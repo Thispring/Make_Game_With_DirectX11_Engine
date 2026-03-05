@@ -64,7 +64,6 @@ void LevelMgr::ChangeLevel(Ptr<ALevel> _NextLevel)
 
 void LevelMgr::Init()
 {
-
 }
 
 void LevelMgr::Progress()

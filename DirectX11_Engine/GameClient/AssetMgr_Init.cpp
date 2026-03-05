@@ -326,6 +326,8 @@ void AssetMgr::CreateEngineTexture()
 
 void AssetMgr::CreateEngineMaterial() 
 {
+	// File로 저장이 완료된 Asset은 Load 함수 호출부만 남겨두기
+
 	wstring FilePath = CONTENT_PATH;
 	Ptr<AMaterial> pMtrl = nullptr;
 
@@ -333,41 +335,37 @@ void AssetMgr::CreateEngineMaterial()
 	// =========
 	// Std2DMtrl 
 	// =========
-	pMtrl = new AMaterial;
-	pMtrl->SetName(L"Std2DMtrl");
-	pMtrl->SetShader(Find<AGraphicShader>(L"Std2DShader"));
-	pMtrl->SetTexture(TEX_0, Find<ATexture>(L"cubeImg"));
-	pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_MASKED);
-	AddAsset(pMtrl->GetName(), pMtrl.Get());
-
+	//pMtrl = new AMaterial;
+	//pMtrl->SetName(L"Std2DMtrl");
+	//pMtrl->SetShader(Find<AGraphicShader>(L"Std2DShader"));
+	//pMtrl->SetTexture(TEX_0, Find<ATexture>(L"cubeImg"));
+	//pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_MASKED);
+	//AddAsset(pMtrl->GetName(), pMtrl.Get());
+	//pMtrl->Save(FilePath + L"\\Material\\" + pMtrl->GetKey() + L".mtrl");
 
 	// =====
 	// 디버그 
 	// =====
-	pMtrl = new AMaterial;
-	pMtrl->SetName(L"DbgMtrl");
-	pMtrl->SetShader(Find<AGraphicShader>(L"DbgShader"));
-	pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_DEBUG);
-	AddAsset(pMtrl->GetName(), pMtrl.Get());
+	//pMtrl = new AMaterial;
+	//pMtrl->SetName(L"DbgMtrl");
+	//pMtrl->SetShader(Find<AGraphicShader>(L"DbgShader"));
+	//pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_DEBUG);
+	//AddAsset(pMtrl->GetName(), pMtrl.Get());
+	//pMtrl->Save(FilePath + L"\\Material\\" + pMtrl->GetKey() + L".mtrl");
 
+	Load<AMaterial>(L"Std2DMtrl", L"Material\\Std2DMtrl.mtrl");
+	Load<AMaterial>(L"DbgMtrl", L"Material\\DbgMtrl.mtrl");
 	Load<AMaterial>(L"Material\\Default Material_0.mtrl", L"Material\\Default Material_0.mtrl");
 	#pragma endregion
 
 	#pragma region Content Material	
 	
-	//Load<ATexture>(L"cloudImg", L"Texture\\BackGround\\clouds.png");
-	//Load<ATexture>(L"seaImg", L"Texture\\BackGround\\sea.png");
-	//Load<ATexture>(L"skyImg", L"Texture\\BackGround\\sky.png");
-
-	//pMtrl = new AMaterial;
-	//pMtrl->SetName(L"CloudMtrl");
-	//pMtrl->SetShader(Find<AGraphicShader>(L"Std2DShader"));
-	//pMtrl->SetTexture(TEX_0, Find<ATexture>(L"cloudImg"));
-	//pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_MASKED);
-	//AddAsset(pMtrl->GetName(), pMtrl.Get());
-	//pMtrl->Save(FilePath + L"\\Material\\" + pMtrl->GetKey() + L".mtrl");
-	
+	// BackGround
 	Load<AMaterial>(L"CloudMtrl", L"Material\\CloudMtrl.mtrl");
+	Load<AMaterial>(L"SkyMtrl", L"Material\\SkyMtrl.mtrl");
+	Load<AMaterial>(L"SeaMtrl", L"Material\\SeaMtrl.mtrl");
+
+
 	#pragma endregion
 }
 

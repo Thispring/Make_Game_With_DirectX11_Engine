@@ -37,4 +37,4 @@ void SaveWString(FILE* _File, const wstring& _String);
 wstring LoadWString(FILE* _File);
 
 // Engine에 사용 할 기본 Level을 생성하는 함수
-void CreateTestLevel();
+void CreateLevel();

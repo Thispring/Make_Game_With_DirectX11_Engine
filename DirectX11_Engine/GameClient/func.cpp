@@ -187,7 +187,7 @@ wstring LoadWString(FILE* _File)
 #include "Source/Scripts/CEnemySpawner.h"
 #include "Source/Scripts/CPlayerFBRController.h"
 #include "CSpriteRender.h"
-void CreateTestLevel()
+void CreateLevel()
 {
 	/*******************************************
 	* Level에 최초 생성할 오브젝트 정보를 정의합니다.
@@ -198,7 +198,7 @@ void CreateTestLevel()
 	//===========
 	Ptr<ALevel> pLevel = new ALevel;
 	pLevel = new ALevel;
-	pLevel->SetName(L"Current Level");
+	pLevel->SetName(L"Normal_Stage_0");
 
 
 	//===============
@@ -211,9 +211,6 @@ void CreateTestLevel()
 	pLevel->GetLayer(4)->SetName(L"PlayerProjectile");
 	pLevel->GetLayer(5)->SetName(L"Enermy");
 	pLevel->GetLayer(6)->SetName(L"EnermyProjectile");
-
-	pLevel->GetLayer(7)->SetName(L"Plant");
-	pLevel->GetLayer(8)->SetName(L"AnchorObject");
 
 
 	//============
@@ -255,7 +252,7 @@ void CreateTestLevel()
 	// 광원 오브젝트
 	//============
 	pObject = new GameObject;
-	pObject->SetName(L"Light");
+	pObject->SetName(L"DirectLight");
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CLight2D);
 
@@ -268,20 +265,6 @@ void CreateTestLevel()
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
 
 	pLevel->AddObject(0, pObject);
-
-
-	//pObject = new GameObject;
-	//pObject->SetName(L"Directional_Light_0");
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CLight2D);
-
-	//pObject->Light2D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
-	//pObject->Light2D()->SetLightColor(Vec3(0.5f, 0.5f, 0.5f));
-	//pObject->Light2D()->SetAmbient(Vec3(0.15f, 0.15f, 0.15f));
-
-	//pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
-
-	//pLevel->AddObject(0, pObject);
 
 
 	//pObject = new GameObject;
@@ -316,24 +299,42 @@ void CreateTestLevel()
 	//pLevel->AddObject(0, pObject);
 	#pragma endregion
 
+	// BackGround
+	// Render가 없는 빈 오브젝트 BackGround를 만들고, 
+	// 자식 오브젝트들에 Render를 추가 하여 빈 오브젝트 자식으로 등록
+	// 
+	
+	// Sky
+	pObject = new GameObject;
+	pObject->SetName(L"Sky");
 
-	//=====
-	// 배경
-	//=====
-	//pObject = new GameObject;
-	//pObject->SetName(L"BackGround");
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
 
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
+	pObject->Transform()->SetRelativeScale(Vec3(800.f, 450.f, 1.f));
 
-	//pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
-	//pObject->Transform()->SetRelativeScale(Vec3(800.f, 450.f, 1.f));
+	pObject->MeshRender()->SetMesh(AssetMgr::GetInst()->Find<AMesh>(L"FullRectMesh"));
+	pObject->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"SkyMtrl"));
 
-	//pObject->MeshRender()->SetMesh(AssetMgr::GetInst()->Find<AMesh>(L"FullRectMesh"));
-	//pObject->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"BGMtrl"));
+	pLevel->AddObject(1, pObject);
 
-	//pLevel->AddObject(1, pObject);
+	// Cloud
+	pObject = new GameObject;
+	pObject->SetName(L"Cloud");
 
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 80.f));
+	pObject->Transform()->SetRelativeScale(Vec3(400.f, 200.f, 1.f));
+
+	pObject->MeshRender()->SetMesh(AssetMgr::GetInst()->Find<AMesh>(L"FullRectMesh"));
+	pObject->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"CloudMtrl"));
+
+	pLevel->AddObject(1, pObject);
+
+	// Player
 
 	//==================
 	// 플레이어 (우주 테마)
@@ -387,92 +388,7 @@ void CreateTestLevel()
 	//pLevel->AddObject(5, pObject);
 
 
-	//========
-	// TileMap
-	//========
-	//pObject = new GameObject;
-	//pObject->SetName(L"Tile");
-
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CCollider2D);
-	//pObject->AddComponent(new CTileRender);
-
-
-	//pObject->Transform()->SetRelativePos(Vec3(10.f, 10.f, 0.f));
-	//pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
-	//pObject->TileRender()->SetTileMap(LOAD(ATileMap, L"TileMap\\ATileMap.tile"));
-
-	//pLevel->AddObject(1, pObject);
-
-
-	//========
-	// Ground
-	//========
-	//pObject = new GameObject;
-	//pObject->SetName(L"Ground");
-
-	//pObject->AddComponent(new CTransform);
-	////pObject->AddComponent(new CSpriteRender);
-	//pObject->AddComponent(new CTileRender);
-
-	//pObject->Transform()->SetRelativePos(Vec3(0.f, -410.f, 20.f));
-	//// Z축 Scale을 1로 설정해주어야 한다. (자식 오브젝트의 SetIndependentScale에도 영향)
-	//pObject->Transform()->SetRelativeScale(Vec3(1600.f, 80.f, 1.f));
-	////pObject->SpriteRender()->SetSprite(FIND(ASprite, L"TileSprite_7"));
-	//pObject->TileRender()->SetTileMap(LOAD(ATileMap, L"TileMap\\ATileMap.tile"));
-
-	//=======================================
-	// Collider 판정을 위한 Ground 자식 오브젝트
-	//=======================================
-	//int ChildCount = 2;
-	//for (int i = 0; i < ChildCount; i++)
-	//{
-	//	Ptr<GameObject> pChild = new GameObject;
-
-	//	// Collider 역할에 맞는 이름 설정
-	//	// 2번만 반복하기에, 3항연산자를 사용 (반복이 추가될 시 다른 조건식으로 변경)
-	//	// 0: Platform(발판), 1: Trigger(트리거 이벤트)
-	//	wstring name = i == 0 ? L"Platform_Collider" : L"Trigger_Collider";
-	//	Vec3 vScale = i == 0 ? Vec3(1600.f, 80.f, 1.f) : Vec3(100.f, 100.f, 1.f);
-
-	//	//wchar_t Buff[50] = {};
-	//	//swprintf_s(Buff, L"GroundCollider_%d", i);
-	//	pChild->SetName(name);
-	//	pChild->AddComponent(new CTransform);
-	//	pChild->AddComponent(new CCollider2D);
-
-	//	pChild->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
-	//	pChild->Transform()->SetRelativeScale(vScale);
-	//	pChild->Transform()->SetIndependentScale(true);
-
-	//	pObject->AddChild(pChild);
-	//}
-
-	//// "Tile" Layer에 등록
-	//pLevel->AddObject(2, pObject);
-
-
-	//========
-	// Ground2
-	//========
-	//pObject = new GameObject;
-	//pObject->SetName(L"Ground2");
-
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CSpriteRender);
-	//pObject->AddComponent(new CCollider2D);
-
-	//pObject->Transform()->SetRelativePos(Vec3(0.f, -210.f, 20.f));
-	//// Z축 Scale을 1로 설정해주어야 한다. (자식 오브젝트의 SetIndependentScale에도 영향)
-	//pObject->Transform()->SetRelativeScale(Vec3(800.f, 80.f, 1.f));
-	//pObject->SpriteRender()->SetSprite(LOAD(ASprite, L"Sprite\\TileSprite_8.sprite"));
-
-	//pLevel->AddObject(2, pObject);
-
-
-	//==================
 	// MeshRender Object
-	//==================
 	pObject = new GameObject;
 	pObject->SetName(L"MeshRender_Object");
 
@@ -491,9 +407,7 @@ void CreateTestLevel()
 	//=============
 	// 레벨 충돌 설정
 	//=============
-	pLevel->CheckCollisionLayer(4, 5);	// Player 무기 <-> Enemy
-	pLevel->CheckCollisionLayer(4, 8);	// Player 무기 <-> Player 자식 오브젝트
-	pLevel->CheckCollisionLayer(2, 3);	// Tile <-> Player
+	//pLevel->CheckCollisionLayer(4, 5);	// Player 무기 <-> Enemy
 
 
 	//===============
@@ -502,8 +416,8 @@ void CreateTestLevel()
 	pLevel->SetChanged();
 
 	// 생성한 Level을 Asset으로 등록
-	AssetMgr::GetInst()->AddAsset(L"Test_Level", pLevel.Get());
+	AssetMgr::GetInst()->AddAsset(L"Normal_Stage_0", pLevel.Get());
 
 	// TaskMgr에게 다음 프레임에 실행할 Level을 변경하도록 요청
-	ChangeLevel(L"Test_Level");
+	ChangeLevel(L"Normal_Stage_0");
 }

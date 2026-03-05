@@ -55,7 +55,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     if (FAILED(Engine::GetInst()->Init(hInstance, 1600, 900, true)))
         return 0;
 
-    CreateTestLevel();
+    CreateLevel();
 
     /*****************************************************************************************************************
     * 메시지 루프
