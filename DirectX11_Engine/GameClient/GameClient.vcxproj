@@ -1,0 +1,440 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{be8bfa9c-4f9f-4caf-8470-38f4722f4fc8}</ProjectGuid>
+    <RootNamespace>GameClient</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>false</EnableUnitySupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>false</EnableUnitySupport>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)Game\Bin\</OutDir>
+    <ExternalIncludePath>$(SolutionDir)External\Include\;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)External\Library\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)Game\Bin\</OutDir>
+    <ExternalIncludePath>$(SolutionDir)External\Include\;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)External\Library\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/source-charset:utf-8 /execution-charset:euc-kr %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/source-charset:utf-8 /execution-charset:euc-kr %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/source-charset:utf-8 /execution-charset:euc-kr %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>cd $(SolutionDir) 
+call CopyShader.bat
+call ComponentAuto.exe
+call KeyInfoExtractor.exe
+call CodeGen.exe</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/source-charset:utf-8 /execution-charset:euc-kr %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>cd $(SolutionDir) 
+call CopyShader.bat
+call ComponentAuto.exe
+call KeyInfoExtractor.exe
+call CodeGen.exe</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="AFlipbook.h" />
+    <ClInclude Include="AGraphicShader.h" />
+    <ClInclude Include="ALevel.h" />
+    <ClInclude Include="AMaterial.h" />
+    <ClInclude Include="AMesh.h" />
+    <ClInclude Include="ASprite.h" />
+    <ClInclude Include="Asset.h" />
+    <ClInclude Include="AssetMgr.h" />
+    <ClInclude Include="assets.h" />
+    <ClInclude Include="CEditorCamMoveScript.h" />
+    <ClInclude Include="EAssetUI.h" />
+    <ClInclude Include="ATexture.h" />
+    <ClInclude Include="ATileMap.h" />
+    <ClInclude Include="CBillboardRender.h" />
+    <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CCollider2D.h" />
+    <ClInclude Include="CFlipbookRender.h" />
+    <ClInclude Include="CLight2D.h" />
+    <ClInclude Include="CMeshRender.h" />
+    <ClInclude Include="CollisionMgr.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="components.h" />
+    <ClInclude Include="ConstBuffer.h" />
+    <ClInclude Include="ContentUI.h" />
+    <ClInclude Include="CRenderComponent.h" />
+    <ClInclude Include="CScript.h" />
+    <ClInclude Include="CSpriteRender.h" />
+    <ClInclude Include="CTileRender.h" />
+    <ClInclude Include="CTransform.h" />
+    <ClInclude Include="define.h" />
+    <ClInclude Include="Device.h" />
+    <ClInclude Include="ECameraUI.h" />
+    <ClInclude Include="ECollider2DUI.h" />
+    <ClInclude Include="EComponentUI.h" />
+    <ClInclude Include="EComputeShaderUI.h" />
+    <ClInclude Include="EditorMgr.h" />
+    <ClInclude Include="EditorUI.h" />
+    <ClInclude Include="EFlipbookRenderUI.h" />
+    <ClInclude Include="EFlipbookUI.h" />
+    <ClInclude Include="EGraphicShaderUI.h" />
+    <ClInclude Include="ELevelUI.h" />
+    <ClInclude Include="EMaterialUI.h" />
+    <ClInclude Include="EMeshUI.h" />
+    <ClInclude Include="ESoundUI.h" />
+    <ClInclude Include="ESpriteRenderUI.h" />
+    <ClInclude Include="ESpriteUI.h" />
+    <ClInclude Include="ETextureUI.h" />
+    <ClInclude Include="ETileMapUI.h" />
+    <ClInclude Include="ETileRenderUI.h" />
+    <ClInclude Include="extern.h" />
+    <ClInclude Include="Inspector.h" />
+    <ClInclude Include="KeyList.h" />
+    <ClInclude Include="ELight2DUI.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="EMeshRenderUI.h" />
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="enum.h" />
+    <ClInclude Include="Outliner.h" />
+    <ClInclude Include="ETransformUI.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="func.h" />
+    <ClInclude Include="GameClient.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="global.h" />
+    <ClInclude Include="imgui\imconfig.h" />
+    <ClInclude Include="imgui\imgui.h" />
+    <ClInclude Include="imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="imgui\imgui_impl_win32.h" />
+    <ClInclude Include="imgui\imgui_internal.h" />
+    <ClInclude Include="imgui\imstb_rectpack.h" />
+    <ClInclude Include="imgui\imstb_textedit.h" />
+    <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="KeyMgr.h" />
+    <ClInclude Include="Layer.h" />
+    <ClInclude Include="LevelMgr.h" />
+    <ClInclude Include="ListUI.h" />
+    <ClInclude Include="PathMgr.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="EPrefabUI.h" />
+    <ClInclude Include="Ptr.h" />
+    <ClInclude Include="RenderMgr.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Source\ScriptMgr.h" />
+    <ClInclude Include="Source\Scripts\CCamMoveScript.h" />
+    <ClInclude Include="Source\Scripts\CEnemyScript.h" />
+    <ClInclude Include="Source\Scripts\CEnemySpawner.h" />
+    <ClInclude Include="Source\Scripts\CMissileScript.h" />
+    <ClInclude Include="Source\Scripts\CPlayerFBRController.h" />
+    <ClInclude Include="Source\Scripts\CPlayerScript.h" />
+    <ClInclude Include="struct.h" />
+    <ClInclude Include="StructuredBuffer.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="TaskMgr.h" />
+    <ClInclude Include="TimeMgr.h" />
+    <ClInclude Include="TreeUI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AFlipbook.cpp" />
+    <ClCompile Include="AGraphicShader.cpp" />
+    <ClCompile Include="ALevel.cpp" />
+    <ClCompile Include="AMaterial.cpp" />
+    <ClCompile Include="AMesh.cpp" />
+    <ClCompile Include="ASprite.cpp" />
+    <ClCompile Include="Asset.cpp" />
+    <ClCompile Include="AssetMgr.cpp" />
+    <ClCompile Include="AssetMgr_Init.cpp" />
+    <ClCompile Include="CEditorCamMoveScript.cpp" />
+    <ClCompile Include="EAssetUI.cpp" />
+    <ClCompile Include="ATexture.cpp" />
+    <ClCompile Include="ATileMap.cpp" />
+    <ClCompile Include="CBillboardRender.cpp" />
+    <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CCollider2D.cpp" />
+    <ClCompile Include="CFlipbookRender.cpp" />
+    <ClCompile Include="CLight2D.cpp" />
+    <ClCompile Include="CMeshRender.cpp" />
+    <ClCompile Include="CollisionMgr.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ConstBuffer.cpp" />
+    <ClCompile Include="ContentUI.cpp" />
+    <ClCompile Include="CRenderComponent.cpp" />
+    <ClCompile Include="CScript.cpp" />
+    <ClCompile Include="CSpriteRender.cpp" />
+    <ClCompile Include="CTileRender.cpp" />
+    <ClCompile Include="CTransform.cpp" />
+    <ClCompile Include="Device.cpp" />
+    <ClCompile Include="ECameraUI.cpp" />
+    <ClCompile Include="ECollider2DUI.cpp" />
+    <ClCompile Include="EComponentUI.cpp" />
+    <ClCompile Include="EComputeShaderUI.cpp" />
+    <ClCompile Include="EditorMgr.cpp" />
+    <ClCompile Include="EditorUI.cpp" />
+    <ClCompile Include="EFlipbookRenderUI.cpp" />
+    <ClCompile Include="EFlipbookUI.cpp" />
+    <ClCompile Include="EGraphicShaderUI.cpp" />
+    <ClCompile Include="ELevelUI.cpp" />
+    <ClCompile Include="EMaterialUI.cpp" />
+    <ClCompile Include="EMeshUI.cpp" />
+    <ClCompile Include="ESoundUI.cpp" />
+    <ClCompile Include="ESpriteRenderUI.cpp" />
+    <ClCompile Include="ESpriteUI.cpp" />
+    <ClCompile Include="ETextureUI.cpp" />
+    <ClCompile Include="ETileMapUI.cpp" />
+    <ClCompile Include="ETileRenderUI.cpp" />
+    <ClCompile Include="Inspector.cpp" />
+    <ClCompile Include="Inspector_Init.cpp" />
+    <ClCompile Include="KeyList.cpp" />
+    <ClCompile Include="ELight2DUI.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="EMeshRenderUI.cpp" />
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Engine_Init.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Outliner.cpp" />
+    <ClCompile Include="ETransformUI.cpp" />
+    <ClCompile Include="extern.cpp" />
+    <ClCompile Include="func.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\imgui_demo.cpp" />
+    <ClCompile Include="imgui\imgui_draw.cpp" />
+    <ClCompile Include="imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="imgui\imgui_tables.cpp" />
+    <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="KeyMgr.cpp" />
+    <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="LevelMgr.cpp" />
+    <ClCompile Include="ListUI.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="PathMgr.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="EPrefabUI.cpp" />
+    <ClCompile Include="RenderMgr.cpp" />
+    <ClCompile Include="Source\ScriptMgr.cpp" />
+    <ClCompile Include="Source\Scripts\CCamMoveScript.cpp" />
+    <ClCompile Include="Source\Scripts\CEnemyScript.cpp" />
+    <ClCompile Include="Source\Scripts\CEnemySpawner.cpp" />
+    <ClCompile Include="Source\Scripts\CMissileScript.cpp" />
+    <ClCompile Include="Source\Scripts\CPlayerFBRController.cpp" />
+    <ClCompile Include="Source\Scripts\CPlayerScript.cpp" />
+    <ClCompile Include="StructuredBuffer.cpp" />
+    <ClCompile Include="TaskMgr.cpp" />
+    <ClCompile Include="TimeMgr.cpp" />
+    <ClCompile Include="TreeUI.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameClient.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="GameClient.ico" />
+    <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleMath.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="billboard.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="dbg.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="flipbook.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="func.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="sprite.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="std2d.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="struct.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="tile.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="value.fx">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+    </FxCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,230 @@
+Comment: Resets the position and rotation when the SPACE KEY is pressed.
+KEY: SPACE
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: Switches the camera's projection method when the LSHIFT KEY is pressed.
+KEY: LSHIFT
+KEY_STATE: TAP
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: W
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: S
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: A
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: D
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: Z
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: X
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: W
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: S
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: A
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: D
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: Z
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: X
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: Q
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: E
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: No Comment
+KEY: LBTN
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
+Comment: Enable/Disable DemoUI
+KEY: F8
+KEY_STATE: TAP
+Source File: EditorMgr.cpp
+
+Comment: Clears the focus of the currently selected ImGui item when Enter is pressed.
+KEY: ENTER
+KEY_STATE: TAP
+Source File: EditorMgr.cpp
+
+Comment: No Comment
+KEY: F9
+KEY_STATE: TAP
+Source File: RenderMgr.cpp
+
+Comment: Resets the position and rotation when the SPACE KEY is pressed.
+KEY: SPACE
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: Switches the camera's projection method when the LSHIFT KEY is pressed.
+KEY: LSHIFT
+KEY_STATE: TAP
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: W
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: S
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: A
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: D
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: Z
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: X
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: W
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: S
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: A
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: D
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: Z
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: X
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: Q
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: E
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: LBTN
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: UP
+KEY_STATE: RELEASED
+Source File: CPlayerScript.cpp
+
+Comment: No Comment
+KEY: UP
+KEY_STATE: PRESSED
+Source File: CPlayerScript.cpp
+
+Comment: No Comment
+KEY: DOWN
+KEY_STATE: PRESSED
+Source File: CPlayerScript.cpp
+
+Comment: No Comment
+KEY: RIGHT
+KEY_STATE: PRESSED
+Source File: CPlayerScript.cpp
+
+Comment: No Comment
+KEY: LEFT
+KEY_STATE: PRESSED
+Source File: CPlayerScript.cpp
+
+Comment: No Comment
+KEY: SPACE
+KEY_STATE: PRESSED
+Source File: CPlayerScript.cpp
+
+Comment: No Comment
+KEY: SPACE
+KEY_STATE: RELEASED
+Source File: CPlayerScript.cpp
+
+Comment: No Comment
+KEY: F
+KEY_STATE: TAP
+Source File: CPlayerScript.cpp
+
+Comment: No Comment
+KEY: ENTER
+KEY_STATE: TAP
+Source File: CPlayerScript.cpp
+
