@@ -98,8 +98,18 @@ KEY: F9
 KEY_STATE: TAP
 Source File: RenderMgr.cpp
 
-Comment: Resets the position and rotation when the SPACE KEY is pressed.
-KEY: SPACE
+Comment: Change Debug Cam Move Mode
+KEY: ALPHA0
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: Change InGame Cam Move Mode
+KEY: ALPHA1
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
+
+Comment: Resets the position and rotation when the RSHIFT KEY is pressed.
+KEY: RSHIFT
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
@@ -183,48 +193,68 @@ KEY: LBTN
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
-Comment: No Comment
-KEY: UP
-KEY_STATE: RELEASED
-Source File: CPlayerScript.cpp
-
-Comment: No Comment
+Comment: Player의 y축 위치를 받아서 카메라 위치 조정
 KEY: UP
 KEY_STATE: PRESSED
-Source File: CPlayerScript.cpp
+Source File: CCamMoveScript.cpp
 
-Comment: No Comment
+Comment: vPos.y += DT * 250.f;
 KEY: DOWN
 KEY_STATE: PRESSED
-Source File: CPlayerScript.cpp
+Source File: CCamMoveScript.cpp
+
+Comment: vPos.y -= DT * 250.0f;
+KEY: LEFT
+KEY_STATE: PRESSED
+Source File: CCamMoveScript.cpp
 
 Comment: No Comment
 KEY: RIGHT
 KEY_STATE: PRESSED
-Source File: CPlayerScript.cpp
+Source File: CCamMoveScript.cpp
+
+Comment: No Comment
+KEY: UP
+KEY_STATE: RELEASED
+Source File: CPlayerController.cpp
+
+Comment: No Comment
+KEY: UP
+KEY_STATE: PRESSED
+Source File: CPlayerController.cpp
+
+Comment: No Comment
+KEY: DOWN
+KEY_STATE: PRESSED
+Source File: CPlayerController.cpp
+
+Comment: No Comment
+KEY: RIGHT
+KEY_STATE: PRESSED
+Source File: CPlayerController.cpp
 
 Comment: No Comment
 KEY: LEFT
 KEY_STATE: PRESSED
-Source File: CPlayerScript.cpp
+Source File: CPlayerController.cpp
 
 Comment: No Comment
 KEY: SPACE
 KEY_STATE: PRESSED
-Source File: CPlayerScript.cpp
+Source File: CPlayerController.cpp
 
-Comment: No Comment
+Comment: 이전 프레임에 Jump 했다면 다시 추락중으로 변경
 KEY: SPACE
 KEY_STATE: RELEASED
-Source File: CPlayerScript.cpp
+Source File: CPlayerController.cpp
 
 Comment: No Comment
 KEY: F
 KEY_STATE: TAP
-Source File: CPlayerScript.cpp
+Source File: CPlayerController.cpp
 
-Comment: No Comment
-KEY: ENTER
+Comment: 펀치
+KEY: Z
 KEY_STATE: TAP
-Source File: CPlayerScript.cpp
+Source File: CPlayerController.cpp
 

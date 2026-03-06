@@ -60,8 +60,10 @@ float4 PS_Flipbook(VS_OUT _input) : SV_Target
         }
         else
         {
-            vColor = float4(1.f, 1.f, 0.f, 1.f);
-            //discard;
+            // 노란색으로 표시
+            //vColor = float4(1.f, 1.f, 0.f, 1.f);
+            // BackGround 부분 버리기
+            discard;
         }
         
         if (vColor.a == 0.f)

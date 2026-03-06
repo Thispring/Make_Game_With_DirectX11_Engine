@@ -277,9 +277,6 @@
     <ClInclude Include="Source\Scripts\CPlayerFBRController.h">
       <Filter>Source\ContentScript\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\CPlayerScript.h">
-      <Filter>Source\ContentScript\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Scripts\CEnemyScript.h">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
@@ -289,11 +286,14 @@
     <ClInclude Include="Source\Scripts\CCamMoveScript.h">
       <Filter>Source\ContentScript</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\CMissileScript.h">
-      <Filter>Source\ContentScript</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ScriptMgr.h">
       <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CPlayerStatus.h">
+      <Filter>Source\ContentScript\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CPlayerController.h">
+      <Filter>Source\ContentScript\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -549,9 +549,6 @@
     <ClCompile Include="Source\Scripts\CPlayerFBRController.cpp">
       <Filter>Source\ContentScript\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripts\CPlayerScript.cpp">
-      <Filter>Source\ContentScript\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scripts\CEnemyScript.cpp">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
@@ -561,11 +558,14 @@
     <ClCompile Include="Source\Scripts\CCamMoveScript.cpp">
       <Filter>Source\ContentScript</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripts\CMissileScript.cpp">
-      <Filter>Source\ContentScript</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ScriptMgr.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CPlayerController.cpp">
+      <Filter>Source\ContentScript\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CPlayerStatus.cpp">
+      <Filter>Source\ContentScript\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

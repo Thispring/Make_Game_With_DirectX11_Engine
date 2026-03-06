@@ -108,24 +108,8 @@ void CFlipbookRender::CreateMaterial()
 	// 값을 다르게 줘도 덮여 씌여지고 있음
 
 	wstring ObjName = GetOwner()->GetName();
-	wstring FilePath = L"";
+	wstring FilePath = L"Shader\\flipbook.fx";;
 
-	if (ObjName == L"Player")
-	{
-		FilePath = L"Shader\\flipbook.fx";
-		MtrlName += L"Player";
-		ShaderName += L"Player";
-	}
-	else if (ObjName == L"Enemy")
-	{
-		FilePath = L"Shader\\enemyflipbook.fx";
-		MtrlName += L"Enemy";
-		ShaderName += L"Enemy";
-	}
-	else
-	{
-		FilePath = L"Shader\\flipbook.fx";
-	}
 
 	string VS = "VS_Flipbook";
 	string PS = "PS_Flipbook";

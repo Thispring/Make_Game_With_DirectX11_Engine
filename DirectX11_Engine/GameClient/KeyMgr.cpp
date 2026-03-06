@@ -35,6 +35,13 @@ UINT g_KeyIndex[(UINT)KEY::KEY_END] =
 	VK_HOME,
 	VK_END,
 
+	// 상단 숫자 키
+	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+
+	// 숫자 패드 키
+	VK_NUMPAD0, VK_NUMPAD1, VK_NUMPAD2, VK_NUMPAD3, VK_NUMPAD4, 
+	VK_NUMPAD5, VK_NUMPAD6, VK_NUMPAD7, VK_NUMPAD8, VK_NUMPAD9,
+
 	VK_F1,
 	VK_F2,
 	VK_F3,

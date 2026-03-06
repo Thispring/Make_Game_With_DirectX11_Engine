@@ -267,6 +267,7 @@ void AssetMgr::CreateEngineShader()
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	AssetMgr::GetInst()->AddAsset(pShader->GetName(), pShader.Get());
 
+
 	// ==============
 	// FlipbookShader
 	// ==============
@@ -277,6 +278,7 @@ void AssetMgr::CreateEngineShader()
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	AssetMgr::GetInst()->AddAsset(pShader->GetName(), pShader.Get());
+
 
 	// =============
 	// TileMapShader
@@ -316,6 +318,7 @@ void AssetMgr::CreateEngineTexture()
 	Load<ATexture>(L"cloudImg", L"Texture\\BackGround\\clouds.png");
 	Load<ATexture>(L"seaImg", L"Texture\\BackGround\\sea.png");
 	Load<ATexture>(L"skyImg", L"Texture\\BackGround\\sky.png");
+	Load<ATexture>(L"groundImg", L"Texture\\BackGround\\far-grounds.png");
 
 	// TileMap Atlas
 	Load<ATexture>(L"tile_Atlas", L"Texture\\BackGround\\tileset.png");
@@ -364,6 +367,7 @@ void AssetMgr::CreateEngineMaterial()
 	Load<AMaterial>(L"CloudMtrl", L"Material\\CloudMtrl.mtrl");
 	Load<AMaterial>(L"SkyMtrl", L"Material\\SkyMtrl.mtrl");
 	Load<AMaterial>(L"SeaMtrl", L"Material\\SeaMtrl.mtrl");
+	Load<AMaterial>(L"GroundMtrl", L"Material\\GroundMtrl.mtrl");
 
 
 	#pragma endregion
@@ -377,31 +381,101 @@ void AssetMgr::CreateEngineSprite()
 	* 해당 문자열은 생성된 Sprite의 Key값으로 설정 합니다.
 	***********************************************/
 
+	// Player Atlas
+	Ptr<ATexture> pAtlas = FIND(ATexture, L"cat1_Atlas");		// Texture 생성 시 설정한 이름 String을 입력합니다. 
 
-	// =======
-	// TileMap
-	// =======
-	//Ptr<ATileMap> pTileMap = nullptr;
+	// Texture의 가로 세로 길이를 Getter로 얻어옵니다.
+	float Width = pAtlas->GetWidth();
+	float Height = pAtlas->GetHeight();
 
-	//pTileMap = new ATileMap;
-	//pTileMap->SetName(L"TileMap\\ATileMap.tile");
-	//pTileMap->SetRowCol(2, 2);
-	//pTileMap->SetTileSize(Vec2(16.f, 16.f));
-	//pTileMap->SetAtlas(FIND(ATexture, L"TileAtlas"));
+	// Texture 이미지를 얼마만큼의 길이로 자를 것인지 설정합니다.
+	// UV 좌표 기준으로 값을 설정합니다. (자를 길이(높이, 너비)를 Vec2 값에 설정) 
+	Vec2 SlicePixel = Vec2(64.f, 64.f);
 
-	//int Count = 0;
-	//for (int i = 0; i < 2; ++i)
+	//// 위에서 설정한 값과 반복문을 이용하여
+	//// Texture 이미지를 잘라 Sprite를 생성합니다. 
+	//Ptr<ASprite> pSprite = nullptr;
+	//for (int i = 0; i < 10; ++i)	// 몇 번 반복할지는, 몇 개의 이미지를 만들지에 맞게 결정합니다.
 	//{
-	//	for (int j = 0; j < 2; ++j, ++Count)
-	//	{
-	//		wchar_t Buff[50] = {};
-	//		swprintf_s(Buff, L"Sprite\\TileSprite_%d.sprite", Count);
-	//		pTileMap->SetSprite(i, j, LOAD(ASprite, L"Sprite\\TileSprite_0.sprite"));
-	//	}
+	//	// Sprite의 이름을 설정합니다.
+	//	// 만약 파일 형식으로 제작을 원한다면, 폴더 경로 + 확장자명을 적어둡니다.
+	//	wchar_t Buff[50] = {};
+	//	swprintf_s(Buff, L"Sprite\\cat_OTcombo_%d.sprite", i);
+
+	//	pSprite = new ASprite;
+	//	pSprite->SetName(Buff);
+	//	pSprite->SetAtlas(pAtlas);
+
+	//	// 원점 설정
+	//	// 높이 UV => 0 -> 0.0625 (아틀라스 기준 2번째)
+	//	pSprite->SetLeftTopUV(Vec2((SlicePixel.x / Width) * (float)i, 0.5625f));
+
+	//	// x, y축 각각 '자를 해상도'에서 '아틀라스 해상도'를 나누기
+	//	pSprite->SetSliceUV(SlicePixel / Vec2(Width, Height));
+	//	// BackgorundUV는 자를 해상도 * 2로 설정 
+	//	pSprite->SetBackgroundUV(Vec2(0.125f, 0.125f));
+
+	//	// 만들어진 Sprite를 등록합니다.
+	//	// 
+	//	// AddAsset => 런타임에만 등록
+	//	AddAsset(pSprite->GetName(), pSprite.Get());
+	//	// Save => 파일 형태로 등록
+	//	///pSprite->Save(CONTENT_PATH + pSprite->GetName());
+	//	pSprite->Save(CONTENT_PATH + pSprite->GetKey());	// 경로가 곧 Key 값
 	//}
 
-	//AddAsset(pTileMap->GetName(), pTileMap.Get());
-	//pTileMap->Save(CONTENT_PATH + pTileMap->GetKey());
+
+	//// Flipbook 객체 생성 후, 이름을 설정하고
+	//// 반복문을 통해, 이어서 보여줄 sprite들을 가르키게 합니다.
+	//Ptr<AFlipbook> pFlipbook = nullptr;
+
+	//pFlipbook = new AFlipbook;
+	//pFlipbook->SetName(L"Flipbook\\cat_OTcombo.flip");
+
+	//for (int i = 0; i < 8; ++i)
+	//{
+	//	wchar_t Buff[50] = {};
+	//	swprintf_s(Buff, L"Sprite\\cat_OTcombo_%d.sprite", i);
+	//	pFlipbook->AddSprite(LOAD(ASprite, Buff));
+	//}
+	//AddAsset(pFlipbook->GetName(), pFlipbook.Get());
+	//pFlipbook->Save(CONTENT_PATH + pFlipbook->GetKey());
+
+
+	// Asset Load
+	for (int i = 0; i < 4; ++i)
+	{
+		wchar_t Buff[50] = {};
+		swprintf_s(Buff, L"Sprite\\cat_Idle_%d.sprite", i);
+		Load<ASprite>(Buff, Buff);
+	}
+
+	for (int i = 0; i < 8; ++i)	
+	{
+		wchar_t Buff[50] = {};
+		swprintf_s(Buff, L"Sprite\\cat_Walk_%d.sprite", i);
+		Load<ASprite>(Buff, Buff);
+	}
+
+	for (int i = 0; i < 8; ++i)
+	{
+		wchar_t Buff[50] = {};
+		swprintf_s(Buff, L"Sprite\\cat_Jump_%d.sprite", i);
+		Load<ASprite>(Buff, Buff);
+	}
+
+	for (int i = 0; i < 10; ++i)
+	{
+		wchar_t Buff[50] = {};
+		swprintf_s(Buff, L"Sprite\\cat_OTcombo_%d.sprite", i);
+		Load<ASprite>(Buff, Buff);
+	}
+
+
+	Load<AFlipbook>(L"Flipbook\\cat_Idle.flip", L"Flipbook\\cat_Idle.flip");
+	Load<AFlipbook>(L"Flipbook\\cat_Walk.flip", L"Flipbook\\cat_Walk.flip");
+	Load<AFlipbook>(L"Flipbook\\cat_Jump.flip", L"Flipbook\\cat_Jump.flip");
+	Load<AFlipbook>(L"Flipbook\\cat_OTcombo.flip", L"Flipbook\\cat_OTcombo.flip");
 }
 
 void AssetMgr::CreateAssetByCode()

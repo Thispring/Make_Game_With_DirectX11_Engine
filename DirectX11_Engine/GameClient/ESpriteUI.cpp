@@ -112,6 +112,7 @@ void ESpriteUI::Tick_UI()
 				pSprite->SetBackgroundUV(Vec2((float)pixel[0] / (float)pAtlas->GetWidth()
 					, (float)pixel[1] / (float)pAtlas->GetHeight()));
 			}
+
 		}
 		else
 		{
@@ -142,4 +143,22 @@ void ESpriteUI::Tick_UI()
 		}
 	}
 	ImGui::EndDisabled();
+
+	// Sprite UV 정보
+	//Vec2 LeftTopUV = pSprite->GetLeftTopUV();
+	//Vec2 SliceUV = pSprite->GetSliceUV();
+	//Vec2 BackgroundUV = pSprite->GetBackgroundUV();
+	//Vec2 OffsetUV = pSprite->GetOffsetUV();
+
+
+	// Sprite 이미지 표시
+	// NOTE(26-03-06):
+	// ImGui로의 UV 좌표 계산문제 있음
+	// 
+	// BackGroundUV, OffsetUV로 실제 Atlas보다 넓게 잡아서 렌더링 중이기 때문에
+	// BackGroundUV 좌표를 고려하여 다시 계산해야함
+	ImGui::ImageWithBg((ImTextureRef)pAtlas->GetSRV().Get()
+		, ImVec2(200, 200)
+		, LeftTopUV, SliceUV
+		, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
 }

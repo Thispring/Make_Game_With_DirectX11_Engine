@@ -250,9 +250,9 @@ call CodeGen.exe</Command>
     <ClInclude Include="Source\Scripts\CCamMoveScript.h" />
     <ClInclude Include="Source\Scripts\CEnemyScript.h" />
     <ClInclude Include="Source\Scripts\CEnemySpawner.h" />
-    <ClInclude Include="Source\Scripts\CMissileScript.h" />
+    <ClInclude Include="Source\Scripts\CPlayerController.h" />
     <ClInclude Include="Source\Scripts\CPlayerFBRController.h" />
-    <ClInclude Include="Source\Scripts\CPlayerScript.h" />
+    <ClInclude Include="Source\Scripts\CPlayerStatus.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="StructuredBuffer.h" />
     <ClInclude Include="targetver.h" />
@@ -344,9 +344,9 @@ call CodeGen.exe</Command>
     <ClCompile Include="Source\Scripts\CCamMoveScript.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyScript.cpp" />
     <ClCompile Include="Source\Scripts\CEnemySpawner.cpp" />
-    <ClCompile Include="Source\Scripts\CMissileScript.cpp" />
+    <ClCompile Include="Source\Scripts\CPlayerController.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerFBRController.cpp" />
-    <ClCompile Include="Source\Scripts\CPlayerScript.cpp" />
+    <ClCompile Include="Source\Scripts\CPlayerStatus.cpp" />
     <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="TaskMgr.cpp" />
     <ClCompile Include="TimeMgr.cpp" />

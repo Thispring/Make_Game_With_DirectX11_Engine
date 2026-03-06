@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CCamMoveScript.h"
 #include "KeyMgr.h"
+#include "LevelMgr.h"
 #include "TimeMgr.h"
 #include "CTransform.h"
 #include "CCamera.h"
@@ -9,6 +10,7 @@
 CCamMoveScript::CCamMoveScript()
 	: CScript(SCRIPT_TYPE::CAMMOVESCRIPT)
 	, m_isMoving(false)
+	, m_MoveMode(CAM_MOVE_MODE::INGAME)
 {
 }
 
@@ -18,34 +20,60 @@ CCamMoveScript::~CCamMoveScript()
 
 void CCamMoveScript::Begin()
 {
-	// 처음 위치, 회전 저장
-	m_OriginPos = Transform()->GetRelativePos();
-	m_OriginRot = Transform()->GetRelativeRot();
+	// 처음 위치, 회전으로 돌아가는 것은 Debug 모드에서만 적용
+	m_DebugOriPos = Transform()->GetRelativePos();
+	m_DebugOriRot = Transform()->GetRelativeRot();
+
+	// InGame Transform 정보는 Begin에서 초기화 후, 다른 함수에서 값 갱신
+	m_InGamePos = Transform()->GetRelativePos();
+	m_InGameRot = Transform()->GetRelativeRot();
 }
 
 void CCamMoveScript::Tick()
 {
-	// 매 프레임 마다 현재 위치, 회전을 갱신
-	if(!m_isMoving)
+	// Change Debug Cam Move Mode
+	if (KEY_PRESSED(KEY::ALPHA0))
+		m_MoveMode = CAM_MOVE_MODE::DEBUG;
+	
+	// Change InGame Cam Move Mode
+	if (KEY_PRESSED(KEY::ALPHA1))
+		m_MoveMode = CAM_MOVE_MODE::INGAME;
+
+
+	// Player GameObject를 찾아서 Player 위치 갱신
+	if (!m_isMoving && m_MoveMode == CAM_MOVE_MODE::INGAME)
 	{
-		m_CurPos = Transform()->GetRelativePos();
-		m_CurRot = Transform()->GetRelativeRot();
+		Ptr<GameObject> pPlayer = LevelMgr::GetInst()->FindObjectByName(L"Player");
+
+		// X축만 갱신
+		Vec3 playerPos = pPlayer->Transform()->GetRelativePos();
+		m_InGamePos.x = playerPos.x;
 	}
 
-	// 원경 투영
-	if (Camera()->GetProjType() == PROJ_TYPE::PERSPECTIVE)
+
+	// Debug 모드일 때만 아래 이동 함수를 실행
+	if (m_MoveMode == CAM_MOVE_MODE::DEBUG)
 	{
-		PrespecCamMove();
-		MouseCamMove();
+		// 원경 투영
+		if (Camera()->GetProjType() == PROJ_TYPE::PERSPECTIVE)
+		{
+			PrespecCamMove();
+			MouseCamMove();
+		}
+		// 직교 투영
+		else if (Camera()->GetProjType() == PROJ_TYPE::ORTHOGRAPHIC)
+			OrthoCamMove();
 	}
-	// 직교 투영
-	else if (Camera()->GetProjType() == PROJ_TYPE::ORTHOGRAPHIC)
-		OrthoCamMove();
+	// InGame에서는 Player의 방향키 이동과 같은 속도와 방향으로 이동
+	else if (m_MoveMode == CAM_MOVE_MODE::INGAME)
+	{
+		InGameCamMove();
+	}
 
 
-	// SPACE KEY를 누르면 위치, 회전 상태 초기화
-	// Resets the position and rotation when the SPACE KEY is pressed.
-	if (KEY_PRESSED(KEY::SPACE))
+	// RSHIFT KEY를 누르면 위치, 회전 상태 초기화
+	// Resets the position and rotation when the RSHIFT KEY is pressed.
+	if (KEY_PRESSED(KEY::RSHIFT))
 		MoveOrigin();
 
 	// LSHIFT KEY를 누르면 카메라의 투영방식 스위칭
@@ -57,8 +85,18 @@ void CCamMoveScript::Tick()
 void CCamMoveScript::MoveOrigin()
 {
 	// 현재 자신의 위치, 회전을 원래 위치로 되돌린다.
-	Transform()->SetRelativePos(m_OriginPos);
-	Transform()->SetRelativeRot(m_OriginRot);
+	// Move Mode에 따라 조건 분기 합니다.
+
+	if (m_MoveMode == CAM_MOVE_MODE::DEBUG)
+	{
+		Transform()->SetRelativePos(m_DebugOriPos);
+		Transform()->SetRelativeRot(m_DebugOriRot);
+	}
+	else if (m_MoveMode == CAM_MOVE_MODE::INGAME)
+	{
+		Transform()->SetRelativePos(m_InGamePos);
+		Transform()->SetRelativeRot(m_InGameRot);
+	}
 }
 
 void CCamMoveScript::MovingOrigin()
@@ -146,4 +184,25 @@ void CCamMoveScript::MouseCamMove()
 
 	Transform()->SetRelativePos(vPos);
 	Transform()->SetRelativeRot(vRot);
+}
+
+void CCamMoveScript::InGameCamMove()
+{
+	Vec3 vPos = Transform()->GetRelativePos();
+
+	// 방향키를 눌렀을 때 이동
+	// Player의 이동 속도와 방향을 맞추기 위해
+	// 매개변수로 Player의 이동 속도값을 받는다.
+	// NOTE(26-03-06): UP, DOWN 임시 비활성화, 필요하다면
+	// Player의 y축 위치를 받아서 카메라 위치 조정
+	//if (KEY_PRESSED(KEY::UP))
+	//	vPos.y += DT * 250.f;
+	//if (KEY_PRESSED(KEY::DOWN))	
+	//	vPos.y -= DT * 250.0f;
+	if (KEY_PRESSED(KEY::LEFT))
+		vPos.x -= DT * 250.0f;
+	if (KEY_PRESSED(KEY::RIGHT))
+		vPos.x += DT * 250.0f;
+
+	Transform()->SetRelativePos(vPos);
 }
