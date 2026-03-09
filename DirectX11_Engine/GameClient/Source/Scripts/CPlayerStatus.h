@@ -1,7 +1,7 @@
 #pragma once
 #include "CScript.h"
 
-class CPlayerFBRController;
+class CPlayerAnimator;
 
 // FlipbookRenderController에게 전달할 Player의 상태 정보
 enum class PLAYER_STATE
@@ -57,6 +57,8 @@ public:
     virtual void Tick() override;
     CLONE(CPlayerStatus);
 
+    virtual void SaveToLevelFile(FILE* _File) override;
+    virtual void LoadFromLevelFile(FILE* _File) override;
 
     //=========
     // Get, Set
@@ -81,6 +83,6 @@ public:
     //=============
     // friend class
     //=============
-    friend class CPlayerFBRController;
+    friend class CPlayerAnimator;
 
 };

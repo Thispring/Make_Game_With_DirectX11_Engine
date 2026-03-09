@@ -118,6 +118,13 @@ void Menu::View()
 			pKeyList->SetActive(KeyListActive);
 		}
 
+		Ptr<EditorUI> pSpriteMaker = EditorMgr::GetInst()->FindUI("SpriteMaker");
+		bool SpriteMakerActive = pSpriteMaker->IsActive();
+		if (ImGui::MenuItem("SpriteMaker", nullptr, &SpriteMakerActive))
+		{
+			pSpriteMaker->SetActive(SpriteMakerActive);
+		}
+
 		ImGui::EndMenu();
 	}
 }

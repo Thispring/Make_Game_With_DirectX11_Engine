@@ -28,6 +28,7 @@ public:
     void Deregister();
     void CheckCollisionLayer(UINT _LayerIdx1, UINT _LayerIdx2);
 
+
     // 처음 시작했을 때 한 번 실행
     void Begin();
     // 매 프레임 실행
@@ -40,6 +41,13 @@ public:
     // Level을 복사하는 함수, 호출자 자신의 주소를 전달하여 동적할당
     //ALevel* Clone() { return new ALevel(*this); }
     CLONE(ALevel);
+
+
+    //=============
+    // 상속 멤버 함수
+    //=============
+    virtual int Save(const wstring& _FilePath) override;
+    virtual int Load(const wstring& _FilePath) override;
 
 
     //=========

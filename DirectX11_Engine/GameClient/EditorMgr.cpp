@@ -17,6 +17,7 @@
 #include "ListUI.h"
 #include "ContentUI.h"
 #include "TreeUI.h"
+#include "SpriteMaker.h"
 
 #include "CEditorCamMoveScript.h"
 #include "RenderMgr.h"
@@ -140,6 +141,9 @@ void EditorMgr::CreateEditorUI()
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new ContentUI;
+    AddUI(pUI->GetUIName(), pUI);
+
+    pUI = new SpriteMaker;
     AddUI(pUI->GetUIName(), pUI);
 }
 

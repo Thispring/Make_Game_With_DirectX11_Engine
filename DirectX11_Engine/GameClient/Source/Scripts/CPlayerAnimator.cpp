@@ -1,23 +1,23 @@
 #include "pch.h"
-#include "CPlayerFBRController.h"
+#include "CPlayerAnimator.h"
 
 #include "CMeshRender.h"
 #include "GameObject.h"
 #include "CPlayerStatus.h"
 
 
-CPlayerFBRController::CPlayerFBRController()
-	: CScript(SCRIPT_TYPE::PLAYERFBRCONTROLLER)
+CPlayerAnimator::CPlayerAnimator()
+	: CScript(SCRIPT_TYPE::PLAYERANIMATOR)
 	, m_IsPlaying(false)
 {
 }
 
-CPlayerFBRController::~CPlayerFBRController()
+CPlayerAnimator::~CPlayerAnimator()
 {
 }
 
 
-void CPlayerFBRController::CheckState()
+void CPlayerAnimator::CheckState()
 {
 	// 현재 상태를 확인하고,
 	// 상태 조건을 분기
@@ -76,7 +76,7 @@ void CPlayerFBRController::CheckState()
 
 }
 
-void CPlayerFBRController::Begin()
+void CPlayerAnimator::Begin()
 {
 	// Begin에서 m_Target을 생성된 Player 오브젝트로 설정
 	m_Target = GetOwner()->GetScript<CPlayerStatus>();
@@ -85,10 +85,18 @@ void CPlayerFBRController::Begin()
 	m_PrevState = PLAYER_STATE::IDLE;
 }
 
-void CPlayerFBRController::Tick()
+void CPlayerAnimator::Tick()
 {
 	// 매 프레임 마다, 상태를 갱신
 	m_CurState = m_Target->GetState();
 
 	CheckState();
+}
+
+void CPlayerAnimator::SaveToLevelFile(FILE* _File)
+{
+}
+
+void CPlayerAnimator::LoadFromLevelFile(FILE* _File)
+{
 }

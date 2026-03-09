@@ -71,3 +71,19 @@ void CBillboardRender::CreateMaterial()
 
 	SetMaterial(pMtrl);
 }
+
+void CBillboardRender::SaveToLevelFile(FILE* _File)
+{
+	CRenderComponent::SaveToLevelFile(_File);
+
+	fwrite(&m_BillboardScale, sizeof(Vec2), 1, _File);
+	SaveAssetRef(_File, m_Tex.Get());
+}
+
+void CBillboardRender::LoadFromLevelFile(FILE* _File)
+{
+	CRenderComponent::LoadFromLevelFile(_File);
+
+	fread(&m_BillboardScale, sizeof(Vec2), 1, _File);
+	m_Tex = LoadAssetRef<ATexture>(_File);
+}

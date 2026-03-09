@@ -25,6 +25,9 @@ public:
     virtual void Begin() override;
     CLONE(CEnemySpawner);
 
+    virtual void SaveToLevelFile(FILE* _File) override;
+    virtual void LoadFromLevelFile(FILE* _File) override;
+
 
     //============
     // 생성, 소멸자

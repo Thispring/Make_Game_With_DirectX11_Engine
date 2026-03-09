@@ -30,6 +30,9 @@ public:
 	void CreateEngineMaterial();
 	void CreateEngineSprite();
 
+	// 매개변수를 받아, 외부에서 사용할 수 있도록 오버로딩
+	void CreateEngineSprite(wstring _Name, Vec2 _Slice, int _Loop, wstring _Path, float _Origin);
+
 	// 코드로 Asset을 제작하는 부분을 모아서 정리 (백업용)
 	void CreateAssetByCode();
 	

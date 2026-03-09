@@ -2,8 +2,9 @@
 #include "CScript.h"
 #include "CPlayerStatus.h"
 
-// Player의 FlipBookRender의 상태를 관리하는 클래스 입니다.
-class CPlayerFBRController :
+// Player의 상태를 읽어와, 적절한 Flipbook을 재생시키는
+// 애니메이션 관리 클래스 입니다.
+class CPlayerAnimator :
     public CScript
 {
 
@@ -25,13 +26,16 @@ public:
     //=============
     virtual void Begin() override;
     virtual void Tick() override;
-    CLONE(CPlayerFBRController);
+    CLONE(CPlayerAnimator);
+
+    virtual void SaveToLevelFile(FILE* _File) override;
+    virtual void LoadFromLevelFile(FILE* _File) override;
 
     
     //============
     // 생성, 소멸자
     //============
-    CPlayerFBRController();
-    virtual ~CPlayerFBRController();
+    CPlayerAnimator();
+    virtual ~CPlayerAnimator();
 
 };

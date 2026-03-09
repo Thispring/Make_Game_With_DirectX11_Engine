@@ -31,6 +31,14 @@ void CPlayerController::Tick()
 	Attack();
 }
 
+void CPlayerController::SaveToLevelFile(FILE* _File)
+{
+}
+
+void CPlayerController::LoadFromLevelFile(FILE* _File)
+{
+}
+
 void CPlayerController::Move()
 {
 	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();

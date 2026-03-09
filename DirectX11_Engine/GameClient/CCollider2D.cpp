@@ -103,3 +103,15 @@ void CCollider2D::FinalTick()
 	else
 		assert(nullptr);
 }
+
+void CCollider2D::SaveToLevelFile(FILE* _File)
+{
+	fwrite(&m_Offset, sizeof(Vec2), 1, _File);
+	fwrite(&m_Scale, sizeof(Vec2), 1, _File);
+}
+
+void CCollider2D::LoadFromLevelFile(FILE* _File)
+{
+	fread(&m_Offset, sizeof(Vec2), 1, _File);
+	fread(&m_Scale, sizeof(Vec2), 1, _File);
+}

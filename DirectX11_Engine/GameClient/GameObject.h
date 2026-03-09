@@ -72,6 +72,10 @@ public:
 	void RegisterAsParent();
 	void DeregisterAsParent();
 
+	// File I/O
+	void SaveToLevelFile(FILE* _File);
+	void LoadFromLevelFile(FILE* _File);
+
 
 	//=========
 	// Get, Set

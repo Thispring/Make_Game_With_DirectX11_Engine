@@ -82,6 +82,22 @@ void CTransform::FinalTick()
 	}
 }
 
+void CTransform::SaveToLevelFile(FILE* _File)
+{
+	fwrite(&m_RelativePos, sizeof(Vec3), 1, _File);
+	fwrite(&m_RelativeScale, sizeof(Vec3), 1, _File);
+	fwrite(&m_RelativeRot, sizeof(Vec3), 1, _File);
+	fwrite(&m_IndependentScale, sizeof(bool), 1, _File);
+}
+
+void CTransform::LoadFromLevelFile(FILE* _File)
+{
+	fread(&m_RelativePos, sizeof(Vec3), 1, _File);
+	fread(&m_RelativeScale, sizeof(Vec3), 1, _File);
+	fread(&m_RelativeRot, sizeof(Vec3), 1, _File);
+	fread(&m_IndependentScale, sizeof(bool), 1, _File);
+}
+
 Vec3 CTransform::GetWorldScale()
 {
 	Vec3 vWorldScale = m_RelativeScale;

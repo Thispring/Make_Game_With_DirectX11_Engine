@@ -193,26 +193,6 @@ KEY: LBTN
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
-Comment: Player의 y축 위치를 받아서 카메라 위치 조정
-KEY: UP
-KEY_STATE: PRESSED
-Source File: CCamMoveScript.cpp
-
-Comment: vPos.y += DT * 250.f;
-KEY: DOWN
-KEY_STATE: PRESSED
-Source File: CCamMoveScript.cpp
-
-Comment: vPos.y -= DT * 250.0f;
-KEY: LEFT
-KEY_STATE: PRESSED
-Source File: CCamMoveScript.cpp
-
-Comment: No Comment
-KEY: RIGHT
-KEY_STATE: PRESSED
-Source File: CCamMoveScript.cpp
-
 Comment: No Comment
 KEY: UP
 KEY_STATE: RELEASED

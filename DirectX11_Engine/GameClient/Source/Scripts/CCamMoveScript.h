@@ -1,5 +1,7 @@
 #pragma once
 #include "CScript.h"
+#include "GameObject.h"
+
 
 // 카메라 모드를 설정하여, 이동방식을 다르게 설계
 enum class CAM_MOVE_MODE
@@ -14,6 +16,8 @@ class CCamMoveScript :
 
 private:
     CAM_MOVE_MODE   m_MoveMode;
+
+    Ptr<GameObject> m_Target;         // Pos를 추적할 타겟 오브젝트 (Player)
 
     Vec3            m_DebugOriPos;    // Debug 모드 초기 위치
     Vec3            m_DebugOriRot;    // Debug 모드 초기 회전
@@ -32,8 +36,6 @@ public:
     void OrthoCamMove();
     void PrespecCamMove();
     void MouseCamMove();
-
-    void InGameCamMove();
 
     // Vec3의 각 요소의 절댓값을 계산하는 함수
     Vec3 Vec3Abs(const Vec3& v) 
@@ -54,6 +56,9 @@ public:
     virtual void Tick() override;   
     CLONE(CCamMoveScript);
     
+    virtual void SaveToLevelFile(FILE* _File) override;
+    virtual void LoadFromLevelFile(FILE* _File) override;
+
 
     //============
     // 생성, 소멸자

@@ -151,14 +151,20 @@ void ESpriteUI::Tick_UI()
 	//Vec2 OffsetUV = pSprite->GetOffsetUV();
 
 
-	// Sprite 이미지 표시
-	// NOTE(26-03-06):
-	// ImGui로의 UV 좌표 계산문제 있음
-	// 
-	// BackGroundUV, OffsetUV로 실제 Atlas보다 넓게 잡아서 렌더링 중이기 때문에
-	// BackGroundUV 좌표를 고려하여 다시 계산해야함
+	/****************************************************************************
+	* Sprite 이미지 표시
+	* NOTE(26-03-06):
+	* ImGui로의 UV 좌표 계산문제 있음
+	* 
+	* BackGroundUV, OffsetUV로 실제 Atlas보다 넓게 잡아서 렌더링 중이기 때문에
+	* BackGroundUV 좌표를 고려하여 다시 계산해야함
+	*
+	* ImageWithBg함수의 uv0 파라미터는 텍스쳐에서 가져올 영역의 좌상단(LeftTop) 좌표,
+	* uv1은 텍스쳐에서 가져올 영역의 우하단(RightBottom) 좌표입니다.
+	* 우하단 좌표는 '시작점 + 크기'로 계산할 수 있습니다.
+	****************************************************************************/
 	ImGui::ImageWithBg((ImTextureRef)pAtlas->GetSRV().Get()
 		, ImVec2(200, 200)
-		, LeftTopUV, SliceUV
+		, LeftTopUV, LeftTopUV + SliceUV
 		, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
 }

@@ -73,6 +73,9 @@ public:
     virtual void FinalTick() override;
     CLONE(CCamera);
 
+    virtual void SaveToLevelFile(FILE* _File) override;
+    virtual void LoadFromLevelFile(FILE* _File) override;
+
 
     //=========
     // Get, Set

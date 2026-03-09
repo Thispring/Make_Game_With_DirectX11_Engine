@@ -274,12 +274,6 @@
     <ClInclude Include="CEditorCamMoveScript.h">
       <Filter>GameEngine\Component\Script</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\CPlayerFBRController.h">
-      <Filter>Source\ContentScript\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\CEnemyScript.h">
-      <Filter>Source\ContentScript\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Scripts\CEnemySpawner.h">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
@@ -293,6 +287,21 @@
       <Filter>Source\ContentScript\Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\CPlayerController.h">
+      <Filter>Source\ContentScript\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CEnemyStatus.h">
+      <Filter>Source\ContentScript\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CEnemyAnimator.h">
+      <Filter>Source\ContentScript\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CEnemyBehavior.h">
+      <Filter>Source\ContentScript\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteMaker.h">
+      <Filter>GameEngine\Editor\ComponentUI\SpriteMaker</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CPlayerAnimator.h">
       <Filter>Source\ContentScript\Player</Filter>
     </ClInclude>
   </ItemGroup>
@@ -546,12 +555,6 @@
     <ClCompile Include="CEditorCamMoveScript.cpp">
       <Filter>GameEngine\Component\Script</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripts\CPlayerFBRController.cpp">
-      <Filter>Source\ContentScript\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\CEnemyScript.cpp">
-      <Filter>Source\ContentScript\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scripts\CEnemySpawner.cpp">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
@@ -565,6 +568,21 @@
       <Filter>Source\ContentScript\Player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\CPlayerStatus.cpp">
+      <Filter>Source\ContentScript\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CEnemyAnimator.cpp">
+      <Filter>Source\ContentScript\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CEnemyBehavior.cpp">
+      <Filter>Source\ContentScript\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CEnemyStatus.cpp">
+      <Filter>Source\ContentScript\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteMaker.cpp">
+      <Filter>GameEngine\Editor\ComponentUI\SpriteMaker</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CPlayerAnimator.cpp">
       <Filter>Source\ContentScript\Player</Filter>
     </ClCompile>
   </ItemGroup>
@@ -808,6 +826,9 @@
     </Filter>
     <Filter Include="Source\ContentScript\Enemy">
       <UniqueIdentifier>{46d5911a-edc1-4be8-a35f-b74a01457fa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Editor\ComponentUI\SpriteMaker">
+      <UniqueIdentifier>{b5560ec7-fca8-4424-83a0-cf106c5934c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

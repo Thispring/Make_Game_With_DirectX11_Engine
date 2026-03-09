@@ -149,3 +149,19 @@ void CTileRender::CreateMaterial()
 
 	SetMaterial(pMtrl);
 }
+
+void CTileRender::SaveToLevelFile(FILE* _File)
+{
+	CRenderComponent::SaveToLevelFile(_File);
+
+	SaveAssetRef(_File, m_TileMap.Get());
+}
+
+void CTileRender::LoadFromLevelFile(FILE* _File)
+{
+	CRenderComponent::LoadFromLevelFile(_File);
+
+	m_TileMap = LoadAssetRef<ATileMap>(_File);
+
+	SetTileMap(m_TileMap);
+}

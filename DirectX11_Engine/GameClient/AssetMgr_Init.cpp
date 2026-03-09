@@ -381,8 +381,11 @@ void AssetMgr::CreateEngineSprite()
 	* 해당 문자열은 생성된 Sprite의 Key값으로 설정 합니다.
 	***********************************************/
 
-	// Player Atlas
-	Ptr<ATexture> pAtlas = FIND(ATexture, L"cat1_Atlas");		// Texture 생성 시 설정한 이름 String을 입력합니다. 
+	// Enemy Atlas: 
+	// mon1_Atlas, (64, 64)
+	// Player Atlas: 
+	// cat1_Atlas (64, 64)
+	Ptr<ATexture> pAtlas = FIND(ATexture, L"mon1_Atlas");		// Texture 생성 시 설정한 이름 String을 입력합니다. 
 
 	// Texture의 가로 세로 길이를 Getter로 얻어옵니다.
 	float Width = pAtlas->GetWidth();
@@ -392,54 +395,60 @@ void AssetMgr::CreateEngineSprite()
 	// UV 좌표 기준으로 값을 설정합니다. (자를 길이(높이, 너비)를 Vec2 값에 설정) 
 	Vec2 SlicePixel = Vec2(64.f, 64.f);
 
-	//// 위에서 설정한 값과 반복문을 이용하여
-	//// Texture 이미지를 잘라 Sprite를 생성합니다. 
-	//Ptr<ASprite> pSprite = nullptr;
-	//for (int i = 0; i < 10; ++i)	// 몇 번 반복할지는, 몇 개의 이미지를 만들지에 맞게 결정합니다.
-	//{
-	//	// Sprite의 이름을 설정합니다.
-	//	// 만약 파일 형식으로 제작을 원한다면, 폴더 경로 + 확장자명을 적어둡니다.
-	//	wchar_t Buff[50] = {};
-	//	swprintf_s(Buff, L"Sprite\\cat_OTcombo_%d.sprite", i);
+	// 위에서 설정한 값과 반복문을 이용하여
+	// Texture 이미지를 잘라 Sprite를 생성합니다. 
+	Ptr<ASprite> pSprite = nullptr;
+	for (int i = 0; i < 4; ++i)	// 몇 번 반복할지는, 몇 개의 이미지를 만들지에 맞게 결정합니다.
+	{
+		// Sprite의 이름을 설정합니다.
+		// 만약 파일 형식으로 제작을 원한다면, 폴더 경로 + 확장자명을 적어둡니다.
+		wchar_t Buff[50] = {};
 
-	//	pSprite = new ASprite;
-	//	pSprite->SetName(Buff);
-	//	pSprite->SetAtlas(pAtlas);
+		// 10 이하이면 "0%d"로 네이밍 ex) 02.sprite
+		if (i < 10) swprintf_s(Buff, L"Sprite\\mon1_Idle_0%d.sprite", i);
+		else swprintf_s(Buff, L"Sprite\\mon1_Idle_%d.sprite", i);
 
-	//	// 원점 설정
-	//	// 높이 UV => 0 -> 0.0625 (아틀라스 기준 2번째)
-	//	pSprite->SetLeftTopUV(Vec2((SlicePixel.x / Width) * (float)i, 0.5625f));
+		pSprite = new ASprite;
+		pSprite->SetName(Buff);
+		pSprite->SetAtlas(pAtlas);
 
-	//	// x, y축 각각 '자를 해상도'에서 '아틀라스 해상도'를 나누기
-	//	pSprite->SetSliceUV(SlicePixel / Vec2(Width, Height));
-	//	// BackgorundUV는 자를 해상도 * 2로 설정 
-	//	pSprite->SetBackgroundUV(Vec2(0.125f, 0.125f));
+		// 원점 설정
+		// 높이 UV => 0 -> 0.0625 (아틀라스 기준 2번째)
+		pSprite->SetLeftTopUV(Vec2((SlicePixel.x / Width) * (float)i, 0.f));
 
-	//	// 만들어진 Sprite를 등록합니다.
-	//	// 
-	//	// AddAsset => 런타임에만 등록
-	//	AddAsset(pSprite->GetName(), pSprite.Get());
-	//	// Save => 파일 형태로 등록
-	//	///pSprite->Save(CONTENT_PATH + pSprite->GetName());
-	//	pSprite->Save(CONTENT_PATH + pSprite->GetKey());	// 경로가 곧 Key 값
-	//}
+		// x, y축 각각 '자를 해상도'에서 '아틀라스 해상도'를 나누기
+		pSprite->SetSliceUV(SlicePixel / Vec2(Width, Height));
+		// BackgorundUV는 자를 해상도(UV 기준 정규화) * 2로 설정 
+		pSprite->SetBackgroundUV(Vec2(0.125f, 0.125f));
+
+		// 만들어진 Sprite를 등록합니다.
+		// 
+		// AddAsset => 런타임에만 등록
+		AddAsset(pSprite->GetName(), pSprite.Get());
+		// Save => 파일 형태로 등록
+		///pSprite->Save(CONTENT_PATH + pSprite->GetName());
+		pSprite->Save(CONTENT_PATH + pSprite->GetKey());	// 경로가 곧 Key 값
+	}
 
 
-	//// Flipbook 객체 생성 후, 이름을 설정하고
-	//// 반복문을 통해, 이어서 보여줄 sprite들을 가르키게 합니다.
-	//Ptr<AFlipbook> pFlipbook = nullptr;
+	// Flipbook 객체 생성 후, 이름을 설정하고
+	// 반복문을 통해, 이어서 보여줄 sprite들을 가르키게 합니다.
+	Ptr<AFlipbook> pFlipbook = nullptr;
 
-	//pFlipbook = new AFlipbook;
-	//pFlipbook->SetName(L"Flipbook\\cat_OTcombo.flip");
+	pFlipbook = new AFlipbook;
+	pFlipbook->SetName(L"Flipbook\\mon1_Idle.flip");
 
-	//for (int i = 0; i < 8; ++i)
-	//{
-	//	wchar_t Buff[50] = {};
-	//	swprintf_s(Buff, L"Sprite\\cat_OTcombo_%d.sprite", i);
-	//	pFlipbook->AddSprite(LOAD(ASprite, Buff));
-	//}
-	//AddAsset(pFlipbook->GetName(), pFlipbook.Get());
-	//pFlipbook->Save(CONTENT_PATH + pFlipbook->GetKey());
+	for (int i = 0; i < 4; ++i)
+	{
+		wchar_t Buff[50] = {};
+
+		if (i < 10) swprintf_s(Buff, L"Sprite\\mon1_Idle_0%d.sprite", i);
+		else swprintf_s(Buff, L"Sprite\\mon1_Idle_%d.sprite", i);
+		
+		pFlipbook->AddSprite(LOAD(ASprite, Buff));
+	}
+	AddAsset(pFlipbook->GetName(), pFlipbook.Get());
+	pFlipbook->Save(CONTENT_PATH + pFlipbook->GetKey());
 
 
 	// Asset Load
@@ -471,11 +480,80 @@ void AssetMgr::CreateEngineSprite()
 		Load<ASprite>(Buff, Buff);
 	}
 
+	for (int i = 6; i < 12; ++i)
+	{
+		wchar_t Buff[50] = {};
+		// 10 이하이면 "0%d"로 네이밍 ex) 02.sprite
+		if (i < 10) swprintf_s(Buff, L"Sprite\\cat_MiddleKick_0%d.sprite", i);
+		else swprintf_s(Buff, L"Sprite\\cat_MiddleKick_%d.sprite", i);
+		Load<ASprite>(Buff, Buff);
+	}
+
 
 	Load<AFlipbook>(L"Flipbook\\cat_Idle.flip", L"Flipbook\\cat_Idle.flip");
 	Load<AFlipbook>(L"Flipbook\\cat_Walk.flip", L"Flipbook\\cat_Walk.flip");
 	Load<AFlipbook>(L"Flipbook\\cat_Jump.flip", L"Flipbook\\cat_Jump.flip");
 	Load<AFlipbook>(L"Flipbook\\cat_OTcombo.flip", L"Flipbook\\cat_OTcombo.flip");
+	Load<AFlipbook>(L"Flipbook\\cat_MiddleKick.flip", L"Flipbook\\cat_MiddleKick.flip");
+}
+
+void AssetMgr::CreateEngineSprite(wstring _Name, Vec2 _Slice, int _Loop, wstring _Path, float _Origin)
+{
+	#pragma region Atlas 이미지에서 Texture를 생성하는 방법
+	Ptr<ATexture> pAtlas = FIND(ATexture, _Name);		// Texture 생성 시 설정한 이름 String을 입력합니다. 
+
+	// Texture의 가로 세로 길이를 Getter로 얻어옵니다.
+	float Width = pAtlas->GetWidth();
+	float Height = pAtlas->GetHeight();
+
+	// Texture 이미지를 얼마만큼의 길이로 자를 것인지 설정합니다.
+	// UV 좌표 기준으로 값을 설정합니다. (자를 길이(높이, 너비)를 Vec2 값에 설정) 
+	// 매개변수: _Slice 사용
+
+	// 위에서 설정한 값과 반복문을 이용하여
+	// Texture 이미지를 잘라 Sprite를 생성합니다. 
+	Ptr<ASprite> pSprite = nullptr;
+	for (int i = 0; i < _Loop; ++i)	// 몇 번 반복할지는, 몇 개의 이미지를 만들지에 맞게 결정합니다.
+	{
+		// Sprite의 이름을 설정합니다.
+		// 만약 파일 형식으로 제작을 원한다면, 폴더 경로 + 확장자명을 적어둡니다.
+		wchar_t Buff[50] = {};
+
+		//==================================================================
+		// NOTE(26-03-09): _Path 매개변수로 받았을 때, %d를 어떻게 합칠지 고민하기
+		//==================================================================
+		// _Path는 0%d 이전까지만 받고, 이후는 함수에서 +연산으로 붙이게 하기
+		// std::to_wstring(i) 로 붙이는 방법이 있음
+		// 10 이하이면 "0%d"로 네이밍 ex) 02.sprite
+		wstring spritePath = {};
+
+		if (i < 10) spritePath = _Path + to_wstring(0) + to_wstring(i) + L".sprite";
+		else spritePath = _Path + to_wstring(i) + L".sprite";
+
+		pSprite = new ASprite;
+		pSprite->SetName(Buff);
+		pSprite->SetAtlas(pAtlas);
+
+		// UV 기준 원점 설정
+		pSprite->SetLeftTopUV(Vec2((_Slice.x / Width) * (float)i, _Origin));
+
+		// x, y축 각각 '자를 해상도'에서 '아틀라스 해상도'를 나누기
+		pSprite->SetSliceUV(_Slice / Vec2(Width, Height));
+
+		// BackgorundUV는 자를 해상도(UV 기준 정규화) * 2로 설정 
+		//==================================================================
+		// NOTE(26-03-09): _Slice 매개변수를 UV 기준 정규화하는 기능 구현하기
+		//==================================================================
+		pSprite->SetBackgroundUV(Vec2(0.125f, 0.125f));
+
+		// 만들어진 Sprite를 등록합니다.
+		// 
+		// AddAsset => 런타임에만 등록
+		AddAsset(pSprite->GetName(), pSprite.Get());
+		// Save => 파일 형태로 등록
+		pSprite->Save(CONTENT_PATH + pSprite->GetKey());	// 경로가 곧 Key 값
+	}
+	#pragma endregion
 }
 
 void AssetMgr::CreateAssetByCode()

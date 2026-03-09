@@ -54,6 +54,14 @@ void CEditorCamMoveScript::Tick()
 		SwitchingType(Camera()->GetTypeRef());
 }
 
+void CEditorCamMoveScript::SaveToLevelFile(FILE* _File)
+{
+}
+
+void CEditorCamMoveScript::LoadFromLevelFile(FILE* _File)
+{
+}
+
 void CEditorCamMoveScript::MoveOrigin()
 {
 	// 현재 자신의 위치, 회전을 원래 위치로 되돌린다.
@@ -147,3 +155,4 @@ void CEditorCamMoveScript::MouseCamMove()
 	Transform()->SetRelativePos(vPos);
 	Transform()->SetRelativeRot(vRot);
 }
+

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "CEnemySpawner.h"
-#include "CEnemyScript.h"
 #include "GameObject.h"
+#include "TimeMgr.h"
 #include "AssetMgr.h"
 
 CEnemySpawner::CEnemySpawner()
@@ -24,7 +24,6 @@ void CEnemySpawner::SpawnEnemy()
 
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CFlipbookRender);
-	pObject->AddComponent(new CEnemyScript);
 	pObject->AddComponent(new CCollider2D);
 
 	Vec3 vMyPos = GetOwner()->Transform()->GetRelativePos();
@@ -76,5 +75,13 @@ void CEnemySpawner::Tick()
 void CEnemySpawner::Begin()
 {
 	srand(time(NULL));
+}
+
+void CEnemySpawner::SaveToLevelFile(FILE* _File)
+{
+}
+
+void CEnemySpawner::LoadFromLevelFile(FILE* _File)
+{
 }
 

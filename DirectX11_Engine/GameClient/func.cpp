@@ -184,12 +184,23 @@ wstring LoadWString(FILE* _File)
 #include "Source/Scripts/CCamMoveScript.h"
 #include "Source/Scripts/CPlayerStatus.h"
 #include "Source/Scripts/CPlayerController.h"
-#include "Source/Scripts/CPlayerFBRController.h"
-#include "Source/Scripts/CEnemyScript.h"
+#include "Source/Scripts/CPlayerAnimator.h"
 #include "Source/Scripts/CEnemySpawner.h"
+#include "Source/Scripts/CEnemyStatus.h"
+#include "Source/Scripts/CEnemyBehavior.h"
+#include "Source/Scripts/CEnemyAnimator.h"
 #include "CSpriteRender.h"
 void CreateLevel()
 {
+	//{
+	//	// 파일로 저장된 Level 불러오기
+	//	Ptr<ALevel> pLevel = LOAD(ALevel, L"Level\\Normal_Stage_0.lv");
+	//	ChangeLevel(L"Level\\Normal_Stage_0.lv");
+	//}
+
+	//return;
+
+
 	/*******************************************
 	* Level에 최초 생성할 오브젝트 정보를 정의합니다.
 	*******************************************/
@@ -197,7 +208,7 @@ void CreateLevel()
 	//===========
 	// Level 생성
 	//===========
-	Ptr<ALevel> pLevel = new ALevel;
+	Ptr<ALevel> pLevel = nullptr;
 	pLevel = new ALevel;
 	pLevel->SetName(L"Normal_Stage_0");
 
@@ -389,7 +400,7 @@ void CreateLevel()
 	pObject->AddComponent(new CFlipbookRender);
 	pObject->AddComponent(new CPlayerStatus);
 	pObject->AddComponent(new CPlayerController);
-	pObject->AddComponent(new CPlayerFBRController);
+	pObject->AddComponent(new CPlayerAnimator);
 	pObject->AddComponent(new CCollider2D);
 
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 10.f, -50.f));
@@ -414,27 +425,26 @@ void CreateLevel()
 	//======
 	// Enemy
 	//======
-	//pObject = new GameObject;
-	//pObject->SetName(L"Enemy");
+	pObject = new GameObject;
+	pObject->SetName(L"Enemy");
 
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CFlipbookRender);
-	//pObject->AddComponent(new CEnemyScript);
-	//pObject->AddComponent(new CCollider2D);
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CFlipbookRender);
+	pObject->AddComponent(new CEnemyStatus);
+	pObject->AddComponent(new CEnemyBehavior);
+	pObject->AddComponent(new CEnemyAnimator);
+	pObject->AddComponent(new CCollider2D);
 
-	//pObject->Transform()->SetRelativePos(Vec3(75.f, 10.f, -20.f));
-	//pObject->Transform()->SetRelativeScale(Vec3(25.f, 25.f, 1.f));
-	//pObject->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
+	pObject->Transform()->SetRelativePos(Vec3(100.f, 10.f, -50.f));
+	pObject->Transform()->SetRelativeScale(Vec3(-100.f, 100.f, 1.f));
+	pObject->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
 
-	//// Enemy는 플레이어와 동일한 이미지의 Sprite와 FlipBook을 사용하되, 색상을 다르게 설정합니다.
-	////	=> monster.fx에서 color 리턴값을 다르게 설정
-	//pObject->FlipbookRender()->AddFlipbook(LOAD(AFlipbook, L"Flipbook\\BotMove.flip"));
-	//pObject->FlipbookRender()->AddFlipbook(LOAD(AFlipbook, L"Flipbook\\BotIdle.flip"));
-	//pObject->FlipbookRender()->AddFlipbook(LOAD(AFlipbook, L"Flipbook\\BotAttack.flip"));
 
-	//pObject->FlipbookRender()->Play(1, 8.f, -1);
+	pObject->FlipbookRender()->AddFlipbook(LOAD(AFlipbook, L"Flipbook\\mon1_Idle.flip"));
 
-	//pLevel->AddObject(5, pObject);
+	pObject->FlipbookRender()->Play(0, 8.f, -1);
+
+	pLevel->AddObject(5, pObject);
 
 
 	// MeshRender Object
@@ -470,6 +480,7 @@ void CreateLevel()
 	// 레벨 충돌 설정
 	//=============
 	pLevel->CheckCollisionLayer(2, 3);	// Tile <-> Player
+	pLevel->CheckCollisionLayer(2, 5);	// Tile <-> Enemy
 
 
 	//===============
@@ -479,6 +490,10 @@ void CreateLevel()
 
 	// 생성한 Level을 Asset으로 등록
 	AssetMgr::GetInst()->AddAsset(L"Normal_Stage_0", pLevel.Get());
+
+	// Level을 파일로 저장
+	wstring ContentPath = CONTENT_PATH;
+	pLevel->Save(ContentPath + L"Level\\Normal_Stage_0.lv");
 
 	// TaskMgr에게 다음 프레임에 실행할 Level을 변경하도록 요청
 	ChangeLevel(L"Normal_Stage_0");

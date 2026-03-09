@@ -11,6 +11,7 @@ CCamMoveScript::CCamMoveScript()
 	: CScript(SCRIPT_TYPE::CAMMOVESCRIPT)
 	, m_isMoving(false)
 	, m_MoveMode(CAM_MOVE_MODE::INGAME)
+	, m_Target(nullptr)
 {
 }
 
@@ -27,6 +28,9 @@ void CCamMoveScript::Begin()
 	// InGame Transform 정보는 Begin에서 초기화 후, 다른 함수에서 값 갱신
 	m_InGamePos = Transform()->GetRelativePos();
 	m_InGameRot = Transform()->GetRelativeRot();
+
+	// Player 게임 오브젝트를 찾아서 등록
+	m_Target = LevelMgr::GetInst()->FindObjectByName(L"Player");
 }
 
 void CCamMoveScript::Tick()
@@ -38,17 +42,6 @@ void CCamMoveScript::Tick()
 	// Change InGame Cam Move Mode
 	if (KEY_PRESSED(KEY::ALPHA1))
 		m_MoveMode = CAM_MOVE_MODE::INGAME;
-
-
-	// Player GameObject를 찾아서 Player 위치 갱신
-	if (!m_isMoving && m_MoveMode == CAM_MOVE_MODE::INGAME)
-	{
-		Ptr<GameObject> pPlayer = LevelMgr::GetInst()->FindObjectByName(L"Player");
-
-		// X축만 갱신
-		Vec3 playerPos = pPlayer->Transform()->GetRelativePos();
-		m_InGamePos.x = playerPos.x;
-	}
 
 
 	// Debug 모드일 때만 아래 이동 함수를 실행
@@ -67,7 +60,13 @@ void CCamMoveScript::Tick()
 	// InGame에서는 Player의 방향키 이동과 같은 속도와 방향으로 이동
 	else if (m_MoveMode == CAM_MOVE_MODE::INGAME)
 	{
-		InGameCamMove();
+		Vec3 vPos = Transform()->GetRelativePos();
+
+		// Player의 Z축을 제외하고 가져옵니다.
+		Vec3 playerPos = m_Target->Transform()->GetRelativePos();
+		playerPos.z = vPos.z;
+
+		GetOwner()->Transform()->SetRelativePos(playerPos);
 	}
 
 
@@ -80,6 +79,14 @@ void CCamMoveScript::Tick()
 	// Switches the camera's projection method when the LSHIFT KEY is pressed.
 	if (KEY_TAP(KEY::LSHIFT))
 		SwitchingType(Camera()->GetTypeRef());
+}
+
+void CCamMoveScript::SaveToLevelFile(FILE* _File)
+{
+}
+
+void CCamMoveScript::LoadFromLevelFile(FILE* _File)
+{
 }
 
 void CCamMoveScript::MoveOrigin()
@@ -184,25 +191,4 @@ void CCamMoveScript::MouseCamMove()
 
 	Transform()->SetRelativePos(vPos);
 	Transform()->SetRelativeRot(vRot);
-}
-
-void CCamMoveScript::InGameCamMove()
-{
-	Vec3 vPos = Transform()->GetRelativePos();
-
-	// 방향키를 눌렀을 때 이동
-	// Player의 이동 속도와 방향을 맞추기 위해
-	// 매개변수로 Player의 이동 속도값을 받는다.
-	// NOTE(26-03-06): UP, DOWN 임시 비활성화, 필요하다면
-	// Player의 y축 위치를 받아서 카메라 위치 조정
-	//if (KEY_PRESSED(KEY::UP))
-	//	vPos.y += DT * 250.f;
-	//if (KEY_PRESSED(KEY::DOWN))	
-	//	vPos.y -= DT * 250.0f;
-	if (KEY_PRESSED(KEY::LEFT))
-		vPos.x -= DT * 250.0f;
-	if (KEY_PRESSED(KEY::RIGHT))
-		vPos.x += DT * 250.0f;
-
-	Transform()->SetRelativePos(vPos);
 }

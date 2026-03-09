@@ -8,6 +8,8 @@
 #define AtlasTex    g_tex_0
 #define LeftTopUV   g_vec2_0
 #define SliceUV     g_vec2_1
+#define BackgroundUV    g_vec2_2
+#define OffsetUV        g_vec2_3
 
 struct VS_IN
 {
@@ -40,12 +42,36 @@ VS_OUT VS_Sprite(VS_IN _input)
 // 입력된 텍스쳐를 사용해서 픽셀쉐이더의 출력 색상으로 지정한다.
 float4 PS_Sprite(VS_OUT _input) : SV_Target
 {
-    // 입력으로 들어온 UV의 비율 * 자르려는 UV 비율
-    float2 vSpriteUV = _input.vUV * SliceUV + LeftTopUV;
-    float4 vColor = AtlasTex.Sample(g_sam_1, vSpriteUV);
+    //// 입력으로 들어온 UV의 비율 * 자르려는 UV 비율
+    //float2 vSpriteUV = _input.vUV * SliceUV + LeftTopUV;
+    //float4 vColor = AtlasTex.Sample(g_sam_1, vSpriteUV);
     
-    if (vColor.a == 0.f)
-        discard;
+    //if (vColor.a == 0.f)
+    //    discard;
+    float4 vColor = float4(1.f, 0.f, 1.f, 1.f);
+    
+    // Atlas 텍스쳐가 바인딩이 되었으면
+    if (g_btex_0)
+    {
+        float2 LeftTop = (LeftTopUV + SliceUV * 0.5f - BackgroundUV * 0.5f);
+        float2 SampleUV = LeftTop + BackgroundUV * _input.vUV - OffsetUV;
+        
+        if (LeftTopUV.x <= SampleUV.x && SampleUV.x <= LeftTopUV.x + SliceUV.x
+           && LeftTopUV.y <= SampleUV.y && SampleUV.y <= LeftTopUV.y + SliceUV.y)
+        {
+            vColor = AtlasTex.Sample(g_sam_1, SampleUV);
+        }
+        else
+        {
+            // 노란색으로 표시
+            //vColor = float4(1.f, 1.f, 0.f, 1.f);
+            // BackGround 부분 버리기
+            discard;
+        }
+        
+        if (vColor.a == 0.f)
+            discard;
+    }
     
     // 광원 적용        
     // 물체가 받는 빛의 총량

@@ -9,9 +9,8 @@
 
 #include "Source/Scripts/CCamMoveScript.h"
 #include "Source/Scripts/CPlayerStatus.h"
-#include "Source/Scripts/CEnemyScript.h"
 #include "Source/Scripts/CEnemySpawner.h"
-#include "Source/Scripts/CPlayerFBRController.h"
+#include "Source/Scripts/CPlayerAnimator.h"
 #include "CSpriteRender.h"
 
 LevelMgr::LevelMgr()
@@ -60,6 +59,7 @@ void LevelMgr::ChangeLevel(Ptr<ALevel> _NextLevel)
 	m_CurLevel = m_ShardLevel = _NextLevel;
 
 	m_LevelState = LEVEL_STATE::STOP;
+	_NextLevel->SetChanged();
 }
 
 void LevelMgr::Init()

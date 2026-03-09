@@ -55,3 +55,11 @@ void CPlayerStatus::Tick()
 
 }
 
+void CPlayerStatus::SaveToLevelFile(FILE* _File)
+{
+}
+
+void CPlayerStatus::LoadFromLevelFile(FILE* _File)
+{
+}
+
