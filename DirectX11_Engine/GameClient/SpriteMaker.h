@@ -11,7 +11,7 @@ private:
     //============
     // Make Sprite
     //============
-    wstring     m_Name;
+    wstring     m_TextureName;
     Vec2        m_SliceUV;
     int         m_StartLoop;
     int         m_EndLoop;
@@ -47,7 +47,7 @@ public:
     //=========
     // Get, Set
     //=========
-    GET_SET(wstring, Name);
+    GET_SET(wstring, TextureName);
     GET_SET(Vec2, SliceUV);
     GET_SET(int, StartLoop);
     GET_SET(int, EndLoop);
@@ -57,7 +57,6 @@ public:
     GET_SET(wstring, SpriteName);
     GET_SET(wstring, FlipbookName);
     GET_SET(int, FlipLoop);
-
 
 
     //============

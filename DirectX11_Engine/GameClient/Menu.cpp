@@ -89,7 +89,9 @@ void Menu::View()
 {
 	if (ImGui::BeginMenu("View"))
 	{
-		// 새로운 ImGui 창은 여기에서 생성
+		/******************************
+		* 새로운 ImGui 창은 여기에서 생성
+		******************************/
 
 		bool ShowDemo = EditorMgr::GetInst()->IsShowDemo();
 		if (ImGui::MenuItem("Demo", nullptr, &ShowDemo, true))
@@ -125,6 +127,13 @@ void Menu::View()
 			pSpriteMaker->SetActive(SpriteMakerActive);
 		}
 
+		Ptr<EditorUI> pMtrlMaker = EditorMgr::GetInst()->FindUI("MaterialMaker");
+		bool MtrlMakerActive = pMtrlMaker->IsActive();
+		if (ImGui::MenuItem("Create Material", nullptr, &MtrlMakerActive))
+		{
+			pMtrlMaker->SetActive(MtrlMakerActive);
+		}
+
 		ImGui::EndMenu();
 	}
 }
@@ -144,27 +153,21 @@ void Menu::Asset()
 	{
 		if (ImGui::BeginMenu("Create Asset"))
 		{
-			if (ImGui::MenuItem("Create Material"))
+			Ptr<EditorUI> pMtrlMaker = EditorMgr::GetInst()->FindUI("MaterialMaker");
+			bool MtrlMakerActive = pMtrlMaker->IsActive();
+			if (ImGui::MenuItem("Create Material", nullptr, &MtrlMakerActive))
 			{
-				Ptr<AMaterial> pMtrl = new AMaterial;
-				wstring Key = GetAssetName(ASSET_TYPE::MATERIAL, L"Material\\Default Material");
-				AssetMgr::GetInst()->AddAsset(Key, pMtrl.Get());
+				pMtrlMaker->SetActive(MtrlMakerActive);
+			}
+	
+			// 추후 Create Sprite, Flipbook, TileMap 클래스 분리
+			Ptr<EditorUI> pSpriteMaker = EditorMgr::GetInst()->FindUI("SpriteMaker");
+			bool SpriteMakerActive = pSpriteMaker->IsActive();
+			if (ImGui::MenuItem("Create Sprite, Flipbook, TileMap", nullptr, &SpriteMakerActive))
+			{
+				pSpriteMaker->SetActive(SpriteMakerActive);
 			}
 
-			if (ImGui::MenuItem("Create Sprite"))
-			{
-
-			}
-
-			if (ImGui::MenuItem("Create Flipbook"))
-			{
-
-			}
-
-			if (ImGui::MenuItem("Create TileMap"))
-			{
-
-			}
 			ImGui::EndMenu();
 		}
 

@@ -38,6 +38,7 @@ public:
 
 	// 매개변수를 받아, 외부에서 사용할 수 있도록 오버로딩
 	void CreateEngineSprite(wstring _Name, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _Path, int _OriIdx);
+	void CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wstring _ShaderName, RENDER_DOMAIN _Domain);
 	void CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Loop);
 
 	// 코드로 Asset을 제작하는 부분을 모아서 정리 (백업용)

@@ -331,7 +331,36 @@ void AssetMgr::CreateEngineTexture()
 
 void AssetMgr::CreateEngineMaterial() 
 {
+#pragma region Material 생성하는 방법
+	// File로 저장이 완료된 Asset은 Load 함수 호출부만 남겨두기
 
+	wstring FilePath = CONTENT_PATH;
+	Ptr<AMaterial> pMtrl = nullptr;
+
+	// =========
+	// Std2DMtrl 
+	// =========
+	pMtrl = new AMaterial;
+	pMtrl->SetName(L"Material\\Std2DMtrl.mtrl");
+	pMtrl->SetShader(Find<AGraphicShader>(L"Std2DShader"));
+	pMtrl->SetTexture(TEX_0, Find<ATexture>(L"cubeImg"));
+	pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_MASKED);
+	AddAsset(pMtrl->GetName(), pMtrl.Get());
+	pMtrl->Save(FilePath + pMtrl->GetKey());
+
+	// =====
+	// 디버그 
+	// =====
+	pMtrl = new AMaterial;
+	pMtrl->SetName(L"Material\\DbgMtrl.mtrl");
+	pMtrl->SetShader(Find<AGraphicShader>(L"DbgShader"));
+	pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_DEBUG);
+	AddAsset(pMtrl->GetName(), pMtrl.Get());
+	pMtrl->Save(FilePath + pMtrl->GetKey());
+
+	Load<AMaterial>(L"Material\\Std2DMtrl.mtrl", L"Material\\Std2DMtrl.mtrl");
+	Load<AMaterial>(L"Material\\DbgMtrl.mtrl", L"Material\\DbgMtrl.mtrl");
+#pragma endregion
 }
 
 void AssetMgr::CreateEngineSprite()
@@ -428,6 +457,21 @@ void AssetMgr::CreateEngineSprite(wstring _Name, Vec2 _Slice, int _StartLoop, in
 		// Save => 파일 형태로 등록
 		pSprite->Save(CONTENT_PATH + pSprite->GetKey());	// 경로가 곧 Key 값
 	}
+	#pragma endregion
+}
+
+void AssetMgr::CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wstring _ShaderName, RENDER_DOMAIN _Domain)
+{
+	#pragma region Material 생성하는 방법
+	Ptr<AMaterial> pMtrl = nullptr;
+
+	pMtrl = new AMaterial;
+	pMtrl->SetName(_MtrlName);
+	pMtrl->SetShader(Find<AGraphicShader>(_ShaderName));
+	pMtrl->SetTexture(TEX_0, Find<ATexture>(_TextureName));
+	pMtrl->SetDomain(_Domain);
+	AddAsset(pMtrl->GetName(), pMtrl.Get());
+	pMtrl->Save(CONTENT_PATH + pMtrl->GetKey());
 	#pragma endregion
 }
 

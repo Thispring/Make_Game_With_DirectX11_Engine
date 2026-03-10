@@ -2,11 +2,12 @@
 #include "SpriteMaker.h"
 
 #include "AssetMgr.h"
+// ImGui::InputText의 기본 정의는 char* 버퍼, 이를 해결하기 위한 헤더
 #include "imgui/imgui_stdlib.h"
 
 SpriteMaker::SpriteMaker()
 	: EditorUI("SpriteMaker")
-	, m_Name {}
+	, m_TextureName {}
 	, m_SliceUV {}
 	, m_StartLoop(0)
 	, m_EndLoop(0)
@@ -26,7 +27,7 @@ SpriteMaker::~SpriteMaker()
 void SpriteMaker::SpriteSettingClear()
 {
 	// 모든 멤버의 값을 0으로 초기화 하는 함수
-	m_Name = {};
+	m_TextureName = {};
 	m_SliceUV = Vec2{ 0.f, 0.f };
 	m_StartLoop = 0;
 	m_EndLoop = 0;
@@ -49,13 +50,13 @@ void SpriteMaker::Tick_UI()
 		// Texture Name
 		ImGui::Text("Texture Name");
 		// wstring -> string 변환
-		string Name = string(m_Name.begin(), m_Name.end());
+		string Name = string(m_TextureName.begin(), m_TextureName.end());
 		// Name
 		ImGui::SameLine(150);
 		if (ImGui::InputText("##TEXTURENAME", &Name))
 		{
 			wstring wName = wstring(Name.begin(), Name.end());
-			SetName(wName);
+			SetTextureName(wName);
 		}
 
 		// InputText에서 혹시 Drop 받은 Payload가 있는지 체크
@@ -75,7 +76,7 @@ void SpriteMaker::Tick_UI()
 				Ptr<Asset> pAsset = (Asset*)data;
 
 				// 가져온 Texture의 Key 문자열을 세팅
-				SetName(pAsset->GetKey());
+				SetTextureName(pAsset->GetKey());
 			}
 
 			ImGui::EndDragDropTarget();
@@ -183,7 +184,7 @@ void SpriteMaker::Tick_UI()
 			if (ImGui::Button("OK", ImVec2(120, 0)))
 			{
 				// 저장 및 초기화
-				AssetMgr::GetInst()->CreateEngineSprite(m_Name, m_SliceUV, m_StartLoop, m_EndLoop, m_Path, m_OriIdx);
+				AssetMgr::GetInst()->CreateEngineSprite(m_TextureName, m_SliceUV, m_StartLoop, m_EndLoop, m_Path, m_OriIdx);
 				SpriteSettingClear();
 				ImGui::CloseCurrentPopup();
 			}

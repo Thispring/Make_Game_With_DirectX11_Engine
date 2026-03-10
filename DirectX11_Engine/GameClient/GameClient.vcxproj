@@ -217,6 +217,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="Inspector.h" />
     <ClInclude Include="KeyList.h" />
     <ClInclude Include="ELight2DUI.h" />
+    <ClInclude Include="MaterialMaker.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="EMeshRenderUI.h" />
     <ClInclude Include="Engine.h" />
@@ -321,6 +322,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="Inspector_Init.cpp" />
     <ClCompile Include="KeyList.cpp" />
     <ClCompile Include="ELight2DUI.cpp" />
+    <ClCompile Include="MaterialMaker.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="EMeshRenderUI.cpp" />
     <ClCompile Include="Engine.cpp" />

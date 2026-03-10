@@ -313,6 +313,9 @@
     <ClInclude Include="EScriptUI.h">
       <Filter>GameEngine\Editor\ComponentUI\Script_UI</Filter>
     </ClInclude>
+    <ClInclude Include="MaterialMaker.h">
+      <Filter>GameEngine\Editor\MaterialMaker</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -603,6 +606,9 @@
     <ClCompile Include="EScriptUI.cpp">
       <Filter>GameEngine\Editor\ComponentUI\Script_UI</Filter>
     </ClCompile>
+    <ClCompile Include="MaterialMaker.cpp">
+      <Filter>GameEngine\Editor\MaterialMaker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -853,6 +859,9 @@
     </Filter>
     <Filter Include="GameEngine\Editor\SpriteMaker">
       <UniqueIdentifier>{b5560ec7-fca8-4424-83a0-cf106c5934c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Editor\MaterialMaker">
+      <UniqueIdentifier>{3dbe14c4-6cd2-4afe-92d1-9480a2c1b248}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -24,3 +24,5 @@ public:
 
 // 자주 사용되는 함수 재정의
 #define CONTENT_PATH PathMgr::GetInst()->GetContentPath()
+// wstring 버전
+#define WCONTENT_PATH wstring(PathMgr::GetInst()->GetContentPath())
