@@ -166,6 +166,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="ALevel.h" />
     <ClInclude Include="AMaterial.h" />
     <ClInclude Include="AMesh.h" />
+    <ClInclude Include="APrefab.h" />
     <ClInclude Include="ASprite.h" />
     <ClInclude Include="Asset.h" />
     <ClInclude Include="AssetMgr.h" />
@@ -204,6 +205,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="ELevelUI.h" />
     <ClInclude Include="EMaterialUI.h" />
     <ClInclude Include="EMeshUI.h" />
+    <ClInclude Include="EScriptUI.h" />
     <ClInclude Include="ESoundUI.h" />
     <ClInclude Include="ESpriteRenderUI.h" />
     <ClInclude Include="ESpriteUI.h" />
@@ -211,6 +213,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="ETileMapUI.h" />
     <ClInclude Include="ETileRenderUI.h" />
     <ClInclude Include="extern.h" />
+    <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="Inspector.h" />
     <ClInclude Include="KeyList.h" />
     <ClInclude Include="ELight2DUI.h" />
@@ -269,6 +272,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="ALevel.cpp" />
     <ClCompile Include="AMaterial.cpp" />
     <ClCompile Include="AMesh.cpp" />
+    <ClCompile Include="APrefab.cpp" />
     <ClCompile Include="ASprite.cpp" />
     <ClCompile Include="Asset.cpp" />
     <ClCompile Include="AssetMgr.cpp" />
@@ -305,12 +309,14 @@ call CodeGen.exe</Command>
     <ClCompile Include="ELevelUI.cpp" />
     <ClCompile Include="EMaterialUI.cpp" />
     <ClCompile Include="EMeshUI.cpp" />
+    <ClCompile Include="EScriptUI.cpp" />
     <ClCompile Include="ESoundUI.cpp" />
     <ClCompile Include="ESpriteRenderUI.cpp" />
     <ClCompile Include="ESpriteUI.cpp" />
     <ClCompile Include="ETextureUI.cpp" />
     <ClCompile Include="ETileMapUI.cpp" />
     <ClCompile Include="ETileRenderUI.cpp" />
+    <ClCompile Include="imgui\imgui_stdlib.cpp" />
     <ClCompile Include="Inspector.cpp" />
     <ClCompile Include="Inspector_Init.cpp" />
     <ClCompile Include="KeyList.cpp" />

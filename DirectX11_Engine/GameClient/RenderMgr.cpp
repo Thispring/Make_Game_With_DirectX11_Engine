@@ -24,7 +24,7 @@ void RenderMgr::Init()
 	m_DbgObj = new GameObject;
 	m_DbgObj->AddComponent(new CTransform);
 	m_DbgObj->AddComponent(new CMeshRender);
-	m_DbgObj->MeshRender()->SetMaterial(FIND(AMaterial, L"DbgMtrl"));
+	m_DbgObj->MeshRender()->SetMaterial(FIND(AMaterial, L"Material\\DbgMtrl.mtrl"));
 
 	m_Light2DBuffer = new StructuredBuffer;
 }

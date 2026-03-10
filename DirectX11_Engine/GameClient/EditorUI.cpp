@@ -91,7 +91,9 @@ void EditorUI::Tick()
 	}
 	else
 	{
-		ImGui::BeginChild(m_UIName.c_str());
+		string StrKey = m_UIName + m_UIKey;
+
+		ImGui::BeginChild(StrKey.c_str(), m_SizeAsChild);
 
 		// Begin과 End사이에서 어떤 윈도우가
 		// 선택되었는지 확인
@@ -125,6 +127,20 @@ void EditorUI::CheckFocus()
 		EditorMgr::GetInst()->RegisterFocusedUI(this);
 }
 
+void EditorUI::OutputTitle(const string& _Title, ImVec4 _Color)
+{
+	ImGui::PushID(0);
+	// RGB 값을 모두 최대로 설정 (255, 255, 255)
+	ImGui::PushStyleColor(ImGuiCol_Button, _Color);
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, _Color);
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, _Color);
+	ImGui::Button(_Title.c_str());
+	ImGui::PopStyleColor(3);
+	ImGui::PopID();
+
+	ImGui::Spacing();
+	ImGui::Spacing();
+}
 
 //===============
 // 자료형 변환 함수

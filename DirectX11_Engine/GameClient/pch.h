@@ -15,8 +15,11 @@
 // 파일 입출력
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 
 using namespace std;
+// filesystem 헤더에는 흔한 단어로 된 함수가 많아, namespace로 구분합니다.
+namespace fs = std::filesystem;
 
 //============
 // STL 자료구조

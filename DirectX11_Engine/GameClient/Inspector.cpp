@@ -53,6 +53,45 @@ void Inspector::SetTargetObject(Ptr<GameObject> _Object)
 		m_arrComUI[i]->SetTarget(m_TargetObject);
 	}		
 
+	// TargetObject가 Script를 얼마나 가지고 있는지 검사, 등록
+	if (m_TargetObject != nullptr)
+	{
+		// 오브젝트의 Script에 대응하는 ScriptUI를 활성/비활성화
+		const vector<Ptr<CScript>>& vecScripts = m_TargetObject->GetScripts();
+
+		// 오브젝트가 보유한 Script 개수에 비해서 대응할 ScriptUI의 개수가 모자르면
+		// 동적으로 추가합니다.
+		if (m_vecScriptUI.size() < vecScripts.size())
+		{
+			int AddCount = vecScripts.size() - m_vecScriptUI.size();
+
+			for (int i = 0; i < AddCount; ++i)
+			{
+				EScriptUI* pScriptUI = new EScriptUI;
+				pScriptUI->SetSizeAsChild(Vec2(0.f, 150.f));
+				AddChildUI(pScriptUI);
+
+				m_vecScriptUI.push_back(pScriptUI);
+			}
+		}
+
+		// 오브젝트에서 가져온 Script를 각각의 ScriptUI에 세팅
+		for (size_t i = 0; i < m_vecScriptUI.size(); ++i)
+		{
+			if (vecScripts.size() <= i)
+				m_vecScriptUI[i]->SetScript(nullptr);
+			else
+				m_vecScriptUI[i]->SetScript(vecScripts[i].Get());
+		}
+	}
+	else
+	{
+		for (size_t i = 0; i < m_vecScriptUI.size(); ++i)
+		{
+			m_vecScriptUI[i]->SetScript(nullptr);
+		}
+	}
+
 	// AssetUI를 비활성화
 	m_TargetAsset = nullptr;
 	

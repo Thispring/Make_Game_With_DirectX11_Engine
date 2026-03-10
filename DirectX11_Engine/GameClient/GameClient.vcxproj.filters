@@ -299,10 +299,19 @@
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="SpriteMaker.h">
-      <Filter>GameEngine\Editor\ComponentUI\SpriteMaker</Filter>
+      <Filter>GameEngine\Editor\SpriteMaker</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\CPlayerAnimator.h">
       <Filter>Source\ContentScript\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_stdlib.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="APrefab.h">
+      <Filter>GameEngine\Asset\Prefab</Filter>
+    </ClInclude>
+    <ClInclude Include="EScriptUI.h">
+      <Filter>GameEngine\Editor\ComponentUI\Script_UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -580,10 +589,19 @@
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="SpriteMaker.cpp">
-      <Filter>GameEngine\Editor\ComponentUI\SpriteMaker</Filter>
+      <Filter>GameEngine\Editor\SpriteMaker</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\CPlayerAnimator.cpp">
       <Filter>Source\ContentScript\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_stdlib.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="APrefab.cpp">
+      <Filter>GameEngine\Asset\Prefab</Filter>
+    </ClCompile>
+    <ClCompile Include="EScriptUI.cpp">
+      <Filter>GameEngine\Editor\ComponentUI\Script_UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -827,7 +845,13 @@
     <Filter Include="Source\ContentScript\Enemy">
       <UniqueIdentifier>{46d5911a-edc1-4be8-a35f-b74a01457fa0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\Editor\ComponentUI\SpriteMaker">
+    <Filter Include="GameEngine\Asset\Prefab">
+      <UniqueIdentifier>{05d81f21-b3eb-4e1b-8033-1088c08088b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Editor\ComponentUI\Script_UI">
+      <UniqueIdentifier>{02545871-162c-4d61-b60b-000bf5edc129}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Editor\SpriteMaker">
       <UniqueIdentifier>{b5560ec7-fca8-4424-83a0-cf106c5934c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

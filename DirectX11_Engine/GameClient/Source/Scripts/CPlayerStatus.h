@@ -53,6 +53,7 @@ public:
     * override 키워드는 이 클래스의 함수가
     * 오버라이드 되었다는 것을 시각적으로 표시 (가독성 증가)
     *************************************************/
+    virtual void Init() override;
     virtual void Begin() override;
     virtual void Tick() override;
     CLONE(CPlayerStatus);

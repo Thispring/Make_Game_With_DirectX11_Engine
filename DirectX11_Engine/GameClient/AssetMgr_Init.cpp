@@ -10,9 +10,11 @@ void AssetMgr::Init()
 
 	CreateEngineTexture();
 
-	CreateEngineMaterial();
+	//CreateEngineMaterial();
 
-	CreateEngineSprite();
+	//CreateEngineSprite();
+
+	CreateEnginePrefab();
 }
 
 void AssetMgr::CreateEngineMesh()
@@ -329,48 +331,7 @@ void AssetMgr::CreateEngineTexture()
 
 void AssetMgr::CreateEngineMaterial() 
 {
-	// File로 저장이 완료된 Asset은 Load 함수 호출부만 남겨두기
 
-	wstring FilePath = CONTENT_PATH;
-	Ptr<AMaterial> pMtrl = nullptr;
-
-	#pragma region Default Material
-	// =========
-	// Std2DMtrl 
-	// =========
-	//pMtrl = new AMaterial;
-	//pMtrl->SetName(L"Std2DMtrl");
-	//pMtrl->SetShader(Find<AGraphicShader>(L"Std2DShader"));
-	//pMtrl->SetTexture(TEX_0, Find<ATexture>(L"cubeImg"));
-	//pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_MASKED);
-	//AddAsset(pMtrl->GetName(), pMtrl.Get());
-	//pMtrl->Save(FilePath + L"\\Material\\" + pMtrl->GetKey() + L".mtrl");
-
-	// =====
-	// 디버그 
-	// =====
-	//pMtrl = new AMaterial;
-	//pMtrl->SetName(L"DbgMtrl");
-	//pMtrl->SetShader(Find<AGraphicShader>(L"DbgShader"));
-	//pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_DEBUG);
-	//AddAsset(pMtrl->GetName(), pMtrl.Get());
-	//pMtrl->Save(FilePath + L"\\Material\\" + pMtrl->GetKey() + L".mtrl");
-
-	Load<AMaterial>(L"Std2DMtrl", L"Material\\Std2DMtrl.mtrl");
-	Load<AMaterial>(L"DbgMtrl", L"Material\\DbgMtrl.mtrl");
-	Load<AMaterial>(L"Material\\Default Material_0.mtrl", L"Material\\Default Material_0.mtrl");
-	#pragma endregion
-
-	#pragma region Content Material	
-	
-	// BackGround
-	Load<AMaterial>(L"CloudMtrl", L"Material\\CloudMtrl.mtrl");
-	Load<AMaterial>(L"SkyMtrl", L"Material\\SkyMtrl.mtrl");
-	Load<AMaterial>(L"SeaMtrl", L"Material\\SeaMtrl.mtrl");
-	Load<AMaterial>(L"GroundMtrl", L"Material\\GroundMtrl.mtrl");
-
-
-	#pragma endregion
 }
 
 void AssetMgr::CreateEngineSprite()
@@ -380,124 +341,34 @@ void AssetMgr::CreateEngineSprite()
 	* 생성 시, 경로 + 확장자 명을 문자열로 추가합니다.
 	* 해당 문자열은 생성된 Sprite의 Key값으로 설정 합니다.
 	***********************************************/
-
-	// Enemy Atlas: 
-	// mon1_Atlas, (64, 64)
-	// Player Atlas: 
-	// cat1_Atlas (64, 64)
-	Ptr<ATexture> pAtlas = FIND(ATexture, L"mon1_Atlas");		// Texture 생성 시 설정한 이름 String을 입력합니다. 
-
-	// Texture의 가로 세로 길이를 Getter로 얻어옵니다.
-	float Width = pAtlas->GetWidth();
-	float Height = pAtlas->GetHeight();
-
-	// Texture 이미지를 얼마만큼의 길이로 자를 것인지 설정합니다.
-	// UV 좌표 기준으로 값을 설정합니다. (자를 길이(높이, 너비)를 Vec2 값에 설정) 
-	Vec2 SlicePixel = Vec2(64.f, 64.f);
-
-	// 위에서 설정한 값과 반복문을 이용하여
-	// Texture 이미지를 잘라 Sprite를 생성합니다. 
-	Ptr<ASprite> pSprite = nullptr;
-	for (int i = 0; i < 4; ++i)	// 몇 번 반복할지는, 몇 개의 이미지를 만들지에 맞게 결정합니다.
-	{
-		// Sprite의 이름을 설정합니다.
-		// 만약 파일 형식으로 제작을 원한다면, 폴더 경로 + 확장자명을 적어둡니다.
-		wchar_t Buff[50] = {};
-
-		// 10 이하이면 "0%d"로 네이밍 ex) 02.sprite
-		if (i < 10) swprintf_s(Buff, L"Sprite\\mon1_Idle_0%d.sprite", i);
-		else swprintf_s(Buff, L"Sprite\\mon1_Idle_%d.sprite", i);
-
-		pSprite = new ASprite;
-		pSprite->SetName(Buff);
-		pSprite->SetAtlas(pAtlas);
-
-		// 원점 설정
-		// 높이 UV => 0 -> 0.0625 (아틀라스 기준 2번째)
-		pSprite->SetLeftTopUV(Vec2((SlicePixel.x / Width) * (float)i, 0.f));
-
-		// x, y축 각각 '자를 해상도'에서 '아틀라스 해상도'를 나누기
-		pSprite->SetSliceUV(SlicePixel / Vec2(Width, Height));
-		// BackgorundUV는 자를 해상도(UV 기준 정규화) * 2로 설정 
-		pSprite->SetBackgroundUV(Vec2(0.125f, 0.125f));
-
-		// 만들어진 Sprite를 등록합니다.
-		// 
-		// AddAsset => 런타임에만 등록
-		AddAsset(pSprite->GetName(), pSprite.Get());
-		// Save => 파일 형태로 등록
-		///pSprite->Save(CONTENT_PATH + pSprite->GetName());
-		pSprite->Save(CONTENT_PATH + pSprite->GetKey());	// 경로가 곧 Key 값
-	}
-
-
-	// Flipbook 객체 생성 후, 이름을 설정하고
-	// 반복문을 통해, 이어서 보여줄 sprite들을 가르키게 합니다.
-	Ptr<AFlipbook> pFlipbook = nullptr;
-
-	pFlipbook = new AFlipbook;
-	pFlipbook->SetName(L"Flipbook\\mon1_Idle.flip");
-
-	for (int i = 0; i < 4; ++i)
-	{
-		wchar_t Buff[50] = {};
-
-		if (i < 10) swprintf_s(Buff, L"Sprite\\mon1_Idle_0%d.sprite", i);
-		else swprintf_s(Buff, L"Sprite\\mon1_Idle_%d.sprite", i);
-		
-		pFlipbook->AddSprite(LOAD(ASprite, Buff));
-	}
-	AddAsset(pFlipbook->GetName(), pFlipbook.Get());
-	pFlipbook->Save(CONTENT_PATH + pFlipbook->GetKey());
-
-
-	// Asset Load
-	for (int i = 0; i < 4; ++i)
-	{
-		wchar_t Buff[50] = {};
-		swprintf_s(Buff, L"Sprite\\cat_Idle_%d.sprite", i);
-		Load<ASprite>(Buff, Buff);
-	}
-
-	for (int i = 0; i < 8; ++i)	
-	{
-		wchar_t Buff[50] = {};
-		swprintf_s(Buff, L"Sprite\\cat_Walk_%d.sprite", i);
-		Load<ASprite>(Buff, Buff);
-	}
-
-	for (int i = 0; i < 8; ++i)
-	{
-		wchar_t Buff[50] = {};
-		swprintf_s(Buff, L"Sprite\\cat_Jump_%d.sprite", i);
-		Load<ASprite>(Buff, Buff);
-	}
-
-	for (int i = 0; i < 10; ++i)
-	{
-		wchar_t Buff[50] = {};
-		swprintf_s(Buff, L"Sprite\\cat_OTcombo_%d.sprite", i);
-		Load<ASprite>(Buff, Buff);
-	}
-
-	for (int i = 6; i < 12; ++i)
-	{
-		wchar_t Buff[50] = {};
-		// 10 이하이면 "0%d"로 네이밍 ex) 02.sprite
-		if (i < 10) swprintf_s(Buff, L"Sprite\\cat_MiddleKick_0%d.sprite", i);
-		else swprintf_s(Buff, L"Sprite\\cat_MiddleKick_%d.sprite", i);
-		Load<ASprite>(Buff, Buff);
-	}
-
-
-	Load<AFlipbook>(L"Flipbook\\cat_Idle.flip", L"Flipbook\\cat_Idle.flip");
-	Load<AFlipbook>(L"Flipbook\\cat_Walk.flip", L"Flipbook\\cat_Walk.flip");
-	Load<AFlipbook>(L"Flipbook\\cat_Jump.flip", L"Flipbook\\cat_Jump.flip");
-	Load<AFlipbook>(L"Flipbook\\cat_OTcombo.flip", L"Flipbook\\cat_OTcombo.flip");
-	Load<AFlipbook>(L"Flipbook\\cat_MiddleKick.flip", L"Flipbook\\cat_MiddleKick.flip");
 }
 
-void AssetMgr::CreateEngineSprite(wstring _Name, Vec2 _Slice, int _Loop, wstring _Path, float _Origin)
+void AssetMgr::CreateEnginePrefab()
+{
+	//// Missile 역할 프리팹 제작
+	//GameObject* pObject = new GameObject;
+	//pObject->SetName(L"Missile");
+
+	//pObject->AddComponent(new CTransform);
+	//pObject->AddComponent(new CMeshRender);
+	//pObject->AddComponent(new CCollider2D);	
+	//pObject->AddComponent(new CMissileScript);		
+
+	//pObject->Transform()->SetRelativeScale(Vec3(10.f, 30.f, 1.f));
+
+	//pObject->MeshRender()->SetMesh(AssetMgr::GetInst()->Find<AMesh>(L"RectMesh"));
+	//pObject->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"Std2DMtrl"));
+
+	//// 미사일 오브젝트를 프리팹으로 등록
+	//Ptr<APrefab> pMissilePrefab = new APrefab;
+	//pMissilePrefab->SetObject(pObject);
+	//AddAsset(L"Prefab\\Missile.pref", pMissilePrefab.Get());
+
+	//wstring FilePath = CONTENT_PATH + L"Prefab\\Missile.pref";
+	//pMissilePrefab->Save(FilePath);
+}
+
+void AssetMgr::CreateEngineSprite(wstring _Name, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _Path, int _OriIdx)
 {
 	#pragma region Atlas 이미지에서 Texture를 생성하는 방법
 	Ptr<ATexture> pAtlas = FIND(ATexture, _Name);		// Texture 생성 시 설정한 이름 String을 입력합니다. 
@@ -513,7 +384,7 @@ void AssetMgr::CreateEngineSprite(wstring _Name, Vec2 _Slice, int _Loop, wstring
 	// 위에서 설정한 값과 반복문을 이용하여
 	// Texture 이미지를 잘라 Sprite를 생성합니다. 
 	Ptr<ASprite> pSprite = nullptr;
-	for (int i = 0; i < _Loop; ++i)	// 몇 번 반복할지는, 몇 개의 이미지를 만들지에 맞게 결정합니다.
+	for (int i = _StartLoop; i < _EndLoop; ++i)	// 몇 번 반복할지는, 몇 개의 이미지를 만들지에 맞게 결정합니다.
 	{
 		// Sprite의 이름을 설정합니다.
 		// 만약 파일 형식으로 제작을 원한다면, 폴더 경로 + 확장자명을 적어둡니다.
@@ -531,11 +402,14 @@ void AssetMgr::CreateEngineSprite(wstring _Name, Vec2 _Slice, int _Loop, wstring
 		else spritePath = _Path + to_wstring(i) + L".sprite";
 
 		pSprite = new ASprite;
-		pSprite->SetName(Buff);
+		pSprite->SetName(spritePath);
 		pSprite->SetAtlas(pAtlas);
 
 		// UV 기준 원점 설정
-		pSprite->SetLeftTopUV(Vec2((_Slice.x / Width) * (float)i, _Origin));
+		// 원점 공식:
+		// 파라미터로 받은 인덱스 * (_Slice.y / Height)
+		float Origin = _OriIdx * (_Slice.y / Height);
+		pSprite->SetLeftTopUV(Vec2((_Slice.x / Width) * (float)i, Origin));
 
 		// x, y축 각각 '자를 해상도'에서 '아틀라스 해상도'를 나누기
 		pSprite->SetSliceUV(_Slice / Vec2(Width, Height));
@@ -544,7 +418,8 @@ void AssetMgr::CreateEngineSprite(wstring _Name, Vec2 _Slice, int _Loop, wstring
 		//==================================================================
 		// NOTE(26-03-09): _Slice 매개변수를 UV 기준 정규화하는 기능 구현하기
 		//==================================================================
-		pSprite->SetBackgroundUV(Vec2(0.125f, 0.125f));
+		Vec2 bgUV = {((_Slice.x / Width) * 2), ((_Slice.y / Height) * 2)};
+		pSprite->SetBackgroundUV(bgUV);
 
 		// 만들어진 Sprite를 등록합니다.
 		// 
@@ -556,8 +431,76 @@ void AssetMgr::CreateEngineSprite(wstring _Name, Vec2 _Slice, int _Loop, wstring
 	#pragma endregion
 }
 
+void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Loop)
+{
+	#pragma region Flipbook 생성하는 방법
+	// Flipbook 객체 생성 후, 이름을 설정하고
+	// 반복문을 통해, 이어서 보여줄 sprite들을 가르키게 합니다.
+	Ptr<AFlipbook> pFlipbook = nullptr;
+
+	pFlipbook = new AFlipbook;
+	pFlipbook->SetName(_FlipbookName);
+
+	for (int i = 0; i < _Loop; ++i)
+	{
+		wstring spritePath = {};
+
+		if (i < 10) spritePath = _SpriteName + to_wstring(0) + to_wstring(i) + L".sprite";
+		else spritePath = _SpriteName + to_wstring(i) + L".sprite";
+
+		pFlipbook->AddSprite(LOAD(ASprite, spritePath));
+	}
+	AddAsset(pFlipbook->GetName(), pFlipbook.Get());
+	// Save => 파일 형태로 등록
+	pFlipbook->Save(CONTENT_PATH + pFlipbook->GetKey());	// 경로가 곧 Key 값
+	#pragma endregion
+}
+
 void AssetMgr::CreateAssetByCode()
 {
+	#pragma region Mesh 생성하는 방법
+
+	#pragma endregion
+
+	#pragma region Shader 생성하는 방법
+
+	#pragma endregion
+
+	#pragma region Texture 생성하는 방법
+
+	#pragma endregion
+
+	#pragma region Material 생성하는 방법
+	// File로 저장이 완료된 Asset은 Load 함수 호출부만 남겨두기
+
+	wstring FilePath = CONTENT_PATH;
+	Ptr<AMaterial> pMtrl = nullptr;
+
+	// =========
+	// Std2DMtrl 
+	// =========
+	pMtrl = new AMaterial;
+	pMtrl->SetName(L"Material\\Std2DMtrl.mtrl");
+	pMtrl->SetShader(Find<AGraphicShader>(L"Std2DShader"));
+	pMtrl->SetTexture(TEX_0, Find<ATexture>(L"cubeImg"));
+	pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_MASKED);
+	AddAsset(pMtrl->GetName(), pMtrl.Get());
+	pMtrl->Save(FilePath + pMtrl->GetKey());
+
+	// =====
+	// 디버그 
+	// =====
+	pMtrl = new AMaterial;
+	pMtrl->SetName(L"Material\\DbgMtrl.mtrl");
+	pMtrl->SetShader(Find<AGraphicShader>(L"DbgShader"));
+	pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_DEBUG);
+	AddAsset(pMtrl->GetName(), pMtrl.Get());
+	pMtrl->Save(FilePath + pMtrl->GetKey());
+
+	Load<AMaterial>(L"Material\\Std2DMtrl.mtrl", L"Material\\Std2DMtrl.mtrl");
+	Load<AMaterial>(L"Material\\DbgMtrl.mtrl", L"Material\\DbgMtrl.mtrl");
+	#pragma endregion
+
 	#pragma region Atlas 이미지에서 Texture를 생성하는 방법
 	Ptr<ATexture> pAtlas = FIND(ATexture, L"TestImage");		// Texture 생성 시 설정한 이름 String을 입력합니다. 
 	
@@ -594,19 +537,21 @@ void AssetMgr::CreateAssetByCode()
 		// AddAsset => 런타임에만 등록
 		AddAsset(pSprite->GetName(), pSprite.Get());
 		// Save => 파일 형태로 등록
-		pSprite->Save(CONTENT_PATH + pSprite->GetName());
-		//pSprite->Save(CONTENT_PATH + pSprite->GetKey());	// 경로가 곧 Key 값
+		//pSprite->Save(CONTENT_PATH + pSprite->GetName());
+		pSprite->Save(CONTENT_PATH + pSprite->GetKey());	// 경로가 곧 Key 값
 	}
 	#pragma endregion
 
 	#pragma region Flipbook 생성하는 방법
 	// Flipbook 객체 생성 후, 이름을 설정하고
-	// 반복문을 통해, 이어서 보여줄 sprite들을 가르키게 합니다.
+	// 반복문을 통해, 이어서 보여줄 sprite들을 가리키게 합니다.
 	Ptr<AFlipbook> pFlipbook = nullptr;
 
 	pFlipbook = new AFlipbook;
 	pFlipbook->SetName(L"Flipbook\\Test_Fb.flip");
 
+	// 해당 Flipbook에 몇개의 Sprite를 연속으로 재생할것인지를
+	// 반복 횟수로 정합니다. ex)8장이면 8번 반복
 	for (int i = 0; i < 8; ++i)
 	{
 		wchar_t Buff[50] = {};
@@ -614,6 +559,8 @@ void AssetMgr::CreateAssetByCode()
 		pFlipbook->AddSprite(LOAD(ASprite, Buff));
 	}
 	AddAsset(pFlipbook->GetName(), pFlipbook.Get());
+	// Save => 파일 형태로 등록
+	pFlipbook->Save(CONTENT_PATH + pFlipbook->GetKey());
 	#pragma endregion
 
 	#pragma region TileMap 생성하는 방법

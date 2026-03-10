@@ -133,6 +133,9 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
     // 엔진 기본 Asset들 생성
     AssetMgr::GetInst()->Init();
 
+    // Asset Load
+    AssetMgr::GetInst()->LoadContent();
+
     // Level 초기화
     LevelMgr::GetInst()->Init();
 
@@ -142,6 +145,7 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
     // Editor 초기화(imgui)
     if (m_EditorMode)
         EditorMgr::GetInst()->Init();
+
 
     return S_OK;
 }

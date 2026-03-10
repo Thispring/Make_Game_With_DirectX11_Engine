@@ -3,18 +3,20 @@
 #include "GameObject.h"
 #include "EComponentUI.h"
 #include "EAssetUI.h"
+#include "EScriptUI.h"
 
 class Inspector :
     public EditorUI
 {
 
 private:
-    Ptr<GameObject>     m_TargetObject;
-    Ptr<Asset>          m_TargetAsset;
+    Ptr<GameObject>         m_TargetObject;
+    Ptr<Asset>              m_TargetAsset;
+    vector<Ptr<EScriptUI>>  m_vecScriptUI;
     
     // Inspctor의 자식에 해당하는 UI 클래스를 빠르게 접근하기 위한 Ptr 멤버
-    Ptr<EComponentUI>    m_arrComUI[(UINT)COMPONENT_TYPE::END];
-    Ptr<EAssetUI>        m_arrAssetUI[(UINT)ASSET_TYPE::END];
+    Ptr<EComponentUI>       m_arrComUI[(UINT)COMPONENT_TYPE::END];
+    Ptr<EAssetUI>           m_arrAssetUI[(UINT)ASSET_TYPE::END];
 
 public:
     //=========

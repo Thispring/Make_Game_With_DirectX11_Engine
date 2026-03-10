@@ -13,6 +13,11 @@ private:
 	map<wstring, Ptr<Asset>>	m_mapAsset[(UINT)ASSET_TYPE::END];
 	bool						m_Changed;	// Asset 변경점 확인 (생성, 삭제...)
 
+	// 초기 Loading 관련 멤버
+	ASSET_TYPE			m_tempType;			// 어떤 Asset Type인지
+	vector<wstring>		m_vecFileName;		// file로 부터 얻어온 문자열을 저장
+	int					m_fileCount;		// 특정 폴더에 몇개의 file이 있는지를 저장
+
 public:
 	//=========
 	// 멤버 함수
@@ -29,9 +34,11 @@ public:
 	void CreateEngineTexture();
 	void CreateEngineMaterial();
 	void CreateEngineSprite();
+	void CreateEnginePrefab();
 
 	// 매개변수를 받아, 외부에서 사용할 수 있도록 오버로딩
-	void CreateEngineSprite(wstring _Name, Vec2 _Slice, int _Loop, wstring _Path, float _Origin);
+	void CreateEngineSprite(wstring _Name, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _Path, int _OriIdx);
+	void CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Loop);
 
 	// 코드로 Asset을 제작하는 부분을 모아서 정리 (백업용)
 	void CreateAssetByCode();
@@ -43,6 +50,15 @@ public:
 	template<typename T>
 	Ptr<T> Load(const wstring& _Key, const wstring& _RelativePath);
 	
+	/*************************************************
+	* Level 시작 전에 1회 호출, 
+	* 경로에 있는 각 Asset의 확장자를 문자열로 확인하고
+	* 알맞은 Load를 호출합니다.
+	* 
+	* RunTime 도중 저장한 에셋은 다시 Load할 필요가
+	* 없기에, 실행 시 1회만 호출합니다.
+	*************************************************/
+	void LoadContent();
 	
 	void GetAssetNames(ASSET_TYPE _type, vector<wstring>& _vec);
 	bool IsChanged()
@@ -102,6 +118,8 @@ ASSET_TYPE GetAssetType()
 		return ASSET_TYPE::TILEMAP;
 	else if constexpr (std::is_same_v<T, ALevel>)
 		return ASSET_TYPE::LEVEL;
+	else if constexpr (std::is_same_v<T, APrefab>)
+		return ASSET_TYPE::PREFAB;
 
 	return ASSET_TYPE::END;
 }

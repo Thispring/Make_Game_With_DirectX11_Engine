@@ -39,6 +39,7 @@ public:
         _Child->m_Parent = this;        // EditorUI를 상속받는 자식의 부모를 this로 설정
         m_ChildUI.push_back(_Child);    // 자식UI 등록
     }
+    void OutputTitle(const string& _Title, ImVec4 _Color);
   
 
     //=============

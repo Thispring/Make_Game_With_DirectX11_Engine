@@ -89,6 +89,8 @@ public:
 	// LayerIdx를 사용자가 설정하게 변경
 	void SetLayerIdx(int _Idx) { m_LayerIdx = _Idx; }
 
+
+	vector<Ptr<CScript>> GetScripts() { return m_vecScripts; }
 	// (26-02-23): GetScript를 template으로 변경하여
 	// vector를 순회하여, T타입에 맞는 Script 주소를 반환
 	template<typename T>

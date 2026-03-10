@@ -338,7 +338,7 @@ void CreateLevel()
 	pChild->Transform()->SetRelativeScale(Vec3(800.f, 450.f, 1.f));
 
 	pChild->MeshRender()->SetMesh(AssetMgr::GetInst()->Find<AMesh>(L"FullRectMesh"));
-	pChild->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"SkyMtrl"));
+	pChild->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"Material\\SkyMtrl.mtrl"));
 
 	pObject->AddChild(pChild);
 
@@ -353,7 +353,7 @@ void CreateLevel()
 	pChild->Transform()->SetRelativeScale(Vec3(800.f, 400.f, 1.f));
 
 	pChild->MeshRender()->SetMesh(AssetMgr::GetInst()->Find<AMesh>(L"FullRectMesh"));
-	pChild->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"CloudMtrl"));
+	pChild->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"Material\\CloudMtrl.mtrl"));
 
 	pObject->AddChild(pChild);
 
@@ -368,7 +368,7 @@ void CreateLevel()
 	pChild->Transform()->SetRelativeScale(Vec3(800.f, 400.f, 1.f));
 
 	pChild->MeshRender()->SetMesh(AssetMgr::GetInst()->Find<AMesh>(L"FullRectMesh"));
-	pChild->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"SeaMtrl"));
+	pChild->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"Material\\SeaMtrl.mtrl"));
 
 	pObject->AddChild(pChild);
 
@@ -383,7 +383,7 @@ void CreateLevel()
 	pChild->Transform()->SetRelativeScale(Vec3(800.f, 200.f, 1.f));
 
 	pChild->MeshRender()->SetMesh(AssetMgr::GetInst()->Find<AMesh>(L"FullRectMesh"));
-	pChild->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"GroundMtrl"));
+	pChild->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"Material\\GroundMtrl.mtrl"));
 
 	pObject->AddChild(pChild);
 
@@ -441,8 +441,9 @@ void CreateLevel()
 
 
 	pObject->FlipbookRender()->AddFlipbook(LOAD(AFlipbook, L"Flipbook\\mon1_Idle.flip"));
+	pObject->FlipbookRender()->AddFlipbook(LOAD(AFlipbook, L"Flipbook\\mon1_Move.flip"));
 
-	pObject->FlipbookRender()->Play(0, 8.f, -1);
+	pObject->FlipbookRender()->Play(1, 8.f, -1);
 
 	pLevel->AddObject(5, pObject);
 
@@ -458,7 +459,7 @@ void CreateLevel()
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 5.f, 0.f));
 	pObject->Transform()->SetRelativeScale(Vec3(10.f, 10.f, 0.f));
 	pObject->MeshRender()->SetMesh(FIND(AMesh, L"SquareMesh"));
-	pObject->MeshRender()->SetMaterial(FIND(AMaterial, L"Std2DMtrl"));
+	pObject->MeshRender()->SetMaterial(FIND(AMaterial, L"Material\\Std2DMtrl.mtrl"));
 
 	pLevel->AddObject(1, pObject);
 

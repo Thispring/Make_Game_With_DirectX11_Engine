@@ -25,3 +25,15 @@ void CScript::Destroy()
     info.Param_0 = (DWORD_PTR)GetOwner();
     TaskMgr::GetInst()->AddTask(info);
 }
+
+void CScript::Instantiate(APrefab* _Prefab, int _LayerIdx, Vec3 _WorldPos)
+{
+    if (_Prefab == nullptr)
+        return;
+
+    GameObject* pObject = _Prefab->Instantiate();
+
+    pObject->Transform()->SetRelativePos(_WorldPos);
+
+    CreateObject(pObject, _LayerIdx);
+}

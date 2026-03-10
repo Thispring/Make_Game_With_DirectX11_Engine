@@ -33,6 +33,12 @@ void CPlayerStatus::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCol
 {
 }
 
+void CPlayerStatus::Init()
+{
+	// Init은 AddComponent 시점에 이루어짐
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_Speed, L"Speed", true, 0.f);
+}
+
 void CPlayerStatus::Begin()
 {
 	ADD_DYNAMIC_BEGIN_OVERLAP(CPlayerStatus::BeginOverlap);
