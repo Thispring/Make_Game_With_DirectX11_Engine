@@ -96,8 +96,10 @@ void AssetMgr::LoadContent()
 			Path = (wstring)CONTENT_PATH + L"Flipbook\\";
 			ext = ".flip";
 			break;
-		//case ASSET_TYPE::TILEMAP:
-		//	break;
+		case ASSET_TYPE::TILEMAP:
+			Path = (wstring)CONTENT_PATH + L"TileMap\\";
+			ext = ".tile";
+			break;
 		//case ASSET_TYPE::PREFAB:
 		//	break;
 		case ASSET_TYPE::END:
@@ -162,8 +164,12 @@ void AssetMgr::LoadContent()
 				Load<AFlipbook>(L"Flipbook\\" + FilePath, L"Flipbook\\" + FilePath);
 			}
 			break;
-			//case ASSET_TYPE::TILEMAP:
-			//	break;
+		case ASSET_TYPE::TILEMAP:
+			for (auto& FilePath : m_vecFileName)
+			{
+				Load<ATileMap>(L"TileMap\\" + FilePath, L"TileMap\\" + FilePath);
+			}
+			break;
 			//case ASSET_TYPE::PREFAB:
 			//	break;
 		}

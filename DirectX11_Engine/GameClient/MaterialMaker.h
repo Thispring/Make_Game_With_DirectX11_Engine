@@ -14,7 +14,6 @@ private:
     //=================
     // private 멤버 함수
     //=================
-    RENDER_DOMAIN StringToDomain(string _DomainName);
     void ClearSetting();
 
 public:

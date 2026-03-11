@@ -477,6 +477,22 @@ void CreateLevel()
 
 	pLevel->AddObject(2, pObject);
 
+
+	// test TileMap
+	pObject = new GameObject;
+	pObject->SetName(L"TileMapGround");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CCollider2D);
+	pObject->AddComponent(new CTileRender);
+
+	pObject->Transform()->SetRelativePos(Vec3(0.f, -80.f, 0.f));
+	pObject->Transform()->SetRelativeScale(Vec3(800.f, 10.f, 0.f));
+	pObject->TileRender()->SetTileMap(FIND(ATileMap, L"TileMap\\test3.tile"));
+
+	pLevel->AddObject(2, pObject);
+
+
 	//=============
 	// 레벨 충돌 설정
 	//=============
@@ -498,4 +514,51 @@ void CreateLevel()
 
 	// TaskMgr에게 다음 프레임에 실행할 Level을 변경하도록 요청
 	ChangeLevel(L"Normal_Stage_0");
+}
+
+RENDER_DOMAIN StringToDomain(string _DomainName)
+{
+	if (_DomainName == "DOMAIN_OPAQUE")
+		return RENDER_DOMAIN::DOMAIN_OPAQUE;
+
+	if (_DomainName == "DOMAIN_MASKED")
+		return RENDER_DOMAIN::DOMAIN_MASKED;
+
+	if (_DomainName == "DOMAIN_TRANSPARENT")
+		return RENDER_DOMAIN::DOMAIN_TRANSPARENT;
+
+	if (_DomainName == "DOMAIN_POSTPROCESS")
+		return RENDER_DOMAIN::DOMAIN_POSTPROCESS;
+
+	if (_DomainName == "DOMAIN_DEBUG")
+		return RENDER_DOMAIN::DOMAIN_DEBUG;
+
+	return RENDER_DOMAIN();
+}
+
+wstring ExtractFileName(const wstring& fullPath)
+{
+	// 1. 마지막 슬래시('\\')의 위치를 찾습니다.
+	// 경로가 없는 경우를 대비해 npos일 경우 -1로 취급하여 0번 인덱스부터 시작하게 합니다.
+	size_t lastSlashPos = fullPath.find_last_of(L"\\");
+	size_t startPos = (lastSlashPos == std::wstring::npos) ? 0 : lastSlashPos + 1;
+
+	// 2. 마지막 언더스코어('_')의 위치를 찾습니다. (숫자나 %d 앞부분)
+	size_t lastUnderscorePos = fullPath.find_last_of(L"_");
+
+	// 예외 처리: 언더스코어가 없거나, 언더스코어가 슬래시보다 앞에 있는 경우 (파일명에 _가 없는 경우)
+	if (lastUnderscorePos == std::wstring::npos || lastUnderscorePos < startPos) 
+	{
+		// 언더스코어가 없다면 확장자 점('.') 앞까지만 추출
+		size_t lastDotPos = fullPath.find_last_of(L".");
+		if (lastDotPos != std::wstring::npos && lastDotPos > startPos) {
+			return fullPath.substr(startPos, lastDotPos - startPos);
+		}
+		// 확장자도 없다면 전체 파일명 반환
+		return fullPath.substr(startPos);
+	}
+
+	// 3. 시작 위치부터 마지막 언더스코어 직전까지의 길이를 계산하여 추출합니다.
+	// 길이 = 끝 위치 - 시작 위치
+	return fullPath.substr(startPos, lastUnderscorePos - startPos);
 }

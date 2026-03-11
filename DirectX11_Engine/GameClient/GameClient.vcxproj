@@ -213,6 +213,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="ETileMapUI.h" />
     <ClInclude Include="ETileRenderUI.h" />
     <ClInclude Include="extern.h" />
+    <ClInclude Include="FlipbookMaker.h" />
     <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="Inspector.h" />
     <ClInclude Include="KeyList.h" />
@@ -264,6 +265,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="StructuredBuffer.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TaskMgr.h" />
+    <ClInclude Include="TileMapMaker.h" />
     <ClInclude Include="TimeMgr.h" />
     <ClInclude Include="TreeUI.h" />
   </ItemGroup>
@@ -317,6 +319,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="ETextureUI.cpp" />
     <ClCompile Include="ETileMapUI.cpp" />
     <ClCompile Include="ETileRenderUI.cpp" />
+    <ClCompile Include="FlipbookMaker.cpp" />
     <ClCompile Include="imgui\imgui_stdlib.cpp" />
     <ClCompile Include="Inspector.cpp" />
     <ClCompile Include="Inspector_Init.cpp" />
@@ -363,6 +366,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="SpriteMaker.cpp" />
     <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="TaskMgr.cpp" />
+    <ClCompile Include="TileMapMaker.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
     <ClCompile Include="TreeUI.cpp" />
   </ItemGroup>

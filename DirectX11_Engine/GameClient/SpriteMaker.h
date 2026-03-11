@@ -15,27 +15,22 @@ private:
     Vec2        m_SliceUV;
     int         m_StartLoop;
     int         m_EndLoop;
-    wstring     m_Path;
-    int         m_OriIdx;
-
-    //==============
-    // Make Flipbook
-    //==============
     wstring     m_SpriteName;
-    wstring     m_FlipbookName;
-    int         m_FlipLoop;
+    int         m_OriIdx;
+    int         m_Row;
+    int         m_Col;
 
-    //=============
-    // Make TileMap
-    //=============
+
+    //=================
+    // private 멤버 함수
+    //=================
+    void SettingClear();
 
 
 public:
     //=========
     // 멤버 함수
     //=========
-    void SpriteSettingClear();
-    void FlipbookSettingClear();
 
 
     //=============
@@ -51,12 +46,10 @@ public:
     GET_SET(Vec2, SliceUV);
     GET_SET(int, StartLoop);
     GET_SET(int, EndLoop);
-    GET_SET(wstring, Path);
-    GET_SET(int, OriIdx);
-
     GET_SET(wstring, SpriteName);
-    GET_SET(wstring, FlipbookName);
-    GET_SET(int, FlipLoop);
+    GET_SET(int, OriIdx);
+    GET_SET(int, Row);
+    GET_SET(int, Col);
 
 
     //============

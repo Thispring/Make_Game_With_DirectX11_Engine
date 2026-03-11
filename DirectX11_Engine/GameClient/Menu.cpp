@@ -127,9 +127,23 @@ void Menu::View()
 			pSpriteMaker->SetActive(SpriteMakerActive);
 		}
 
+		Ptr<EditorUI> pFlipbookMaker = EditorMgr::GetInst()->FindUI("FlipbookMaker");
+		bool FlipbookMakerActive = pFlipbookMaker->IsActive();
+		if (ImGui::MenuItem("FlipbookMaker", nullptr, &FlipbookMakerActive))
+		{
+			pFlipbookMaker->SetActive(FlipbookMakerActive);
+		}
+
+		Ptr<EditorUI> pTileMapMaker = EditorMgr::GetInst()->FindUI("TileMapMaker");
+		bool TileMapMakerActive = pTileMapMaker->IsActive();
+		if (ImGui::MenuItem("TileMapMaker", nullptr, &TileMapMakerActive))
+		{
+			pTileMapMaker->SetActive(TileMapMakerActive);
+		}
+
 		Ptr<EditorUI> pMtrlMaker = EditorMgr::GetInst()->FindUI("MaterialMaker");
 		bool MtrlMakerActive = pMtrlMaker->IsActive();
-		if (ImGui::MenuItem("Create Material", nullptr, &MtrlMakerActive))
+		if (ImGui::MenuItem("MaterialMaker", nullptr, &MtrlMakerActive))
 		{
 			pMtrlMaker->SetActive(MtrlMakerActive);
 		}
@@ -163,9 +177,23 @@ void Menu::Asset()
 			// 추후 Create Sprite, Flipbook, TileMap 클래스 분리
 			Ptr<EditorUI> pSpriteMaker = EditorMgr::GetInst()->FindUI("SpriteMaker");
 			bool SpriteMakerActive = pSpriteMaker->IsActive();
-			if (ImGui::MenuItem("Create Sprite, Flipbook, TileMap", nullptr, &SpriteMakerActive))
+			if (ImGui::MenuItem("Create Sprite", nullptr, &SpriteMakerActive))
 			{
 				pSpriteMaker->SetActive(SpriteMakerActive);
+			}
+
+			Ptr<EditorUI> pFlipbookMaker = EditorMgr::GetInst()->FindUI("FlipbookMaker");
+			bool FlipbookMakerActive = pFlipbookMaker->IsActive();
+			if (ImGui::MenuItem("Create Flipbook", nullptr, &FlipbookMakerActive))
+			{
+				pFlipbookMaker->SetActive(FlipbookMakerActive);
+			}
+
+			Ptr<EditorUI> pTileMapMaker = EditorMgr::GetInst()->FindUI("TileMapMaker");
+			bool TileMapMakerActive = pTileMapMaker->IsActive();
+			if (ImGui::MenuItem("Create TileMap", nullptr, &TileMapMakerActive))
+			{
+				pTileMapMaker->SetActive(TileMapMakerActive);
 			}
 
 			ImGui::EndMenu();

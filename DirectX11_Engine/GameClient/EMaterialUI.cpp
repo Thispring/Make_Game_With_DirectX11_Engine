@@ -78,7 +78,19 @@ void EMaterialUI::Tick_UI()
 	}
 
 	// Render Domain
-
+	// Domain
+	RENDER_DOMAIN Domain = pMtrl->GetDomain();
+	ImGui::Text("Domain Render Setting");
+	const char* items[] = { "DOMAIN_OPAQUE", "DOMAIN_MASKED", "DOMAIN_TRANSPARENT", "DOMAIN_POSTPROCESS", "DOMAIN_DEBUG", "DOMAIN_NONE" };
+	// Simplified one-liner Combo() using an array of const char*
+	// This is not very useful (may obsolete): prefer using BeginCombo()/EndCombo() for full control.
+	int item_current_3 = (int)Domain; // If the selection isn't within 0..count, Combo won't display a preview
+	if (ImGui::Combo("##Domain Render Setting", &item_current_3, items, IM_COUNTOF(items)))
+	{
+		// StringToDomain() 호출
+		pMtrl->SetDomain(StringToDomain(items[item_current_3]));
+	}
+	for (int i = 0; i < 5; ++i) ImGui::Spacing();
 
 
 	// Shader Param

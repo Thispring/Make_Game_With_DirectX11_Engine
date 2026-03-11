@@ -20,7 +20,10 @@
 #include "ListUI.h"
 #include "ContentUI.h"
 #include "TreeUI.h"
+
 #include "SpriteMaker.h"
+#include "FlipbookMaker.h"
+#include "TileMapMaker.h"
 #include "MaterialMaker.h"
 
 #include "CEditorCamMoveScript.h"
@@ -148,6 +151,12 @@ void EditorMgr::CreateEditorUI()
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new SpriteMaker;
+    AddUI(pUI->GetUIName(), pUI);
+
+    pUI = new FlipbookMaker;
+    AddUI(pUI->GetUIName(), pUI);
+
+    pUI = new TileMapMaker;
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new MaterialMaker;

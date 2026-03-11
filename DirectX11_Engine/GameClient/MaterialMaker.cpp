@@ -17,26 +17,6 @@ MaterialMaker::~MaterialMaker()
 {
 }
 
-RENDER_DOMAIN MaterialMaker::StringToDomain(string _DomainName)
-{
-	if (_DomainName == "DOMAIN_OPAQUE")
-		return RENDER_DOMAIN::DOMAIN_OPAQUE;
-
-	if (_DomainName == "DOMAIN_MASKED")
-		return RENDER_DOMAIN::DOMAIN_MASKED;
-
-	if (_DomainName == "DOMAIN_TRANSPARENT")
-		return RENDER_DOMAIN::DOMAIN_TRANSPARENT;
-
-	if (_DomainName == "DOMAIN_POSTPROCESS")
-		return RENDER_DOMAIN::DOMAIN_POSTPROCESS;
-
-	if (_DomainName == "DOMAIN_DEBUG")
-		return RENDER_DOMAIN::DOMAIN_DEBUG;
-
-	return RENDER_DOMAIN::DOMAIN_NONE;
-}
-
 void MaterialMaker::ClearSetting()
 {
 	m_MtrlName = {};
@@ -76,6 +56,10 @@ void MaterialMaker::Tick_UI()
 
 		ImGui::EndDragDropTarget();
 	}
+
+	ImGui::Spacing();
+	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+		"Drag and drop an image from the ContentUI\nGraphicShader list into the box above.");
 	for (int i = 0; i < 5; ++i) ImGui::Spacing();
 
 	// Texture Name
@@ -103,21 +87,26 @@ void MaterialMaker::Tick_UI()
 
 		ImGui::EndDragDropTarget();
 	}
+
+	ImGui::Spacing();
+	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+		"Drag and drop an image from the ContentUI\nTexture list into the box above.");
 	for (int i = 0; i < 5; ++i) ImGui::Spacing();
 
 
 	// Mtrl Name
-	ImGui::Text("Material Name Name");
+	ImGui::Text("Material name to save");
 	// wstring -> string 변환
 	string mName = string(m_MtrlName.begin(), m_MtrlName.end());
 	ImGui::SameLine(150);
-	if (ImGui::InputText("##MTRLNAME", &mName))
+	if (ImGui::InputText("##MTRLNAMETOSAVE", &mName))
 	{
 		wstring wmName = wstring(mName.begin(), mName.end());
 		SetMtrlName(wmName);
 	}
 	ImGui::Spacing();
-	ImGui::Text("Material Name Example: Material\\materialName.mtrl");
+	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+		"Please enter the name you want to save.");
 	for (int i = 0; i < 5; ++i) ImGui::Spacing();
 
 	
@@ -157,6 +146,7 @@ void MaterialMaker::Tick_UI()
 			// 저장 및 초기화
 			// AssetMgr 호출
 			AssetMgr::GetInst()->CreateEngineMaterial(m_MtrlName, m_TextureName, m_ShaderName, m_RenderDomain);
+			ClearSetting();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SetItemDefaultFocus();

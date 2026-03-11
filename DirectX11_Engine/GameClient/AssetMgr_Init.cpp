@@ -224,6 +224,8 @@ void AssetMgr::CreateEngineShader()
 	pShader->CreatePixelShader(L"Shader\\std2d.fx", "PS_Std2D");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::ONE_ONE);
+	pShader->AddShaderParam(SHADER_PARAM::VEC4, 0, L"TintColor");
+	pShader->AddShaderParam(SHADER_PARAM::TEX, 0, L"OutColor");
 	AddAsset(L"OOStd2DShader", pShader.Get());
 
 
@@ -255,6 +257,8 @@ void AssetMgr::CreateEngineShader()
 	pShader->CreatePixelShader(L"Shader\\billboard.fx", "PS_Billboard");
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->AddShaderParam(SHADER_PARAM::VEC4, 0, L"TintColor");
+	pShader->AddShaderParam(SHADER_PARAM::TEX, 0, L"OutColor");
 	AssetMgr::GetInst()->AddAsset(pShader->GetName(), pShader.Get());
 
 
@@ -267,6 +271,8 @@ void AssetMgr::CreateEngineShader()
 	pShader->CreatePixelShader(L"Shader\\sprite.fx", "PS_Sprite");
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->AddShaderParam(SHADER_PARAM::VEC4, 0, L"TintColor");
+	pShader->AddShaderParam(SHADER_PARAM::TEX, 0, L"OutColor");
 	AssetMgr::GetInst()->AddAsset(pShader->GetName(), pShader.Get());
 
 
@@ -279,6 +285,8 @@ void AssetMgr::CreateEngineShader()
 	pShader->CreatePixelShader(L"Shader\\flipbook.fx", "PS_Flipbook");
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->AddShaderParam(SHADER_PARAM::VEC4, 0, L"TintColor");
+	pShader->AddShaderParam(SHADER_PARAM::TEX, 0, L"OutColor");
 	AssetMgr::GetInst()->AddAsset(pShader->GetName(), pShader.Get());
 
 
@@ -291,6 +299,8 @@ void AssetMgr::CreateEngineShader()
 	pShader->CreatePixelShader(L"Shader\\tile.fx", "PS_Tile");
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->AddShaderParam(SHADER_PARAM::VEC4, 0, L"TintColor");
+	pShader->AddShaderParam(SHADER_PARAM::TEX, 0, L"OutColor");
 	AssetMgr::GetInst()->AddAsset(pShader->GetName(), pShader.Get());
 }
 
@@ -298,6 +308,7 @@ void AssetMgr::CreateEngineTexture()
 {
 	// Default Texture
 	Load<ATexture>(L"cubeImg", L"Texture\\cube.png");
+	Load<ATexture>(L"gridImg", L"Texture\\Grid.png");
 	
 	// Player Character Atlas
 	Load<ATexture>(L"cat1_Atlas", L"Texture\\Player\\cat1_base.png");
@@ -324,6 +335,7 @@ void AssetMgr::CreateEngineTexture()
 
 	// TileMap Atlas
 	Load<ATexture>(L"tile_Atlas", L"Texture\\BackGround\\tileset.png");
+	Load<ATexture>(L"remapTile_Atlas", L"Texture\\BackGround\\remapTileSet.png");
 
 	// UI
 
@@ -331,7 +343,7 @@ void AssetMgr::CreateEngineTexture()
 
 void AssetMgr::CreateEngineMaterial() 
 {
-#pragma region Material 생성하는 방법
+	#pragma region Material 생성하는 방법
 	// File로 저장이 완료된 Asset은 Load 함수 호출부만 남겨두기
 
 	wstring FilePath = CONTENT_PATH;
@@ -360,7 +372,7 @@ void AssetMgr::CreateEngineMaterial()
 
 	Load<AMaterial>(L"Material\\Std2DMtrl.mtrl", L"Material\\Std2DMtrl.mtrl");
 	Load<AMaterial>(L"Material\\DbgMtrl.mtrl", L"Material\\DbgMtrl.mtrl");
-#pragma endregion
+	#pragma endregion
 }
 
 void AssetMgr::CreateEngineSprite()
@@ -370,6 +382,7 @@ void AssetMgr::CreateEngineSprite()
 	* 생성 시, 경로 + 확장자 명을 문자열로 추가합니다.
 	* 해당 문자열은 생성된 Sprite의 Key값으로 설정 합니다.
 	***********************************************/
+
 }
 
 void AssetMgr::CreateEnginePrefab()
@@ -397,10 +410,10 @@ void AssetMgr::CreateEnginePrefab()
 	//pMissilePrefab->Save(FilePath);
 }
 
-void AssetMgr::CreateEngineSprite(wstring _Name, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _Path, int _OriIdx)
+void AssetMgr::CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _SpriteName, int _OriIdx, int _Row, int _Col)
 {
 	#pragma region Atlas 이미지에서 Texture를 생성하는 방법
-	Ptr<ATexture> pAtlas = FIND(ATexture, _Name);		// Texture 생성 시 설정한 이름 String을 입력합니다. 
+	Ptr<ATexture> pAtlas = FIND(ATexture, _TextureName);		// Texture 생성 시 설정한 이름 String을 입력합니다. 
 
 	// Texture의 가로 세로 길이를 Getter로 얻어옵니다.
 	float Width = pAtlas->GetWidth();
@@ -427,8 +440,14 @@ void AssetMgr::CreateEngineSprite(wstring _Name, Vec2 _Slice, int _StartLoop, in
 		// 10 이하이면 "0%d"로 네이밍 ex) 02.sprite
 		wstring spritePath = {};
 
-		if (i < 10) spritePath = _Path + to_wstring(0) + to_wstring(i) + L".sprite";
-		else spritePath = _Path + to_wstring(i) + L".sprite";
+		// _Row, _Cow이 디폴트로 들어왔을 때
+		if (i < 10 && _Row == 0 && _Col == 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(i) + L".sprite";
+		else spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(i) + L".sprite";
+
+		// _Row, _Cow이 정해졌다는 건, 100개 이상의 sprite 제작
+		if (i < 10 && i >= 0 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(0) + to_wstring(i) + L".sprite";
+		else if (i < 100 && i >= 10) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(i) + L".sprite";
+		else if (i >= 100) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(i) + L".sprite";
 
 		pSprite = new ASprite;
 		pSprite->SetName(spritePath);
@@ -437,8 +456,26 @@ void AssetMgr::CreateEngineSprite(wstring _Name, Vec2 _Slice, int _StartLoop, in
 		// UV 기준 원점 설정
 		// 원점 공식:
 		// 파라미터로 받은 인덱스 * (_Slice.y / Height)
-		float Origin = _OriIdx * (_Slice.y / Height);
-		pSprite->SetLeftTopUV(Vec2((_Slice.x / Width) * (float)i, Origin));
+		//float Origin = _OriIdx * (_Slice.y / Height);
+		//pSprite->SetLeftTopUV(Vec2((_Slice.x / Width) * (float)i, Origin));
+
+		// [수정 제안]
+		// i 값을 이용해 현재 몇 번째 열(col), 몇 번째 행(row)인지 계산
+		int CountPerRow = (int)(Width / _Slice.x); // 한 줄에 들어가는 개수 (27개)
+
+		// 현재 행(Row) 인덱스: 200 / 27 = 7
+		int CurrentRow = i / CountPerRow;
+
+		// 현재 열(Col) 인덱스: 200 % 27 = 11
+		int CurrentCol = i % CountPerRow;
+
+		// X 좌표: (1/27) * 11 = 0.4074... (정상 범위)
+		float UV_X = (_Slice.x / Width) * (float)CurrentCol;
+
+		// Y 좌표: (1/9) * 7 = 0.7777...
+		float UV_Y = (_Slice.y / Height) * (float)CurrentRow;
+
+		pSprite->SetLeftTopUV(Vec2(UV_X, UV_Y));
 
 		// x, y축 각각 '자를 해상도'에서 '아틀라스 해상도'를 나누기
 		pSprite->SetSliceUV(_Slice / Vec2(Width, Height));
@@ -466,6 +503,7 @@ void AssetMgr::CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wst
 	Ptr<AMaterial> pMtrl = nullptr;
 
 	pMtrl = new AMaterial;
+	_MtrlName = L"Material\\" + _MtrlName + L".mtrl";
 	pMtrl->SetName(_MtrlName);
 	pMtrl->SetShader(Find<AGraphicShader>(_ShaderName));
 	pMtrl->SetTexture(TEX_0, Find<ATexture>(_TextureName));
@@ -483,20 +521,51 @@ void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, 
 	Ptr<AFlipbook> pFlipbook = nullptr;
 
 	pFlipbook = new AFlipbook;
+	_FlipbookName = L"Flipbook\\" + _FlipbookName + L".flip";
 	pFlipbook->SetName(_FlipbookName);
 
 	for (int i = 0; i < _Loop; ++i)
 	{
 		wstring spritePath = {};
 
-		if (i < 10) spritePath = _SpriteName + to_wstring(0) + to_wstring(i) + L".sprite";
-		else spritePath = _SpriteName + to_wstring(i) + L".sprite";
+		if (i < 10) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(i) + L".sprite";
+		else spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(i) + L".sprite";
 
 		pFlipbook->AddSprite(LOAD(ASprite, spritePath));
 	}
 	AddAsset(pFlipbook->GetName(), pFlipbook.Get());
 	// Save => 파일 형태로 등록
 	pFlipbook->Save(CONTENT_PATH + pFlipbook->GetKey());	// 경로가 곧 Key 값
+	#pragma endregion
+}
+
+void AssetMgr::CreateEngineTileMap(vector<Ptr<ASprite>>& _vecSprite, wstring _TileMapName, wstring _AtlasName, UINT _Row, UINT _Col, Vec2 _TileSize)
+{
+	#pragma region TileMap 생성하는 방법
+	// =======
+	// TileMap
+	// =======
+	Ptr<ATileMap> pTileMap = nullptr;
+
+	pTileMap = new ATileMap;
+	_TileMapName = L"TileMap\\" + _TileMapName + L".tile";
+	pTileMap->SetAtlas(FIND(ATexture, _AtlasName));
+	pTileMap->SetName(_TileMapName);
+	pTileMap->SetRowCol(_Row, _Col);
+	pTileMap->SetTileSize(_TileSize);
+
+	int Count = 0;
+	for (int i = 0; i < _Col; ++i)
+	{
+		for (int j = 0; j < _Row; ++j)
+		{
+			pTileMap->SetSprite(i, j, _vecSprite[Count]);
+			Count++;
+		}
+	}
+
+	AddAsset(pTileMap->GetName(), pTileMap.Get());
+	pTileMap->Save(CONTENT_PATH + pTileMap->GetKey());
 	#pragma endregion
 }
 

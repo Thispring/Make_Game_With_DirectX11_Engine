@@ -299,7 +299,7 @@
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="SpriteMaker.h">
-      <Filter>GameEngine\Editor\SpriteMaker</Filter>
+      <Filter>GameEngine\Editor\MakerUI\SpriteMaker</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\CPlayerAnimator.h">
       <Filter>Source\ContentScript\Player</Filter>
@@ -314,7 +314,13 @@
       <Filter>GameEngine\Editor\ComponentUI\Script_UI</Filter>
     </ClInclude>
     <ClInclude Include="MaterialMaker.h">
-      <Filter>GameEngine\Editor\MaterialMaker</Filter>
+      <Filter>GameEngine\Editor\MakerUI\MaterialMaker</Filter>
+    </ClInclude>
+    <ClInclude Include="FlipbookMaker.h">
+      <Filter>GameEngine\Editor\MakerUI\FlipbookMaker</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMapMaker.h">
+      <Filter>GameEngine\Editor\MakerUI\TileMapMaker</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -592,7 +598,7 @@
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="SpriteMaker.cpp">
-      <Filter>GameEngine\Editor\SpriteMaker</Filter>
+      <Filter>GameEngine\Editor\MakerUI\SpriteMaker</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\CPlayerAnimator.cpp">
       <Filter>Source\ContentScript\Player</Filter>
@@ -607,7 +613,13 @@
       <Filter>GameEngine\Editor\ComponentUI\Script_UI</Filter>
     </ClCompile>
     <ClCompile Include="MaterialMaker.cpp">
-      <Filter>GameEngine\Editor\MaterialMaker</Filter>
+      <Filter>GameEngine\Editor\MakerUI\MaterialMaker</Filter>
+    </ClCompile>
+    <ClCompile Include="FlipbookMaker.cpp">
+      <Filter>GameEngine\Editor\MakerUI\FlipbookMaker</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMapMaker.cpp">
+      <Filter>GameEngine\Editor\MakerUI\TileMapMaker</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -857,11 +869,20 @@
     <Filter Include="GameEngine\Editor\ComponentUI\Script_UI">
       <UniqueIdentifier>{02545871-162c-4d61-b60b-000bf5edc129}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\Editor\SpriteMaker">
+    <Filter Include="GameEngine\Editor\MakerUI">
+      <UniqueIdentifier>{27e2325c-23cd-4200-a315-80abee8a28cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Editor\MakerUI\SpriteMaker">
       <UniqueIdentifier>{b5560ec7-fca8-4424-83a0-cf106c5934c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\Editor\MaterialMaker">
+    <Filter Include="GameEngine\Editor\MakerUI\FlipbookMaker">
+      <UniqueIdentifier>{34186cf9-3331-4376-8424-3e2cc7c217ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Editor\MakerUI\MaterialMaker">
       <UniqueIdentifier>{3dbe14c4-6cd2-4afe-92d1-9480a2c1b248}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Editor\MakerUI\TileMapMaker">
+      <UniqueIdentifier>{22a4ce29-5b97-46dc-8b8b-a4f41a97b3ce}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
