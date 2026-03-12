@@ -60,7 +60,7 @@ public:
     }
     UINT* GetCollisionMatrix() { return m_Matrix; };
 
-    bool IsChanged() 
+    bool IsChanged()
     { 
         // 원본 bool 값을 바꾸어 변환하지 않는다
         bool Changed = m_Changed; 

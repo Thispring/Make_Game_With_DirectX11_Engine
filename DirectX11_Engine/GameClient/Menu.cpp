@@ -148,6 +148,13 @@ void Menu::View()
 			pMtrlMaker->SetActive(MtrlMakerActive);
 		}
 
+		Ptr<EditorUI> pGameObjMaker = EditorMgr::GetInst()->FindUI("GameObjectMaker");
+		bool GameObjMakerActive = pGameObjMaker->IsActive();
+		if (ImGui::MenuItem("GameObjectMaker", nullptr, &GameObjMakerActive))
+		{
+			pGameObjMaker->SetActive(GameObjMakerActive);
+		}
+
 		ImGui::EndMenu();
 	}
 }
@@ -156,6 +163,12 @@ void Menu::GameObject()
 {
 	if (ImGui::BeginMenu("GameObject"))
 	{
+		Ptr<EditorUI> pGameObjMaker = EditorMgr::GetInst()->FindUI("GameObjectMaker");
+		bool GameObjMakerActive = pGameObjMaker->IsActive();
+		if (ImGui::MenuItem("Create GameObject", nullptr, &GameObjMakerActive))
+		{
+			pGameObjMaker->SetActive(GameObjMakerActive);
+		}
 
 		ImGui::EndMenu();
 	}

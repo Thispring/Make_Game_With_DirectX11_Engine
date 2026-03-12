@@ -90,8 +90,6 @@ enum class COMPONENT_TYPE
 	PARTICLE_RENDER,
 	TILE_RENDER,
 
-	M_SCRIPT,
-
 	END,
 
 	// 하나의 오브젝트가 여러개의 Script를 가질 수 있도록

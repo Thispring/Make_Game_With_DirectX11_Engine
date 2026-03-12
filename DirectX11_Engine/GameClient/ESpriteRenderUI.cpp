@@ -12,4 +12,5 @@ ESpriteRenderUI::~ESpriteRenderUI()
 
 void ESpriteRenderUI::Tick_UI()
 {
+	OutputTitle("SpriteRender");
 }

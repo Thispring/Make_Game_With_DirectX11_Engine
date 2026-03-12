@@ -42,6 +42,12 @@ void CreateLevel();
 // String 문자열을 받아, 알맞은 enum class RENDER_DOMAIN을 반환하는 함수
 RENDER_DOMAIN StringToDomain(string _DomainName);
 
+// String 문자열을 받아, 알맞은 COMPONENT_TYPE을 반환하는 함수
+COMPONENT_TYPE StringToComponent(string _ComponentName);
+
+// COMPONENT_TYPE를 받아 조건에 맞는 Component 객체를 생성하는 함수
+Component* CreateComponent(COMPONENT_TYPE _Type);
+
 // Asset의 Key값 문자열을 받았을때, 경로와 확장자를 제거한 이름을 반환하는 함수
 // Sprite에서 _%d와 앞의 파일 확장자를 제거하기 위해 사용
 wstring ExtractFileName(const wstring& fullPath);

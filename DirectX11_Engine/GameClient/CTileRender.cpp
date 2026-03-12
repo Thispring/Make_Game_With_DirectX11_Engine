@@ -47,14 +47,24 @@ void CTileRender::Render()
 
 	GetMaterial()->SetTexture(TEX_0, m_TileMap->GetAtlas());
 
+	// m_TileMap에 전달받은 Row, Col값 만큼 for반복을하여,
+	// SpriteInfo 인덱스별로 UV 정보를 전달합니다.
+	UINT Row = m_TileMap->GetRow();
+	UINT Col = m_TileMap->GetCol();
+	int Count = 0;
 	GetMaterial()->SetScalar(INT_0, m_TileMap->GetRow());
 	GetMaterial()->SetScalar(INT_1, m_TileMap->GetCol());
-	GetMaterial()->SetScalar(VEC2_0, m_vecSpriteInfo[0].LeftTop);
-	GetMaterial()->SetScalar(VEC2_1, m_vecSpriteInfo[0].Slice);
-
-	GetMaterial()->Binding();
-
-	GetMesh()->Render();
+	for (int i = 0; i < Col; ++i)
+	{
+		for (int j = 0; j < Row; ++j)
+		{
+			GetMaterial()->SetScalar(VEC2_0, m_vecSpriteInfo[Count].LeftTop);
+			GetMaterial()->SetScalar(VEC2_1, m_vecSpriteInfo[Count].Slice);
+			GetMaterial()->Binding();
+			GetMesh()->Render();
+			Count++;
+		}
+	}
 
 	m_Buffer->Clear();
 }

@@ -167,4 +167,6 @@ void ESpriteUI::Tick_UI()
 		, ImVec2(200, 200)
 		, LeftTopUV, LeftTopUV + SliceUV
 		, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+
 }
+

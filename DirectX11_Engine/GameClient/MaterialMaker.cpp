@@ -56,14 +56,14 @@ void MaterialMaker::Tick_UI()
 
 		ImGui::EndDragDropTarget();
 	}
-
 	ImGui::Spacing();
 	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
 		"Drag and drop an image from the ContentUI\nGraphicShader list into the box above.");
-	for (int i = 0; i < 5; ++i) ImGui::Spacing();
+	SPACING_UI(5);
+
 
 	// Texture Name
-	ImGui::Text("Texture Name Name");
+	ImGui::Text("Texture Name");
 	// wstring -> string 변환
 	string tName = string(m_TextureName.begin(), m_TextureName.end());
 	ImGui::SameLine(150);
@@ -87,11 +87,10 @@ void MaterialMaker::Tick_UI()
 
 		ImGui::EndDragDropTarget();
 	}
-
 	ImGui::Spacing();
 	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
 		"Drag and drop an image from the ContentUI\nTexture list into the box above.");
-	for (int i = 0; i < 5; ++i) ImGui::Spacing();
+	SPACING_UI(5);
 
 
 	// Mtrl Name
@@ -107,7 +106,7 @@ void MaterialMaker::Tick_UI()
 	ImGui::Spacing();
 	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
 		"Please enter the name you want to save.");
-	for (int i = 0; i < 5; ++i) ImGui::Spacing();
+	SPACING_UI(5);
 
 	
 	// Domain
@@ -121,7 +120,7 @@ void MaterialMaker::Tick_UI()
 		// StringToDomain() 호출
 		SetRenderDomain(StringToDomain(items[item_current_3]));
 	}
-	for (int i = 0; i < 5; ++i) ImGui::Spacing();
+	SPACING_UI(5);
 
 
 	// SaveBtn
@@ -159,6 +158,5 @@ void MaterialMaker::Tick_UI()
 		ImGui::EndPopup();
 	}
 
-	for (int i = 0; i < 7; ++i)
-		ImGui::Spacing();
+	SPACING_UI(7);
 }

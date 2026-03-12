@@ -70,54 +70,116 @@ void TreeNode::DropCheck()
 
 void TreeNode::Tick()
 {
-	// TreeNode Flag 설정 (ImGui쪽 enum 사용)
-	UINT Flags = ImGuiTreeNodeFlags_SpanFullWidth		// 클릭 판정범위 확장
-		| ImGuiTreeNodeFlags_OpenOnDoubleClick			// 더블 클릭으로만 열리기
-		| ImGuiTreeNodeFlags_OpenOnArrow;				// 화살표 누르면 열리기
+	// 1. 테이블의 다음 행(Row) 시작
+	ImGui::TableNextRow();
 
+	// 2. 첫 번째 컬럼(Name + Tree 구조) 시작
+	ImGui::TableNextColumn();
 
-	// 노드가 자식노드를 보유하고 있지 않으면 Leaf 플래그 추가
+	// ---------------------------------------------------------
+	// Flag 설정
+	// ---------------------------------------------------------
+	// Table 안에서는 SpanFullWidth 대신 SpanAllColumns를 주로 씁니다.
+	UINT Flags = ImGuiTreeNodeFlags_SpanAllColumns      // 전체 컬럼에 걸쳐 하이라이트
+		| ImGuiTreeNodeFlags_OpenOnDoubleClick          // 더블 클릭으로 열기
+		| ImGuiTreeNodeFlags_OpenOnArrow;               // 화살표로 열기
+
 	if (vecChildNode.empty())
 		Flags |= ImGuiTreeNodeFlags_Leaf;
 
-	// UI 자기 자신이 선택되었다면 Flag 변경
 	if (m_Owner->GetSelected() == this)
 		Flags |= ImGuiTreeNodeFlags_Selected;
 
-	// Framed가 true인 UI만 적용
 	if (Framed)
 		Flags |= ImGuiTreeNodeFlags_Framed;
 
+	// ---------------------------------------------------------
+	// 노드 그리기 (1열)
+	// ---------------------------------------------------------
+	// NodeName 생성 (Key는 ID 구별용으로 숨겨서 붙입니다)
 	string NodeName = Str + Key;
 
-	// 자식이 없는 Node 중 Frame이 적용되었을 때,
-	// 보여지는 텍스트의 시작지점을 맞춰주기 위한 코드
-	if (Framed && vecChildNode.empty())
-		NodeName = "   " + NodeName;
+	// 자식 여부에 따라 TreeNodeEx 호출
+	// 중요: TreeNodeEx는 화면에 아이템을 그리고, 열림 여부(bool)를 반환합니다.
+	bool isOpen = ImGui::TreeNodeEx(NodeName.c_str(), Flags);
 
-	// 트리노드에 등록한 문자열을 Key로 찾아서 출력
-	if (ImGui::TreeNodeEx(NodeName.c_str(), Flags))
+	// ---------------------------------------------------------
+	// 상호작용 (Click, Drag, Drop) - TreeNodeEx 직후에 한 번만 호출!
+	// ---------------------------------------------------------
+	// 기존 코드의 if/else 중복을 제거하고 여기서 통합 처리합니다.
+	// ImGui는 가장 마지막에 그려진 아이템(TreeNode)을 대상으로 동작합니다.
+	ClickCheck();
+	DragCheck();
+	DropCheck();
+
+	// ---------------------------------------------------------
+	// 추가 정보 그리기 (2열 - Key값 혹은 데이터 정보 보여주기)
+	// ---------------------------------------------------------
+	ImGui::TableNextColumn();
+	ImGui::TextDisabled("%s", Key.c_str()); // 예시: 2번째 칸에 Key값(ID)을 흐리게 출력
+
+	// ---------------------------------------------------------
+	// 자식 노드 순회
+	// ---------------------------------------------------------
+	if (isOpen)
 	{
-		// 복사 붙여넣기 식 코드라면 함수화를 고려
-		ClickCheck();
-		// Drag & Drop의 판정은 Node에서 판별하고
-		// 판정되었을 때의 기능은 상속을 받은 자식에서 구현합니다.
-		DragCheck();
-		DropCheck();
-
+		// 자식이 있다면 재귀적으로 Tick 호출 (TableNextRow가 내부에서 호출됨)
 		for (size_t i = 0; i < vecChildNode.size(); ++i)
 		{
 			vecChildNode[i]->Tick();
 		}
-
 		ImGui::TreePop();
 	}
-	else
-	{
-		ClickCheck();
-		DragCheck();
-		DropCheck();
-	}
+
+	//// 기존 코드
+	//// TreeNode Flag 설정 (ImGui쪽 enum 사용)
+	//UINT Flags = ImGuiTreeNodeFlags_SpanFullWidth		// 클릭 판정범위 확장
+	//	| ImGuiTreeNodeFlags_OpenOnDoubleClick			// 더블 클릭으로만 열리기
+	//	| ImGuiTreeNodeFlags_OpenOnArrow;				// 화살표 누르면 열리기
+
+
+	//// 노드가 자식노드를 보유하고 있지 않으면 Leaf 플래그 추가
+	//if (vecChildNode.empty())
+	//	Flags |= ImGuiTreeNodeFlags_Leaf;
+
+	//// UI 자기 자신이 선택되었다면 Flag 변경
+	//if (m_Owner->GetSelected() == this)
+	//	Flags |= ImGuiTreeNodeFlags_Selected;
+
+	//// Framed가 true인 UI만 적용
+	//if (Framed)
+	//	Flags |= ImGuiTreeNodeFlags_Framed;
+
+	//string NodeName = Str + Key;
+
+	//// 자식이 없는 Node 중 Frame이 적용되었을 때,
+	//// 보여지는 텍스트의 시작지점을 맞춰주기 위한 코드
+	//if (Framed && vecChildNode.empty())
+	//	NodeName = "   " + NodeName;
+
+	//// 트리노드에 등록한 문자열을 Key로 찾아서 출력
+	//if (ImGui::TreeNodeEx(NodeName.c_str(), Flags))
+	//{
+	//	// 복사 붙여넣기 식 코드라면 함수화를 고려
+	//	ClickCheck();
+	//	// Drag & Drop의 판정은 Node에서 판별하고
+	//	// 판정되었을 때의 기능은 상속을 받은 자식에서 구현합니다.
+	//	DragCheck();
+	//	DropCheck();
+
+	//	for (size_t i = 0; i < vecChildNode.size(); ++i)
+	//	{
+	//		vecChildNode[i]->Tick();
+	//	}
+
+	//	ImGui::TreePop();
+	//}
+	//else
+	//{
+	//	ClickCheck();
+	//	DragCheck();
+	//	DropCheck();
+	//}
 }
 
 #pragma endregion
@@ -176,26 +238,63 @@ void TreeUI::RegisterSelected(Ptr<TreeNode> _Node)
 
 void TreeUI::Tick_UI()
 {
-	for (size_t i = 0; i < m_vecNode.size(); ++i)
+	// 테이블 플래그 설정
+	// Resizable: 컬럼 크기 조절 가능
+	// Borders: 테두리 표시
+	// RowBg: 행마다 배경색 교차 (가독성 향상)
+	static ImGuiTableFlags table_flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable;
+
+	// 테이블 시작 (컬럼 2개: Name, Key)
+	if (ImGui::BeginTable("TreeTable", 2, table_flags))
 	{
-		m_vecNode[i]->Tick();
+		// 헤더 설정
+		ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide); // 숨김 불가
+		ImGui::TableSetupColumn("ID (Key)", ImGuiTableColumnFlags_WidthFixed, 100.0f); // 고정 너비
+		ImGui::TableHeadersRow(); // 헤더 그리기
+
+		// 루트 노드들 순회
+		for (size_t i = 0; i < m_vecNode.size(); ++i)
+		{
+			m_vecNode[i]->Tick();
+		}
+
+		ImGui::EndTable();
 	}
 
-	// Drag 하던 노드를 특정 노드에 Drop
-	// OR 조건으로 Drag를 한 상태에서 마우스를 땐 상태였다면
+	// [기존 드래그 앤 드롭 마무리 로직 유지]
 	if (m_DragNode.Get() && m_DropNode.Get()
 		|| (m_DragNode.Get() && ImGui::IsMouseReleased(ImGuiMouseButton_Left)))
 	{
 		if (m_DDInst && m_DDMemFunc)
 		{
-			// Drag & Drop Node의 주소를 전달
 			(m_DDInst->*m_DDMemFunc)((DWORD_PTR)m_DragNode.Get(), (DWORD_PTR)m_DropNode.Get());
 		}
 
-		// nullptr 초기화로 주소 비워주기
 		m_DragNode = nullptr;
 		m_DropNode = nullptr;
 	}
+
+	//// 기존 코드
+	//for (size_t i = 0; i < m_vecNode.size(); ++i)
+	//{
+	//	m_vecNode[i]->Tick();
+	//}
+
+	//// Drag 하던 노드를 특정 노드에 Drop
+	//// OR 조건으로 Drag를 한 상태에서 마우스를 땐 상태였다면
+	//if (m_DragNode.Get() && m_DropNode.Get()
+	//	|| (m_DragNode.Get() && ImGui::IsMouseReleased(ImGuiMouseButton_Left)))
+	//{
+	//	if (m_DDInst && m_DDMemFunc)
+	//	{
+	//		// Drag & Drop Node의 주소를 전달
+	//		(m_DDInst->*m_DDMemFunc)((DWORD_PTR)m_DragNode.Get(), (DWORD_PTR)m_DropNode.Get());
+	//	}
+
+	//	// nullptr 초기화로 주소 비워주기
+	//	m_DragNode = nullptr;
+	//	m_DropNode = nullptr;
+	//}
 }
 
 #pragma endregion

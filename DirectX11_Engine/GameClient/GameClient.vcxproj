@@ -193,6 +193,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="CTransform.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="Device.h" />
+    <ClInclude Include="EBillboardRenderUI.h" />
     <ClInclude Include="ECameraUI.h" />
     <ClInclude Include="ECollider2DUI.h" />
     <ClInclude Include="EComponentUI.h" />
@@ -214,6 +215,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="ETileRenderUI.h" />
     <ClInclude Include="extern.h" />
     <ClInclude Include="FlipbookMaker.h" />
+    <ClInclude Include="GameObjectMaker.h" />
     <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="Inspector.h" />
     <ClInclude Include="KeyList.h" />
@@ -300,6 +302,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="CTileRender.cpp" />
     <ClCompile Include="CTransform.cpp" />
     <ClCompile Include="Device.cpp" />
+    <ClCompile Include="EBillboardRenderUI.cpp" />
     <ClCompile Include="ECameraUI.cpp" />
     <ClCompile Include="ECollider2DUI.cpp" />
     <ClCompile Include="EComponentUI.cpp" />
@@ -320,6 +323,8 @@ call CodeGen.exe</Command>
     <ClCompile Include="ETileMapUI.cpp" />
     <ClCompile Include="ETileRenderUI.cpp" />
     <ClCompile Include="FlipbookMaker.cpp" />
+    <ClCompile Include="GameObjectMaker.cpp" />
+    <ClCompile Include="GameObjectMaker_Init.cpp" />
     <ClCompile Include="imgui\imgui_stdlib.cpp" />
     <ClCompile Include="Inspector.cpp" />
     <ClCompile Include="Inspector_Init.cpp" />

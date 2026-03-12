@@ -322,6 +322,12 @@
     <ClInclude Include="TileMapMaker.h">
       <Filter>GameEngine\Editor\MakerUI\TileMapMaker</Filter>
     </ClInclude>
+    <ClInclude Include="GameObjectMaker.h">
+      <Filter>GameEngine\Editor\MakerUI\GameObjectMaker</Filter>
+    </ClInclude>
+    <ClInclude Include="EBillboardRenderUI.h">
+      <Filter>GameEngine\Editor\ComponentUI\Render_UI\BillboardRender_UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -621,6 +627,15 @@
     <ClCompile Include="TileMapMaker.cpp">
       <Filter>GameEngine\Editor\MakerUI\TileMapMaker</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjectMaker.cpp">
+      <Filter>GameEngine\Editor\MakerUI\GameObjectMaker</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectMaker_Init.cpp">
+      <Filter>GameEngine\Editor\MakerUI\GameObjectMaker</Filter>
+    </ClCompile>
+    <ClCompile Include="EBillboardRenderUI.cpp">
+      <Filter>GameEngine\Editor\ComponentUI\Render_UI\BillboardRender_UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -883,6 +898,12 @@
     </Filter>
     <Filter Include="GameEngine\Editor\MakerUI\TileMapMaker">
       <UniqueIdentifier>{22a4ce29-5b97-46dc-8b8b-a4f41a97b3ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Editor\MakerUI\GameObjectMaker">
+      <UniqueIdentifier>{7d89a04c-9951-4b9d-b75d-67a21720312e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Editor\ComponentUI\Render_UI\BillboardRender_UI">
+      <UniqueIdentifier>{2673b244-d205-46cc-903a-ff6df1795f3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

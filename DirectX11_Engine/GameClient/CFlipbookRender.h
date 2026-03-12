@@ -61,9 +61,10 @@ public:
         m_vecFlipbook[_Idx] = _Flipbook;
     }
     bool GetFinish() { return m_Finish; }
-    int GetReapeatCount() { return m_RepeatCount; }
     const vector<Ptr<AFlipbook>>& GetVecFlipbook() { return m_vecFlipbook; }
-    int GetCurIndex() { return m_CurFlipbook; }
+    GET_SET(int, CurFlipbook);
+    GET_SET(int, RepeatCount);
+    GET_SET(float, FPS);
 
 
     //============

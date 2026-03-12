@@ -44,4 +44,16 @@ void KeyList::Tick_UI()
 	{
 		ImGui::Text((*iter).c_str());
 	}
+	
+	// 추후 List를 filter로 검색하는 방법 찾아보기
+	//static ImGuiTextFilter filter;
+
+	//filter.Draw("Search");
+
+	//for (auto& item : m_keyList) 
+	//{
+	//	if (filter.PassFilter(item.c_str())) {
+	//		ImGui::Text("%s", item.c_str());
+	//	}
+	//}
 }

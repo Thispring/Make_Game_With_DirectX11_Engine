@@ -72,6 +72,23 @@ public:
 	void RegisterAsParent();
 	void DeregisterAsParent();
 
+	// 자신이 가리키고 있던 Component를 해제하는 함수
+	void ReleaseComponent(COMPONENT_TYPE _Type)
+	{
+		// Transform의 경우 기본으로 가지고 있어야 되기때문에 해제 X
+		if (_Type == COMPONENT_TYPE::TRANSFORM)
+			return;
+
+		m_Com[(UINT)_Type] = nullptr;
+
+		// _Type이 Render Component라면
+		// m_RenderCom도 nullptr을 가리키게 설정
+		if (_Type == COMPONENT_TYPE::BILLBOARD_RENDER || _Type == COMPONENT_TYPE::FLIPBOOK_RENDER || _Type == COMPONENT_TYPE::MESHRENDER ||
+			_Type == COMPONENT_TYPE::PARTICLE_RENDER || _Type == COMPONENT_TYPE::SPRITE_RENDER || _Type == COMPONENT_TYPE::TILE_RENDER)
+			m_RenderCom = nullptr;
+
+	}
+
 	// File I/O
 	void SaveToLevelFile(FILE* _File);
 	void LoadFromLevelFile(FILE* _File);

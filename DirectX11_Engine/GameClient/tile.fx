@@ -3,6 +3,9 @@
 
 #include "value.fx"
 
+#define AtlasTex    g_tex_0
+#define ROW         g_int_0
+#define COL         g_int_1
 
 struct SpriteInfo
 {
@@ -10,11 +13,6 @@ struct SpriteInfo
     float2 Slice;
 };
 StructuredBuffer<SpriteInfo> g_Buffer : register(t20);
-
-
-#define AtlasTex    g_tex_0
-#define ROW         g_int_0
-#define COL         g_int_1
 
 
 struct VS_IN

@@ -12,5 +12,6 @@ ETileRenderUI::~ETileRenderUI()
 
 void ETileRenderUI::Tick_UI()
 {
+	OutputTitle("TileRender");
 }
 

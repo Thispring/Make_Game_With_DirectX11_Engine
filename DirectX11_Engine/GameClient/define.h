@@ -22,3 +22,6 @@
 
 // 객체 복사 매크로
 #define CLONE(Type) Type* Clone() { return new Type(*this); }
+
+// ImGui UI 간격 조정 매크로
+#define SPACING_UI(Count) for (int i = 0; i < Count; ++i) ImGui::Spacing();

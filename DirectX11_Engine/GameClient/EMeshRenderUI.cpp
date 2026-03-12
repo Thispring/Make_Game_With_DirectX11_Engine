@@ -26,8 +26,17 @@ void EMeshRenderUI::Tick_UI()
 	ImGui::Text("Mesh List");
 	ImGui::SameLine(120);
 
-	Ptr<AMesh> pMesh = pMeshRender->GetMesh();
-	string MeshKey = string(pMesh->GetKey().begin(), pMesh->GetKey().end());
+	Ptr<AMesh> pMesh = nullptr;
+	string MeshKey = {};
+
+	// pMeshRender가 설정된 상태면, Mesh 설정값을 가져오고
+	// 설정되지 않은 상태면 설정되지 않았다는 의미로 공백으로 UI 표시합니다.
+	if (pMeshRender->GetMesh() != nullptr)
+	{
+		pMesh = pMeshRender->GetMesh();
+		MeshKey = string(pMesh->GetKey().begin(), pMesh->GetKey().end());
+	}
+
 	ImGui::InputText("##MeshName", MeshKey.data(), MeshKey.length() + 1, ImGuiInputTextFlags_ReadOnly);
 
 	// InputText에서 혹시 Drop 받은 Payload가 있는지 체크
@@ -73,8 +82,15 @@ void EMeshRenderUI::Tick_UI()
 	ImGui::Text("Material");
 	ImGui::SameLine(120);
 
-	Ptr<AMaterial> pMtrl = pMeshRender->GetMaterial();
-	string MtrlKey = string(pMtrl->GetKey().begin(), pMtrl->GetKey().end());
+	Ptr<AMaterial> pMtrl = nullptr;
+	string MtrlKey = {};
+
+	if (pMeshRender->GetMaterial() != nullptr)
+	{
+		pMtrl = pMeshRender->GetMaterial();
+		MtrlKey = string(pMtrl->GetKey().begin(), pMtrl->GetKey().end());
+	}
+
 	ImGui::InputText("##MtrlName", MtrlKey.data(), MtrlKey.length() + 1, ImGuiInputTextFlags_ReadOnly);
 
 	// 특정 위젯에서 드래그가 발생했고, 해당 위젯 위에 마우스가 올려져있는지 확인
