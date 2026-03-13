@@ -425,3 +425,66 @@ void Device::CreateConstBuffer()
 	m_CB[(UINT)CB_TYPE::GLOBAL] = new ConstBuffer;
 	m_CB[(UINT)CB_TYPE::GLOBAL]->Create(CB_TYPE::GLOBAL, sizeof(GlobalData));
 }
+
+void Device::Resize(UINT width, UINT height)
+{
+	if (m_SwapChain == nullptr || m_Context == nullptr)
+		return;
+
+	// 너비/높이 유효성 검사
+	if (width == 0 || height == 0)
+		return;
+
+	//// 1) 기존 렌더 타겟(및 관련 뷰)을 해제
+	//if (m_RenderTarget)
+	//{
+	//	m_RTV->Release();
+	//	m_RTV = nullptr;
+	//}
+	// 1) 기존 뷰/관련 리소스 해제 (ComPtr 방식)
+	if (m_RTV) m_RTV.Reset();
+	if (m_DSV) m_DSV.Reset();
+
+
+	// (선택) ImGui에 디바이스 리소스 무효화 알림 — imgui_impl_dx11 내부에서 리소스 재생성에 사용
+	// ImGui_ImplDX11_InvalidateDeviceObjects();
+
+	// 2) SwapChain 크기 변경
+	HRESULT hr = m_SwapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	if (FAILED(hr))
+	{
+		// 실패 처리 (로그 등)
+		return;
+	}
+
+	// 3) 백버퍼 얻고 RenderTargetView 재생성
+	ID3D11Texture2D* pBackBuffer = nullptr;
+	hr = m_SwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+	if (FAILED(hr) || pBackBuffer == nullptr)
+	{
+		// 실패 처리
+		return;
+	}
+
+	hr = m_Device->CreateRenderTargetView(pBackBuffer, nullptr, &m_RTV);
+	pBackBuffer->Release();
+	if (FAILED(hr))
+	{
+		// 실패 처리
+		m_RTV = nullptr;
+		return;
+	}
+
+	// 4) 뷰포트 업데이트
+	D3D11_VIEWPORT vp;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	vp.Width = (FLOAT)width;
+	vp.Height = (FLOAT)height;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	m_Context->RSSetViewports(1, &vp);
+
+	// (선택) ImGui 디바이스 오브젝트 재생성 — ImGui에서 DX 자원을 다시 생성
+	// ImGui_ImplDX11_CreateDeviceObjects();
+}

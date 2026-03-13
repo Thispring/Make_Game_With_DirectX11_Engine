@@ -209,6 +209,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+    case WM_SIZE:
+        if (wParam != SIZE_MINIMIZED)
+        {
+            UINT newWidth = LOWORD(lParam);
+            UINT newHeight = HIWORD(lParam);
+            // Engine이나 Device에 리사이즈 알림
+            Engine::GetInst()->OnResize((int)newWidth, (int)newHeight);
+        }
+        break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }

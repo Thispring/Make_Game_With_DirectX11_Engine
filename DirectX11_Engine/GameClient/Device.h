@@ -113,6 +113,8 @@ public:
 	void OMSetTarget();
 	int CreateSampler();
 
+	void Resize(UINT width, UINT height);
+
 
 	//=========
 	// Get, Set

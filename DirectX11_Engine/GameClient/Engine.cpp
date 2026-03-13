@@ -65,3 +65,16 @@ int Engine::Progress()
 
 	return S_OK;
 }
+
+void Engine::OnResize(int width, int height)
+{
+	if (width == 0 || height == 0)
+		return;
+
+	// 엔진의 논리 해상도 저장
+	m_Resolution = Vec2((float)width, (float)height);
+
+	// 그래픽 장치(DirectX) 쪽 리사이즈 호출
+	Device::GetInst()->Resize((UINT)width, (UINT)height);
+
+}

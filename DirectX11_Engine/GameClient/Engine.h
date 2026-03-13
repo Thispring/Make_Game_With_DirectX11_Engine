@@ -29,7 +29,7 @@ public:
 	//=========
 	int Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode);
 	int Progress();
-
+	void OnResize(int width, int height);
 
 	//=========
 	// Get, Set
