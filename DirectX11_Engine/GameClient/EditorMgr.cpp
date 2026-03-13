@@ -69,8 +69,33 @@ void EditorMgr::Tick()
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    ImGui::DockSpaceOverViewport();
+    // 수동 DockSpace (NoBackground 플래그 추가)
+    //ImGuiViewport* viewport = ImGui::GetMainViewport();
+    //ImGui::SetNextWindowPos(viewport->WorkPos);
+    //ImGui::SetNextWindowSize(viewport->WorkSize);
+    //ImGui::SetNextWindowViewport(viewport->ID);
+
+    //ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
+    //window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
+    //window_flags |= ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    //window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+    //window_flags |= ImGuiWindowFlags_NoBackground;  // 투명 배경
+
+    //ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+    //ImGui::Begin("DockSpaceWindow", nullptr, window_flags);
+    //ImGui::PopStyleVar();
+
+    //ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+    //ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f),
+    //    ImGuiDockNodeFlags_PassthruCentralNode);
+
+    //ImGui::End();
+
     m_FocusedUI = nullptr;
-    
+   
+
     // DemoUI 활성/비활성화
     // Enable/Disable DemoUI
     if (KEY_TAP(KEY::F8))
@@ -231,9 +256,15 @@ void EditorMgr::Init()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
+    HWND mainHwnd = Engine::GetInst()->GetMainWndHwnd();
+    ImGui_ImplWin32_Init(mainHwnd);
+
     // Setup Platform/Renderer backends
-    ImGui_ImplWin32_Init(Engine::GetInst()->GetMainWndHwnd());
-    ImGui_ImplDX11_Init(DEVICE, CONTEXT);
+    //ImGui_ImplWin32_Init(Engine::GetInst()->GetMainWndHwnd());
+    //ImGui_ImplDX11_Init(DEVICE, CONTEXT);
+    ComPtr<ID3D11Device> device = Device::GetInst()->GetDevice();
+    ComPtr<ID3D11DeviceContext> context = Device::GetInst()->GetContext();
+    ImGui_ImplDX11_Init(device.Get(), context.Get());
 
     // EditorUI 생성
     CreateEditorUI();
