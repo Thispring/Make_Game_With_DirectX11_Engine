@@ -2,8 +2,9 @@
 #include "FlipbookMaker.h"
 
 #include "AssetMgr.h"
+#include "EditorMgr.h"
 // ImGui::InputText의 기본 정의는 char* 버퍼, 이를 해결하기 위한 헤더
-#include "imgui/imgui_stdlib.h"
+//#include "imgui/imgui_stdlib.h"
 
 FlipbookMaker::FlipbookMaker()
 	: EditorUI("FlipbookMaker")

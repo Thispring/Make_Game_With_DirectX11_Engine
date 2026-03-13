@@ -3,7 +3,7 @@
 
 #include "AssetMgr.h"
 // ImGui::InputText의 기본 정의는 char* 버퍼, 이를 해결하기 위한 헤더
-#include "imgui/imgui_stdlib.h"
+#include "EditorMgr.h"
 
 SpriteMaker::SpriteMaker()
 	: EditorUI("SpriteMaker")

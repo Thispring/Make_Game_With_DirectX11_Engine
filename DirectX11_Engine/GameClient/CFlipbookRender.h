@@ -15,6 +15,9 @@ private:
     float                   m_FPS;              // 애니메이션 프레임 수
     float                   m_AccTime;          // 현재 시간
 
+    // ImGui 재생 컨트롤용도의 bool 변수
+    // EFlipbookRenderUI 클래스에 의존하고 있어서 사용 주의 필요
+    bool                    m_IsStop;
 
     //=================
     // private 멤버 함수
@@ -30,6 +33,8 @@ public:
     {
         // 다시 Play를 호출했을 때, m_CurSprite를 0으로 초기화하여,
         // 다른 FlipBook의 Sprite를 처음부터 재생
+            
+
         m_CurSprite = 0;
 
         m_CurFlipbook = _FlipbookIdx;
@@ -65,6 +70,7 @@ public:
     GET_SET(int, CurFlipbook);
     GET_SET(int, RepeatCount);
     GET_SET(float, FPS);
+    GET_SET(bool, IsStop);
 
 
     //============

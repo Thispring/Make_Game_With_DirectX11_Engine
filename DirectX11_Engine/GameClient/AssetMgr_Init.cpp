@@ -506,7 +506,11 @@ void AssetMgr::CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wst
 	_MtrlName = L"Material\\" + _MtrlName + L".mtrl";
 	pMtrl->SetName(_MtrlName);
 	pMtrl->SetShader(Find<AGraphicShader>(_ShaderName));
-	pMtrl->SetTexture(TEX_0, Find<ATexture>(_TextureName));
+
+	// TextureName을 설정안했으면, Texture 설정 X
+	if (_TextureName != L"")
+		pMtrl->SetTexture(TEX_0, Find<ATexture>(_TextureName));
+
 	pMtrl->SetDomain(_Domain);
 	AddAsset(pMtrl->GetName(), pMtrl.Get());
 	pMtrl->Save(CONTENT_PATH + pMtrl->GetKey());

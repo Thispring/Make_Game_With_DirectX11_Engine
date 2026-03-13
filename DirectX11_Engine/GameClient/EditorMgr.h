@@ -1,5 +1,6 @@
 #pragma once
 #include "EditorUI.h"
+#include "imgui/imgui_stdlib.h"
 
 class EditorMgr
 	: public Singleton<EditorMgr>

@@ -13,6 +13,7 @@ CFlipbookRender::CFlipbookRender()
 	, m_CurSprite(0)
 	, m_Finish(false)
 	, m_RepeatCount(0)
+	, m_IsStop(false)
 {
 }
 
@@ -49,6 +50,9 @@ void CFlipbookRender::FinalTick()
 	// Level이 Play상태 일때만 재생하도록 설정
 	/*if (LevelMgr::GetInst()->GetLevelState() != LEVEL_STATE::PLAY)
 		return;*/
+
+	if (GetIsStop())
+		return;
 
 	if (CheckFinish())
 		return;

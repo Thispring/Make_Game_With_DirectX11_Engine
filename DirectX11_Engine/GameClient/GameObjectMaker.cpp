@@ -4,8 +4,8 @@
 #include "GameObject.h"
 #include "LevelMgr.h"
 #include "AssetMgr.h"
+#include "EditorMgr.h"
 
-#include "imgui/imgui_stdlib.h"
 
 GameObjectMaker::GameObjectMaker()
 	: EditorUI("GameObjectMaker")
@@ -136,6 +136,10 @@ void GameObjectMaker::Tick_UI()
 	{
 		// 이미 보유하고 있는 Component라면 리턴
 		if (m_pObject->GetComponent(GetComType()) != nullptr)
+			return;
+
+		// 이미 RenderComponent가 있다면 리턴
+		if (m_pObject->GetRenderCom().Get() != nullptr)
 			return;
 
 		// m_Com에 ComType에 맞는 객체를 만들어 전달

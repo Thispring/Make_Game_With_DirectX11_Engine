@@ -2,7 +2,7 @@
 #include "TileMapMaker.h"
 
 #include "AssetMgr.h"
-#include "imgui/imgui_stdlib.h"
+#include "EditorMgr.h"
 
 TileMapMaker::TileMapMaker()
 	: EditorUI("TileMapMaker")

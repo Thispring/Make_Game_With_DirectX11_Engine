@@ -492,6 +492,21 @@ void CreateLevel()
 
 	pLevel->AddObject(2, pObject);
 
+	// test spriteRender
+	pObject = new GameObject;
+	pObject->SetName(L"TestSpriteRenderObj");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CCollider2D);
+	pObject->AddComponent(new CSpriteRender);
+
+	pObject->Transform()->SetRelativePos(Vec3(0.f, -80.f, 0.f));
+	pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 1.f));
+	//pObject->SpriteRender()->SetMaterial(FIND(AMaterial, L"Material\mon2SpriteMtrl.mtrl"));
+	pObject->SpriteRender()->SetSprite(FIND(ASprite, L"Sprite\\cat_Idle_0.sprite"));
+
+	pLevel->AddObject(2, pObject);
+
 
 	//=============
 	// 레벨 충돌 설정

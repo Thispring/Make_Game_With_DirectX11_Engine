@@ -2,7 +2,7 @@
 #include "MaterialMaker.h"
 
 #include "AssetMgr.h"
-#include "imgui/imgui_stdlib.h"
+#include "EditorMgr.h"
 
 MaterialMaker::MaterialMaker()
 	: EditorUI("MaterialMaker")

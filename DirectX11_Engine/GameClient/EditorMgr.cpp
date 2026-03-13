@@ -4,7 +4,6 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx11.h"
-
 // imgui에서 문자열 길이에 따라 버퍼가 자동조절하게 해주는 해더
 //#include "imgui/imgui_stdlib.h"
 
