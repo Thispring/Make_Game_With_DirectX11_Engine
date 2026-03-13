@@ -28,6 +28,7 @@
 
 #include "CEditorCamMoveScript.h"
 #include "RenderMgr.h"
+#include "GameViewportUI.h"
 
 EditorMgr::EditorMgr()
     : m_ShowDemo(true)
@@ -70,28 +71,7 @@ void EditorMgr::Tick()
     ImGui::NewFrame();
 
     ImGui::DockSpaceOverViewport();
-    // 수동 DockSpace (NoBackground 플래그 추가)
-    //ImGuiViewport* viewport = ImGui::GetMainViewport();
-    //ImGui::SetNextWindowPos(viewport->WorkPos);
-    //ImGui::SetNextWindowSize(viewport->WorkSize);
-    //ImGui::SetNextWindowViewport(viewport->ID);
 
-    //ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
-    //window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
-    //window_flags |= ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-    //window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-    //window_flags |= ImGuiWindowFlags_NoBackground;  // 투명 배경
-
-    //ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-
-    //ImGui::Begin("DockSpaceWindow", nullptr, window_flags);
-    //ImGui::PopStyleVar();
-
-    //ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-    //ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f),
-    //    ImGuiDockNodeFlags_PassthruCentralNode);
-
-    //ImGui::End();
 
     m_FocusedUI = nullptr;
    
@@ -132,6 +112,10 @@ void EditorMgr::Tick()
 
 void EditorMgr::Render()
 {
+    // 백버퍼를 클리어하고 렌더 타겟으로 설정
+    Device::GetInst()->OMSetTarget();
+    Device::GetInst()->ClearTarget();
+
     // Main Window 렌더링
     // Rendering
     ImGui::Render();
@@ -152,6 +136,14 @@ void EditorMgr::CreateEditorUI()
     // 파생 클래스를 동적할당으로 생성하고 등록
     Ptr<EditorUI> pUI = nullptr;
     
+
+    // GameViewportUI 생성 및 등록
+    GameViewportUI* gameViewport = new GameViewportUI;
+    gameViewport->SetGameTexture(RenderMgr::GetInst()->GetGameSRV());
+    gameViewport->SetActive(true);
+    AddUI(gameViewport->GetUIName(), gameViewport);
+
+
     //===========================
     // 새로운 ImGui 창은 여기서 등록
     //===========================
@@ -176,18 +168,23 @@ void EditorMgr::CreateEditorUI()
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new SpriteMaker;
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new FlipbookMaker;
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new TileMapMaker;
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new MaterialMaker;
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new GameObjectMaker;
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 }
 
@@ -242,12 +239,14 @@ void EditorMgr::Init()
     ImGui::StyleColorsDark();
     //ImGui::StyleColorsLight();
 
+    // Dpi 관련 설정 주석처리 중
     // Setup scaling
     ImGuiStyle& style = ImGui::GetStyle();
     style.ScaleAllSizes(main_scale);        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
     style.FontScaleDpi = main_scale;        // Set initial font scale. (in docking branch: using io.ConfigDpiScaleFonts=true automatically overrides this for every window depending on the current monitor)
     io.ConfigDpiScaleFonts = true;          // [Experimental] Automatically overwrite style.FontScaleDpi in Begin() when Monitor DPI changes. This will scale fonts but _NOT_ scale sizes/padding for now.
     io.ConfigDpiScaleViewports = true;      // [Experimental] Scale Dear ImGui and Platform Windows when Monitor DPI changes.
+
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

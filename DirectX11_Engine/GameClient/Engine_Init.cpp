@@ -56,7 +56,8 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
     // PopUp 모드로 타이틀 창 제거
     //HWND hWnd = CreateWindowW(L"MyGame", L"MyGame", WS_POPUP/*WS_OVERLAPPEDWINDOW*/, CW_USEDEFAULT, 0, CW_USEDEFAULT
     //                         , 0, nullptr, nullptr, hInstance, nullptr);        
-    UINT Style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
+    //UINT Style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
+    UINT Style = WS_POPUP | WS_VISIBLE | WS_MAXIMIZE;
 
 
     // 커널 오브젝트 - OS가 관리하는 객체

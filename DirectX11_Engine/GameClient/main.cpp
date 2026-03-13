@@ -52,7 +52,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     hInst = hInstance;
 
     // Engine 초기화    
-    if (FAILED(Engine::GetInst()->Init(hInstance, 1600, 900, true)))
+    if (FAILED(Engine::GetInst()->Init(hInstance, 1920, 1080, true)))
         return 0;
 
     CreateLevel();
@@ -117,6 +117,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     ************************************************************************************/
     while (true)
     {
+        // 프로그램종료 키
+        if (KEY_PRESSED(KEY::ESC))
+            break;
+
         // 메세지 큐에서 메세지를 꺼낸게 있다.
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {

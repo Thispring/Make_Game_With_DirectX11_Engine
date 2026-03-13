@@ -238,3 +238,8 @@ KEY: Z
 KEY_STATE: TAP
 Source File: CPlayerController.cpp
 
+Comment: 프로그램종료 키
+KEY: ESC
+KEY_STATE: PRESSED
+Source File: main.cpp
+

@@ -328,6 +328,7 @@
     <ClInclude Include="EBillboardRenderUI.h">
       <Filter>GameEngine\Editor\ComponentUI\Render_UI\BillboardRender_UI</Filter>
     </ClInclude>
+    <ClInclude Include="GameViewportUI.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -636,6 +637,7 @@
     <ClCompile Include="EBillboardRenderUI.cpp">
       <Filter>GameEngine\Editor\ComponentUI\Render_UI\BillboardRender_UI</Filter>
     </ClCompile>
+    <ClCompile Include="GameViewportUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">

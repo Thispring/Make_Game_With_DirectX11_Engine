@@ -155,6 +155,13 @@ void Menu::View()
 			pGameObjMaker->SetActive(GameObjMakerActive);
 		}
 
+		Ptr<EditorUI> pGameViewport = EditorMgr::GetInst()->FindUI("GameViewport");
+		bool GameViewportActive = pGameViewport->IsActive();
+		if (ImGui::MenuItem("GameViewport", nullptr, &GameViewportActive))
+		{
+			pGameViewport->SetActive(GameViewportActive);
+		}
+
 		ImGui::EndMenu();
 	}
 }

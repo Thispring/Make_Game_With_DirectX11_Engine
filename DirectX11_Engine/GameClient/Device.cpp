@@ -324,7 +324,9 @@ int Device::CreateBlendState()
 	
 	Desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	Desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	//Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	// GameViewportUI 추가로 인한 설정 변경
+	Desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
 
 	DEVICE->CreateBlendState(&Desc, m_BSState[(UINT)BS_TYPE::ALPHABLEND].GetAddressOf());
 

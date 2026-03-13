@@ -19,12 +19,21 @@ private:
 	
 	bool					m_IsDebugRender;			// 디버그 렌더 기능 On / Off
 	
+	// GameView Port 렌더 타겟
+	ComPtr<ID3D11Texture2D>          m_GameRenderTarget;
+	ComPtr<ID3D11RenderTargetView>   m_GameRTV;
+	ComPtr<ID3D11ShaderResourceView> m_GameSRV;
+	ComPtr<ID3D11Texture2D>          m_GameDepthStencil;
+	ComPtr<ID3D11DepthStencilView>   m_GameDSV;
+	Vec2							 m_CurrentGameResolution;
+	
 	//=================
 	// private 멤버 함수
 	//=================
 	void Render_Start();
 	void Render_End();
 	void Render_Debug();				// 디버그 랜더를 설정하는 함수
+	void CreateGameRenderTarget(Vec2 _Size);
 
 public:
 	//=========
@@ -37,6 +46,9 @@ public:
 	void RegisterEditorCamera(Ptr<CCamera> _Cam) { m_EditorCam = _Cam; };
 	void AddDebugInfo(const DbgInfo& _Info) { if (m_IsDebugRender) m_DbgInfoList.push_back(_Info); }
 	void RegisterLight2D(Ptr<CLight2D> _Light2D) { m_vecLight2D.push_back(_Light2D); }
+
+	void ResizeGameRenderTarget(Vec2 newSize);
+	ComPtr<ID3D11ShaderResourceView> GetGameSRV() { return m_GameSRV; }
 
 
 	//=========

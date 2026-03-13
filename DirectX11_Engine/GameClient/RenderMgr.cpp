@@ -5,9 +5,11 @@
 #include "TimeMgr.h"
 #include "KeyMgr.h"
 #include "Device.h"
+#include "Engine.h"
 
 RenderMgr::RenderMgr()
 	: m_IsDebugRender(true)
+	, m_CurrentGameResolution(0.f, 0.f)
 {
 
 }
@@ -27,6 +29,10 @@ void RenderMgr::Init()
 	m_DbgObj->MeshRender()->SetMaterial(FIND(AMaterial, L"Material\\DbgMtrl.mtrl"));
 
 	m_Light2DBuffer = new StructuredBuffer;
+
+	// Game View 렌더 타겟 설정
+	Vec2 resolution = Engine::GetInst()->GetResolution();
+	CreateGameRenderTarget(resolution);
 }
 
 void RenderMgr::Progress()
@@ -71,11 +77,38 @@ void RenderMgr::Progress()
 
 void RenderMgr::Render_Start()
 {
-	// 타겟 설정
-	Device::GetInst()->OMSetTarget();
+	// Game View 렌더 타겟 설정
+	CONTEXT->OMSetRenderTargets(1, m_GameRTV.GetAddressOf(), m_GameDSV.Get());
+
+	// ALPHABLEND 상태를 강제로 적용
+	//CONTEXT->OMSetBlendState(
+	//	Device::GetInst()->GetBSState(BS_TYPE::ALPHABLEND).Get(),
+	//	nullptr,
+	//	0xffffffff
+	//);
 
 	// 렌더타겟 클리어
-	Device::GetInst()->ClearTarget();
+	float clearColor[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
+	CONTEXT->ClearRenderTargetView(m_GameRTV.Get(), clearColor);
+	CONTEXT->ClearDepthStencilView(m_GameDSV.Get(),
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+		1.0f, 0);
+
+	// 뷰포트 설정
+	D3D11_VIEWPORT viewport = {};
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.Width = m_CurrentGameResolution.x;
+	viewport.Height = m_CurrentGameResolution.y;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	CONTEXT->RSSetViewports(1, &viewport);
+
+	//// 타겟 설정
+	//Device::GetInst()->OMSetTarget();
+
+	//// 렌더타겟 클리어
+	//Device::GetInst()->ClearTarget();
 
 	// 등록받은 Light2D의 광원 정보를 구조화 버퍼에 담는다.
 	// 구조화버퍼를 특정 t 레지스터에 바인딩 한다.
@@ -180,4 +213,88 @@ void RenderMgr::Render_Debug()
 		else
 			++iter;	// iter삭제 시, 다음 iter의 다음을 가리키게 하지 않기 위해 else에서 증가
 	}
+}
+
+void RenderMgr::CreateGameRenderTarget(Vec2 _Size)
+{
+	m_CurrentGameResolution = _Size;
+
+	// 기존 리소스 해제
+	m_GameSRV.Reset();
+	m_GameRTV.Reset();
+	m_GameDSV.Reset();
+	m_GameDepthStencil.Reset();
+	m_GameRenderTarget.Reset();
+
+	// 렌더 타겟 텍스처 생성
+	D3D11_TEXTURE2D_DESC texDesc = {};
+	texDesc.Width = (UINT)_Size.x;
+	texDesc.Height = (UINT)_Size.y;
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	texDesc.CPUAccessFlags = 0;
+	texDesc.MiscFlags = 0;
+
+	DEVICE->CreateTexture2D(&texDesc, nullptr, m_GameRenderTarget.GetAddressOf());
+
+	// RTV 생성
+	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+	rtvDesc.Format = texDesc.Format;
+	rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	rtvDesc.Texture2D.MipSlice = 0;
+
+	DEVICE->CreateRenderTargetView(m_GameRenderTarget.Get(), &rtvDesc,
+		m_GameRTV.GetAddressOf());
+
+	// SRV 생성 (ImGui에서 사용)
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = texDesc.Format;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.MipLevels = 1;
+
+	DEVICE->CreateShaderResourceView(m_GameRenderTarget.Get(), &srvDesc,
+		m_GameSRV.GetAddressOf());
+
+	// 깊이 스텐실 버퍼 생성
+	D3D11_TEXTURE2D_DESC dsDesc = {};
+	dsDesc.Width = (UINT)_Size.x;
+	dsDesc.Height = (UINT)_Size.y;
+	dsDesc.MipLevels = 1;
+	dsDesc.ArraySize = 1;
+	dsDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	dsDesc.SampleDesc.Count = 1;
+	dsDesc.SampleDesc.Quality = 0;
+	dsDesc.Usage = D3D11_USAGE_DEFAULT;
+	dsDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	dsDesc.CPUAccessFlags = 0;
+	dsDesc.MiscFlags = 0;
+
+	DEVICE->CreateTexture2D(&dsDesc, nullptr, m_GameDepthStencil.GetAddressOf());
+
+	// DSV 생성
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+	dsvDesc.Format = dsDesc.Format;
+	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	dsvDesc.Texture2D.MipSlice = 0;
+
+	DEVICE->CreateDepthStencilView(m_GameDepthStencil.Get(), &dsvDesc,
+		m_GameDSV.GetAddressOf());
+}
+
+void RenderMgr::ResizeGameRenderTarget(Vec2 newSize)
+{
+	// 최소 크기 제한
+	if (newSize.x < 100 || newSize.y < 100)
+		return;
+
+	if (m_CurrentGameResolution == newSize)
+		return;
+
+	CreateGameRenderTarget(newSize);
 }
