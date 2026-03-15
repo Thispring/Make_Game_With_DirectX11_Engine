@@ -14,10 +14,12 @@ public:
     //=========
     void SetGameTexture(ComPtr<ID3D11ShaderResourceView> srv) { m_GameSRV = srv; }
 
+
     //=============
     // 상속 멤버 함수
     //=============
     virtual void Tick_UI() override;
+
 
     //============
     // 생성, 소멸자

@@ -435,21 +435,13 @@ void Device::Resize(UINT width, UINT height)
 	if (width == 0 || height == 0)
 		return;
 
-	//// 1) 기존 렌더 타겟(및 관련 뷰)을 해제
-	//if (m_RenderTarget)
-	//{
-	//	m_RTV->Release();
-	//	m_RTV = nullptr;
-	//}
-	// 1) 기존 뷰/관련 리소스 해제 (ComPtr 방식)
+	// 기존 뷰/관련 리소스 해제
 	if (m_RTV) m_RTV.Reset();
 	if (m_DSV) m_DSV.Reset();
+	if (m_RenderTarget) m_RenderTarget.Reset();
+	if (m_DepthStencilTarget) m_DepthStencilTarget.Reset();
 
-
-	// (선택) ImGui에 디바이스 리소스 무효화 알림 — imgui_impl_dx11 내부에서 리소스 재생성에 사용
-	// ImGui_ImplDX11_InvalidateDeviceObjects();
-
-	// 2) SwapChain 크기 변경
+	// SwapChain 크기 변경
 	HRESULT hr = m_SwapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
 	if (FAILED(hr))
 	{
@@ -457,7 +449,7 @@ void Device::Resize(UINT width, UINT height)
 		return;
 	}
 
-	// 3) 백버퍼 얻고 RenderTargetView 재생성
+	// 백버퍼 얻고 RenderTargetView 재생성
 	ID3D11Texture2D* pBackBuffer = nullptr;
 	hr = m_SwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
 	if (FAILED(hr) || pBackBuffer == nullptr)
@@ -466,7 +458,11 @@ void Device::Resize(UINT width, UINT height)
 		return;
 	}
 
-	hr = m_Device->CreateRenderTargetView(pBackBuffer, nullptr, &m_RTV);
+	// m_RenderTarget에 raw 포인터 할당 (ComPtr로 관리)
+	m_RenderTarget = nullptr;
+	m_RenderTarget = pBackBuffer; // ComPtr = raw ptr (참조 카운트 증가)
+	// RTV 생성 (올바른 GetAddressOf 사용)
+	hr = m_Device->CreateRenderTargetView(m_RenderTarget.Get(), nullptr, m_RTV.GetAddressOf());
 	pBackBuffer->Release();
 	if (FAILED(hr))
 	{
@@ -475,7 +471,37 @@ void Device::Resize(UINT width, UINT height)
 		return;
 	}
 
-	// 4) 뷰포트 업데이트
+	// DepthStencil 텍스쳐 + DSV 재생성 (초기 Init과 동일한 방식)
+	D3D11_TEXTURE2D_DESC Desc = {};
+	Desc.ArraySize = 1;
+	Desc.Width = width;
+	Desc.Height = height;
+	Desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	Desc.CPUAccessFlags = 0;
+	Desc.Usage = D3D11_USAGE_DEFAULT;
+	Desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	Desc.MipLevels = 1;
+	Desc.MiscFlags = 0;
+	Desc.SampleDesc.Count = 1;
+	Desc.SampleDesc.Quality = 0;
+
+	hr = m_Device->CreateTexture2D(&Desc, nullptr, m_DepthStencilTarget.GetAddressOf());
+	if (FAILED(hr))
+	{
+		// 실패 처리
+		m_DepthStencilTarget = nullptr;
+		return;
+	}
+
+	hr = m_Device->CreateDepthStencilView(m_DepthStencilTarget.Get(), nullptr, m_DSV.GetAddressOf());
+	if (FAILED(hr))
+	{
+		// 실패 처리
+		m_DSV = nullptr;
+		return;
+	}
+
+	// 뷰포트 업데이트
 	D3D11_VIEWPORT vp;
 	vp.TopLeftX = 0.0f;
 	vp.TopLeftY = 0.0f;
@@ -484,7 +510,4 @@ void Device::Resize(UINT width, UINT height)
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	m_Context->RSSetViewports(1, &vp);
-
-	// (선택) ImGui 디바이스 오브젝트 재생성 — ImGui에서 DX 자원을 다시 생성
-	// ImGui_ImplDX11_CreateDeviceObjects();
 }

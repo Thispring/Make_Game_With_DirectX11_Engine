@@ -84,6 +84,7 @@ void GameObjectMaker::Tick_UI()
 	ImGui::Separator();		// 수평 구분선
 	#pragma endregion	
 
+
 	#pragma region Layer Index
 	SPACING_UI(5);
 	ImGui::Text("Layer Index Setting");
@@ -151,10 +152,32 @@ void GameObjectMaker::Tick_UI()
 	SetTargetObject(m_pObject);
 	#pragma endregion
 
+
+	#pragma region Script UI
+	// Script 컴포넌트는, 이미 생성된 콘텐츠 스크립트를 목록으로 따로 보여주기
+	//
+	// 새로운 콘텐츠 스크립트는 버튼을 통해 생성할 수 있으며, 콘텐츠 스크립트를 모아둔 콘텐츠 폴더에
+	// "설정한 이름".cpp, .h 파일 생성 및 저장하기
+	//
+	// 새로 만든 스크립트 컴포넌트는 바로 붙일 수 없게 설정, 추후 인스펙터 컴포넌트 UI에서 컴포넌트 추가 버튼을 통해
+	// 컴포넌트를 추가 부착할 수 있도록 설계하기
+	//
+	// 스크립트 타입을 확인하거나 이름을 확인하여 중복된 스크립트 추가를 방지하기
+	//
+	ImGui::Text("Script List");
+
+	ImGui::Text("Add Script");
+
+	 
+
+	#pragma endregion
+
+
 	#pragma region ObjectSaveBtn
 	// 저장하기 전에 설정이 올바른지 확인합니다.
 	// ex) Layer Index가 지정된 인덱스 범위 밖에 있다면 크래시
 	#pragma endregion
+
 
 	SPACING_UI(5);
 }
