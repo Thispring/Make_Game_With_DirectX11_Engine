@@ -333,6 +333,34 @@ void GameObject::DeregisterAsParent()
 	pLayer->DeregisterAsParent(this);
 }
 
+void GameObject::ReleaseContentScript(const wstring* _ScriptName)
+{
+}
+
+void GameObject::ReleaseContentScript(const char* _ScriptName)
+{
+}
+
+void GameObject::ReleaseContentScript(SCRIPT_TYPE _Type)
+{
+	// 이 함수를 호출한 GameObject의 script vector 전체 목록을 확인하고
+	// SCRIPT_TYPE으로 전달받은 인덱스를 가리키게 하지 않도록 해제
+	for (UINT i = 0; i < m_vecScripts.size(); ++i)
+	{
+		if (_Type == m_vecScripts[i]->GetScriptType())
+		{
+			// 해제한 벡터 원소자리를 지워야
+			// 다음 벡터 추가 시, 문제가 없음
+			m_vecScripts[i] = nullptr;
+			if (i < m_vecScripts.size()) 
+			{
+				m_vecScripts.erase(m_vecScripts.begin() + i); // O(N) — 뒤 원소들이 앞으로 당겨짐
+			}
+		}
+	}
+
+}
+
 void GameObject::SaveToLevelFile(FILE* _File)
 {
 	// 이름 

@@ -6,6 +6,7 @@
 #include "AssetMgr.h"
 #include "EditorMgr.h"
 
+#include "Source/ScriptMgr.h"
 
 GameObjectMaker::GameObjectMaker()
 	: EditorUI("GameObjectMaker")
@@ -102,10 +103,10 @@ void GameObjectMaker::Tick_UI()
 
 	#pragma region Component Setting
 	// Component
-	SPACING_UI(5);
 	ImGui::Text("Component Setting");
+	SPACING_UI(5);
 	const char* componentNames[] = { "CAMERA", "COLLIDER2D", "LIGHT2D",
-			"MESHRENDER", "SPRITE_RENDER", "BILLBOARD_RENDER", "FLIPBOOK_RENDER", "TILE_RENDER", "SCRIPT", };
+			"MESHRENDER", "SPRITE_RENDER", "BILLBOARD_RENDER", "FLIPBOOK_RENDER", "TILE_RENDER", };
 
 	static int currentNum = 0; // If the selection isn't within 0..count, Combo won't display a preview
 	if (ImGui::Combo("##Component Setting", &currentNum, componentNames, IM_COUNTOF(componentNames)))
@@ -151,9 +152,148 @@ void GameObjectMaker::Tick_UI()
 	SetTargetObject(m_pObject);
 	#pragma endregion
 
+	#pragma region Script Setting
+	/*************************************************************************************
+	* ScriptMgr을 이용해, 현재 보유하고 있는 콘텐츠로 제작한 Script 클래스 네임을 문자열로 받아와,
+	* ImGui Combo의 파라미터로 전달합니다.
+	* 
+	* 같은 이름의 Script를 두개이상 가질 수 없게 예외처리를 구현합니다.
+	*************************************************************************************/
+
+	// 이전 프레임 vector 초기화
+	m_vecScriptName.clear();
+
+	// ScriptMgr 싱글톤 방식이 아니므로, 지역에 임시 객체 생성
+	ScriptMgr scriptMgr;
+
+	// 등록된 SCRIPT_TYPE의 END까지 enum에 해당하는 문자열을
+	// m_vecScriptName에 등록
+	for (UINT i = 0; i < static_cast<UINT>(SCRIPT_TYPE_END); ++i)
+	{
+		m_vecScriptName.push_back(scriptMgr.GetScriptName((SCRIPT_TYPE)i));
+	}
+
+	
+	// Combo를 이용해 추가하려는 콘텐츠 Script 설정
+	ImGui::Text("Content Script List");
+	SPACING_UI(5);
+	static int curNameNum = -1;
+	// Combo에 전달하는 항목 수는 벡터의 크기여야 합니다.
+	if (ImGui::Combo("##Content Script Names", &curNameNum, m_vecScriptName.data(), static_cast<int>(m_vecScriptName.size())))
+	{
+		// curNameNum 인덱스에 해당하는 Script 이름 설정
+		SetContnentScriptName(m_vecScriptName[curNameNum]);
+	}
+	SPACING_UI(5);
+
+	ImGui::Dummy(ImVec2(0.0f, 0.0f));
+	ImGui::SameLine(10.f);
+	// Content Script를 추가하는 로직 조건을 활성화
+	// SetContentScriptAdd로 멤버 변수가 true가 되면
+	// CScript * ScriptMgr::GetScript(const wstring& _strScriptName) 함수 호출
+	if (ImGui::Button("Add\nContent Script", ImVec2(100.f, 100.f)))
+	{
+		if (m_ContnentScriptName != nullptr)
+			SetContentScriptAdd();
+	}
+	ImGui::SameLine(160.f);
+
+	// 등록한  Content Script 제거 버튼
+	if (ImGui::Button("Delete\nContent Script", ImVec2(100.f, 100.f)))
+	{
+		// SCRIPT_TYPE을 전달
+		if (m_ContnentScriptName != nullptr)
+			m_pObject->ReleaseContentScript(scriptMgr.GetScriptType(m_ContnentScriptName));
+	}
+
+	// CScript * ScriptMgr::GetScript(const wstring& _strScriptName) 함수 호출
+	if (IsContentScriptAdd() == true)
+	{
+		/*************************************************************************************
+		* 이미 보유하고 있는 Script라면 리턴
+		* 지금 등록하려는 Script가 등록하려는 GameObject의
+		* Script vector에 등록되어 있는지를, m_ContnentScriptName에 맞는 enum을 가져와 값을 비교
+		*************************************************************************************/
+		
+		// 현재 추가하려는 Type
+		SCRIPT_TYPE addType = scriptMgr.GetScriptType(m_ContnentScriptName);
+
+		// vector 순회했을때, 이미 보유중인 타입이면 return
+		vector<Ptr<CScript>> vecScript = m_pObject->GetScripts();
+		for (UINT i = 0; i < vecScript.size(); ++i)
+		{
+			// 보유중인 타입만 검사, m_pObject에 이전에 등록해서 size가 증가했어도
+			// 현재 등록하려는 타입이 있는지를 검사
+			if (vecScript[i] == nullptr)
+				continue;
+
+			if (addType == vecScript[i]->GetScriptType())
+				return;
+		}
+
+		// 위 조건에 걸리지 않았으면 해당 콘텐츠 Script 추가
+		if (m_ContnentScriptName != nullptr)
+			m_pObject->AddComponent(scriptMgr.GetScript(m_ContnentScriptName));
+	}
+	SPACING_UI(5);
+	ImGui::Separator();
+
+	#pragma endregion
+
+	#pragma region Content Script File Make
+	// 사용자에게 원하는 문자열을 입력받아, 해당 이름으로 작업 디렉터리 Source 파일 경로에 
+	// 입력받은 문자열.h, .cpp 파일을 생성 및 저장합니다.
+	ImGui::Text("New Add Content Script");
+	// wstring -> string 변환
+	string addScriptName = string(m_AddScriptName.begin(), m_AddScriptName.end());
+	if (ImGui::InputText("##CONTENTSCRIPTNAMETOSAVE", &addScriptName))
+	{
+		wstring waddScriptName = wstring(addScriptName.begin(), addScriptName.end());
+		SetAddScriptName(waddScriptName);
+	}
+	ImGui::Spacing();
+	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+		"Please enter the name you want to save.");
+	SPACING_UI(5);
+
+	// Button으로 생성
+	if (ImGui::Button("New Add\nContent Script", ImVec2(100.f, 50.f)))
+	{
+		SetScriptAdd();
+	}
+	SPACING_UI(5);
+
+	if (IsScriptAdd())
+	{
+		scriptMgr.GenerateScriptFiles(m_AddScriptName);
+	}
+	SPACING_UI(5);
+
+
+	ImGui::Separator();
+
+	#pragma endregion	
+
+
 	#pragma region ObjectSaveBtn
 	// 저장하기 전에 설정이 올바른지 확인합니다.
 	// ex) Layer Index가 지정된 인덱스 범위 밖에 있다면 크래시
+	// GameObject 생성은 LevelMgr에서 담당
+
+	if (ImGui::Button("Make Game Object", ImVec2(100.f, 200.f)))
+	{
+		SetObjectMake();
+	}
+	
+	if (IsObjectMake())
+	{
+		// LevelMgr로 넘기기 전에 이름 설정
+		m_pObject->SetName(m_ObjectName);
+		Ptr<ALevel> pLevel = AssetMgr::GetInst()->FIND(ALevel, m_LevelName);
+
+		LevelMgr::GetInst()->AddNewObject(m_pObject, pLevel, m_LayerIdx);
+	}
+
 	#pragma endregion
 
 	SPACING_UI(5);

@@ -89,6 +89,14 @@ public:
 
 	}
 
+	// Script 문자열을 받아, 자신이 보유한 vecScript의 이름과 비교해
+	// m_vecScripts가 가리키고 있던 Script 객체를 해제하는 함수
+	// wstring, const char* 버전 구현
+	void ReleaseContentScript(const wstring* _ScriptName);
+	void ReleaseContentScript(const char* _ScriptName);
+	void ReleaseContentScript(SCRIPT_TYPE _Type);
+
+
 	// File I/O
 	void SaveToLevelFile(FILE* _File);
 	void LoadFromLevelFile(FILE* _File);

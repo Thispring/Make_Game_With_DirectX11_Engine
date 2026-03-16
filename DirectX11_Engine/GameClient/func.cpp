@@ -527,6 +527,9 @@ void CreateLevel()
 	wstring ContentPath = CONTENT_PATH;
 	pLevel->Save(ContentPath + L"Level\\Normal_Stage_0.lv");
 
+	// 디폴트 Level 1개 Load 하기
+
+
 	// TaskMgr에게 다음 프레임에 실행할 Level을 변경하도록 요청
 	ChangeLevel(L"Normal_Stage_0");
 }

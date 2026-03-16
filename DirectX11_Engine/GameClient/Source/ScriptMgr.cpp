@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ScriptMgr.h"
+#include <cstring>
 
 #include "Scripts/CCamMoveScript.h"
 #include "Scripts/CEnemyAnimator.h"
@@ -113,4 +114,130 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 
 	}
 	return nullptr;
+}
+
+const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
+{
+	switch (_Type)
+	{
+	case CAMMOVESCRIPT: return "CCamMoveScript";
+		break;
+
+	case ENEMYANIMATOR: return "CEnemyAnimator";
+		break;
+
+	case ENEMYBEHAVIOR: return "CEnemyBehavior";
+		break;
+
+	case ENEMYSPAWNER: return "CEnemySpawner";
+		break;
+
+	case ENEMYSTATUS: return "CEnemyStatus";
+		break;
+
+	case PLAYERANIMATOR: return "CPlayerAnimator";
+		break;
+
+	case PLAYERCONTROLLER: return "CPlayerController";
+		break;
+
+	case PLAYERSTATUS: return "CPlayerStatus";
+		break;
+
+	case SCRIPT_TYPE_END: return "End";
+		break;
+
+	default:
+		break;
+	}
+
+	return nullptr;
+}
+
+
+CScript * ScriptMgr::GetScript(const char* _strScriptName)
+{
+	if (0 == strcmp(_strScriptName, "CCamMoveScript"))
+		return new CCamMoveScript;
+	if (0 == strcmp(_strScriptName, "CEnemyAnimator"))
+		return new CEnemyAnimator;
+	if (0 == strcmp(_strScriptName, "CEnemyBehavior"))
+		return new CEnemyBehavior;
+	if (0 == strcmp(_strScriptName, "CEnemySpawner"))
+		return new CEnemySpawner;
+	if (0 == strcmp(_strScriptName, "CEnemyStatus"))
+		return new CEnemyStatus;
+	if (0 == strcmp(_strScriptName, "CPlayerAnimator"))
+		return new CPlayerAnimator;
+	if (0 == strcmp(_strScriptName, "CPlayerController"))
+		return new CPlayerController;
+	if (0 == strcmp(_strScriptName, "CPlayerStatus"))
+		return new CPlayerStatus;
+	return nullptr;
+}
+
+
+SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
+{
+	if (L"CCamMoveScript" == _strScriptName)
+		return CAMMOVESCRIPT;
+	if (L"CEnemyAnimator" == _strScriptName)
+		return ENEMYANIMATOR;
+	if (L"CEnemyBehavior" == _strScriptName)
+		return ENEMYBEHAVIOR;
+	if (L"CEnemySpawner" == _strScriptName)
+		return ENEMYSPAWNER;
+	if (L"CEnemyStatus" == _strScriptName)
+		return ENEMYSTATUS;
+	if (L"CPlayerAnimator" == _strScriptName)
+		return PLAYERANIMATOR;
+	if (L"CPlayerController" == _strScriptName)
+		return PLAYERCONTROLLER;
+	if (L"CPlayerStatus" == _strScriptName)
+		return PLAYERSTATUS;
+	return SCRIPT_TYPE_END;
+}
+
+
+SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
+{
+	if (0 == strcmp(_strScriptName, "CCamMoveScript"))
+		return CAMMOVESCRIPT;
+	if (0 == strcmp(_strScriptName, "CEnemyAnimator"))
+		return ENEMYANIMATOR;
+	if (0 == strcmp(_strScriptName, "CEnemyBehavior"))
+		return ENEMYBEHAVIOR;
+	if (0 == strcmp(_strScriptName, "CEnemySpawner"))
+		return ENEMYSPAWNER;
+	if (0 == strcmp(_strScriptName, "CEnemyStatus"))
+		return ENEMYSTATUS;
+	if (0 == strcmp(_strScriptName, "CPlayerAnimator"))
+		return PLAYERANIMATOR;
+	if (0 == strcmp(_strScriptName, "CPlayerController"))
+		return PLAYERCONTROLLER;
+	if (0 == strcmp(_strScriptName, "CPlayerStatus"))
+		return PLAYERSTATUS;
+	return SCRIPT_TYPE_END;
+}
+
+
+void ScriptMgr::GenerateScriptFiles(const std::wstring& _strScriptName)
+{
+	if (_strScriptName.empty()) return;
+	std::wstring scriptFolder = L"C:\\Users\\141245124\\Documents\\GitHub\\Make_Game_With_DirectX11_Engine\\DirectX11_Engine\\GameClient\\Source\\Scripts\\";
+	if (scriptFolder.empty()) return;
+
+	std::wstring headerPath = scriptFolder + _strScriptName + L".h";
+	std::wstring cppPath    = scriptFolder + _strScriptName + L".cpp";
+
+	FILE* pH = nullptr;
+	if (_wfopen_s(&pH, headerPath.c_str(), L"w") == 0 && pH != nullptr)
+	{
+		fclose(pH);
+	}
+	FILE* pC = nullptr;
+	if (_wfopen_s(&pC, cppPath.c_str(), L"w") == 0 && pC != nullptr)
+	{
+		fclose(pC);
+	}
 }

@@ -35,6 +35,7 @@ public:
     //=========
     // Get, Set
     //=========
+    Ptr<ATileMap> GetTileMap() { return m_TileMap; }
     void SetTileMap(Ptr<ATileMap> _TileMap);
 
 

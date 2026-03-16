@@ -26,6 +26,7 @@ public:
 	void Init();
 	void Progress();
 	Ptr<GameObject> FindObjectByName(const wstring& _Name);
+	void AddNewObject(Ptr<GameObject> _Object, Ptr<ALevel> _Level, int _Layer);
 
 
 	//=========

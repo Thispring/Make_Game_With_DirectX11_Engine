@@ -150,19 +150,25 @@ void EditorMgr::CreateEditorUI()
     pUI = new ContentUI;
     AddUI(pUI->GetUIName(), pUI);
 
+    // Maker UI들은 디폴트로 비활성화 처리
     pUI = new SpriteMaker;
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new FlipbookMaker;
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new TileMapMaker;
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new MaterialMaker;
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new GameObjectMaker;
+    //pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 }
 

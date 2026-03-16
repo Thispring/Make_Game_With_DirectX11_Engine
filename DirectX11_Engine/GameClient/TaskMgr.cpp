@@ -19,6 +19,17 @@ void TaskMgr::Progress()
 	// 이전 프레임에 있던 가비지 컬렉터에 있는 요소를 제거
 	m_Garbage.clear();
 
+	// m_ChangeGameObjects에 등록된 오브젝트가 있다면
+	if (m_ChangeGameObjects.size() > 0)
+	{
+		// 변경점 파일로 저장
+		Ptr<ALevel> pCurLevel = LevelMgr::GetInst()->GetCurLevel();
+		pCurLevel->Save(CONTENT_PATH + pCurLevel->GetKey());
+		
+		m_ChangeGameObjects.clear();
+	}
+
+
 	for (size_t i = 0; i < m_vecTask.size(); ++i)
 	{
 		switch (m_vecTask[i].Type)
@@ -35,7 +46,9 @@ void TaskMgr::Progress()
 				Ptr<ALevel> pCurLevel = LevelMgr::GetInst()->GetCurLevel();
 				pCurLevel->AddObject(m_vecTask[i].Param_1, pNewObj);
 				pCurLevel->SetChanged();
-					
+				
+				// 변경점 파일로 저장
+				pCurLevel->Save(CONTENT_PATH + pCurLevel->GetKey());
 				/**********************************************************************
 				* 레벨에 추가된 오브젝트는, 레벨 시작 지점 때, Begin을 호출받지 못하기 때문에,
 				* 레벨에 스폰될 때 Begin을 호출받는다.
@@ -57,8 +70,13 @@ void TaskMgr::Progress()
 					pObj->m_Dead = true;
 					m_Garbage.push_back(pObj);	// 가비지 컬렉터에 삭제할 오브젝트 등록
 
+					// list에도 등록하여, 다음 프레임에 list에 Object가 들어있다면
+					// 변경된 Level을 저장하고 list 삭제
+					m_ChangeGameObjects.push_back(pObj);
+
 					Ptr<ALevel> pCurLevel = LevelMgr::GetInst()->GetCurLevel();
 					pCurLevel->SetChanged();
+
 				}
 			}
 				break;
@@ -68,6 +86,7 @@ void TaskMgr::Progress()
 				const wchar_t* pLevelName = (const wchar_t*)m_vecTask[i].Param_0;
 				Ptr<ALevel> pLevel = AssetMgr::GetInst()->Find<ALevel>(pLevelName);
 				LevelMgr::GetInst()->ChangeLevel(pLevel);
+
 			}
 				break;
 

@@ -22,6 +22,13 @@ public:
     virtual void LoadFromLevelFile(FILE* _File) override;
 
 
+    //=========
+    // Get, Set
+    //=========
+    GET_SET(Vec2, BillboardScale);
+    GET_SET(Ptr<ATexture>, Tex);
+
+
     //============
     // 생성, 소멸자
     //============

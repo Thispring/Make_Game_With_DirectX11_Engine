@@ -29,6 +29,24 @@ Ptr<GameObject> LevelMgr::FindObjectByName(const wstring& _Name)
 	return m_CurLevel->FindObjectByName(_Name);
 }
 
+void LevelMgr::AddNewObject(Ptr<GameObject> _Object, Ptr<ALevel> _Level, int _Layer)
+{
+	// assert는 false로 걸릴 조건을 등록
+	assert(_Object != nullptr, _Level != nullptr, _Layer >= 0 && _Layer <= 32);
+	
+	// 입력받은 Layer에 등록
+	//_Level->AddObject(_Layer, _Object);
+
+	// TaskMgr로 CREATE_OBJECT 등록
+	// TaskMgr에서는 현재 Level에 Object를 등록
+	CreateObject(_Object.Get(), _Layer);
+
+
+	// 새로운 오브젝트 정보가 들어있는 Level 파일로 저장
+	// 파일 경로로 전달
+	//_Level->Save(CONTENT_PATH + _Level->GetKey());
+}
+
 void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 {
 	// 이미 같은 상태였다면 함수 실행 X
@@ -58,12 +76,18 @@ void LevelMgr::ChangeLevel(Ptr<ALevel> _NextLevel)
 {
 	m_CurLevel = m_ShardLevel = _NextLevel;
 
+	// 변경점이 있다면 파일로 저장
+	m_CurLevel->Save(CONTENT_PATH + m_CurLevel->GetKey());
+
 	m_LevelState = LEVEL_STATE::STOP;
 	_NextLevel->SetChanged();
 }
 
 void LevelMgr::Init()
 {
+	// 파일로 저장된 Level 불러오기
+	//Ptr<ALevel> pLevel = LOAD(ALevel, L"Level\\Normal_Stage_0.lv");
+	//ChangeLevel(pLevel);
 }
 
 void LevelMgr::Progress()

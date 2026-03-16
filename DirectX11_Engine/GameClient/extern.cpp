@@ -12,11 +12,11 @@ const char* ASSET_TYPE_STR[(UINT)ASSET_TYPE::END] =
 	"SOUND",
 	"GRAPHICSHADER",
 	"COMPUTESHADER",
-	"LEVEL",
 	"SPRITE",
 	"FLIPBOOK",
 	"TILEMAP",
 	"PREFAB",
+	"LEVEL",
 };
 
 const char* ToString(ASSET_TYPE _Type)

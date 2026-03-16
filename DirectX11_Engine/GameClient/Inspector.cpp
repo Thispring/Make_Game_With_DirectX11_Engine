@@ -33,6 +33,38 @@ void Inspector::Tick_UI()
 
 	ImGui::Button(strName.c_str());
 
+	// 위 버튼과 같은 라인 끝쪽에 삭제 버튼 추가하기
+	ImGui::SameLine(300.f);
+	if (ImGui::Button("Destroy"))
+	{	
+		// 버튼을 누르면 팝업 상태를 'Open'으로 설정
+		ImGui::OpenPopup("Destroy_GameObject?");
+	}
+
+	// Always center this window when appearing
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+	if (ImGui::BeginPopupModal("Destroy_GameObject?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Do you want destroy this GameObject?");
+		ImGui::Separator();
+
+		if (ImGui::Button("OK", ImVec2(120, 0)))
+		{
+			// GameObject Destroy 함수 호출
+			m_TargetObject->Destroy();
+		}
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+	SPACING_UI(7);
+
 	ImGui::Separator();
 }
 

@@ -84,10 +84,10 @@ void AssetMgr::LoadContent()
 		//	break;
 		// 
 		// Level의 경우 생성 시점을 고려(Level에 있는 Object들중 RenderComponent가, Asset Loading 전에 불려지고 있음)
-		//case ASSET_TYPE::LEVEL:
-		//	Path = (wstring)CONTENT_PATH + L"Level\\";
-		//	ext = ".lv";
-		//	break;
+		case ASSET_TYPE::LEVEL:
+			Path = (wstring)CONTENT_PATH + L"Level\\";
+			ext = ".lv";
+			break;
 		case ASSET_TYPE::SPRITE:
 			Path = (wstring)CONTENT_PATH + L"Sprite\\";
 			ext = ".sprite";
@@ -146,12 +146,6 @@ void AssetMgr::LoadContent()
 			//	break;
 			//case ASSET_TYPE::COMPUTESHADER:
 			//	break;
-		//case ASSET_TYPE::LEVEL:
-		//	for (auto& FilePath : m_vecFileName)
-		//	{
-		//		Load<ALevel>(L"Level\\" + FilePath, L"Level\\" + FilePath);
-		//	}
-		//	break;
 		case ASSET_TYPE::SPRITE:
 			for (auto& FilePath : m_vecFileName)
 			{
@@ -172,15 +166,39 @@ void AssetMgr::LoadContent()
 			break;
 			//case ASSET_TYPE::PREFAB:
 			//	break;
+		
+		// Level은 나머지 Asset들이 모두 Load된 후, 마지막에 호출
+		case ASSET_TYPE::LEVEL:
+			for (auto& FilePath : m_vecFileName)
+			{
+				Load<ALevel>(L"Level\\" + FilePath, L"Level\\" + FilePath);
+				// func ChangeLevel 함수 호출
+				ChangeLevel(L"Level\\" + FilePath);
+			}
+			break;
 		}
-
-
 
 		// 검사와 Load가 모두 끝나면 ASSET_TYPE +1 연산으로 다음 TYPE을 가리키게 합니다.
 		m_tempType = static_cast<ASSET_TYPE>(static_cast<int>(m_tempType) + 1);
 		// vector 초기화
 		m_vecFileName.clear();
 	}
+	
+	// Level은 나머지 Asset들이 모두 Load된 후, 마지막에 호출
+	//switch (m_tempType)
+	//{
+	//case ASSET_TYPE::LEVEL:
+	//	for (auto& FilePath : m_vecFileName)
+	//	{
+	//		Load<ALevel>(L"Level\\" + FilePath, L"Level\\" + FilePath);
+	//	}
+	//	break;
+	//}
+
+	// LevelMgr에서 시작할 Level Load
+	//Ptr<ALevel> pLevel = LOAD(ALevel, L"Level\\Normal_Stage_0.lv");
+	// func ChangeLevel 함수 호출
+	//ChangeLevel(L"Level\\Normal_Stage_0.lv");
 }
 
 void AssetMgr::GetAssetNames(ASSET_TYPE _type, vector<wstring>& _vec)

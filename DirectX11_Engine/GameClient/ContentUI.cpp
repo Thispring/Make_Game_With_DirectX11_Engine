@@ -5,6 +5,7 @@
 #include "Inspector.h"
 
 #include "AssetMgr.h"
+#include "LevelMgr.h"
 #include "EditorMgr.h"
 
 ContentUI::ContentUI()
@@ -71,7 +72,9 @@ void ContentUI::Tick_UI()
 {
 	// 변경사항이 있다면 Renew 호출하여, 새롭게 추가된 UI를 갱신
 	if (AssetMgr::GetInst()->IsChanged())
+	{
 		Renew();
+	}
 
 
 	const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;

@@ -55,8 +55,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     if (FAILED(Engine::GetInst()->Init(hInstance, 1600, 900, true)))
         return 0;
 
-    CreateLevel();
-
     /*****************************************************************************************************************
     * 메시지 루프
     * 매크로에서 ##은 글자를 이어붙이겠다는 뜻
