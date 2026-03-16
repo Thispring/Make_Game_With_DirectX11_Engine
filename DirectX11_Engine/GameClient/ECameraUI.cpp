@@ -13,7 +13,8 @@ ECameraUI::~ECameraUI()
 
 void ECameraUI::Tick_UI()
 {
-    ImGui::Text("CameraUI");
+    OutputTitle("CameraUI");
+    //ImGui::Text("CameraUI");
     if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
     {
         int SameLine = 180;

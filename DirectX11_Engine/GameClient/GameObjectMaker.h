@@ -26,17 +26,13 @@ private:
 	//=======
 	// Script
 	//=======
-	//vector<string> m_vecScriptName;
-	vector<const char*> m_vecScriptName;	// List로 활용할 이름 vector
-	const char* m_ContnentScriptName;
-	wstring m_AddScriptName;
+	vector<const char*>			m_vecScriptName;		// List로 활용할 이름 vector
+	const char*					m_ContnentScriptName;
 
-	bool m_IsContentScriptAdd;
-	bool m_IsScriptAdd;
+	bool						m_IsContentScriptAdd;
 
-	SCRIPT_TYPE m_ScriptType;
+	SCRIPT_TYPE					m_ScriptType;
 	
-	bool m_IsObjectMake;
 
 	//=================
 	// private 멤버 함수
@@ -74,7 +70,6 @@ public:
 
 
 	GET_SET(const char*, ContnentScriptName);
-	GET_SET(wstring, AddScriptName);
 	GET_SET(SCRIPT_TYPE, ScriptType);
 	bool IsContentScriptAdd()
 	{ 
@@ -83,22 +78,6 @@ public:
 		return _AddConScript;
 	};
 	void SetContentScriptAdd() { m_IsContentScriptAdd = true; }
-
-	bool IsScriptAdd()
-	{ 
-		bool _AddScript = m_IsScriptAdd;
-		m_IsScriptAdd = false;
-		return _AddScript;
-	};
-	void SetScriptAdd() { m_IsScriptAdd = true; }
-
-	bool IsObjectMake()
-	{ 
-		bool _AddObject = m_IsObjectMake;
-		m_IsObjectMake = false;
-		return _AddObject;
-	};
-	void SetObjectMake() { m_IsObjectMake = true; }
 
 
 	//============

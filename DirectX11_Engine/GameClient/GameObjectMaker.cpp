@@ -7,6 +7,7 @@
 #include "EditorMgr.h"
 
 #include "Source/ScriptMgr.h"
+#include "imguiFunc.h"
 
 GameObjectMaker::GameObjectMaker()
 	: EditorUI("GameObjectMaker")
@@ -24,19 +25,82 @@ GameObjectMaker::~GameObjectMaker()
 
 void GameObjectMaker::SettingClear()
 {
+	m_pObject = nullptr;
+	m_LevelName = {};
+	m_ObjectName = {};
+	m_LayerIdx = 0;
 }
 
 void GameObjectMaker::Tick_UI()
 {
-	OutputTitle("Make Game Object", Vec4(0.5f, 0.5f, 0.5f, 0.5f));
+	Vec4 vColor = Vec4(0.5f, 0.5f, 0.5f, 0.5f);
+	ImGui::PushID(0);
+	ImGui::PushStyleColor(ImGuiCol_Button, vColor);
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, vColor);
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, vColor);
+	ImGui::Button("Game Object Maker", Vec2(200.f, 100.f));
+	ImGui::PopStyleColor(3);
+	ImGui::PopID();
+
+	ImGui::SameLine(500.f);
+
+	#pragma region ObjectSaveBtn
+	/*******************************************************
+	* 저장하기 전에, 설정 값이 올바른지 확인합니다.
+	* ex) Layer Index가 지정된 인덱스 범위 밖에 있다면 크래시
+	* 
+	* GameObject Ptr 클래스 멤버를 LevelMgr의 AddNewObject
+	* 함수를 호출하여 등록합니다.
+	*******************************************************/
+	if (ImGuiFunc::ColoredButton("Create Game\nObject Button",
+		ColorConvertIntToVec4(84, 255, 118), ImVec2(100.f, 100.f)))
+	{
+		ImGui::OpenPopup("MakeGameObject?");
+	}
+
+	if (ImGui::BeginPopupModal("MakeGameObject?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Please check if the values are correct!");
+		ImGui::Separator();
+
+		if (ImGui::Button("OK", ImVec2(120, 0)))
+		{
+			// LevelMgr로 넘기기 전에 이름 설정
+			m_pObject->SetName(m_ObjectName);
+			// 사용자가 등록한 m_LevelName과 동일한 이름의 level를 찾기
+			Ptr<ALevel> pLevel = AssetMgr::GetInst()->FIND(ALevel, m_LevelName);
+			// LevelMgr 함수호출로 오브젝트 등록
+			LevelMgr::GetInst()->AddNewObject(m_pObject, pLevel, m_LayerIdx);
+			// 멤버 설정 초기화
+			SettingClear();
+		}
+
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+		
+		// NOTE(26-03-16): MakeGameObject 버튼 순서가 위에 있어서,
+		// AddNewObject 이후, 건드려지는 설정때문에 크래시 발생
+		// 만약 OK로 넘어간 뒤 EndPopup으로 닫혔다면
+		// bool 조건문을 true로 만들어서 바로 이 함수 리턴하게 수정
+	}
 	SPACING_UI(5);
+	ImGui::Separator();
+
+	#pragma endregion
 
 	#pragma region Level Setting
-	ImGui::Text("Level Setting");
+	//ImGui::Text("Target Level Setting");
+	OutputTitle("Target Level Setting", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+
 	// wstring -> string 변환
 	string levelName = string(m_LevelName.begin(), m_LevelName.end());
 
-	ImGui::SameLine(150);
 	if (ImGui::InputText("##LEVELNAME", &levelName))
 	{
 		wstring wlevelName = wstring(levelName.begin(), levelName.end());
@@ -63,14 +127,15 @@ void GameObjectMaker::Tick_UI()
 		ImGui::EndDragDropTarget();
 	}
 	ImGui::Spacing();
-	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+	ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
 		"Please specify the name of the 'Level'\nto which the GameObject will be added.");
 	SPACING_UI(5);
 	ImGui::Separator();
 	#pragma endregion	
 
-	#pragma region Name Setting
-	ImGui::Text("GameObject name to save");
+	#pragma region GameObject Name Setting
+	OutputTitle("GameObject name to save", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	//ImGui::Text("GameObject name to save");
 	// wstring -> string 변환
 	string objName = string(m_ObjectName.begin(), m_ObjectName.end());
 	if (ImGui::InputText("##GAMEOBJECTNAMETOSAVE", &objName))
@@ -79,22 +144,21 @@ void GameObjectMaker::Tick_UI()
 		SetObjectName(wobjName);
 	}
 	ImGui::Spacing();
-	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+	ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
 		"Please enter the name you want to save.");
 	SPACING_UI(5);
 	ImGui::Separator();		// 수평 구분선
 	#pragma endregion	
 
 	#pragma region Layer Index
-	SPACING_UI(5);
-	ImGui::Text("Layer Index Setting");
-	ImGui::SameLine(150);
+	OutputTitle("Layer Index Setting", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	//ImGui::Text("Layer Index Setting");
 	if (ImGui::DragInt("##LAYERIDX", &m_LayerIdx, 1.f, 0, 32))
 	{
 		SetLayerIdx(m_LayerIdx);
 	}
 	ImGui::Spacing();
-	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+	ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
 		"Enter the Layer index for the GameObject.\n");
 	// Level의 현재 설정된 Layer 번호 List를 여기에 출력 
 	SPACING_UI(5);
@@ -103,12 +167,14 @@ void GameObjectMaker::Tick_UI()
 
 	#pragma region Component Setting
 	// Component
-	ImGui::Text("Component Setting");
-	SPACING_UI(5);
+	OutputTitle("Component Setting", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	//ImGui::Text("Component Setting");
+	SPACING_UI(2);
+	ImGui::Text("Component List");
 	const char* componentNames[] = { "CAMERA", "COLLIDER2D", "LIGHT2D",
 			"MESHRENDER", "SPRITE_RENDER", "BILLBOARD_RENDER", "FLIPBOOK_RENDER", "TILE_RENDER", };
 
-	static int currentNum = 0; // If the selection isn't within 0..count, Combo won't display a preview
+	static int currentNum = -1; // If the selection isn't within 0..count, Combo won't display a preview
 	if (ImGui::Combo("##Component Setting", &currentNum, componentNames, IM_COUNTOF(componentNames)))
 	{
 		// 1. ImGui Combo로 Component 문자열을 선택했을때, enum class COMPONENET_TYPE으로 변경하는 함수 호출
@@ -120,17 +186,20 @@ void GameObjectMaker::Tick_UI()
 	ImGui::SameLine(10.f);
 	// 2-1. COMPONENET_TYPE을 받아, 조건에 알맞은 Ptr<Component>를 반환하는 함수 호출
 	// 버튼으로 활성화, GameObjectMaker UI에도 Component 정보 표시
-	if (ImGui::Button("Add\nComponent", ImVec2(100.f, 100.f)))
+	if (ImGuiFunc::ColoredButton("Add\nComponent",
+		ColorConvertIntToVec4(38, 74, 27), ImVec2(150.f, 50.f)))
 	{
 		SetComAdd();
 	}
-	ImGui::SameLine(160.f);
+	ImGui::SameLine(300.f);
 	// 2-2. 등록한 Component를 지우고 싶다면 해당 버튼을 눌러
 	// Component 해제 함수 호출
-	if (ImGui::Button("Delete\nComponent", ImVec2(100.f, 100.f)))
+	if (ImGuiFunc::ColoredButton("Delete\nComponent",
+		ColorConvertIntToVec4(38, 74, 27), ImVec2(150.f, 50.f)))
 	{
 		m_pObject->ReleaseComponent(GetComType());
 	}
+	SPACING_UI(5);
 
 	// 3. 반환된 Ptr<Component>를 AddComponent의 매개변수로 전달
 	if (IsComAdd() == true)
@@ -159,7 +228,7 @@ void GameObjectMaker::Tick_UI()
 	* 
 	* 같은 이름의 Script를 두개이상 가질 수 없게 예외처리를 구현합니다.
 	*************************************************************************************/
-
+	OutputTitle("Content Script Setting", ColorConvertIntToVec4(4.f, 135.f, 35.f));
 	// 이전 프레임 vector 초기화
 	m_vecScriptName.clear();
 
@@ -175,8 +244,8 @@ void GameObjectMaker::Tick_UI()
 
 	
 	// Combo를 이용해 추가하려는 콘텐츠 Script 설정
+	SPACING_UI(2);
 	ImGui::Text("Content Script List");
-	SPACING_UI(5);
 	static int curNameNum = -1;
 	// Combo에 전달하는 항목 수는 벡터의 크기여야 합니다.
 	if (ImGui::Combo("##Content Script Names", &curNameNum, m_vecScriptName.data(), static_cast<int>(m_vecScriptName.size())))
@@ -191,20 +260,23 @@ void GameObjectMaker::Tick_UI()
 	// Content Script를 추가하는 로직 조건을 활성화
 	// SetContentScriptAdd로 멤버 변수가 true가 되면
 	// CScript * ScriptMgr::GetScript(const wstring& _strScriptName) 함수 호출
-	if (ImGui::Button("Add\nContent Script", ImVec2(100.f, 100.f)))
+	if (ImGuiFunc::ColoredButton("Add\nContent Script",
+		ColorConvertIntToVec4(38, 74, 27), ImVec2(150.f, 50.f)))
 	{
 		if (m_ContnentScriptName != nullptr)
 			SetContentScriptAdd();
 	}
-	ImGui::SameLine(160.f);
+	ImGui::SameLine(300.f);
 
 	// 등록한  Content Script 제거 버튼
-	if (ImGui::Button("Delete\nContent Script", ImVec2(100.f, 100.f)))
+	if (ImGuiFunc::ColoredButton("Delete\nContent Script",
+		ColorConvertIntToVec4(38, 74, 27), ImVec2(150.f, 50.f)))
 	{
 		// SCRIPT_TYPE을 전달
 		if (m_ContnentScriptName != nullptr)
 			m_pObject->ReleaseContentScript(scriptMgr.GetScriptType(m_ContnentScriptName));
 	}
+
 
 	// CScript * ScriptMgr::GetScript(const wstring& _strScriptName) 함수 호출
 	if (IsContentScriptAdd() == true)
@@ -240,63 +312,6 @@ void GameObjectMaker::Tick_UI()
 
 	#pragma endregion
 
-	#pragma region Content Script File Make
-	// 사용자에게 원하는 문자열을 입력받아, 해당 이름으로 작업 디렉터리 Source 파일 경로에 
-	// 입력받은 문자열.h, .cpp 파일을 생성 및 저장합니다.
-	ImGui::Text("New Add Content Script");
-	// wstring -> string 변환
-	string addScriptName = string(m_AddScriptName.begin(), m_AddScriptName.end());
-	if (ImGui::InputText("##CONTENTSCRIPTNAMETOSAVE", &addScriptName))
-	{
-		wstring waddScriptName = wstring(addScriptName.begin(), addScriptName.end());
-		SetAddScriptName(waddScriptName);
-	}
-	ImGui::Spacing();
-	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
-		"Please enter the name you want to save.");
-	SPACING_UI(5);
-
-	// Button으로 생성
-	if (ImGui::Button("New Add\nContent Script", ImVec2(100.f, 50.f)))
-	{
-		SetScriptAdd();
-	}
-	SPACING_UI(5);
-
-	if (IsScriptAdd())
-	{
-		scriptMgr.GenerateScriptFiles(m_AddScriptName);
-	}
-	SPACING_UI(5);
-
-
-	ImGui::Separator();
-
-	#pragma endregion	
-
-
-	#pragma region ObjectSaveBtn
-	// 저장하기 전에 설정이 올바른지 확인합니다.
-	// ex) Layer Index가 지정된 인덱스 범위 밖에 있다면 크래시
-	// GameObject 생성은 LevelMgr에서 담당
-
-	if (ImGui::Button("Make Game Object", ImVec2(100.f, 200.f)))
-	{
-		SetObjectMake();
-	}
-	
-	if (IsObjectMake())
-	{
-		// LevelMgr로 넘기기 전에 이름 설정
-		m_pObject->SetName(m_ObjectName);
-		Ptr<ALevel> pLevel = AssetMgr::GetInst()->FIND(ALevel, m_LevelName);
-
-		LevelMgr::GetInst()->AddNewObject(m_pObject, pLevel, m_LayerIdx);
-	}
-
-	#pragma endregion
-
-	SPACING_UI(5);
 }
 
 void GameObjectMaker::SetTargetObject(Ptr<GameObject> _Object)

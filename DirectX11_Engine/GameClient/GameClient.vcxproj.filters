@@ -328,6 +328,9 @@
     <ClInclude Include="EBillboardRenderUI.h">
       <Filter>GameEngine\Editor\ComponentUI\Render_UI\BillboardRender_UI</Filter>
     </ClInclude>
+    <ClInclude Include="imguiFunc.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -635,6 +638,9 @@
     </ClCompile>
     <ClCompile Include="EBillboardRenderUI.cpp">
       <Filter>GameEngine\Editor\ComponentUI\Render_UI\BillboardRender_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="imguiFunc.cpp">
+      <Filter>Header</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

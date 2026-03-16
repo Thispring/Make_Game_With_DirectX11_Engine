@@ -53,41 +53,47 @@ void ESpriteRenderUI::Tick_UI()
 	// Mtrl
 	// Render의 종류별로 재질을 미리 설정하는 경우가 있다.
 	// 그런경우에는 어떤 재질을 사용하는지 이름만 표시
-	ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "Material Setting(ReadOnly)");
+	//ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "Material Setting(ReadOnly)");
+	ImGui::Text("Material Setting(ReadOnly)");
 	Ptr<AMaterial> pMtrl = GetTarget()->SpriteRender()->GetMaterial();
 	string mtrlName = string(pMtrl->GetKey().begin(), pMtrl->GetKey().end());
 	ImGui::InputText("##CSR_MTRLName", &mtrlName);
 	SPACING_UI(5);
 
-
-	// Sprite가 들고 있는 Texutre, UV 정보로 어떤 Sprite인지 표시
-	pSprite->GetSprite();
-
-	string atlasName = string(pSprite->GetSprite()->GetAtlas()->GetKey().begin(), pSprite->GetSprite()->GetAtlas()->GetKey().end());
-	Vec2 ltUV = pSprite->GetSprite()->GetLeftTopUV();
-	Vec2 sUV = pSprite->GetSprite()->GetSliceUV();
-	Vec2 bgUV = pSprite->GetSprite()->GetBackgroundUV();
-	Vec2 osUV = pSprite->GetSprite()->GetOffsetUV();	
+	// Sprite 설정 전이라면 표시 X
+	// Sprite 설정이 되었다면 표시
+	if (pSprite->GetSprite() != nullptr)
+	{
+		// Sprite가 들고 있는 Texutre, UV 정보로 어떤 Sprite인지 표시
+		string atlasName = string(pSprite->GetSprite()->GetAtlas()->GetKey().begin(), pSprite->GetSprite()->GetAtlas()->GetKey().end());
+		Vec2 ltUV = pSprite->GetSprite()->GetLeftTopUV();
+		Vec2 sUV = pSprite->GetSprite()->GetSliceUV();
+		Vec2 bgUV = pSprite->GetSprite()->GetBackgroundUV();
+		Vec2 osUV = pSprite->GetSprite()->GetOffsetUV();	
 	
-	ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "Texutre Info(ReadOnly)");
+		//ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "Texutre Info(ReadOnly)");
+		ImGui::Text("Texutre Info(ReadOnly)");
 
-	ImGui::Text("Atlas Name");
-	ImGui::InputText("##CSR_ATLASNAME", &atlasName, ImGuiInputTextFlags_ReadOnly);
-	SPACING_UI(2);
+		ImGui::Text("Atlas Name");
+		ImGui::InputText("##CSR_ATLASNAME", &atlasName, ImGuiInputTextFlags_ReadOnly);
+		SPACING_UI(2);
 
-	ImGui::Text("Left Top UV");
-	ImGui::InputFloat2("##LEFTTOP", ltUV, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	SPACING_UI(2);
+		ImGui::Text("Left Top UV");
+		ImGui::InputFloat2("##LEFTTOP", ltUV, "%.3f", ImGuiInputTextFlags_ReadOnly);
+		SPACING_UI(2);
 
-	ImGui::Text("Slice UV");
-	ImGui::InputFloat2("##SLICE", sUV, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	SPACING_UI(2);
+		ImGui::Text("Slice UV");
+		ImGui::InputFloat2("##SLICE", sUV, "%.3f", ImGuiInputTextFlags_ReadOnly);
+		SPACING_UI(2);
 
-	ImGui::Text("Background UV");
-	ImGui::InputFloat2("##BACKGROUND", bgUV, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	SPACING_UI(2);
+		ImGui::Text("Background UV");
+		ImGui::InputFloat2("##BACKGROUND", bgUV, "%.3f", ImGuiInputTextFlags_ReadOnly);
+		SPACING_UI(2);
 
-	ImGui::Text("Offset UV");
-	ImGui::InputFloat2("##OFFSET", osUV, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	SPACING_UI(2);
+		ImGui::Text("Offset UV");
+		ImGui::InputFloat2("##OFFSET", osUV, "%.3f", ImGuiInputTextFlags_ReadOnly);
+		SPACING_UI(2);
+
+	}
+
 }

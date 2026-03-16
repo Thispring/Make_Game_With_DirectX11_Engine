@@ -28,7 +28,8 @@ void ELight2DUI::Tick_UI()
     //====================
     // 빛의 정보를 바꾸는 UI
     //====================
-    ImGui::Text("Light2DUI");
+    OutputTitle("Light2DUI");
+    //ImGui::Text("Light2DUI");
 
     if (ImGui::CollapsingHeader("Light2D", ImGuiTreeNodeFlags_DefaultOpen))
     {

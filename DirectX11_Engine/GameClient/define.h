@@ -25,3 +25,7 @@
 
 // ImGui UI 간격 조정 매크로
 #define SPACING_UI(Count) for (int i = 0; i < Count; ++i) ImGui::Spacing();
+
+// RGB값을 입력하면 Vector로 변환하는 매크로
+// 입력값 / 255.0f;
+#define ColorConvertIntToVec4(r, g, b) Vec4((float)(r) / 255.0f, (float)(g) / 255.0f, (float)(b) / 255.0f, 1.0f)

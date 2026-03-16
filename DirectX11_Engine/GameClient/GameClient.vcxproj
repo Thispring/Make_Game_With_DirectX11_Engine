@@ -216,6 +216,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="extern.h" />
     <ClInclude Include="FlipbookMaker.h" />
     <ClInclude Include="GameObjectMaker.h" />
+    <ClInclude Include="imguiFunc.h" />
     <ClInclude Include="imgui\imgui_stdlib.h" />
     <ClInclude Include="Inspector.h" />
     <ClInclude Include="KeyList.h" />
@@ -325,6 +326,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="FlipbookMaker.cpp" />
     <ClCompile Include="GameObjectMaker.cpp" />
     <ClCompile Include="GameObjectMaker_Init.cpp" />
+    <ClCompile Include="imguiFunc.cpp" />
     <ClCompile Include="imgui\imgui_stdlib.cpp" />
     <ClCompile Include="Inspector.cpp" />
     <ClCompile Include="Inspector_Init.cpp" />

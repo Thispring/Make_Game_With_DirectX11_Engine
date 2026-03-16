@@ -4,12 +4,13 @@
 #include "LevelMgr.h"
 #include "GameObject.h"
 
+#include "imguiFunc.h"
+
 Inspector::Inspector()
 	: EditorUI("Inspector")
 {
 	CreateChildUI();
 	SetTargetObject(nullptr);
-	//SetTargetObject(LevelMgr::GetInst()->FindObjectByName(L"Player"));
 }
 
 Inspector::~Inspector()
@@ -34,12 +35,33 @@ void Inspector::Tick_UI()
 	ImGui::Button(strName.c_str());
 
 	// 위 버튼과 같은 라인 끝쪽에 삭제 버튼 추가하기
-	ImGui::SameLine(300.f);
-	if (ImGui::Button("Destroy"))
-	{	
-		// 버튼을 누르면 팝업 상태를 'Open'으로 설정
+	ImGui::SameLine(250.f);
+
+	if (ImGuiFunc::ColoredButton("Destroy", ImVec4(1.f, 0.2f, 0.2f, 1.f), ImVec2(100.f, 20.f)))
+	{
 		ImGui::OpenPopup("Destroy_GameObject?");
 	}
+
+	//// PushStyleColor로 Button 색상 바꾸기
+	//ImVec4 col = ImVec4(1.0f, 0.2f, 0.2f, 1.0f); // 원하는 빨간색
+	//ImVec4 col_hover = ImVec4(0.9f, 0.15f, 0.15f, 1.0f);
+	//ImVec4 col_active = ImVec4(0.8f, 0.1f, 0.1f, 1.0f);
+	//ImVec4 text_col = ImVec4(1, 1, 1, 1); // 텍스트를 흰색으로
+
+	//ImGui::PushStyleColor(ImGuiCol_Button, col);
+	//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, col_hover);
+	//ImGui::PushStyleColor(ImGuiCol_ButtonActive, col_active);
+	//ImGui::PushStyleColor(ImGuiCol_Text, text_col);
+
+	//if (ImGui::Button("Destroy", ImVec2(100.0f, 20.0f)))
+	//{
+	//	// 클릭 처리
+	//	// 버튼을 누르면 팝업 상태를 'Open'으로 설정
+	//	ImGui::OpenPopup("Destroy_GameObject?");
+	//}
+
+	//ImGui::PopStyleColor(4);
+
 
 	// Always center this window when appearing
 	ImVec2 center = ImGui::GetMainViewport()->GetCenter();

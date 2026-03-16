@@ -12,7 +12,8 @@ ECollider2DUI::~ECollider2DUI()
 
 void ECollider2DUI::Tick_UI()
 {
-	ImGui::Text("Collider2DUI");
+	OutputTitle("Collider2DUI");
+	//ImGui::Text("Collider2DUI");
 	if (ImGui::CollapsingHeader("Collider2D", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		// Target Object의 정보를 얻어오기
