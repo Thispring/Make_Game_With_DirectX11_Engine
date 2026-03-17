@@ -106,7 +106,6 @@ void Inspector::Tick_UI()
 
 	}
 
-
 	// Component List Combo
 	ImGui::Text("Component List");
 	const char* componentNames[] = { "CAMERA", "COLLIDER2D", "LIGHT2D",
@@ -161,13 +160,17 @@ void Inspector::Tick_UI()
 		return;
 	}
 	
-
 	SPACING_UI(5);
-	
+	ImGui::Separator();
 	#pragma endregion
 
 
+	#pragma region Add Script 버튼
+	ImGui::Text("Script List");
+
+
 	ImGui::Separator();
+	#pragma endregion
 
 }
 

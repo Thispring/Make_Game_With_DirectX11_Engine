@@ -23,6 +23,9 @@ void ETileRenderUI::Tick_UI()
 	Ptr<CTileRender> pTile = GetTarget()->TileRender();
 	string tileName = {};
 
+	if (pTile == nullptr)
+		return;
+
 	// 처음엔 빈 상태로 띄우기,
 	// InputText에 이름을 입력받거나, Drag Drop으로 이름을 가져와
 	// SetTileMap 호출

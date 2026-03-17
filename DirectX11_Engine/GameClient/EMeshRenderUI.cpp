@@ -21,6 +21,9 @@ void EMeshRenderUI::Tick_UI()
 	// 컴포넌트 제거 버튼
 	DeleteComponent(COMPONENT_TYPE::MESHRENDER);
 
+	if (GetTarget()->MeshRender() == nullptr)
+		return;
+
 	Ptr<CMeshRender> pMeshRender = GetTarget()->MeshRender();
 
 	// ====
@@ -59,7 +62,10 @@ void EMeshRenderUI::Tick_UI()
 			Ptr<Asset> pAsset = (Asset*)data;
 
 			if (ASSET_TYPE::MESH == pAsset->GetType())
+			{
 				pMeshRender->SetMesh((AMesh*)pAsset.Get());
+				
+			}
 		}
 
 		ImGui::EndDragDropTarget();
@@ -77,6 +83,7 @@ void EMeshRenderUI::Tick_UI()
 		pUI->AddString(vecMeshNames);
 		pUI->AddDelegate(this, (DELEGATE_1)&EMeshRenderUI::SelectMesh);
 		pUI->SetActive(true);
+		
 	}
 
 	// ========
@@ -92,6 +99,7 @@ void EMeshRenderUI::Tick_UI()
 	{
 		pMtrl = pMeshRender->GetMaterial();
 		MtrlKey = string(pMtrl->GetKey().begin(), pMtrl->GetKey().end());
+		
 	}
 
 	ImGui::InputText("##MtrlName", MtrlKey.data(), MtrlKey.length() + 1, ImGuiInputTextFlags_ReadOnly);
@@ -106,7 +114,10 @@ void EMeshRenderUI::Tick_UI()
 			Ptr<Asset> pAsset = (Asset*)data;
 
 			if (ASSET_TYPE::MATERIAL == pAsset->GetType())
+			{
 				pMeshRender->SetMaterial((AMaterial*)pAsset.Get());
+				
+			}
 		}
 
 		ImGui::EndDragDropTarget();
@@ -126,6 +137,7 @@ void EMeshRenderUI::Tick_UI()
 		pUI->AddString(vecMtrlName);
 		pUI->AddDelegate(this, (DELEGATE_1)&EMeshRenderUI::SelectMtrl);
 		pUI->SetActive(true);
+		
 	}
 
 }

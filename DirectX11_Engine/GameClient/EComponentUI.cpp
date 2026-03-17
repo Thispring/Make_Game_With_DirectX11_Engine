@@ -26,6 +26,13 @@ void EComponentUI::SetTarget(Ptr<GameObject> _Object)
 		SetActive(true);
 }
 
+void EComponentUI::ChangeComponent()
+{
+	// 자식 컴포넌트 UI에서 변경점이 있다면 호출
+	Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
+	ChangeLevel(pLevel->GetKey());
+}
+
 void EComponentUI::OutputTitle(const string& _Title)
 {
 	ImGui::PushID(0);

@@ -19,6 +19,10 @@ void CSpriteRender::FinalTick()
 
 void CSpriteRender::Render()
 {
+	// 아직 Sprite 설정이 안되어있다면 return
+	if (m_Sprite == nullptr)
+		return;
+
 	// sprite.fx 에 특정 값을 전달
 	GetMaterial()->SetTexture(TEX_0, m_Sprite->GetAtlas());
 	GetMaterial()->SetScalar(VEC2_0, m_Sprite->GetLeftTopUV());

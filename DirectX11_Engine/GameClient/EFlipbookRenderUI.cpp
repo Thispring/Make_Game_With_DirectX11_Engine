@@ -28,6 +28,8 @@ void EFlipbookRenderUI::Tick_UI()
 	***********************************************************************/
 	Ptr<CFlipbookRender> pFlipbookRender = GetTarget()->FlipbookRender();
 	
+	if (pFlipbookRender == nullptr)
+		return;
 
 	/************************************************************************
 	* 재생 중인 Flipbook 멤버 정보 표시

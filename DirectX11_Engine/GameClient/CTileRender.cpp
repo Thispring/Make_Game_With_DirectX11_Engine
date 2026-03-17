@@ -43,6 +43,10 @@ void CTileRender::FinalTick()
 
 void CTileRender::Render()
 {
+	// TileMap 설정이 안되어있거나, Sprite vector가 비어있다면 리턴
+	if (m_TileMap == nullptr && m_vecSpriteInfo.empty())
+		return;
+
 	m_Buffer->Binding(20);
 
 	GetMaterial()->SetTexture(TEX_0, m_TileMap->GetAtlas());

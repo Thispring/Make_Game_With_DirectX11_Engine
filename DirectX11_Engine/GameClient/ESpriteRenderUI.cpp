@@ -24,6 +24,9 @@ void ESpriteRenderUI::Tick_UI()
 	Ptr<CSpriteRender> pSprite = GetTarget()->SpriteRender();
 	string spriteName = {};
 
+	if (pSprite == nullptr)
+		return;
+
 	// 세팅된 Sprite가 있을 때만
 	if (pSprite->GetSprite() != nullptr)
 		spriteName = string(pSprite->GetSprite()->GetKey().begin(), pSprite->GetSprite()->GetKey().end());

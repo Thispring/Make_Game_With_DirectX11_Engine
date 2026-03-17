@@ -22,6 +22,7 @@ public:
 	//=========
 	void SetTarget(Ptr<GameObject> _Object);
 	Ptr<GameObject> GetTarget() { return m_Target; }
+	void ChangeComponent();
 
 
 	//============

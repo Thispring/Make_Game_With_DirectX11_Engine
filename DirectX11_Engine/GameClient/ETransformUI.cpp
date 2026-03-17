@@ -41,12 +41,16 @@ void ETransformUI::Tick_UI()
 		{
 			vRot = vDegree * (XM_PI / 180.f);
 			GetTarget()->Transform()->SetRelativeRot(vRot);
+			
 		}
 
 		ImGui::Text("Scale");
 		ImGui::SameLine(150);
 		if (ImGui::DragFloat3("##SCALE", vScale))
+		{
 			GetTarget()->Transform()->SetRelativeScale(vScale);
+			
+		}
 
 		bool Independent = GetTarget()->Transform()->IsIndependentScale();
 
@@ -58,6 +62,7 @@ void ETransformUI::Tick_UI()
 		if (ImGui::Checkbox("##Independent", &Independent))
 		{
 			GetTarget()->Transform()->SetIndependentScale(Independent);
+			
 		}
 	}
 }

@@ -14,6 +14,7 @@ CFlipbookRender::CFlipbookRender()
 	, m_Finish(false)
 	, m_RepeatCount(0)
 	, m_IsStop(false)
+	, m_CurFlipbook(0)
 {
 }
 
@@ -76,6 +77,10 @@ void CFlipbookRender::FinalTick()
 
 void CFlipbookRender::Render()
 {
+	// 설정된 Flipbook이 없다면 return
+	if (m_vecFlipbook.empty())
+		return;
+
 	Ptr<AFlipbook> pCurFlipbook = m_vecFlipbook[m_CurFlipbook];
 	Ptr<ASprite> pCurSprite = pCurFlipbook->GetSprite(m_CurSprite);
 

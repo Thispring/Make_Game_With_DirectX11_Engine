@@ -22,6 +22,10 @@ void EBillboardRenderUI::Tick_UI()
 	Ptr<CBillboardRender> pBillboard = GetTarget()->BillboardRender();
 	string textureName = {};
 
+	// Billboard 설정이 안되어 있으면 리턴
+	if (pBillboard == nullptr)
+		return;
+
 	if (pBillboard->GetTex() != nullptr)
 		textureName = string(pBillboard->GetTex()->GetKey().begin(), pBillboard->GetTex()->GetKey().end());
 

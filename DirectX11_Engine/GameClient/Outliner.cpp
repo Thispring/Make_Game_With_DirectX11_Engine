@@ -6,7 +6,7 @@
 
 #include "EditorMgr.h"
 #include "Inspector.h"
-
+#include "imguiFunc.h"
 
 Outliner::Outliner()
 	: EditorUI("Outliner")
@@ -115,4 +115,14 @@ void Outliner::Tick_UI()
 
 		}
 	}
+
+
+	if (ImGuiFunc::ColoredButton("Save Level Button",
+		ColorConvertIntToVec4(255, 61, 61), ImVec2(150.f, 50.f)))
+	{
+		// LevelMgr의 ChangeLevel는 private 함수
+		Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
+		ChangeLevel(pLevel->GetKey());
+	}
+	SPACING_UI(10);
 }

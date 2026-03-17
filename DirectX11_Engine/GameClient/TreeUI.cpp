@@ -131,55 +131,6 @@ void TreeNode::Tick()
 		ImGui::TreePop();
 	}
 
-	//// 기존 코드
-	//// TreeNode Flag 설정 (ImGui쪽 enum 사용)
-	//UINT Flags = ImGuiTreeNodeFlags_SpanFullWidth		// 클릭 판정범위 확장
-	//	| ImGuiTreeNodeFlags_OpenOnDoubleClick			// 더블 클릭으로만 열리기
-	//	| ImGuiTreeNodeFlags_OpenOnArrow;				// 화살표 누르면 열리기
-
-
-	//// 노드가 자식노드를 보유하고 있지 않으면 Leaf 플래그 추가
-	//if (vecChildNode.empty())
-	//	Flags |= ImGuiTreeNodeFlags_Leaf;
-
-	//// UI 자기 자신이 선택되었다면 Flag 변경
-	//if (m_Owner->GetSelected() == this)
-	//	Flags |= ImGuiTreeNodeFlags_Selected;
-
-	//// Framed가 true인 UI만 적용
-	//if (Framed)
-	//	Flags |= ImGuiTreeNodeFlags_Framed;
-
-	//string NodeName = Str + Key;
-
-	//// 자식이 없는 Node 중 Frame이 적용되었을 때,
-	//// 보여지는 텍스트의 시작지점을 맞춰주기 위한 코드
-	//if (Framed && vecChildNode.empty())
-	//	NodeName = "   " + NodeName;
-
-	//// 트리노드에 등록한 문자열을 Key로 찾아서 출력
-	//if (ImGui::TreeNodeEx(NodeName.c_str(), Flags))
-	//{
-	//	// 복사 붙여넣기 식 코드라면 함수화를 고려
-	//	ClickCheck();
-	//	// Drag & Drop의 판정은 Node에서 판별하고
-	//	// 판정되었을 때의 기능은 상속을 받은 자식에서 구현합니다.
-	//	DragCheck();
-	//	DropCheck();
-
-	//	for (size_t i = 0; i < vecChildNode.size(); ++i)
-	//	{
-	//		vecChildNode[i]->Tick();
-	//	}
-
-	//	ImGui::TreePop();
-	//}
-	//else
-	//{
-	//	ClickCheck();
-	//	DragCheck();
-	//	DropCheck();
-	//}
 }
 
 #pragma endregion
@@ -261,7 +212,7 @@ void TreeUI::Tick_UI()
 		ImGui::EndTable();
 	}
 
-	// [기존 드래그 앤 드롭 마무리 로직 유지]
+	// 기존 드래그 앤 드롭 마무리 로직
 	if (m_DragNode.Get() && m_DropNode.Get()
 		|| (m_DragNode.Get() && ImGui::IsMouseReleased(ImGuiMouseButton_Left)))
 	{
@@ -274,27 +225,6 @@ void TreeUI::Tick_UI()
 		m_DropNode = nullptr;
 	}
 
-	//// 기존 코드
-	//for (size_t i = 0; i < m_vecNode.size(); ++i)
-	//{
-	//	m_vecNode[i]->Tick();
-	//}
-
-	//// Drag 하던 노드를 특정 노드에 Drop
-	//// OR 조건으로 Drag를 한 상태에서 마우스를 땐 상태였다면
-	//if (m_DragNode.Get() && m_DropNode.Get()
-	//	|| (m_DragNode.Get() && ImGui::IsMouseReleased(ImGuiMouseButton_Left)))
-	//{
-	//	if (m_DDInst && m_DDMemFunc)
-	//	{
-	//		// Drag & Drop Node의 주소를 전달
-	//		(m_DDInst->*m_DDMemFunc)((DWORD_PTR)m_DragNode.Get(), (DWORD_PTR)m_DropNode.Get());
-	//	}
-
-	//	// nullptr 초기화로 주소 비워주기
-	//	m_DragNode = nullptr;
-	//	m_DropNode = nullptr;
-	//}
 }
 
 #pragma endregion
