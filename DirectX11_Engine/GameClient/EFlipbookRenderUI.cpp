@@ -18,6 +18,9 @@ void EFlipbookRenderUI::Tick_UI()
 {
 	OutputTitle("FlipbookRender");
 
+	// 컴포넌트 제거 버튼
+	DeleteComponent(COMPONENT_TYPE::FLIPBOOK_RENDER);
+
 	/***********************************************************************
 	* Flipbook Render Component 정보를 가져옵니다.
 	* EComponentUI 클래스에 GameObject Ptr을 반환하는 GetTarget 함수 활용

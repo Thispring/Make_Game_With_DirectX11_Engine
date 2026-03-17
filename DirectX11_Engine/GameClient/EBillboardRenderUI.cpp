@@ -16,6 +16,9 @@ void EBillboardRenderUI::Tick_UI()
 {
 	OutputTitle("BillboardRender");
 
+	// 컴포넌트 제거 버튼
+	DeleteComponent(COMPONENT_TYPE::BILLBOARD_RENDER);
+
 	Ptr<CBillboardRender> pBillboard = GetTarget()->BillboardRender();
 	string textureName = {};
 

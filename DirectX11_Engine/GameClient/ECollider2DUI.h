@@ -5,6 +5,10 @@ class ECollider2DUI :
     public EComponentUI
 {
 
+private:
+    // Component 제거 유무
+    bool m_IsDelete;
+
 public:
     //=============
     // 상속 멤버 함수

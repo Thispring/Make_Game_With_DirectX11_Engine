@@ -16,6 +16,9 @@ void ETileRenderUI::Tick_UI()
 {
 	OutputTitle("TileRender");
 
+	// 컴포넌트 제거 버튼
+	DeleteComponent(COMPONENT_TYPE::TILE_RENDER);
+
 	// UI에서 Drag Drop으로 ATileMap만 세팅 할 수 있도록합니다.
 	Ptr<CTileRender> pTile = GetTarget()->TileRender();
 	string tileName = {};

@@ -29,10 +29,16 @@ void ELight2DUI::Tick_UI()
     // 빛의 정보를 바꾸는 UI
     //====================
     OutputTitle("Light2DUI");
-    //ImGui::Text("Light2DUI");
+
+    // 컴포넌트 제거 버튼
+    DeleteComponent(COMPONENT_TYPE::LIGHT2D);
 
     if (ImGui::CollapsingHeader("Light2D", ImGuiTreeNodeFlags_DefaultOpen))
     {
+        // nullptr 체크
+        if (GetTarget()->Light2D() == nullptr)
+            return;
+
         // Light Type
         ImGui::Text("LightType");
         ImGui::SameLine();

@@ -14,6 +14,7 @@ private:
 protected:
 	void OutputTitle(const string& _Title);
 	void OutputTitle(const string& _Title, ImVec4 _Color);	// 원하는 컬러 매개변수를 주는 버전
+	bool DeleteComponent(COMPONENT_TYPE _Type);				// Component를 제거하는 함수
 
 public:
 	//=========

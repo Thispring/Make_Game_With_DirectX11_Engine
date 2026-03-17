@@ -7,6 +7,7 @@
 #include "EditorMgr.h"
 #include "Inspector.h"
 
+
 Outliner::Outliner()
 	: EditorUI("Outliner")
 {
@@ -111,6 +112,7 @@ void Outliner::Tick_UI()
 			Renew();
 			Ptr<Inspector> pInspector = (Inspector*)EditorMgr::GetInst()->FindUI("Inspector").Get();
 			pInspector->SetTargetObject(nullptr);
+
 		}
 	}
 }

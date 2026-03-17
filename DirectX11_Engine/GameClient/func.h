@@ -36,9 +36,6 @@ void SaveAssetRef(FILE* _File, class Asset* _Asset);
 void SaveWString(FILE* _File, const wstring& _String);
 wstring LoadWString(FILE* _File);
 
-// Engine에 사용 할 기본 Level을 생성하는 함수
-void CreateLevel();
-
 // String 문자열을 받아, 알맞은 enum class RENDER_DOMAIN을 반환하는 함수
 RENDER_DOMAIN StringToDomain(string _DomainName);
 

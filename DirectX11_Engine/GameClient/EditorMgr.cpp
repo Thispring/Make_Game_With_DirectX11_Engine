@@ -29,6 +29,7 @@
 #include "CEditorCamMoveScript.h"
 #include "RenderMgr.h"
 
+
 EditorMgr::EditorMgr()
     : m_ShowDemo(true)
 {
@@ -170,6 +171,7 @@ void EditorMgr::CreateEditorUI()
     pUI = new GameObjectMaker;
     //pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
+
 }
 
 void EditorMgr::CreateEditorObject()

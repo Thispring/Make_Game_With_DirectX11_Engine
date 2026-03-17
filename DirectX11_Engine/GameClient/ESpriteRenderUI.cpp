@@ -16,6 +16,8 @@ void ESpriteRenderUI::Tick_UI()
 {
 	OutputTitle("SpriteRender");
 
+	// 컴포넌트 제거 버튼
+	DeleteComponent(COMPONENT_TYPE::SPRITE_RENDER);
 
 	// SpriteRender를 가져와, InputText에 이름을 띄우고
 	// Sprite를 변경할 수 있도록 합니다.

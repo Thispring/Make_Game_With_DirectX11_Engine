@@ -20,7 +20,7 @@ void ETransformUI::Tick_UI()
 	// 캡슐안에 들어있는 UI가 어떻게 표시될지 설정할 수 있습니다.
 	// ImGuiTreeNodeFlags_DefaultOpen => 기본으로 열기 상태, 이렇게 해야지 스크롤바가 안생겨서 해당 enum으로 설정
 	OutputTitle("TransformUI");
-	//ImGui::Text("TransformUI");
+
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		Vec3 vPos = GetTarget()->Transform()->GetRelativePos();

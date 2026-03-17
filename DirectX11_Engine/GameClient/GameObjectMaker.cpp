@@ -12,6 +12,7 @@
 GameObjectMaker::GameObjectMaker()
 	: EditorUI("GameObjectMaker")
 	, m_pObject(nullptr)
+	, m_CloneObject(nullptr)
 {
 	CreateChildUI();
 	m_pObject = new GameObject;
@@ -26,6 +27,9 @@ GameObjectMaker::~GameObjectMaker()
 void GameObjectMaker::SettingClear()
 {
 	m_pObject = nullptr;
+	m_pObject = new GameObject;
+	m_pObject->AddComponent(new CTransform);	// Transform은 기본 생성
+
 	m_LevelName = {};
 	m_ObjectName = {};
 	m_LayerIdx = 0;
@@ -67,12 +71,26 @@ void GameObjectMaker::Tick_UI()
 		{
 			// LevelMgr로 넘기기 전에 이름 설정
 			m_pObject->SetName(m_ObjectName);
+
+			// 등록할 멤버 변수들의 복사본을 전달
+			// SettingClear를 만나면 값이 초기화됨
+			m_CloneObject = nullptr;	// CloneObject 멤버는 다음 생성 요청 시, nullptr로 초기화 하여 재사용합니다.
+
+			m_CloneObject = new GameObject(*m_pObject.Get()); // Ptr::operator=(T*) 사용
+
+			int tempLayerIdx = m_LayerIdx;
+
 			// 사용자가 등록한 m_LevelName과 동일한 이름의 level를 찾기
 			Ptr<ALevel> pLevel = AssetMgr::GetInst()->FIND(ALevel, m_LevelName);
 			// LevelMgr 함수호출로 오브젝트 등록
-			LevelMgr::GetInst()->AddNewObject(m_pObject, pLevel, m_LayerIdx);
+			LevelMgr::GetInst()->AddNewObject(m_CloneObject, pLevel, tempLayerIdx);
 			// 멤버 설정 초기화
+			// 이 부분이 문제, 다음 프레임에 전달된 오브젝트 정보로 생성하는데
+			// SettingClear로인해 값이 날라감
+			// 
+			// m_pObject를 복사생성하여, 전달하기
 			SettingClear();
+			ImGui::CloseCurrentPopup();
 		}
 
 		ImGui::SetItemDefaultFocus();
@@ -204,16 +222,32 @@ void GameObjectMaker::Tick_UI()
 	// 3. 반환된 Ptr<Component>를 AddComponent의 매개변수로 전달
 	if (IsComAdd() == true)
 	{
+		// Render Component와 Non-Render Component 생성 부분을 구별하여
+		// 생성 후 바로 return
+
 		// 이미 보유하고 있는 Component라면 리턴
 		if (m_pObject->GetComponent(GetComType()) != nullptr)
+		{
 			return;
+		}
+		else
+		{
+			// m_Com에 ComType에 맞는 객체를 만들어 전달
+			m_pObject->AddComponent(CreateComponent(GetComType()));
+			return;
+		}
 
 		// 이미 RenderComponent가 있다면 리턴
 		if (m_pObject->GetRenderCom().Get() != nullptr)
+		{
 			return;
+		}
+		else
+		{
+			m_pObject->AddComponent(CreateComponent(GetComType()));
+			return;
+		}
 
-		// m_Com에 ComType에 맞는 객체를 만들어 전달
-		m_pObject->AddComponent(CreateComponent(GetComType()));
 	}
 	ImGui::Separator();
 

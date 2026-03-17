@@ -18,6 +18,9 @@ void EMeshRenderUI::Tick_UI()
 {
 	OutputTitle("MeshRender");
 
+	// 컴포넌트 제거 버튼
+	DeleteComponent(COMPONENT_TYPE::MESHRENDER);
+
 	Ptr<CMeshRender> pMeshRender = GetTarget()->MeshRender();
 
 	// ====

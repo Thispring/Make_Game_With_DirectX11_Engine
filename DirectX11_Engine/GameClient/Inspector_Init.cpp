@@ -29,6 +29,7 @@
 #include "ETileMapUI.h"
 #include "EPrefabUI.h"
 
+
 #define ADD_COMPONENT_UI(ComponentType, type, Size) m_arrComUI[(UINT)ComponentType] = new type;\
 													m_arrComUI[(UINT)ComponentType]->SetSizeAsChild(Size);\
 													AddChildUI(m_arrComUI[(UINT)ComponentType].Get());

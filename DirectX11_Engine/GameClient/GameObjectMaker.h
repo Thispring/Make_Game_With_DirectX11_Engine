@@ -10,6 +10,7 @@ class GameObjectMaker :
 
 private:
 	Ptr<GameObject>				m_pObject;
+	Ptr<GameObject>				m_CloneObject;	// 실제로 넘길 복사본 오브젝트
 	COMPONENT_TYPE				m_ComType;
 
 	Ptr<EComponentUI>			m_arrComUI[(UINT)COMPONENT_TYPE::END];

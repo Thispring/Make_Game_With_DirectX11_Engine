@@ -14,9 +14,16 @@ ECameraUI::~ECameraUI()
 void ECameraUI::Tick_UI()
 {
     OutputTitle("CameraUI");
-    //ImGui::Text("CameraUI");
+
+    // 컴포넌트 제거 버튼
+    DeleteComponent(COMPONENT_TYPE::CAMERA);
+
     if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
     {
+        // nullptr 체크
+        if (GetTarget()->Camera() == nullptr)
+            return;
+
         int SameLine = 180;
 
         // ==========
