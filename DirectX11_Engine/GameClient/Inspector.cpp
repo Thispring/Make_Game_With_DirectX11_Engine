@@ -5,6 +5,7 @@
 #include "GameObject.h"
 
 #include "imguiFunc.h"
+#include "Source\ScriptMgr.h"
 
 Inspector::Inspector()
 	: EditorUI("Inspector")
@@ -118,7 +119,7 @@ void Inspector::Tick_UI()
 	static string comName = {};
 	// 컨텐츠 영역의 절반 크기로 설정
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
-	if (ImGui::BeginCombo("##Component Setting2", preview))
+	if (ImGui::BeginCombo("##Inspector Component Setting", preview))
 	{
 		for (int i = 0; i < IM_COUNTOF(componentNames); ++i)
 		{
@@ -166,7 +167,79 @@ void Inspector::Tick_UI()
 
 
 	#pragma region Add Script 버튼
-	ImGui::Text("Script List");
+	// Script 목록을 저장할 벡터
+	vector<const char*> vecScriptName = {};
+
+	// ScriptMgr 싱글톤 방식이 아니므로, 지역에 임시 객체 생성
+	ScriptMgr scriptMgr;
+
+	// 등록된 SCRIPT_TYPE의 END까지 enum에 해당하는 실제 Script의 문자열을 등록
+	for (UINT i = 0; i < static_cast<UINT>(SCRIPT_TYPE_END); ++i)
+	{
+		vecScriptName.push_back(scriptMgr.GetScriptName((SCRIPT_TYPE)i));
+	}
+
+	// Target 오브젝트의 스크립트 목록 벡터를 가져옵니다.
+	// 벡터의 크기만큼 어떤 스크립트를 보유중인지 Key값을 가져옵니다.
+	vector<Ptr<CScript>> pScript = GetTargetObject()->GetScripts();
+	vector<UINT> vecScriptType = {};
+	
+	for (UINT i = 0; i < pScript.size(); ++i)
+	{
+		vecScriptType.push_back(pScript[i]->GetScriptType());
+	}
+
+	ImGui::Text("Content Script List");
+	static int currentScriptNum = -1;
+	const char* scriptPreview = (currentScriptNum >= 0 && currentScriptNum < vecScriptName.size()) ? vecScriptName[currentScriptNum] : " ";
+	static string scriptName = {};
+	// 컨텐츠 영역의 절반 크기로 설정
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
+	if (ImGui::BeginCombo("##Inspector Script Setting", scriptPreview))
+	{
+		for (UINT i = 0; i < vecScriptName.size(); ++i)
+		{
+			bool disabled = (find(vecScriptType.begin(), vecScriptType.end(), (UINT)i) != vecScriptType.end());
+
+			if (disabled)
+				ImGui::BeginDisabled();
+
+			// Selectable 클릭 시 currentNum 갱신 (disabled일 경우 선택 동작이 무시됨)
+			if (ImGui::Selectable(vecScriptName[i], currentScriptNum == i) && !disabled)
+			{
+				currentScriptNum = i;
+				scriptName = vecScriptName[i];
+			}
+
+			if (disabled)
+			{
+				ImGui::EndDisabled();
+			}
+		}
+
+		ImGui::EndCombo();
+	}
+	ImGui::SameLine(250.f);
+
+	// Add Script 버튼 추가
+	if (ImGuiFunc::ColoredButton("Add Script", ColorConvertIntToVec4(20, 166, 34), ImVec2(100.f, 20.f)))
+	{
+		// ScriptMgr에서 아래 함수 호출
+		// CScript * ScriptMgr::GetScript(const char* _strScriptName)
+		GetTargetObject()->AddComponent(scriptMgr.GetScript(scriptName.c_str()));
+		
+		// 초기화
+		currentScriptNum = -1;
+		// 현재 Level에 변경점을 알림
+		// LevelMgr의 ChangeLevel는 private 함수
+		Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
+		ChangeLevel(pLevel->GetKey());
+		return;
+	}
+
+	SPACING_UI(5);
+	ImGui::Separator();
+
 
 
 	ImGui::Separator();

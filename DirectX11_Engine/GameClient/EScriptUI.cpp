@@ -2,6 +2,8 @@
 #include "EScriptUI.h"
 
 #include "TreeUI.h"
+#include "imguiFunc.h"
+#include "LevelMgr.h"
 #include <Source/ScriptMgr.h>
 
 EScriptUI::EScriptUI()
@@ -52,6 +54,9 @@ void EScriptUI::Tick_UI()
 
 	ImGui::PopStyleColor(3);
 	ImGui::PopID();
+
+	// 보유 스크립트 컴포넌트 제거 버튼
+	DeleteScript((SCRIPT_TYPE)m_TargetScript->GetScriptType());
 
 	// Script 파라미터
 	const vector<tScriptParam>& vecParam = m_TargetScript->GetScriptParam();
@@ -105,4 +110,60 @@ void EScriptUI::AddItemHeight()
 {
 	ImVec2 vSize = ImGui::GetItemRectSize();
 	m_ItemHeight += vSize.y + 5.f;
+}
+
+bool EScriptUI::DeleteScript(SCRIPT_TYPE _Type)
+{
+	// Tick_UI에서 아래 파라미터를 DeleteScript에 전달합니다.
+	//m_TargetScript->GetScriptType();
+
+
+	// Inspector 에서만 Delete UI를 표시하도록 부모 UI를 검사
+	Ptr<EditorUI> pParent = GetParentUI();
+	if (pParent == nullptr)
+		return false;
+
+	// 부모 UI의 이름이 "Inspector"일 때만 삭제 UI 노출
+	if (pParent->GetUIName() != "Inspector")
+		return false;
+
+	ImGui::SameLine(250.f);
+
+	if (ImGuiFunc::ColoredButton("Delete\nThis Script",
+		ColorConvertIntToVec4(125, 23, 20), ImVec2(120.f, 40.f)))
+	{
+		ImGui::OpenPopup("DeleteThisScript?");
+	}
+
+	if (ImGui::BeginPopupModal("DeleteThisScript?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Do you want delete this script?");
+		ImGui::Separator();
+
+		if (ImGui::Button("OK", ImVec2(120, 0)))
+		{
+			GetTarget()->ReleaseContentScript(_Type);
+
+			// 현재 Level에 변경점을 알림
+			// LevelMgr의 ChangeLevel는 private 함수
+			Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
+			ChangeLevel(pLevel->GetKey());
+			ImGui::CloseCurrentPopup();
+			ImGui::EndPopup();
+			return true;
+		}
+
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+
+	}
+	SPACING_UI(5);
+
+	return false;
 }

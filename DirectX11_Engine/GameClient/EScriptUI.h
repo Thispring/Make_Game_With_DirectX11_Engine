@@ -17,6 +17,8 @@ private:
     void AddItemHeight();
 
 public:
+    bool DeleteScript(SCRIPT_TYPE _Type);
+
     //=============
     // 상속 멤버 함수
     //=============
