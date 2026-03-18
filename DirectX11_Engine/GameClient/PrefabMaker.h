@@ -1,17 +1,14 @@
 #pragma once
 #include "EditorUI.h"
+#include "GameObject.h"
 
-class FlipbookMaker :
+class PrefabMaker :
     public EditorUI
 {
 
 private:
-    //==============
-    // Make Flipbook
-    //==============
-    wstring     m_SpriteName;
-    wstring     m_FlipbookName;
-    int         m_SpriteCount;
+    Ptr<GameObject>     m_Object;
+
 
     //=================
     // private 멤버 함수
@@ -19,11 +16,6 @@ private:
     void ClearSetting();
 
 public:
-    //=========
-    // 멤버 함수
-    //=========
-
-
     //=============
     // 상속 멤버 함수
     //=============
@@ -33,14 +25,12 @@ public:
     //=========
     // Get, Set
     //=========
-    GET_SET(wstring, SpriteName);
-    GET_SET(wstring, FlipbookName);
-    GET_SET(int, SpriteCount);
+    GET_SET(Ptr<GameObject>, Object);
 
 
     //============
     // 생성, 소멸자
     //============
-    FlipbookMaker();
-    virtual ~FlipbookMaker();
+    PrefabMaker();
+    virtual ~PrefabMaker();
 };

@@ -331,6 +331,9 @@
     <ClInclude Include="imguiFunc.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="PrefabMaker.h">
+      <Filter>GameEngine\Editor\MakerUI\PrefabMaker</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -645,6 +648,9 @@
     <ClCompile Include="AssetMgr_Func.cpp">
       <Filter>GameEngine\Manager\Asset</Filter>
     </ClCompile>
+    <ClCompile Include="PrefabMaker.cpp">
+      <Filter>GameEngine\Editor\MakerUI\PrefabMaker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -913,6 +919,9 @@
     </Filter>
     <Filter Include="GameEngine\Editor\ComponentUI\Render_UI\BillboardRender_UI">
       <UniqueIdentifier>{2673b244-d205-46cc-903a-ff6df1795f3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Editor\MakerUI\PrefabMaker">
+      <UniqueIdentifier>{d6f72840-520d-4a64-83ac-6b5c23d3d457}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

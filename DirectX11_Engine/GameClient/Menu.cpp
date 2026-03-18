@@ -155,6 +155,13 @@ void Menu::View()
 			pGameObjMaker->SetActive(GameObjMakerActive);
 		}
 
+		Ptr<EditorUI> pPrefabMaker = EditorMgr::GetInst()->FindUI("PrefabMaker");
+		bool PrefabMakerActive = pPrefabMaker->IsActive();
+		if (ImGui::MenuItem("PrefabMaker", nullptr, &PrefabMakerActive))
+		{
+			pPrefabMaker->SetActive(PrefabMakerActive);
+		}
+
 		ImGui::EndMenu();
 	}
 }
@@ -207,6 +214,13 @@ void Menu::Asset()
 			if (ImGui::MenuItem("Create TileMap", nullptr, &TileMapMakerActive))
 			{
 				pTileMapMaker->SetActive(TileMapMakerActive);
+			}
+
+			Ptr<EditorUI> pPrefabMaker = EditorMgr::GetInst()->FindUI("PrefabMaker");
+			bool PrefabMakerActive = pPrefabMaker->IsActive();
+			if (ImGui::MenuItem("Create Prefab", nullptr, &PrefabMakerActive))
+			{
+				pPrefabMaker->SetActive(PrefabMakerActive);
 			}
 
 			ImGui::EndMenu();

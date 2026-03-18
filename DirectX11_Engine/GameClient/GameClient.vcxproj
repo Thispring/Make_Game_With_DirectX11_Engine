@@ -249,6 +249,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="PathMgr.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="EPrefabUI.h" />
+    <ClInclude Include="PrefabMaker.h" />
     <ClInclude Include="Ptr.h" />
     <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="Resource.h" />
@@ -361,6 +362,7 @@ call CodeGen.exe</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="EPrefabUI.cpp" />
+    <ClCompile Include="PrefabMaker.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
     <ClCompile Include="Source\ScriptMgr.cpp" />
     <ClCompile Include="Source\Scripts\CCamMoveScript.cpp" />

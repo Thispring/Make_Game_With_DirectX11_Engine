@@ -25,7 +25,7 @@ TileMapMaker::~TileMapMaker()
 }
 
 
-void TileMapMaker::SettingClear()
+void TileMapMaker::ClearSetting()
 {
 	m_vecSprite = {};
 	m_Row = 0;
@@ -81,7 +81,7 @@ void TileMapMaker::Tick_UI()
 
 			// 저장 및 초기화
 			AssetMgr::GetInst()->CreateEngineTileMap(m_vecSprite, m_TileMapName, m_AtlasName, (UINT)m_Row, (UINT)m_Col, m_TileSize);
-			SettingClear();
+			ClearSetting();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SetItemDefaultFocus();

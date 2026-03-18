@@ -34,7 +34,7 @@ public:
 	void CreateEngineTexture();
 	void CreateEngineMaterial();
 	void CreateEngineSprite();
-	void CreateEnginePrefab();
+	void CreateEnginePrefab(Ptr<GameObject> _Object);
 
 	// 매개변수를 받아, 외부에서 사용할 수 있도록 오버로딩
 	void CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _SpriteName, int _OriIdx, int _Row = 0, int _Col = 0);

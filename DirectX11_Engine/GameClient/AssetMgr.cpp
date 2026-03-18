@@ -100,8 +100,10 @@ void AssetMgr::LoadContent()
 			Path = (wstring)CONTENT_PATH + L"TileMap\\";
 			ext = ".tile";
 			break;
-		//case ASSET_TYPE::PREFAB:
-		//	break;
+		case ASSET_TYPE::PREFAB:
+			Path = (wstring)CONTENT_PATH + L"Prefab\\";
+			ext = ".pref";
+			break;
 		case ASSET_TYPE::END:
 			
 			break;
@@ -164,8 +166,12 @@ void AssetMgr::LoadContent()
 				Load<ATileMap>(L"TileMap\\" + FilePath, L"TileMap\\" + FilePath);
 			}
 			break;
-			//case ASSET_TYPE::PREFAB:
-			//	break;
+		case ASSET_TYPE::PREFAB:
+			for (auto& FilePath : m_vecFileName)
+			{
+				Load<APrefab>(L"Prefab\\" + FilePath, L"Prefab\\" + FilePath);
+			}
+			break;
 		
 		// Level은 나머지 Asset들이 모두 Load된 후, 마지막에 호출
 		case ASSET_TYPE::LEVEL:

@@ -20,7 +20,7 @@ FlipbookMaker::~FlipbookMaker()
 {
 }
 
-void FlipbookMaker::SettingClear()
+void FlipbookMaker::ClearSetting()
 {
 	m_SpriteName = {};
 	m_FlipbookName = {};
@@ -65,7 +65,7 @@ void FlipbookMaker::Tick_UI()
 		{
 			// 저장 및 초기화
 			AssetMgr::GetInst()->CreateEngineFlipbook(m_SpriteName, m_FlipbookName, m_SpriteCount);
-			SettingClear();
+			ClearSetting();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SetItemDefaultFocus();

@@ -328,7 +328,7 @@ void AssetMgr::CreateEngineTexture()
 
 void AssetMgr::CreateEngineMaterial()
 {
-#pragma region Material 생성하는 방법
+	#pragma region Material 생성하는 방법
 	// File로 저장이 완료된 Asset은 Load 함수 호출부만 남겨두기
 
 	wstring FilePath = CONTENT_PATH;
@@ -357,7 +357,7 @@ void AssetMgr::CreateEngineMaterial()
 
 	Load<AMaterial>(L"Material\\Std2DMtrl.mtrl", L"Material\\Std2DMtrl.mtrl");
 	Load<AMaterial>(L"Material\\DbgMtrl.mtrl", L"Material\\DbgMtrl.mtrl");
-#pragma endregion
+	#pragma endregion
 }
 
 void AssetMgr::CreateEngineSprite()
@@ -370,34 +370,22 @@ void AssetMgr::CreateEngineSprite()
 
 }
 
-void AssetMgr::CreateEnginePrefab()
+void AssetMgr::CreateEnginePrefab(Ptr<GameObject> _Object)
 {
-	//// Missile 역할 프리팹 제작
-	//GameObject* pObject = new GameObject;
-	//pObject->SetName(L"Missile");
+	// 매개변수로 전달받은 _Object을 파일로 저장
+	Ptr<APrefab> pPrefab = new APrefab;
+	pPrefab->SetObject(_Object);
+	
+	wstring objectName = _Object->GetName();
 
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
-	//pObject->AddComponent(new CCollider2D);	
-	//pObject->AddComponent(new CMissileScript);		
-
-	//pObject->Transform()->SetRelativeScale(Vec3(10.f, 30.f, 1.f));
-
-	//pObject->MeshRender()->SetMesh(AssetMgr::GetInst()->Find<AMesh>(L"RectMesh"));
-	//pObject->MeshRender()->SetMaterial(AssetMgr::GetInst()->Find<AMaterial>(L"Std2DMtrl"));
-
-	//// 미사일 오브젝트를 프리팹으로 등록
-	//Ptr<APrefab> pMissilePrefab = new APrefab;
-	//pMissilePrefab->SetObject(pObject);
-	//AddAsset(L"Prefab\\Missile.pref", pMissilePrefab.Get());
-
-	//wstring FilePath = CONTENT_PATH + L"Prefab\\Missile.pref";
-	//pMissilePrefab->Save(FilePath);
-}
+	AddAsset((L"Prefab\\" + objectName + L".pref"), pPrefab.Get());
+	wstring FilePath = CONTENT_PATH + pPrefab->GetKey();
+	pPrefab->Save(FilePath);
+}	
 
 void AssetMgr::CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _SpriteName, int _OriIdx, int _Row, int _Col)
 {
-#pragma region Atlas 이미지에서 Texture를 생성하는 방법
+	#pragma region Atlas 이미지에서 Texture를 생성하는 방법
 	Ptr<ATexture> pAtlas = FIND(ATexture, _TextureName);		// Texture 생성 시 설정한 이름 String을 입력합니다. 
 
 	// Texture의 가로 세로 길이를 Getter로 얻어옵니다.
@@ -479,12 +467,12 @@ void AssetMgr::CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartL
 		// Save => 파일 형태로 등록
 		pSprite->Save(CONTENT_PATH + pSprite->GetKey());	// 경로가 곧 Key 값
 	}
-#pragma endregion
+	#pragma endregion
 }
 
 void AssetMgr::CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wstring _ShaderName, RENDER_DOMAIN _Domain)
 {
-#pragma region Material 생성하는 방법
+	#pragma region Material 생성하는 방법
 	Ptr<AMaterial> pMtrl = nullptr;
 
 	pMtrl = new AMaterial;
@@ -499,12 +487,12 @@ void AssetMgr::CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wst
 	pMtrl->SetDomain(_Domain);
 	AddAsset(pMtrl->GetName(), pMtrl.Get());
 	pMtrl->Save(CONTENT_PATH + pMtrl->GetKey());
-#pragma endregion
+	#pragma endregion
 }
 
 void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Loop)
 {
-#pragma region Flipbook 생성하는 방법
+	#pragma region Flipbook 생성하는 방법
 	// Flipbook 객체 생성 후, 이름을 설정하고
 	// 반복문을 통해, 이어서 보여줄 sprite들을 가르키게 합니다.
 	Ptr<AFlipbook> pFlipbook = nullptr;
@@ -525,12 +513,12 @@ void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, 
 	AddAsset(pFlipbook->GetName(), pFlipbook.Get());
 	// Save => 파일 형태로 등록
 	pFlipbook->Save(CONTENT_PATH + pFlipbook->GetKey());	// 경로가 곧 Key 값
-#pragma endregion
+	#pragma endregion
 }
 
 void AssetMgr::CreateEngineTileMap(vector<Ptr<ASprite>>& _vecSprite, wstring _TileMapName, wstring _AtlasName, UINT _Row, UINT _Col, Vec2 _TileSize)
 {
-#pragma region TileMap 생성하는 방법
+	#pragma region TileMap 생성하는 방법
 	// =======
 	// TileMap
 	// =======
@@ -555,5 +543,5 @@ void AssetMgr::CreateEngineTileMap(vector<Ptr<ASprite>>& _vecSprite, wstring _Ti
 
 	AddAsset(pTileMap->GetName(), pTileMap.Get());
 	pTileMap->Save(CONTENT_PATH + pTileMap->GetKey());
-#pragma endregion
+	#pragma endregion
 }

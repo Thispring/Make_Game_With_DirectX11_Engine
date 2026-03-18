@@ -24,7 +24,7 @@ SpriteMaker::~SpriteMaker()
 {
 }
 
-void SpriteMaker::SettingClear()
+void SpriteMaker::ClearSetting()
 {
 	// 모든 멤버의 값을 0으로 초기화 하는 함수
 	m_TextureName = {};
@@ -84,7 +84,7 @@ void SpriteMaker::Tick_UI()
 		{
 			// 저장 및 초기화
 			AssetMgr::GetInst()->CreateEngineSprite(m_TextureName, m_SliceUV, m_StartLoop, m_EndLoop, m_SpriteName, m_OriIdx, m_Row, m_Col);
-			SettingClear();
+			ClearSetting();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SetItemDefaultFocus();

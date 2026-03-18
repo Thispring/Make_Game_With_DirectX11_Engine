@@ -25,6 +25,7 @@
 #include "TileMapMaker.h"
 #include "MaterialMaker.h"
 #include "GameObjectMaker.h"
+#include "PrefabMaker.h"
 
 #include "CEditorCamMoveScript.h"
 #include "RenderMgr.h"
@@ -169,6 +170,10 @@ void EditorMgr::CreateEditorUI()
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new GameObjectMaker;
+    //pUI->SetActive(false);
+    AddUI(pUI->GetUIName(), pUI);
+
+    pUI = new PrefabMaker;
     //pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 

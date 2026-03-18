@@ -24,7 +24,7 @@ GameObjectMaker::~GameObjectMaker()
 }
 
 
-void GameObjectMaker::SettingClear()
+void GameObjectMaker::ClearSetting()
 {
 	m_pObject = nullptr;
 	m_pObject = new GameObject;
@@ -74,7 +74,7 @@ void GameObjectMaker::Tick_UI()
 			m_pObject->SetName(m_ObjectName);
 
 			// 등록할 멤버 변수들의 복사본을 전달
-			// SettingClear를 만나면 값이 초기화됨
+			// ClearSetting를 만나면 값이 초기화됨
 			m_CloneObject = nullptr;	// CloneObject 멤버는 다음 생성 요청 시, nullptr로 초기화 하여 재사용합니다.
 
 			m_CloneObject = new GameObject(*m_pObject.Get()); // Ptr::operator=(T*) 사용
@@ -87,10 +87,10 @@ void GameObjectMaker::Tick_UI()
 			LevelMgr::GetInst()->AddNewObject(m_CloneObject, pLevel, tempLayerIdx);
 			// 멤버 설정 초기화
 			// 이 부분이 문제, 다음 프레임에 전달된 오브젝트 정보로 생성하는데
-			// SettingClear로인해 값이 날라감
+			// ClearSetting로인해 값이 날라감
 			// 
 			// m_pObject를 복사생성하여, 전달하기
-			SettingClear();
+			ClearSetting();
 			ImGui::CloseCurrentPopup();
 		}
 

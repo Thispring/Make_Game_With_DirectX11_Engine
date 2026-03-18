@@ -27,7 +27,7 @@ private:
     //=================
     // private 멤버 함수
     //=================
-    void SettingClear();
+    void ClearSetting();
 
 public:
     //=========
