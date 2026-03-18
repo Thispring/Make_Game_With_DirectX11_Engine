@@ -37,16 +37,17 @@ void GameObjectMaker::SettingClear()
 
 void GameObjectMaker::Tick_UI()
 {
-	Vec4 vColor = Vec4(0.5f, 0.5f, 0.5f, 0.5f);
+	// 크기 조절을 위해 OutputTitle 함수 사용 X
+	Vec4 vColor = Vec4(0.5f, 0.5f, 0.5f, 1.f);
 	ImGui::PushID(0);
 	ImGui::PushStyleColor(ImGuiCol_Button, vColor);
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, vColor);
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, vColor);
-	ImGui::Button("Game Object Maker", Vec2(200.f, 100.f));
+	ImGui::Button("Game Object Maker", Vec2(150.f, 50.f));
 	ImGui::PopStyleColor(3);
 	ImGui::PopID();
 
-	ImGui::SameLine(500.f);
+	ImGui::SameLine(300.f);
 
 	#pragma region ObjectSaveBtn
 	/*******************************************************
@@ -56,8 +57,8 @@ void GameObjectMaker::Tick_UI()
 	* GameObject Ptr 클래스 멤버를 LevelMgr의 AddNewObject
 	* 함수를 호출하여 등록합니다.
 	*******************************************************/
-	if (ImGuiFunc::ColoredButton("Create Game\nObject Button",
-		ColorConvertIntToVec4(84, 255, 118), ImVec2(100.f, 100.f)))
+	if (ImGuiFunc::ColoredButton("Save Game\nObject Button",
+		ColorConvertIntToVec4(38, 74, 27), ImVec2(120.f, 50.f)))
 	{
 		ImGui::OpenPopup("MakeGameObject?");
 	}
@@ -119,7 +120,7 @@ void GameObjectMaker::Tick_UI()
 	// wstring -> string 변환
 	string levelName = string(m_LevelName.begin(), m_LevelName.end());
 
-	if (ImGui::InputText("##LEVELNAME", &levelName))
+	if (ImGui::InputTextWithHint("##LEVELNAME", "Example: Level\\Normal_Stage_0.lv", &levelName))
 	{
 		wstring wlevelName = wstring(levelName.begin(), levelName.end());
 		SetLevelName(wlevelName);
@@ -145,6 +146,7 @@ void GameObjectMaker::Tick_UI()
 		ImGui::EndDragDropTarget();
 	}
 	ImGui::Spacing();
+	IMGUI_REQUIRED()
 	ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
 		"Please specify the name of the 'Level'\nto which the GameObject will be added.");
 	SPACING_UI(5);
@@ -153,15 +155,17 @@ void GameObjectMaker::Tick_UI()
 
 	#pragma region GameObject Name Setting
 	OutputTitle("GameObject name to save", ColorConvertIntToVec4(4.f, 135.f, 35.f));
-	//ImGui::Text("GameObject name to save");
+
 	// wstring -> string 변환
 	string objName = string(m_ObjectName.begin(), m_ObjectName.end());
-	if (ImGui::InputText("##GAMEOBJECTNAMETOSAVE", &objName))
+
+	if (ImGui::InputTextWithHint("##GAMEOBJECTNAMETOSAVE", "Name your GameObject", &objName))
 	{
 		wstring wobjName = wstring(objName.begin(), objName.end());
 		SetObjectName(wobjName);
 	}
 	ImGui::Spacing();
+	IMGUI_REQUIRED()
 	ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
 		"Please enter the name you want to save.");
 	SPACING_UI(5);
@@ -170,12 +174,14 @@ void GameObjectMaker::Tick_UI()
 
 	#pragma region Layer Index
 	OutputTitle("Layer Index Setting", ColorConvertIntToVec4(4.f, 135.f, 35.f));
-	//ImGui::Text("Layer Index Setting");
-	if (ImGui::DragInt("##LAYERIDX", &m_LayerIdx, 1.f, 0, 32))
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
+	// Layer 번호 추가되면 DragInt 최대값 수정
+	if (ImGui::DragInt("##LAYERIDX", &m_LayerIdx, 1.f, 0, 31))
 	{
 		SetLayerIdx(m_LayerIdx);
 	}
 	ImGui::Spacing();
+	IMGUI_OPTIONAL()
 	ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
 		"Enter the Layer index for the GameObject.\n");
 	// Level의 현재 설정된 Layer 번호 List를 여기에 출력 
@@ -186,8 +192,8 @@ void GameObjectMaker::Tick_UI()
 	#pragma region Component Setting
 	// Component
 	OutputTitle("Component Setting", ColorConvertIntToVec4(4.f, 135.f, 35.f));
-	//ImGui::Text("Component Setting");
-	SPACING_UI(2);
+	IMGUI_OPTIONAL()
+	SPACING_UI(1);
 	ImGui::Text("Component List");
 	const char* componentNames[] = { "CAMERA", "COLLIDER2D", "LIGHT2D",
 			"MESHRENDER", "SPRITE_RENDER", "BILLBOARD_RENDER", "FLIPBOOK_RENDER", "TILE_RENDER", };
@@ -213,7 +219,7 @@ void GameObjectMaker::Tick_UI()
 	// 2-2. 등록한 Component를 지우고 싶다면 해당 버튼을 눌러
 	// Component 해제 함수 호출
 	if (ImGuiFunc::ColoredButton("Delete\nComponent",
-		ColorConvertIntToVec4(38, 74, 27), ImVec2(150.f, 50.f)))
+		ColorConvertIntToVec4(125, 23, 20), ImVec2(150.f, 50.f)))
 	{
 		m_pObject->ReleaseComponent(GetComType());
 	}
@@ -278,7 +284,8 @@ void GameObjectMaker::Tick_UI()
 
 	
 	// Combo를 이용해 추가하려는 콘텐츠 Script 설정
-	SPACING_UI(2);
+	IMGUI_OPTIONAL()
+	SPACING_UI(1);
 	ImGui::Text("Content Script List");
 	static int curNameNum = -1;
 	// Combo에 전달하는 항목 수는 벡터의 크기여야 합니다.
@@ -304,7 +311,7 @@ void GameObjectMaker::Tick_UI()
 
 	// 등록한  Content Script 제거 버튼
 	if (ImGuiFunc::ColoredButton("Delete\nContent Script",
-		ColorConvertIntToVec4(38, 74, 27), ImVec2(150.f, 50.f)))
+		ColorConvertIntToVec4(125, 23, 20), ImVec2(150.f, 50.f)))
 	{
 		// SCRIPT_TYPE을 전달
 		if (m_ContnentScriptName != nullptr)

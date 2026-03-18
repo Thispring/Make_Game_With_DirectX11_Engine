@@ -117,7 +117,6 @@ bool EScriptUI::DeleteScript(SCRIPT_TYPE _Type)
 	// Tick_UI에서 아래 파라미터를 DeleteScript에 전달합니다.
 	//m_TargetScript->GetScriptType();
 
-
 	// Inspector 에서만 Delete UI를 표시하도록 부모 UI를 검사
 	Ptr<EditorUI> pParent = GetParentUI();
 	if (pParent == nullptr)
@@ -142,7 +141,10 @@ bool EScriptUI::DeleteScript(SCRIPT_TYPE _Type)
 
 		if (ImGui::Button("OK", ImVec2(120, 0)))
 		{
-			GetTarget()->ReleaseContentScript(_Type);
+			// m_TargetScript->GetOwner()로 접근해야, 실제 가리키고 있는 GameObject 주소를 얻어옴
+			// GetTarget()만을 사용하면 nullptr을 반환
+			Ptr<GameObject> pObject = m_TargetScript->GetOwner();
+			pObject->ReleaseContentScript(_Type);
 
 			// 현재 Level에 변경점을 알림
 			// LevelMgr의 ChangeLevel는 private 함수

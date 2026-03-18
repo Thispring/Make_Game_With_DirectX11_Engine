@@ -58,6 +58,8 @@ public:
         assert(0 <= _Idx && _Idx < MAX_LAYER);
         return &m_arrLayer[_Idx]; 
     }
+    // Layer 배열 전체를 반환
+    Layer* GetLayer() { return m_arrLayer; }
     UINT* GetCollisionMatrix() { return m_Matrix; };
 
     bool IsChanged()

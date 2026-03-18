@@ -3,6 +3,7 @@
 
 #include "AssetMgr.h"
 #include "EditorMgr.h"
+#include "imguiFunc.h"
 
 TileMapMaker::TileMapMaker()
 	: EditorUI("TileMapMaker")
@@ -38,90 +39,115 @@ void TileMapMaker::SettingClear()
 
 void TileMapMaker::Tick_UI()
 {
-	OutputTitle("Making TileMap", ImVec4(0.5f, 0.5f, 0.5f, 1.f));
+	// 크기 조절을 위해 OutputTitle 함수 사용 X
+	Vec4 vColor = Vec4(0.5f, 0.5f, 0.5f, 1.f);
+	ImGui::PushID(0);
+	ImGui::PushStyleColor(ImGuiCol_Button, vColor);
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, vColor);
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, vColor);
+	ImGui::Button("Making TileMap", Vec2(150.f, 50.f));
+	ImGui::PopStyleColor(3);
+	ImGui::PopID();
 
-	// Row, Col, TileSize를 받아
-	// 더미 Tile UI를 생성합니다.
+	ImGui::SameLine(300.f);
 
-	// Row
-	ImGui::Text("Row");
-	ImGui::SameLine(150);
+	#pragma region SaveTileMapBtn
+	if (ImGuiFunc::ColoredButton("SaveTileMap##TileMapSaveBtn", ColorConvertIntToVec4(20, 166, 34), ImVec2(150.f, 50.f)))
+	{
+		// 버튼을 누르면 팝업 상태를 'Open'으로 설정
+		ImGui::OpenPopup("TileMapSave?");
+	}
+
+	// 모달 창을 매 프레임 마다 호출되게 하고,
+	// 팝업 상태가 Open일 때, 실행된다.
+	// 
+	// Always center this window when appearing
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+	// 모달 창을 이용해 저장하기 전 메시지를 띄우기
+	if (ImGui::BeginPopupModal("TileMapSave?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Please check if the values are correct!");
+		ImGui::Separator();
+
+		if (ImGui::Button("OK", ImVec2(120, 0)))
+		{
+			// UINT 변환, 음수일 경우 크래시
+			if (m_Row < 0 && m_Col < 0)
+			{
+				assert(false);
+			}
+
+			// 저장 및 초기화
+			AssetMgr::GetInst()->CreateEngineTileMap(m_vecSprite, m_TileMapName, m_AtlasName, (UINT)m_Row, (UINT)m_Col, m_TileSize);
+			SettingClear();
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+	SPACING_UI(7);
+	ImGui::Separator();
+	#pragma endregion
+
+	#pragma region Row
+	OutputTitle("Row", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
 	if (ImGui::DragInt("##ROW", &m_Row, 1.f, 0, INT_MAX))
 	{
 		SetRow(m_Row);
 	}
+	IMGUI_REQUIRED()
 	SPACING_UI(5);
+	ImGui::Separator();
+	#pragma endregion
 	
-	
-	// Col
-	ImGui::Text("Col");
-	ImGui::SameLine(150);
+	#pragma region Col
+	OutputTitle("Col", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
 	if (ImGui::DragInt("##COL", &m_Col, 1.f, 0, INT_MAX))
 	{
 		SetCol(m_Col);
 	}
+	IMGUI_REQUIRED()
 	SPACING_UI(5);
+	ImGui::Separator();
+	#pragma endregion
 
-
-	// TileSize
-	ImGui::Text("TileSize");
-	ImGui::SameLine(150);
+	#pragma region TileSize
+	OutputTitle("TileSize", ColorConvertIntToVec4(4.f, 135.f, 35.f));
 	if (ImGui::DragFloat2("##TILESIZE", m_TileSize, 1.f, 0.f, FLT_MAX))
 	{
 		SetTileSize(m_TileSize);
 	}
+	IMGUI_REQUIRED()
 	SPACING_UI(5);
-
-	
-	// Atlas Name
-	ImGui::Text("Atlas Name");
-	// wstring -> string 변환
-	string atlasName = string(m_AtlasName.begin(), m_AtlasName.end());
-	// Name
-	ImGui::SameLine(150);
-	if (ImGui::InputText("##ATLASTEXTURENAME", &atlasName))
-	{
-		wstring wAtlasName = wstring(atlasName.begin(), atlasName.end());
-		SetAtlasName(wAtlasName);
-	}
-
-	// InputText에서 혹시 Drop 받은 Payload가 있는지 체크
-	// Drop 체크는, 특정 위젯에서 드래그가 발생 && 해당 위젯 위에 마우스가 호버링 중인지
-	if (ImGui::BeginDragDropTarget())
-	{
-		/**************************************************************
-		* 마우스가 때졌을 때의 조건, 전달한 Key값과 동일한지 확인
-		*
-		* 동작 의도에 맞게, 어느 ImGui에서 전달한 Key인지를 조건으로 구별하여
-		* MeshRenderUI이면 ContentUI의 Mesh 목록에 있는 Key만을 받게 설계
-		**************************************************************/
-		const ImGuiPayload* PayLoad = ImGui::AcceptDragDropPayload("ContentUI");	// Content UI에서만 받도록 Key 조건 설정
-		if (PayLoad)
-		{
-			DWORD_PTR data = *((DWORD_PTR*)PayLoad->Data);
-			Ptr<Asset> pAsset = (Asset*)data;
-
-			// 가져온 Texture의 Key 문자열을 세팅
-			SetAtlasName(pAsset->GetKey());
-		}
-
-		ImGui::EndDragDropTarget();
-	}
-
-	ImGui::Spacing();
-	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
-		"Drag and drop an image from the ContentUI\nTexture list into the box above.");
-	SPACING_UI(5);
-
-
-	// 위 정보를 입력받아 버튼을 누르면 더미 Tile 이미지 생성
-	if (ImGui::Button("Create TileMap PreSet##TileMapPreSetBtn"))
-	{
-		// 버튼을 누르면 팝업 상태를 'Open'으로 설정
-		m_IsShowPreTile = true;
-	}
+	ImGui::Separator();
+	#pragma endregion
 
 	#pragma region TileMap PreView
+	// Row, Col, TileSize를 받아
+	// 더미 Tile UI를 생성합니다.
+	// 위 정보를 입력받아 버튼을 누르면 더미 Tile 이미지 생성
+	OutputTitle("TileMap PreSet", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	ImGui::Spacing();
+	if (ImGui::Button("Create TileMap PreSet Button##TileMapPreSetBtn"))
+	{
+		// 부동 소수점 오차 고려
+		const float EPSILON = 1e-6f;
+
+		// 버튼을 누르면 팝업 상태를 'Open'으로 설정
+		if (m_Row != 0 && m_Col != 0 && fabs(m_TileSize.x) > EPSILON && fabs(m_TileSize.y) > EPSILON)
+			m_IsShowPreTile = true;
+	}
+
 	if (m_IsShowPreTile)
 	{
 		int Count = 0;
@@ -146,7 +172,6 @@ void TileMapMaker::Tick_UI()
 			
 			m_IsShowInit = true;
 		}
-
 
 		// TileSize가 보이는 것보다 작아서 보정치 *2
 		for (int i = 0; i < m_Col; ++i) // 세로줄 반복
@@ -198,68 +223,67 @@ void TileMapMaker::Tick_UI()
 
 			ImGui::PopID(); // 바깥쪽 ID Pop (Row ID)
 		}
-
 	}
+	SPACING_UI(5);
+	ImGui::Separator();
 	#pragma endregion
 
-	// TileMap name to save
-	ImGui::Text("TileMap name to save");
+	#pragma region Atlas Name
+	// Atlas Name
+	OutputTitle("Atlas Name", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	// wstring -> string 변환
+	string atlasName = string(m_AtlasName.begin(), m_AtlasName.end());
+	if (ImGui::InputTextWithHint("##ATLASTEXTURENAME", "Example: tile_Atlas", &atlasName))
+	{
+		wstring wAtlasName = wstring(atlasName.begin(), atlasName.end());
+		SetAtlasName(wAtlasName);
+	}
+
+	// InputText에서 혹시 Drop 받은 Payload가 있는지 체크
+	// Drop 체크는, 특정 위젯에서 드래그가 발생 && 해당 위젯 위에 마우스가 호버링 중인지
+	if (ImGui::BeginDragDropTarget())
+	{
+		/**************************************************************
+		* 마우스가 때졌을 때의 조건, 전달한 Key값과 동일한지 확인
+		*
+		* 동작 의도에 맞게, 어느 ImGui에서 전달한 Key인지를 조건으로 구별하여
+		* MeshRenderUI이면 ContentUI의 Mesh 목록에 있는 Key만을 받게 설계
+		**************************************************************/
+		const ImGuiPayload* PayLoad = ImGui::AcceptDragDropPayload("ContentUI");	// Content UI에서만 받도록 Key 조건 설정
+		if (PayLoad)
+		{
+			DWORD_PTR data = *((DWORD_PTR*)PayLoad->Data);
+			Ptr<Asset> pAsset = (Asset*)data;
+
+			// 가져온 Texture의 Key 문자열을 세팅
+			SetAtlasName(pAsset->GetKey());
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+	ImGui::Spacing();
+	IMGUI_REQUIRED()
+	ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+		"Drag and drop an image from the ContentUI\nTexture list into the box above.");
+	SPACING_UI(5);
+	ImGui::Separator();
+	#pragma endregion
+
+	#pragma region TileMap name to save
+	OutputTitle("TileMap name to save", ColorConvertIntToVec4(4.f, 135.f, 35.f));
 	// wstring -> string 변환
 	string tileMapName = string(m_TileMapName.begin(), m_TileMapName.end());
-	ImGui::SameLine(150);
-	if (ImGui::InputText("##TILEMAPNAMETOSAVE", &tileMapName))
+	if (ImGui::InputTextWithHint("##TILEMAPNAMETOSAVE", "Name your TileMap", &tileMapName))
 	{
 		wstring wtileMapName = wstring(tileMapName.begin(), tileMapName.end());
 		SetTileMapName(wtileMapName);
 	}
 	ImGui::Spacing();
-	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
-		"Please enter the name you want to save.");
+	IMGUI_REQUIRED()
+		ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+			"Please enter the name you want to save.");
 	SPACING_UI(5);
+	ImGui::Separator();
+	#pragma endregion
 
-
-	// Save Button
-	if (ImGui::Button("SaveTileMap##TileMapSaveBtn"))
-	{
-		// 버튼을 누르면 팝업 상태를 'Open'으로 설정
-		ImGui::OpenPopup("TileMapSave?");
-	}
-
-	// 모달 창을 매 프레임 마다 호출되게 하고,
-	// 팝업 상태가 Open일 때, 실행된다.
-	// 
-	// Always center this window when appearing
-	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-	// 모달 창을 이용해 저장하기 전 메시지를 띄우기
-	if (ImGui::BeginPopupModal("TileMapSave?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-	{
-		ImGui::Text("Please check if the values are correct!");
-		ImGui::Separator();
-
-		if (ImGui::Button("OK", ImVec2(120, 0)))
-		{
-			// UINT 변환, 음수일 경우 크래시
-			if (m_Row < 0 && m_Col < 0)
-			{
-				assert(false);
-			}
-
-			// 저장 및 초기화
-			AssetMgr::GetInst()->CreateEngineTileMap(m_vecSprite, m_TileMapName, m_AtlasName, (UINT)m_Row, (UINT)m_Col, m_TileSize);
-			SettingClear();
-			ImGui::CloseCurrentPopup();
-		}
-		ImGui::SetItemDefaultFocus();
-		ImGui::SameLine();
-		if (ImGui::Button("Cancel", ImVec2(120, 0)))
-		{
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	SPACING_UI(7);
 }
