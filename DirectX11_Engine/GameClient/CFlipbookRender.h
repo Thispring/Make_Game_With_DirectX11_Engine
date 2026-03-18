@@ -29,6 +29,7 @@ public:
     // 멤버 함수
     //=========
     void AddFlipbook(Ptr<AFlipbook> _Flipbook) { m_vecFlipbook.push_back(_Flipbook); }
+    void DeleteFlipbook(int _Idx);
     void Play(int _FlipbookIdx, float _FPS, int _RepeatCount)
     {
         // 다시 Play를 호출했을 때, m_CurSprite를 0으로 초기화하여,

@@ -11,7 +11,8 @@ private:
     //==============
     wstring     m_SpriteName;
     wstring     m_FlipbookName;
-    int         m_SpriteCount;
+    int         m_StartIdx;
+    int         m_EndIdx;
 
     //=================
     // private 멤버 함수
@@ -35,7 +36,8 @@ public:
     //=========
     GET_SET(wstring, SpriteName);
     GET_SET(wstring, FlipbookName);
-    GET_SET(int, SpriteCount);
+    GET_SET(int, StartIdx);
+    GET_SET(int, EndIdx);
 
 
     //============

@@ -37,9 +37,9 @@ public:
 	void CreateEnginePrefab(Ptr<GameObject> _Object);
 
 	// 매개변수를 받아, 외부에서 사용할 수 있도록 오버로딩
-	void CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _SpriteName, int _OriIdx, int _Row = 0, int _Col = 0);
+	void CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _SpriteName, int _OriIdx = 0, int _Row = 0, int _Col = 0);
 	void CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wstring _ShaderName, RENDER_DOMAIN _Domain);
-	void CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Loop);
+	void CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Start, int _End);
 	void CreateEngineTileMap(vector<Ptr<ASprite>>& _vecSprite, wstring _TileMapName, wstring _AtlasName, UINT _Row, UINT _Col, Vec2 _TileSize);
 
 	// 코드로 Asset을 제작하는 부분을 모아서 정리 (백업용)

@@ -96,42 +96,19 @@ void EFlipbookRenderUI::Tick_UI()
 			**********************************************************/
 			pFlipbookRender->Play(curIndex, fps, repeatCount);
 		}
+
+
+		// Delete Flipbook
+		ImGui::SameLine(250.f);
+		string btnStr = "Delete Flipbook##Delete Flipbook " + to_string(i);
+		if (ImGui::Button(btnStr.c_str(), ImVec2(150, 25)))
+		{
+			// 원본 벡터를 제거해야함
+			pFlipbookRender->DeleteFlipbook(i);
+		}
+		SPACING_UI(2);
 	}
 	SPACING_UI(5);
-
-
-	// NOTE(26-03-13):
-	// RadioButton으로 Play 전환을 구현, 아래 실제 재생중인지
-	// 확인용으로 남겨두고, 추후 제거
-	// 
-	// Flipbook Asset 목록을 가져옵니다.
-	//ImGui::Text("Flipbook List");
-
-	//// Flipbook은 어떤 Flipbook을 가리키는지 여부가 중요
-	//// Flipbook 전체 목록을 vector로 가져와 ListUI에 전달
-	//m_vecFlipbook = pFlipbookRender->GetVecFlipbook();
-
-	//string FlipbookKey = "";
-	//for (UINT i = 0; i < m_vecFlipbook.size(); i++)
-	//{
-	//	// 만약 재생중인 Flipbook이 있다면 HighLight로 구분
-	//	if (i == pFlipbookRender->GetCurFlipbook())
-	//	{
-	//		// 여기에 들어왔다는 건 현재 재생중인 인덱스와 찾는 인덱스가 일치
-	//		FlipbookKey = string(m_vecFlipbook[i]->GetKey().begin(), m_vecFlipbook[i]->GetKey().end());
-
-	//		ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(25, 145, 225, 255)); 
-	//		OutputTitle(FlipbookKey, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
-	//		ImGui::PopStyleColor();
-	//	}
-	//	else
-	//	{
-	//		FlipbookKey = string(m_vecFlipbook[i]->GetKey().begin(), m_vecFlipbook[i]->GetKey().end());
-	//		OutputTitle(FlipbookKey, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
-	//	}
-
-	//}
-	//SPACING_UI(5);
 
 
 	// Add Flipbook

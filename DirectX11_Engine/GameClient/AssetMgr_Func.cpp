@@ -445,8 +445,17 @@ void AssetMgr::CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartL
 		// X 좌표: (1/27) * 11 = 0.4074... (정상 범위)
 		float UV_X = (_Slice.x / Width) * (float)CurrentCol;
 
+		// NOTE(26-03-18): 아래 공식으로 인해 Height 기준 어디서 부터 자를지가 모두 0으로 통일됨
+		// 임시로 Origin 매개변수가 0이 아니면 (설정되었다면) UV_Y를 다른 공식으로 계산하기
+		//
 		// Y 좌표: (1/9) * 7 = 0.7777...
 		float UV_Y = (_Slice.y / Height) * (float)CurrentRow;
+		
+		if (_OriIdx != 0)
+		{
+			float Origin = _OriIdx * (_Slice.y / Height);
+			UV_Y = ((float)i, Origin);
+		}
 
 		pSprite->SetLeftTopUV(Vec2(UV_X, UV_Y));
 
@@ -490,7 +499,7 @@ void AssetMgr::CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wst
 	#pragma endregion
 }
 
-void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Loop)
+void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Start, int _End)
 {
 	#pragma region Flipbook 생성하는 방법
 	// Flipbook 객체 생성 후, 이름을 설정하고
@@ -501,7 +510,7 @@ void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, 
 	_FlipbookName = L"Flipbook\\" + _FlipbookName + L".flip";
 	pFlipbook->SetName(_FlipbookName);
 
-	for (int i = 0; i < _Loop; ++i)
+	for (int i = _Start; i < _End; ++i)
 	{
 		wstring spritePath = {};
 

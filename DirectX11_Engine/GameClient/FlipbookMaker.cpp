@@ -12,7 +12,8 @@ FlipbookMaker::FlipbookMaker()
 
 	, m_SpriteName{}
 	, m_FlipbookName{}
-	, m_SpriteCount(0)
+	, m_StartIdx(0)
+	, m_EndIdx(0)
 {
 }
 
@@ -24,7 +25,8 @@ void FlipbookMaker::ClearSetting()
 {
 	m_SpriteName = {};
 	m_FlipbookName = {};
-	m_SpriteCount = 0;
+	m_StartIdx = 0;
+	m_EndIdx = 0;
 }
 
 void FlipbookMaker::Tick_UI()
@@ -64,7 +66,7 @@ void FlipbookMaker::Tick_UI()
 		if (ImGui::Button("OK", ImVec2(120, 0)))
 		{
 			// 저장 및 초기화
-			AssetMgr::GetInst()->CreateEngineFlipbook(m_SpriteName, m_FlipbookName, m_SpriteCount);
+			AssetMgr::GetInst()->CreateEngineFlipbook(m_SpriteName, m_FlipbookName, m_StartIdx, m_EndIdx);
 			ClearSetting();
 			ImGui::CloseCurrentPopup();
 		}
@@ -135,16 +137,30 @@ void FlipbookMaker::Tick_UI()
 	ImGui::Separator();
 	#pragma endregion
 
-	#pragma region SpriteCount
-	OutputTitle("SpriteCount", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	#pragma region StartIdx
+	OutputTitle("Start Index", ColorConvertIntToVec4(4.f, 135.f, 35.f));
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
-	if (ImGui::DragInt("##SPRITECOUNT", &m_SpriteCount, 1.f, 0, INT_MAX))
+	if (ImGui::DragInt("##STARTIDX", &m_StartIdx, 1.f, 0, INT_MAX))
 	{
-		SetSpriteCount(m_SpriteCount);
+		SetStartIdx(m_StartIdx);
 	}
 	IMGUI_REQUIRED()
 	ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
-		"Number of sprites for the flipbook");
+		"Number of flipbook start point");
+	SPACING_UI(5);
+	ImGui::Separator();
+	#pragma endregion
+
+	#pragma region EndIdx
+	OutputTitle("End Index", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
+	if (ImGui::DragInt("##ENDIDX", &m_EndIdx, 1.f, 0, INT_MAX))
+	{
+		SetEndIdx(m_EndIdx);
+	}
+	IMGUI_REQUIRED()
+	ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+		"Number of flipbook end point");
 	SPACING_UI(5);
 	ImGui::Separator();
 	#pragma endregion

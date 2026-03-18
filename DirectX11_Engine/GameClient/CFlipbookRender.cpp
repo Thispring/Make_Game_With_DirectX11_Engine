@@ -46,6 +46,12 @@ bool CFlipbookRender::CheckFinish()
 	}
 }
 
+void CFlipbookRender::DeleteFlipbook(int _Idx)
+{
+	m_vecFlipbook.erase(m_vecFlipbook.begin() + _Idx);
+	m_CurFlipbook = 0;	// 재생중인 인덱스를 0으로 설정
+}
+
 void CFlipbookRender::FinalTick()
 {
 	// Level이 Play상태 일때만 재생하도록 설정
@@ -179,6 +185,7 @@ void CFlipbookRender::SaveToLevelFile(FILE* _File)
 	fwrite(&m_CurFlipbook, sizeof(int), 1, _File);
 	fwrite(&m_CurSprite, sizeof(int), 1, _File);
 	fwrite(&m_FPS, sizeof(int), 1, _File);
+	fwrite(&m_RepeatCount, sizeof(int), 1, _File);
 }
 
 void CFlipbookRender::LoadFromLevelFile(FILE* _File)
@@ -197,4 +204,5 @@ void CFlipbookRender::LoadFromLevelFile(FILE* _File)
 	fread(&m_CurFlipbook, sizeof(int), 1, _File);
 	fread(&m_CurSprite, sizeof(int), 1, _File);
 	fread(&m_FPS, sizeof(int), 1, _File);
+	fread(&m_RepeatCount, sizeof(int), 1, _File);
 }
