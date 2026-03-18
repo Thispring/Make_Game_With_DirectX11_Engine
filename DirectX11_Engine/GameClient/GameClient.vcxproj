@@ -282,6 +282,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="ASprite.cpp" />
     <ClCompile Include="Asset.cpp" />
     <ClCompile Include="AssetMgr.cpp" />
+    <ClCompile Include="AssetMgr_Func.cpp" />
     <ClCompile Include="AssetMgr_Init.cpp" />
     <ClCompile Include="CEditorCamMoveScript.cpp" />
     <ClCompile Include="EAssetUI.cpp" />

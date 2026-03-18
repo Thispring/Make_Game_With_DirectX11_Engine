@@ -12,4 +12,6 @@ EPrefabUI::~EPrefabUI()
 
 void EPrefabUI::Tick_UI()
 {
+	OutputTitle();
+
 }

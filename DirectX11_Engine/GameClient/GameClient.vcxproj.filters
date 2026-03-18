@@ -642,6 +642,9 @@
     <ClCompile Include="imguiFunc.cpp">
       <Filter>Header</Filter>
     </ClCompile>
+    <ClCompile Include="AssetMgr_Func.cpp">
+      <Filter>GameEngine\Manager\Asset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">

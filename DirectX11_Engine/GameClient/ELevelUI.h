@@ -4,6 +4,10 @@
 class ELevelUI :
     public EAssetUI
 {
+
+private:
+    vector<string>      m_LayerNames;
+
 public:
     //=============
     // 상속 멤버 함수
