@@ -21,6 +21,11 @@ void ALevel::AddObject(int _LayerIdx, Ptr<GameObject> _Object)
 	m_arrLayer[_LayerIdx].AddObject(_Object);
 }
 
+void ALevel::DeleteObject(Ptr<GameObject> _Object)
+{
+	_Object->Destroy();
+}
+
 void ALevel::Deregister()
 {
 	for (UINT i = 0; i < MAX_LAYER; ++i)

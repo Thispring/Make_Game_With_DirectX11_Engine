@@ -67,14 +67,31 @@ void Inspector::Tick_UI()
 		ImGui::EndPopup();
 	}
 	SPACING_UI(10);
+	ImGui::Separator();
 
 	#pragma region Layer Index
-	OutputTitle("Object Layer Index", ColorConvertIntToVec4(4.f, 135.f, 35.f));
-	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
+	ImGui::Text("Object Layer Index");
 	int layerIdx = GetTargetObject()->GetLayerIdx();
-	if (ImGui::DragInt("##LAYERIDX", &layerIdx, 1.f, 0, MAX_LAYER))
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
+	ImGui::InputInt("##LAYERIDX", &layerIdx, 0 , 0);
+	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		GetTargetObject()->SetLayerIdx(layerIdx);
+		// 입력값이 음수값이거나, MAX_LAYER보다 클 경우
+		// 0으로 임시 변경
+		if (layerIdx <= -1 || layerIdx >= MAX_LAYER)
+		{
+			layerIdx = 0;
+		}
+
+		// TargetObject를 복사생성하여, 해당 객체를 전달
+		Ptr<GameObject> pCopy = new GameObject(*m_TargetObject.Get());
+
+		// 현재 Level을 가져와, TargetObject를 변경할 layer에 등록
+		Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
+		pLevel->AddObject(layerIdx, pCopy);
+
+		// 원본 TargetObject 삭제 요청
+		m_TargetObject->Destroy();
 	}
 	SPACING_UI(5);
 	ImGui::Separator();

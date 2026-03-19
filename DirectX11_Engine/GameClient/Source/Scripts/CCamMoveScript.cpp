@@ -30,7 +30,7 @@ void CCamMoveScript::Begin()
 	m_InGameRot = Transform()->GetRelativeRot();
 
 	// Player 게임 오브젝트를 찾아서 등록
-	m_Target = LevelMgr::GetInst()->FindObjectByName(L"Player");
+	//m_Target = LevelMgr::GetInst()->FindObjectByName(L"Player");
 }
 
 void CCamMoveScript::Tick()
@@ -60,13 +60,13 @@ void CCamMoveScript::Tick()
 	// InGame에서는 Player의 방향키 이동과 같은 속도와 방향으로 이동
 	else if (m_MoveMode == CAM_MOVE_MODE::INGAME)
 	{
-		Vec3 vPos = Transform()->GetRelativePos();
+		//Vec3 vPos = Transform()->GetRelativePos();
 
-		// Player의 Z축을 제외하고 가져옵니다.
-		Vec3 playerPos = m_Target->Transform()->GetRelativePos();
-		playerPos.z = vPos.z;
+		//// Player의 Z축을 제외하고 가져옵니다.
+		//Vec3 playerPos = m_Target->Transform()->GetRelativePos();
+		//playerPos.z = vPos.z;
 
-		GetOwner()->Transform()->SetRelativePos(playerPos);
+		//GetOwner()->Transform()->SetRelativePos(playerPos);
 	}
 
 

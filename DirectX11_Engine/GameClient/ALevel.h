@@ -25,6 +25,7 @@ public:
     // 멤버 함수
     //=========
     void AddObject(int _LayerIdx, Ptr<GameObject> _Object);
+    void DeleteObject(Ptr<GameObject> _Object);
     void Deregister();
     void CheckCollisionLayer(UINT _LayerIdx1, UINT _LayerIdx2);
 
