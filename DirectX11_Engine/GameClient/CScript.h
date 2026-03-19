@@ -2,8 +2,8 @@
 #include "Component.h"
 #include "Source/ScriptMgr.h"
 
-// 자식 Script들이 어떤 타입의 변수들을 가지고 있는지 정의
-// ImGui의 요소를 출력하기 위함
+// ImGui로 자식 Script들의 멤버를 표시하기 위함
+// 필요한 자료형이 있다면 추가합니다.
 enum class SCRIPT_PARAM
 {
     INT,
@@ -33,17 +33,14 @@ class CScript :
 {
 
 private:
-    int                     m_ScriptType;   // enum 값으로 초기화
+    int                     m_ScriptType;       // enum 값으로 초기화
     vector<tScriptParam>    m_vecScriptParam;
 
 protected:
     // 스크립트 컴포넌트의 오브젝트 삭제 요청 함수
     void Destroy(); 
     // m_vecScriptParam 데이터 push back 함수
-    void AddScriptParam(SCRIPT_PARAM _Type, void* _Data, const wstring& _Desc, bool _IsInput = true, float _Step = 1.f) 
-    { 
-        m_vecScriptParam.push_back(tScriptParam{ _Type , _Data, _Desc, _IsInput, _Step }); 
-    }
+    void AddScriptParam(SCRIPT_PARAM _Type, void* _Data, const wstring& _Desc, bool _IsInput = true, float _Step = 1.f);
     // Prefab을 가져와 객체로 생성하는 함수
     void Instantiate(class APrefab* _Prefab, int _LayerIdx, Vec3 _WorldPos);
 
@@ -53,7 +50,11 @@ public:
     //=============
     virtual void Begin() {}
     virtual void Tick() = 0;
-    virtual void FinalTick() final{}    // final 키워드에 대해 알아보기
+    /************************************************************
+    * virtual 함수 뒤에 final을 붙이면, 그 가상함수는
+    * 더 이상 파생 클래스에서 재정의(override)할 수 없음을 의미합니다.
+    ************************************************************/
+    virtual void FinalTick() final{}
     virtual CScript* Clone() = 0;
 
 

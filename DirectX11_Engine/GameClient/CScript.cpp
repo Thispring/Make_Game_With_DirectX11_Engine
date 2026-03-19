@@ -26,6 +26,11 @@ void CScript::Destroy()
     TaskMgr::GetInst()->AddTask(info);
 }
 
+void CScript::AddScriptParam(SCRIPT_PARAM _Type, void* _Data, const wstring& _Desc, bool _IsInput, float _Step)
+{
+    m_vecScriptParam.push_back(tScriptParam{ _Type , _Data, _Desc, _IsInput, _Step });
+}
+
 void CScript::Instantiate(APrefab* _Prefab, int _LayerIdx, Vec3 _WorldPos)
 {
     if (_Prefab == nullptr)

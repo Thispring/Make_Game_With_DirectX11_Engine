@@ -397,6 +397,7 @@ void GameObject::SaveToLevelFile(FILE* _File)
 		Script->SaveToLevelFile(_File);
 	}
 
+
 	// 자식 오브젝트가 있다면 저장
 	size_t ChildCount = m_vecChild.size();
 	fwrite(&ChildCount, sizeof(size_t), 1, _File);
@@ -412,6 +413,7 @@ void GameObject::LoadFromLevelFile(FILE* _File)
 {
 	// 이름
 	SetName(LoadWString(_File));
+
 
 	// 컴포넌트
 	UINT ComType = 0;
@@ -497,4 +499,5 @@ void GameObject::LoadFromLevelFile(FILE* _File)
 		AddChild(pChild);
 		pChild->LoadFromLevelFile(_File);
 	}
+
 }

@@ -68,6 +68,18 @@ void Inspector::Tick_UI()
 	}
 	SPACING_UI(10);
 
+	#pragma region Layer Index
+	OutputTitle("Object Layer Index", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
+	int layerIdx = GetTargetObject()->GetLayerIdx();
+	if (ImGui::DragInt("##LAYERIDX", &layerIdx, 1.f, 0, MAX_LAYER))
+	{
+		GetTargetObject()->SetLayerIdx(layerIdx);
+	}
+	SPACING_UI(5);
+	ImGui::Separator();
+	#pragma endregion	
+
 	#pragma region Add Component 버튼 
 	vector<UINT> vecComType = {};
 

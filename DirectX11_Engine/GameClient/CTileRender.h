@@ -26,8 +26,8 @@ public:
     virtual void FinalTick() override;
     virtual void Render() override;
     virtual void CreateMaterial() override;
-    CLONE(CTileRender);
 
+    CLONE(CTileRender);
     virtual void SaveToLevelFile(FILE* _File) override;
     virtual void LoadFromLevelFile(FILE* _File) override;
 

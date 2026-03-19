@@ -9,6 +9,10 @@
 CEditorCamMoveScript::CEditorCamMoveScript()
 	: CScript(-1)	// Engine 용 Script이기 때문에 따로 처리
 	, m_isMoving(false)
+	
+	// 매 프레임 저장할 현재 Transform 정보는 생성 시점에 초기화
+	, m_CurPos{}
+	, m_CurRot{}
 {
 }
 
@@ -156,3 +160,13 @@ void CEditorCamMoveScript::MouseCamMove()
 	Transform()->SetRelativeRot(vRot);
 }
 
+Vec3 CEditorCamMoveScript::Vec3Abs(const Vec3& v)
+{
+	// Vec3의 각 요소의 절댓값을 계산하는 함수
+
+	return {
+	fabsf(v.x), // float의 절댓값은 fabsf() 사용
+	fabsf(v.y),
+	fabsf(v.z)
+	};
+}

@@ -15,7 +15,7 @@ private:
     float                   m_FPS;              // 애니메이션 프레임 수
     float                   m_AccTime;          // 현재 시간
 
-    // ImGui 재생 컨트롤용도의 bool 변수
+    // ImGui에서 재생 컨트롤용으로 사용 중인 bool 변수
     // EFlipbookRenderUI 클래스에 의존하고 있어서 사용 주의 필요
     bool                    m_IsStop;
 
@@ -30,19 +30,7 @@ public:
     //=========
     void AddFlipbook(Ptr<AFlipbook> _Flipbook) { m_vecFlipbook.push_back(_Flipbook); }
     void DeleteFlipbook(int _Idx);
-    void Play(int _FlipbookIdx, float _FPS, int _RepeatCount)
-    {
-        // 다시 Play를 호출했을 때, m_CurSprite를 0으로 초기화하여,
-        // 다른 FlipBook의 Sprite를 처음부터 재생
-            
-
-        m_CurSprite = 0;
-
-        m_CurFlipbook = _FlipbookIdx;
-        m_RepeatCount = _RepeatCount;
-        m_FPS = _FPS;
-        m_AccTime = 0.f;
-    }
+    void Play(int _FlipbookIdx, float _FPS, int _RepeatCount);
 
 
     //=============
@@ -51,8 +39,8 @@ public:
     virtual void FinalTick() override;
     virtual void Render() override;
     virtual void CreateMaterial() override;
-    CLONE(CFlipbookRender);
 
+    CLONE(CFlipbookRender);
     virtual void SaveToLevelFile(FILE* _File) override;
     virtual void LoadFromLevelFile(FILE* _File) override;
 

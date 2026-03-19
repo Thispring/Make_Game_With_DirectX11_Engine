@@ -104,6 +104,7 @@ void CCollider2D::FinalTick()
 		assert(nullptr);
 }
 
+// 행렬과 충돌카운트는 런타임 중에 결정되므로 파일 저장 X
 void CCollider2D::SaveToLevelFile(FILE* _File)
 {
 	fwrite(&m_Offset, sizeof(Vec2), 1, _File);

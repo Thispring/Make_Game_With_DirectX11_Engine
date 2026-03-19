@@ -22,7 +22,7 @@ void DrawDebugSquare(const Matrix& _matWorld, Vec4 _Color, float _Duration, bool
 void DrawDebugCircle(Vec3 _Pos, float _Radius, Vec4 _Color, float _Duration, bool _DepthTest = false);
 
 // 0 ~ 1로 제한하는 함수
-float Saturate(float _Data);
+float Saturate(float _Data);	
 
 #include "CCamera.h"
 // PROJ_TYPE을 스위칭하는 함수

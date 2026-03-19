@@ -36,14 +36,14 @@ void CBillboardRender::CreateMaterial()
 	SetMesh(AssetMgr::GetInst()->Find<AMesh>(L"SquareMesh"));
 	
 	// 만들어진 재질 찾기
-	Ptr<AMaterial> pMtrl = AssetMgr::GetInst()->Find<AMaterial>(L"BillboardMtrl");
+	Ptr<AMaterial> pMtrl = AssetMgr::GetInst()->Find<AMaterial>(L"Material\\BillboardMtrl.mtrl");
 
 	// 찾는 재질이 없다면 생성
 	if (pMtrl == nullptr)
 	{
 		// 재질 생성
 		pMtrl = new AMaterial;
-		pMtrl->SetName(L"BillboardMtrl");
+		pMtrl->SetName(L"Material\\BillboardMtrl.mtrl");
 
 		// 쉐이더를 찾아서 재질에 세팅
 		Ptr<AGraphicShader> pShader = AssetMgr::GetInst()->Find<AGraphicShader>(L"BillboardShader");
@@ -67,6 +67,8 @@ void CBillboardRender::CreateMaterial()
 		// 재질의 도메인 등록
 		pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_OPAQUE);
 		AssetMgr::GetInst()->AddAsset(pMtrl->GetName(), pMtrl.Get());
+		// 생성한 재질을 파일로 저장
+		pMtrl->Save(CONTENT_PATH + pMtrl->GetKey());
 	}
 
 	SetMaterial(pMtrl);

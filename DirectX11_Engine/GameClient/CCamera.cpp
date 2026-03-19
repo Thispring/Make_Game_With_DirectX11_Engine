@@ -22,6 +22,22 @@ CCamera::~CCamera()
 {
 }
 
+
+void CCamera::LayerCheckAll()
+{
+	/*******************************************************
+	* 레이어 비트 unsinged int 자리를 모두 1로 채움
+	* 16진수 f는 1바이트를 1로 모두 채운 수 * 8(부호 없는 int)
+	*******************************************************/
+	m_LayerCheck = 0xffffffff;
+}
+
+void CCamera::LayerCheckClear()
+{
+	// 모든 레이어 비트를 0으로 초기화
+	m_LayerCheck = 0;
+}
+
 void CCamera::LayerCheck(int _Idx)
 {
 	/**********************************************
@@ -56,7 +72,7 @@ void CCamera::Render()
 
 void CCamera::SortObejct()
 {
-	// 렌더링 할 물체들을 정렬한다.
+	// 지정한 도메인 순서별로 렌더링 순서를 정렬하는 함수 
 
 	// 정렬 전, 이전 프레임에 등록된 게임오브젝트들을 지운다.
 	m_vecOpaque.clear();
@@ -191,6 +207,8 @@ void CCamera::FinalTick()
 		m_matProj = XMMatrixPerspectiveFovLH(m_FOV, m_AspectRatio, 1.f, m_Far);
 }
 
+// 멤버중 행렬 정보와 GameObject 벡터 정보는
+// 엔진 시작 시 결정되기 때문에 파일 저장 X
 void CCamera::SaveToLevelFile(FILE* _File)
 {
 	fwrite(&m_LayerCheck, sizeof(UINT), 1, _File);

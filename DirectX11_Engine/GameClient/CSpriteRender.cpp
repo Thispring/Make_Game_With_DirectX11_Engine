@@ -14,7 +14,6 @@ CSpriteRender::~CSpriteRender()
 
 void CSpriteRender::FinalTick()
 {
-
 }
 
 void CSpriteRender::Render()
@@ -37,7 +36,7 @@ void CSpriteRender::Render()
 void CSpriteRender::CreateMaterial()
 {
 	wstring MeshName = L"SquareMesh";
-	wstring MtrlName = L"Material\\testSpriteMtrl.mtrl";
+	wstring MtrlName = L"Material\\SpriteMtrl.mtrl";
 	wstring ShaderName = L"SpriteShader";
 	wstring FilePath = L"Shader\\sprite.fx";
 	string VS = "VS_Tile";
@@ -75,6 +74,8 @@ void CSpriteRender::CreateMaterial()
 		// 재질의 도메인 등록
 		pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_MASKED);
 		AssetMgr::GetInst()->AddAsset(pMtrl->GetName(), pMtrl.Get());
+		// 생성한 재질 파일 저장
+		pMtrl->Save(CONTENT_PATH + pMtrl->GetKey());
 	}
 
 	SetMaterial(pMtrl);

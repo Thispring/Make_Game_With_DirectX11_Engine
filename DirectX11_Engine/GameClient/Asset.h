@@ -40,6 +40,7 @@ public:
 	// 상속 멤버 함수
 	//=============
 	// File I/O 관련 함수 (저장, 불러오기)
+	// 해당 기능이 필요한 Asset들만 구현하도록 설계
 	virtual int Save(const wstring& _FilePath) { return S_OK; };
 	virtual int Load(const wstring& _FilePath) { return S_OK; };
 

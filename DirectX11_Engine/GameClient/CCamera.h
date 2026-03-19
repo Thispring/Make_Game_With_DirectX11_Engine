@@ -43,27 +43,11 @@ public:
     //=========
     // 멤버 함수
     //=========
-    void LayerCheckAll()
-    {
-        // 레이어 비트 unsinged int 자리를 모두 1로 채움
-        // f는 1바이트를 1로 모두 채운 수 * 8(부호 없는 int)
-        m_LayerCheck = 0xffffffff;
-    }
-    // 모든 레이어 비트를 0으로 초기화
-    void LayerCheckClear() { m_LayerCheck = 0; }
+    void LayerCheckAll();
+    void LayerCheckClear();
     void LayerCheck(int _Idx);
-
     void Render();
-
-    // 지정한 도메인 순서별로 렌더링 순서를 정렬하는 함수 
     void SortObejct();
-
-    // PROJ_TYPE을 스위칭하는 함수
-    // 호출했을 때, m_ProjType 여부를 확인하고 다른 투영으로 변경
-    //void SwitchingType() 
-    //{
-    //    m_ProjType = m_ProjType == PROJ_TYPE::ORTHOGRAPHIC ? PROJ_TYPE::PERSPECTIVE : PROJ_TYPE::ORTHOGRAPHIC;
-    //}
 
 
     //=============
@@ -71,8 +55,8 @@ public:
     //=============
     virtual void Begin() override;
     virtual void FinalTick() override;
-    CLONE(CCamera);
 
+    CLONE(CCamera);
     virtual void SaveToLevelFile(FILE* _File) override;
     virtual void LoadFromLevelFile(FILE* _File) override;
 
@@ -92,16 +76,8 @@ public:
 
     // FOV를 60분법이 아닌 라디안으로 구하기 위해
     // FOV의 Get, Set함수는 따로 구현
-    float GetFOV()
-    {
-        // 라디안을 60분법으로
-        return m_FOV * (180 / XM_PI);
-    }
-    void SetFOV(float _Degree)
-    {
-        // 60분법을 라디안으로
-        m_FOV = _Degree * (XM_PI / 180.f);
-    }
+    float GetFOV() { return m_FOV * (180 / XM_PI); }  // 라디안을 60분법으로
+    void SetFOV(float _Degree) { m_FOV = _Degree * (XM_PI / 180.f); }   // 60분법을 라디안으로
 
 
     //============

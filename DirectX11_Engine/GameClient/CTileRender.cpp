@@ -121,7 +121,7 @@ void CTileRender::SetTileMap(Ptr<ATileMap> _TileMap)
 void CTileRender::CreateMaterial()
 {
 	wstring MeshName = L"SquareMesh";
-	wstring MtrlName = L"TileMtrl";
+	wstring MtrlName = L"Material\\TileMtrl.mtrl";
 	wstring ShaderName = L"TileShader";
 	wstring FilePath = L"Shader\\tile.fx";
 	string VS = "VS_Tile";
@@ -159,6 +159,8 @@ void CTileRender::CreateMaterial()
 		// 재질의 도메인 등록
 		pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_MASKED);
 		AssetMgr::GetInst()->AddAsset(pMtrl->GetName(), pMtrl.Get());
+		// 생성한 재질을 파일로 저장
+		pMtrl->Save(CONTENT_PATH + pMtrl->GetKey());
 	}
 
 	SetMaterial(pMtrl);
@@ -166,6 +168,11 @@ void CTileRender::CreateMaterial()
 
 void CTileRender::SaveToLevelFile(FILE* _File)
 {
+	/******************************************************
+	* SpriteInfo는 Load 과정에서 SetTileMap으로
+	* 파일에 저장된 TileMap 정보로 멤버 벡터에 저장하기 때문에
+	* m_vecSpriteInfo는 파일에 저장하지 않습니다.
+	******************************************************/
 	CRenderComponent::SaveToLevelFile(_File);
 
 	SaveAssetRef(_File, m_TileMap.Get());

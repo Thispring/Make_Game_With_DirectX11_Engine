@@ -24,6 +24,8 @@ public:
     //=========
     const Light2DInfo& GetInfo() { return m_Info; }
     
+    // 멤버로 들고있는 Light2DInfo 구조체의 멤버에 접근해야하기 때문에
+    // GET_SET 매크로 사용 X
     LIGHT_TYPE GetLightType() { return m_Info.Type; }
     void SetLightType(LIGHT_TYPE _Type) { m_Info.Type = _Type; }
 

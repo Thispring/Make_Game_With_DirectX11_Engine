@@ -28,8 +28,7 @@ public:
     virtual void CreateMaterial() = 0;
 
     // 추상 클래스는 Clone 구현 X
-
-    
+    // 
     virtual void SaveToLevelFile(FILE* _File) override;
     virtual void LoadFromLevelFile(FILE* _File) override;
 

@@ -5,6 +5,7 @@
 class CCollider2D;
 typedef void(CScript::* COLLISION_EVENT)(CCollider2D*, CCollider2D*);
 
+// 스크립트에서 발생한 충돌 이벤트
 struct COLLISION_DELEGATE
 {
     CScript*        Inst;
@@ -49,8 +50,8 @@ public:
     // 상속 멤버 함수
     //=============
     virtual void FinalTick() override;
-    CLONE(CCollider2D);
 
+    CLONE(CCollider2D);
     virtual void SaveToLevelFile(FILE* _File) override;
     virtual void LoadFromLevelFile(FILE* _File) override;
 
