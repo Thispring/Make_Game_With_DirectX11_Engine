@@ -66,12 +66,66 @@ void EditorMgr::Tick()
     //==========
     // Editor UI
     //==========
-    // Start the Dear ImGui frame
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    // --- DockSpace host 생성 (메인 뷰포트를 전체로 사용) ---
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+    {
+        ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->WorkPos);
+        ImGui::SetNextWindowSize(viewport->WorkSize);
+        ImGui::SetNextWindowViewport(viewport->ID);
+
+        ImGuiWindowFlags host_window_flags = ImGuiWindowFlags_NoTitleBar
+            | ImGuiWindowFlags_NoCollapse
+            | ImGuiWindowFlags_NoResize
+            | ImGuiWindowFlags_NoMove
+            | ImGuiWindowFlags_NoBringToFrontOnFocus
+            | ImGuiWindowFlags_NoNavFocus
+            | ImGuiWindowFlags_MenuBar;
+
+        // Host 창이 다른 윈도우에 도킹되지 않도록 하는 플래그
+        host_window_flags |= ImGuiWindowFlags_NoDocking;
+
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        ImGui::Begin("MainDockHost", nullptr, host_window_flags);
+        ImGui::PopStyleVar(2);
+
+        // 실제 DockSpace 생성
+        ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+
+        ImGui::End();
+    }
+    // --- DockSpace host 끝 ---
+
     m_FocusedUI = nullptr;
+
+    // Scene viewport: display RenderMgr's offscreen SRV inside an ImGui window
+    if (ImGui::Begin("SceneViewport"))
+    {
+        ImVec2 avail = ImGui::GetContentRegionAvail();
+        // Ensure RenderMgr's offscreen target matches viewport size
+        UINT w = (UINT)avail.x > 0 ? (UINT)avail.x : 1;
+        UINT h = (UINT)avail.y > 0 ? (UINT)avail.y : 1;
+        RenderMgr::GetInst()->EnsureSceneRenderTarget(w, h);
+
+        ID3D11ShaderResourceView* srv = RenderMgr::GetInst()->GetSceneSRV();
+        if (srv)
+        {
+            // ImGui uses top-left at (0,0), DirectX SRV is top-left as well; flip vertically in UV to correct orientation
+            ImGui::Image((void*)srv, avail, ImVec2(0, 0), ImVec2(1, 1));
+        }
+        else
+        {
+            ImGui::Text("Scene not available");
+        }
+    }
+    ImGui::End();
     
     // DemoUI 활성/비활성화
     // Enable/Disable DemoUI

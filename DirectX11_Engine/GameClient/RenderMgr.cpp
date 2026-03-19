@@ -27,6 +27,89 @@ void RenderMgr::Init()
 	m_DbgObj->MeshRender()->SetMaterial(FIND(AMaterial, L"Material\\DbgMtrl.mtrl"));
 
 	m_Light2DBuffer = new StructuredBuffer;
+
+    // Initialize scene render target size to device resolution
+	Vec2 res = Device::GetInst()->GetRenderResolution();
+	m_SceneWidth = (UINT)res.x;
+	m_SceneHeight = (UINT)res.y;
+
+	// Create offscreen render target for editor viewport
+	D3D11_TEXTURE2D_DESC desc = {};
+	desc.Width = m_SceneWidth;
+	desc.Height = m_SceneHeight;
+	desc.MipLevels = 1;
+	desc.ArraySize = 1;
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.SampleDesc.Count = 1;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+
+	HRESULT hr = DEVICE->CreateTexture2D(&desc, nullptr, m_pSceneTex.GetAddressOf());
+	if (SUCCEEDED(hr))
+	{
+		DEVICE->CreateRenderTargetView(m_pSceneTex.Get(), nullptr, m_pSceneRTV.GetAddressOf());
+		DEVICE->CreateShaderResourceView(m_pSceneTex.Get(), nullptr, m_pSceneSRV.GetAddressOf());
+	}
+
+    // Depth buffer for offscreen
+	D3D11_TEXTURE2D_DESC ddesc = {};
+	ddesc.Width = m_SceneWidth;
+	ddesc.Height = m_SceneHeight;
+	ddesc.MipLevels = 1;
+	ddesc.ArraySize = 1;
+	ddesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	ddesc.SampleDesc.Count = 1;
+	ddesc.Usage = D3D11_USAGE_DEFAULT;
+	ddesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+    DEVICE->CreateTexture2D(&ddesc, nullptr, m_pSceneDepthTex.GetAddressOf());
+	DEVICE->CreateDepthStencilView(m_pSceneDepthTex.Get(), nullptr, m_pSceneDSV.GetAddressOf());
+}
+
+// Ensure offscreen render target matches requested size. Recreate if needed.
+void RenderMgr::EnsureSceneRenderTarget(UINT _Width, UINT _Height)
+{
+	if (_Width == m_SceneWidth && _Height == m_SceneHeight && m_pSceneTex)
+		return;
+
+	m_pSceneSRV = nullptr;
+	m_pSceneRTV = nullptr;
+	m_pSceneDSV = nullptr;
+	m_pSceneTex = nullptr;
+	m_pSceneDepthTex = nullptr;
+
+	m_SceneWidth = _Width;
+	m_SceneHeight = _Height;
+
+	D3D11_TEXTURE2D_DESC desc = {};
+	desc.Width = m_SceneWidth;
+	desc.Height = m_SceneHeight;
+	desc.MipLevels = 1;
+	desc.ArraySize = 1;
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.SampleDesc.Count = 1;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+
+	HRESULT hr = DEVICE->CreateTexture2D(&desc, nullptr, m_pSceneTex.GetAddressOf());
+	if (SUCCEEDED(hr))
+	{
+		DEVICE->CreateRenderTargetView(m_pSceneTex.Get(), nullptr, m_pSceneRTV.GetAddressOf());
+		DEVICE->CreateShaderResourceView(m_pSceneTex.Get(), nullptr, m_pSceneSRV.GetAddressOf());
+	}
+
+	D3D11_TEXTURE2D_DESC ddesc = {};
+	ddesc.Width = m_SceneWidth;
+	ddesc.Height = m_SceneHeight;
+	ddesc.MipLevels = 1;
+	ddesc.ArraySize = 1;
+	ddesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	ddesc.SampleDesc.Count = 1;
+	ddesc.Usage = D3D11_USAGE_DEFAULT;
+	ddesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+	DEVICE->CreateTexture2D(&ddesc, nullptr, m_pSceneDepthTex.GetAddressOf());
+	DEVICE->CreateDepthStencilView(m_pSceneDepthTex.Get(), nullptr, m_pSceneDSV.GetAddressOf());
 }
 
 void RenderMgr::Progress()
@@ -71,11 +154,22 @@ void RenderMgr::Progress()
 
 void RenderMgr::Render_Start()
 {
-	// 타겟 설정
-	Device::GetInst()->OMSetTarget();
-
-	// 렌더타겟 클리어
-	Device::GetInst()->ClearTarget();
+    // Bind offscreen render target for scene rendering
+	if (m_pSceneRTV)
+	{
+		ID3D11RenderTargetView* rtvs[] = { m_pSceneRTV.Get() };
+		CONTEXT->OMSetRenderTargets(1, rtvs, m_pSceneDSV.Get());
+		// Clear offscreen
+		const FLOAT clearColor[4] = { 0.f, 0.f, 0.f, 1.f };
+		CONTEXT->ClearRenderTargetView(m_pSceneRTV.Get(), clearColor);
+		CONTEXT->ClearDepthStencilView(m_pSceneDSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	}
+	else
+	{
+		// Fallback to default backbuffer
+		Device::GetInst()->OMSetTarget();
+		Device::GetInst()->ClearTarget();
+	}
 
 	// 등록받은 Light2D의 광원 정보를 구조화 버퍼에 담는다.
 	// 구조화버퍼를 특정 t 레지스터에 바인딩 한다.
@@ -116,6 +210,10 @@ void RenderMgr::Render_End()
 	// (매 프레임 마다 호출 되므로)
 	m_Light2DBuffer->Clear();
 	m_vecLight2D.clear();
+
+	// After scene rendering to offscreen, copy/resolve to main backbuffer is handled by Present.
+	// Ensure main backbuffer is set again so ImGui can render on top in EditorMgr.
+	Device::GetInst()->OMSetTarget();
 }
 
 

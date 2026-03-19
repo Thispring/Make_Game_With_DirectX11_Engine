@@ -18,6 +18,15 @@ private:
 	Ptr<StructuredBuffer>	m_Light2DBuffer;			// 광원의 데이터를 입력받을 구조화 버퍼
 	
 	bool					m_IsDebugRender;			// 디버그 렌더 기능 On / Off
+
+	// Offscreen render target for scene (displayed in ImGui)
+	Microsoft::WRL::ComPtr<ID3D11Texture2D>          m_pSceneTex;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>  m_pSceneRTV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>m_pSceneSRV;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D>          m_pSceneDepthTex;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_pSceneDSV;
+	UINT                                            m_SceneWidth;
+	UINT                                            m_SceneHeight;
 	
 	//=================
 	// private 멤버 함수
@@ -32,6 +41,7 @@ public:
 	//=========
 	void Init();
 	void Progress();
+	void EnsureSceneRenderTarget(UINT _Width, UINT _Height);
 	
 	void RegisterCamera(Ptr<CCamera> _Cam) { m_MainCam = _Cam; };
 	void RegisterEditorCamera(Ptr<CCamera> _Cam) { m_EditorCam = _Cam; };
@@ -43,4 +53,6 @@ public:
 	// Get, Set
 	//=========
 	Ptr<CCamera> GetPOVCamera() { return m_MainCam; }
+    // Return shader resource view for ImGui display
+	ID3D11ShaderResourceView* GetSceneSRV() { return m_pSceneSRV.Get(); }
 };

@@ -52,7 +52,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     hInst = hInstance;
 
     // Engine 초기화    
-    if (FAILED(Engine::GetInst()->Init(hInstance, 1600, 900, true)))
+    if (FAILED(Engine::GetInst()->Init(hInstance, 1920, 1080, true)))
         return 0;
 
     /*****************************************************************************************************************
