@@ -30,8 +30,7 @@ void AMaterial::Binding()
 		m_Tex[i]->Binding(i);
 		m_Const.IsTex[0] = 1;
 	}
-
-	Device::GetInst()->GetCB(CB_TYPE::MATERIAL)->SetData(&m_Const);
+	Device::GetInst()->GetCB(CB_TYPE::MATERIAL)->SetData(&m_Const); 
 	Device::GetInst()->GetCB(CB_TYPE::MATERIAL)->Binding();
 }
 

@@ -541,9 +541,9 @@ void AssetMgr::CreateEngineTileMap(vector<Ptr<ASprite>>& _vecSprite, wstring _Ti
 	pTileMap->SetTileSize(_TileSize);
 
 	int Count = 0;
-	for (int i = 0; i < _Col; ++i)
+	for (int i = 0; i < _Row; ++i)
 	{
-		for (int j = 0; j < _Row; ++j)
+		for (int j = 0; j < _Col; ++j)
 		{
 			pTileMap->SetSprite(i, j, _vecSprite[Count]);
 			Count++;

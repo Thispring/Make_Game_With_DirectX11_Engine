@@ -62,14 +62,13 @@ void CTileRender::Render()
 	{
 		for (int j = 0; j < Row; ++j)
 		{
-			GetMaterial()->SetScalar(VEC2_0, m_vecSpriteInfo[Count].LeftTop);
-			GetMaterial()->SetScalar(VEC2_1, m_vecSpriteInfo[Count].Slice);
+			GetMaterial()->SetScalar(VEC2_0, m_vecSpriteInfo[i].LeftTop);
+			GetMaterial()->SetScalar(VEC2_1, m_vecSpriteInfo[i].Slice);
 			GetMaterial()->Binding();
 			GetMesh()->Render();
 			Count++;
 		}
 	}
-
 	m_Buffer->Clear();
 }
 
