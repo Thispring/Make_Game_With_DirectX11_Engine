@@ -11,17 +11,6 @@ ELight2DUI::~ELight2DUI()
 {
 }
 
-static void HelpMarker(const char* desc)
-{
-    ImGui::TextDisabled("(?)");
-    if (ImGui::BeginItemTooltip())
-    {
-        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-        ImGui::TextUnformatted(desc);
-        ImGui::PopTextWrapPos();
-        ImGui::EndTooltip();
-    }
-};
 
 void ELight2DUI::Tick_UI()
 {
@@ -39,6 +28,7 @@ void ELight2DUI::Tick_UI()
         if (GetTarget()->Light2D() == nullptr)
             return;
 
+
         // Light Type
         ImGui::Text("LightType");
         ImGui::SameLine();
@@ -50,6 +40,7 @@ void ELight2DUI::Tick_UI()
         {
             GetTarget()->Light2D()->SetLightType(LightType);
         }
+
 
         // Light Color
         ImGui::SetNextItemWidth(200);
@@ -63,11 +54,30 @@ void ELight2DUI::Tick_UI()
             }
         }
 
+
         // Light Dir
         ImGui::SetNextItemWidth(200);
         ImGui::Text("LightDir");
         ImGui::SameLine(150);
         Vec3 vDir = GetTarget()->Light2D()->GetLightDir();
+        if (ImGui::DragFloat3("##LightDir", vDir))
+        {
+            GetTarget()->Light2D()->SetLightDir(vDir);
+        }
+
+
+        // Light Ambient
+        ImGui::SetNextItemWidth(200);
+        ImGui::Text("LightAmbient");
+        ImGui::SameLine(150);
+        Vec3 vAmb = GetTarget()->Light2D()->GetAmbient();
+        if (ImGui::DragFloat3("##LightAmbient", vAmb))
+        {
+            GetTarget()->Light2D()->SetAmbient(vAmb);
+        }
+        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+            "Only available for Directional Light.");
+        SPACING_UI(3);
 
         // Light Radius
         ImGui::SetNextItemWidth(200);
@@ -78,6 +88,9 @@ void ELight2DUI::Tick_UI()
         {
             GetTarget()->Light2D()->SetRadius(radius);
         }
+        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+            "Only available for Point, Spot Light.");
+        SPACING_UI(3);
 
         // Light Angle
         ImGui::SetNextItemWidth(200);
@@ -88,26 +101,11 @@ void ELight2DUI::Tick_UI()
         {
             GetTarget()->Light2D()->SetAngle(angle);
         }
+        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+            "Only available for Spot Light.");
+        SPACING_UI(3);
     }
 
     ImGui::Dummy(Vec2(0.0f, 1000.0f));
 
-
-	/*
-    ImGui::Text("Rotation");
-    ImGui::SameLine(150);
-    Vec3 vDegree = vRot * 180 / XM_PI;
-    if (ImGui::DragFloat3("##ROTATION", vDegree))
-    {
-        vRot = vDegree * (XM_PI / 180.f);
-        GetTarget()->Transform()->SetRelativeRot(vRot);
-    }
-
-    Vec3 GetLightDir() { return m_Info.LightDir; }
-    void SetLightDir(Vec3 _Dir) { m_Info.LightDir = _Dir; }
-
-    Vec3 GetAmbient() { return m_Info.Ambient; }
-    void SetAmbient(Vec3 _Amb) { m_Info.Ambient = _Amb; }
-
-    */
 }

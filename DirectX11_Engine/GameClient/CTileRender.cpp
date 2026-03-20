@@ -50,26 +50,39 @@ void CTileRender::Render()
 	m_Buffer->Binding(20);
 
 	GetMaterial()->SetTexture(TEX_0, m_TileMap->GetAtlas());
+	// NOTE(26-03-20): Col, Row를 .fx로 전달할때 값이 어떻게 전달되며,
+	// .fx에서 어떻게 값이 쓰이는지 질문하기
+	GetMaterial()->SetScalar(INT_0, m_TileMap->GetCol());
+	GetMaterial()->SetScalar(INT_1, m_TileMap->GetRow());
+	GetMaterial()->Binding();
+		
+	GetMesh()->Render();
 
-	// m_TileMap에 전달받은 Row, Col값 만큼 for반복을하여,
-	// SpriteInfo 인덱스별로 UV 정보를 전달합니다.
-	UINT Row = m_TileMap->GetRow();
-	UINT Col = m_TileMap->GetCol();
-	int Count = 0;
-	GetMaterial()->SetScalar(INT_0, m_TileMap->GetRow());
-	GetMaterial()->SetScalar(INT_1, m_TileMap->GetCol());
-	for (int i = 0; i < Col; ++i)
-	{
-		for (int j = 0; j < Row; ++j)
-		{
-			GetMaterial()->SetScalar(VEC2_0, m_vecSpriteInfo[i].LeftTop);
-			GetMaterial()->SetScalar(VEC2_1, m_vecSpriteInfo[i].Slice);
-			GetMaterial()->Binding();
-			GetMesh()->Render();
-			Count++;
-		}
-	}
 	m_Buffer->Clear();
+
+
+	//// m_TileMap에 전달받은 Row, Col값 만큼 for반복을하여,
+	//// SpriteInfo 인덱스별로 UV 정보를 전달합니다.
+	//UINT Row = m_TileMap->GetRow();
+	//UINT Col = m_TileMap->GetCol();
+	//int Count = 0;
+	////GetMaterial()->SetScalar(INT_0, m_TileMap->GetRow());
+	////GetMaterial()->SetScalar(INT_1, m_TileMap->GetCol());
+	//GetMaterial()->SetTexture(TEX_0, m_TileMap->GetAtlas());
+	//GetMaterial()->SetScalar(INT_0, m_TileMap->GetCol());
+	//GetMaterial()->SetScalar(INT_1, m_TileMap->GetRow());
+	//for (int i = 0; i < Col; ++i)
+	//{
+	//	for (int j = 0; j < Row; ++j)
+	//	{
+	//		GetMaterial()->SetScalar(VEC2_0, m_vecSpriteInfo[Count].LeftTop);
+	//		GetMaterial()->SetScalar(VEC2_1, m_vecSpriteInfo[Count].Slice);
+	//		GetMaterial()->Binding();
+	//		GetMesh()->Render();
+	//		Count++;
+	//	}
+	//}
+	//m_Buffer->Clear();
 }
 
 
@@ -87,6 +100,9 @@ void CTileRender::SetTileMap(Ptr<ATileMap> _TileMap)
 	UINT Row = m_TileMap->GetRow();
 	UINT Col = m_TileMap->GetCol();
 	Vec2 TileSize = m_TileMap->GetTileSize();
+
+	// 수정: X는 타일 가로 * 열(Col), Y는 타일 세로 * 행(Row)
+	//Vec3 vScale = Vec3(TileSize.x * (float)Col, TileSize.y * (float)Row, 1.f);
 	Vec3 vScale = Vec3(TileSize.x * (float)Row, TileSize.y * (float)Col, 1.f);
 	Transform()->SetRelativeScale(vScale);
 

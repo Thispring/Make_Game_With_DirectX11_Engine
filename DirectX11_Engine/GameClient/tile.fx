@@ -3,9 +3,6 @@
 
 #include "value.fx"
 
-#define AtlasTex    g_tex_0
-#define ROW         g_int_0
-#define COL         g_int_1
 
 struct SpriteInfo
 {
@@ -14,6 +11,9 @@ struct SpriteInfo
 };
 StructuredBuffer<SpriteInfo> g_Buffer : register(t20);
 
+#define AtlasTex    g_tex_0
+#define ROW         g_int_0
+#define COL         g_int_1
 
 struct VS_IN
 {
@@ -40,6 +40,7 @@ VS_OUT VS_Tile(VS_IN _input)
      
     output.vPosition = vProj;
     output.vWorld = vWorld;
+
     output.vUV = _input.vUV * float2(COL, ROW);
     
     return output;
@@ -50,6 +51,7 @@ float4 PS_Tile(VS_OUT _input) : SV_Target
 {
     int2 ColRow = int2(_input.vUV);
     int Idx = ColRow.y * COL + ColRow.x;
+    
     
     float2 vSpriteUV = frac(_input.vUV) * g_Buffer[Idx].Slice + g_Buffer[Idx].LeftTop;
     float4 vColor = AtlasTex.Sample(g_sam_1, vSpriteUV);

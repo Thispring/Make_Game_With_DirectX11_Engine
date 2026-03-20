@@ -541,11 +541,16 @@ void AssetMgr::CreateEngineTileMap(vector<Ptr<ASprite>>& _vecSprite, wstring _Ti
 	pTileMap->SetTileSize(_TileSize);
 
 	int Count = 0;
-	for (int i = 0; i < _Row; ++i)
+	// Col = 세로
+	// Row = 가로
+	// 반복문 작성 전에 꼭 확인하기
+	for (int j = 0; j < _Row; ++j)
 	{
-		for (int j = 0; j < _Col; ++j)
+		for (int i = 0; i < _Col; ++i)
 		{
-			pTileMap->SetSprite(i, j, _vecSprite[Count]);
+			// NOTE(26-03-20): SetSprite 인자를 잘못 전달하고 있는것 확인
+			// SetSprite(row, col,... )
+			pTileMap->SetSprite(j, i, _vecSprite[Count]);
 			Count++;
 		}
 	}

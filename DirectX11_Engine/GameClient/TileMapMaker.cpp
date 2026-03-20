@@ -103,6 +103,7 @@ void TileMapMaker::Tick_UI()
 	if (ImGui::DragInt("##ROW", &m_Row, 1.f, 0, INT_MAX))
 	{
 		SetRow(m_Row);
+		m_IsShowInit = false;	// 값 변경이 있으면 vector 초기화
 	}
 	IMGUI_REQUIRED()
 	SPACING_UI(5);
@@ -115,6 +116,7 @@ void TileMapMaker::Tick_UI()
 	if (ImGui::DragInt("##COL", &m_Col, 1.f, 0, INT_MAX))
 	{
 		SetCol(m_Col);
+		m_IsShowInit = false;	// 값 변경이 있으면 vector 초기화
 	}
 	IMGUI_REQUIRED()
 	SPACING_UI(5);
@@ -126,6 +128,7 @@ void TileMapMaker::Tick_UI()
 	if (ImGui::DragFloat2("##TILESIZE", m_TileSize, 1.f, 0.f, FLT_MAX))
 	{
 		SetTileSize(m_TileSize);
+		m_IsShowInit = false;	// 값 변경이 있으면 vector 초기화
 	}
 	IMGUI_REQUIRED()
 	SPACING_UI(5);
@@ -157,6 +160,7 @@ void TileMapMaker::Tick_UI()
 		// 1번만 초기화, 이후 clear가 없어, Row, Col이 변할 시 예외상황에 대한 코드 작성하기
 		if (!m_IsShowInit)
 		{
+			m_vecSprite.clear();
 			for (int i = 0; i < m_Col; ++i)
 			{
 				for (int j = 0; j < m_Row; ++j)
@@ -165,9 +169,6 @@ void TileMapMaker::Tick_UI()
 					Ptr<ASprite> pSprite = (ASprite*)pAsset.Get();
 					m_vecSprite.push_back(pSprite);
 				}
-				Ptr<Asset> pAsset = AssetMgr::GetInst()->FindAsset(ASSET_TYPE::SPRITE, L"Sprite\\grid.sprite");
-				Ptr<ASprite> pSprite = (ASprite*)pAsset.Get();
-				m_vecSprite.push_back(pSprite);
 			}
 			
 			m_IsShowInit = true;

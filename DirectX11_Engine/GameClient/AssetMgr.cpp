@@ -84,10 +84,6 @@ void AssetMgr::LoadContent()
 		//	break;
 		// 
 		// Level의 경우 생성 시점을 고려(Level에 있는 Object들중 RenderComponent가, Asset Loading 전에 불려지고 있음)
-		case ASSET_TYPE::LEVEL:
-			Path = (wstring)CONTENT_PATH + L"Level\\";
-			ext = ".lv";
-			break;
 		case ASSET_TYPE::SPRITE:
 			Path = (wstring)CONTENT_PATH + L"Sprite\\";
 			ext = ".sprite";
@@ -103,6 +99,10 @@ void AssetMgr::LoadContent()
 		case ASSET_TYPE::PREFAB:
 			Path = (wstring)CONTENT_PATH + L"Prefab\\";
 			ext = ".pref";
+			break;
+		case ASSET_TYPE::LEVEL:
+			Path = (wstring)CONTENT_PATH + L"Level\\";
+			ext = ".lv";
 			break;
 		case ASSET_TYPE::END:
 			
