@@ -28,14 +28,15 @@ void EMeshUI::Tick_UI()
 	UINT Idx = pMesh->GetIdxCount();
 
 	ImGui::Text(Name.c_str());
-	ImGui::SameLine();
+	SPACING_UI(3);
+
 	ImGui::Text("Vtx Count ");
-	ImGui::SameLine();
-	ImGui::DragInt("##VTX", (int*)&Vtx);
-	ImGui::Spacing();
-	ImGui::Text(Name.c_str());
-	ImGui::SameLine();
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
+	ImGui::DragInt("##VTX", (int*)&Vtx, 1.0f, 0, 0, "%d", ImGuiInputTextFlags_ReadOnly);
+	SPACING_UI(3);
+
 	ImGui::Text("Index Count ");
-	ImGui::SameLine();
-	ImGui::DragInt("##IDX", (int*)&Idx);
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
+	ImGui::DragInt("##IDX", (int*)&Idx, 1.0f, 0, 0, "%d", ImGuiInputTextFlags_ReadOnly);
+	SPACING_UI(3);
 }

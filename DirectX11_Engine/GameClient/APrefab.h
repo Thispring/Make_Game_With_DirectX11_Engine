@@ -29,6 +29,7 @@ public:
     // Get, Set
     //=========
     void SetObject(Ptr<GameObject> _Object) { m_ProtoObj = _Object; }
+    Ptr<GameObject> GetGameObject() { return m_ProtoObj; }
 
 
     //============

@@ -47,10 +47,9 @@ void ELight2DUI::Tick_UI()
         Vec3 vColor = GetTarget()->Light2D()->GetLightColor();
         ImGui::SeparatorText("LightColor/Pickers");
         {
-            static float col1[3] = { 1.0f, 0.0f, 0.2f };
-            if (ImGui::ColorEdit3("color 1", col1))
+            if (ImGui::ColorEdit3("color 1", vColor))
             {
-                GetTarget()->Light2D()->SetLightColor(Vec3(col1));
+                GetTarget()->Light2D()->SetLightColor(vColor);
             }
         }
 

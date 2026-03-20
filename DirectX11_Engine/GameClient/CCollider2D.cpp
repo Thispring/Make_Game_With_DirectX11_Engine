@@ -80,6 +80,10 @@ void CCollider2D::AddDynamicEndOverlap(CScript* _Inst, COLLISION_EVENT _MemFunc)
 
 void CCollider2D::FinalTick()
 {
+	// 30번 인덱스면 비활성화
+	if (GetOwner()->GetLayerIdx() == 30)
+		return;
+
 	/*********************************************************
 	* 현재 구조에서는 Render 컴포넌트는 하나만 가질 수 있다.
 	* 하지만 개발 시 충돌체의 크기를 눈으로 보면서 작업해야하기 때문에

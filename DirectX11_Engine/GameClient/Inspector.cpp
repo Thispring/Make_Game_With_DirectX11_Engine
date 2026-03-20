@@ -71,6 +71,17 @@ void Inspector::Tick_UI()
 
 	#pragma region Layer Index
 	ImGui::Text("Object Layer Index");
+	SPACING_UI(3);
+
+	// Layer 이름 표시
+	Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
+	Layer* pLayer = pLevel->GetLayer();
+	int tIdx = GetTargetObject()->GetLayerIdx();
+	//pLayer[tIdx].GetName();
+	string layerName = string(pLayer[tIdx].GetName().begin(), pLayer[tIdx].GetName().end());
+	ImGui::Text(layerName.c_str());
+
+	// Layer 번호 표시
 	int layerIdx = GetTargetObject()->GetLayerIdx();
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
 	ImGui::InputInt("##LAYERIDX", &layerIdx, 0 , 0);
@@ -95,7 +106,22 @@ void Inspector::Tick_UI()
 	}
 	SPACING_UI(5);
 	ImGui::Separator();
+	#pragma endregion
+
+	#pragma region GameObject 비활성화 버튼
+	// 버튼 클릭 시, 비활성 Layer 30으로 GameObject를 등록시킵니다.
+	// GameObject 클래스에 이전 Layer 번호를 저장하는 m_PrevLayerNumber를 추가하고
+	// 활성화를 다시 시키면 PrevLayer로 돌아가게 합니다.
+	// 
+	// 위 UI에서 Layer 변경 시 30이 들어온다면
+	// 해당 방법으로는 바꿀 수 없다는 예외를 둡니다.
+	// 각 Component의 Tick에서 GetOwner의 Layer가 30이라면
+	// Tick을 중지하는 식으로 구현합니다. Render는 MainCamera의 
+	// 특정 Layer 렌더링 비활성화로 구현하며,
+	// 각 Render Component 코드에서 예외를 두지 않습니다.
+
 	#pragma endregion	
+
 
 	#pragma region Add Component 버튼 
 	vector<UINT> vecComType = {};

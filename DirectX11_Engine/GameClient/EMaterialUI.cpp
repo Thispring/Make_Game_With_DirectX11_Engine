@@ -103,6 +103,7 @@ void EMaterialUI::Tick_UI()
 		// 생성된 파일경로가 파일의 위치이자, Key 값으로 사용
 		wstring FilePath = CONTENT_PATH + pMtrl->GetKey();
 		pMtrl->Save(FilePath);
+		ShowSaveMessage(pMtrl->GetKey());
 	}
 }
 

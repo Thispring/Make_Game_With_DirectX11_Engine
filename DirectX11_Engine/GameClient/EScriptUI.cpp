@@ -98,6 +98,8 @@ void EScriptUI::Tick_UI()
 			break;
 		case SCRIPT_PARAM::MATERIAL:
 			break;
+		case SCRIPT_PARAM::STRING:
+			break;
 		default:
 			break;
 		}

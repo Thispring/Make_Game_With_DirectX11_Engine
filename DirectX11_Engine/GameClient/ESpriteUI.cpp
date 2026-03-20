@@ -2,6 +2,7 @@
 #include "ESpriteUI.h"
 #include "ASprite.h"
 #include "ATexture.h"
+#include "PathMgr.h"
 
 ESpriteUI::ESpriteUI()
 	: EAssetUI(ASSET_TYPE::SPRITE)
@@ -167,6 +168,17 @@ void ESpriteUI::Tick_UI()
 		, ImVec2(200, 200)
 		, LeftTopUV, LeftTopUV + SliceUV
 		, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+
+
+	// Save Button
+	// 버튼을 누르면 해당 경로에 파일 생성
+	if (ImGui::Button("Save##SpriteSaveBtn"))
+	{
+		// 생성된 파일경로가 파일의 위치이자, Key 값으로 사용
+		wstring FilePath = CONTENT_PATH + pSprite->GetKey();
+		pSprite->Save(FilePath);
+		ShowSaveMessage(pSprite->GetKey());
+	}
 
 }
 

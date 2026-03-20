@@ -173,4 +173,14 @@ void ELevelUI::Tick_UI()
 
     #pragma endregion   
 
+
+    // Save Button
+    // 버튼을 누르면 해당 경로에 파일 생성
+    if (ImGui::Button("Save##LevelSaveBtn"))
+    {
+        // 생성된 파일경로가 파일의 위치이자, Key 값으로 사용
+        wstring FilePath = CONTENT_PATH + pLevel->GetKey();
+        pLevel->Save(FilePath);
+        ShowSaveMessage(pLevel->GetKey());
+    }
 }

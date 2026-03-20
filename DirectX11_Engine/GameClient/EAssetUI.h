@@ -10,8 +10,14 @@ private:
     const ASSET_TYPE  m_AssetType;
     Ptr<Asset>        m_TargetAsset;
 
+    std::chrono::steady_clock::time_point   m_MessageStartTime;
+    wstring                                 m_SaveMessage;
+    bool                                    m_IsShowSaveMessage;
+
 protected:
     void OutputTitle();
+    void ShowSaveMessage(const wstring& _Msg);
+    void UpdateMessage();
 
 public:
     //=========

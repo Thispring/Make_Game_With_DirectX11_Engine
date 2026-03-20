@@ -176,6 +176,7 @@ void GameObjectMaker::Tick_UI()
 	OutputTitle("Layer Index Setting", ColorConvertIntToVec4(4.f, 135.f, 35.f));
 	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
 	// Layer 번호 추가되면 DragInt 최대값 수정
+	// 
 	if (ImGui::DragInt("##LAYERIDX", &m_LayerIdx, 1.f, 0, MAX_LAYER))
 	{
 		SetLayerIdx(m_LayerIdx);
