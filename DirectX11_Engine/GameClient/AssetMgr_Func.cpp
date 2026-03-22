@@ -538,7 +538,7 @@ void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, 
 	}
 
 	AddAsset(pFlipbook->GetName(), pFlipbook.Get());
-	// Save => 파일 형태로 등록
+	// Save => 파일 형태로 등록 
 	pFlipbook->Save(CONTENT_PATH + pFlipbook->GetKey());	// 경로가 곧 Key 값
 	#pragma endregion
 }
