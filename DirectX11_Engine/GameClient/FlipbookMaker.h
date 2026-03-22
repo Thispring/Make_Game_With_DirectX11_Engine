@@ -14,6 +14,8 @@ private:
     int         m_StartIdx;
     int         m_EndIdx;
 
+    bool        m_IsReverse;    // 인덱스 순서 뒤집기
+
     //=================
     // private 멤버 함수
     //=================
@@ -38,6 +40,7 @@ public:
     GET_SET(wstring, FlipbookName);
     GET_SET(int, StartIdx);
     GET_SET(int, EndIdx);
+    GET_SET(bool, IsReverse);
 
 
     //============

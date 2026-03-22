@@ -14,6 +14,7 @@ FlipbookMaker::FlipbookMaker()
 	, m_FlipbookName{}
 	, m_StartIdx(0)
 	, m_EndIdx(0)
+	, m_IsReverse(false)
 {
 }
 
@@ -27,6 +28,7 @@ void FlipbookMaker::ClearSetting()
 	m_FlipbookName = {};
 	m_StartIdx = 0;
 	m_EndIdx = 0;
+	m_IsReverse = false;
 }
 
 void FlipbookMaker::Tick_UI()
@@ -66,7 +68,7 @@ void FlipbookMaker::Tick_UI()
 		if (ImGui::Button("OK", ImVec2(120, 0)))
 		{
 			// 저장 및 초기화
-			AssetMgr::GetInst()->CreateEngineFlipbook(m_SpriteName, m_FlipbookName, m_StartIdx, m_EndIdx);
+			AssetMgr::GetInst()->CreateEngineFlipbook(m_SpriteName, m_FlipbookName, m_StartIdx, m_EndIdx, m_IsReverse);
 			ClearSetting();
 			ImGui::CloseCurrentPopup();
 		}
@@ -161,6 +163,20 @@ void FlipbookMaker::Tick_UI()
 	IMGUI_REQUIRED()
 	ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
 		"Number of flipbook end point");
+	SPACING_UI(5);
+	ImGui::Separator();
+	#pragma endregion
+
+	#pragma region IsReverse
+	OutputTitle("Reverse Index", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
+	if (ImGui::Checkbox("##REVERSEIDX", &m_IsReverse))
+	{
+		SetIsReverse(m_IsReverse);
+	}
+	IMGUI_OPTIONAL()
+		ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+			"Check to reverse the index.\nThis automatically sets a higher StartIdx and a lower EndIdx.");
 	SPACING_UI(5);
 	ImGui::Separator();
 	#pragma endregion

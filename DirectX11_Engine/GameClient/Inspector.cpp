@@ -119,6 +119,8 @@ void Inspector::Tick_UI()
 	// Tick을 중지하는 식으로 구현합니다. Render는 MainCamera의 
 	// 특정 Layer 렌더링 비활성화로 구현하며,
 	// 각 Render Component 코드에서 예외를 두지 않습니다.
+	static bool check = true;
+	ImGui::Checkbox("checkbox", &check);
 
 	#pragma endregion	
 

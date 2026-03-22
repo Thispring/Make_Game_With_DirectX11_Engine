@@ -413,14 +413,14 @@ void AssetMgr::CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartL
 		// 10 이하이면 "0%d"로 네이밍 ex) 02.sprite
 		wstring spritePath = {};
 
-		// _Row, _Cow이 디폴트로 들어왔을 때
+		// _Row, _Cow이 디폴트로 들어왔을 때 -> 00 2자리 네이밍 사용
 		if (i < 10 && _Row == 0 && _Col == 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(i) + L".sprite";
 		else spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(i) + L".sprite";
 
-		// _Row, _Cow이 정해졌다는 건, 100개 이상의 sprite 제작
+		// _Row, _Cow이 정해졌다는 건, 100개 이상의 sprite 제작 -> 000 3자리 네이밍 사용
 		if (i < 10 && i >= 0 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(0) + to_wstring(i) + L".sprite";
-		else if (i < 100 && i >= 10) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(i) + L".sprite";
-		else if (i >= 100) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(i) + L".sprite";
+		else if (i < 100 && i >= 10 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(i) + L".sprite";
+		else if (i >= 100 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(i) + L".sprite";
 
 		pSprite = new ASprite;
 		pSprite->SetName(spritePath);
@@ -499,7 +499,7 @@ void AssetMgr::CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wst
 	#pragma endregion
 }
 
-void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Start, int _End)
+void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Start, int _End, bool _IsReverse)
 {
 	#pragma region Flipbook 생성하는 방법
 	// Flipbook 객체 생성 후, 이름을 설정하고
@@ -510,15 +510,33 @@ void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, 
 	_FlipbookName = L"Flipbook\\" + _FlipbookName + L".flip";
 	pFlipbook->SetName(_FlipbookName);
 
-	for (int i = _Start; i < _End; ++i)
+	if (_IsReverse)
 	{
-		wstring spritePath = {};
+		// 반복문 순서를 거꾸로 뒤집어서 Sprite 추가
+		// 큰 값이 시작점이 되고, 작은 값이 조건이 됨
+		for (int i = _Start; i >= _End; --i)
+		{
+			wstring spritePath = {};
 
-		if (i < 10) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(i) + L".sprite";
-		else spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(i) + L".sprite";
+			if (i < 10) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(i) + L".sprite";
+			else spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(i) + L".sprite";
 
-		pFlipbook->AddSprite(LOAD(ASprite, spritePath));
+			pFlipbook->AddSprite(LOAD(ASprite, spritePath));
+		}
 	}
+	else
+	{
+		for (int i = _Start; i < _End; ++i)
+		{
+			wstring spritePath = {};
+
+			if (i < 10) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(i) + L".sprite";
+			else spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(i) + L".sprite";
+
+			pFlipbook->AddSprite(LOAD(ASprite, spritePath));
+		}
+	}
+
 	AddAsset(pFlipbook->GetName(), pFlipbook.Get());
 	// Save => 파일 형태로 등록
 	pFlipbook->Save(CONTENT_PATH + pFlipbook->GetKey());	// 경로가 곧 Key 값
