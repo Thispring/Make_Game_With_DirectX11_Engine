@@ -283,12 +283,6 @@
     <ClInclude Include="Source\ScriptMgr.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\CPlayerStatus.h">
-      <Filter>Source\ContentScript\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\CPlayerController.h">
-      <Filter>Source\ContentScript\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Scripts\CEnemyStatus.h">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
@@ -333,6 +327,21 @@
     </ClInclude>
     <ClInclude Include="PrefabMaker.h">
       <Filter>GameEngine\Editor\MakerUI\PrefabMaker</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\PlayerStatus.h">
+      <Filter>Source\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\PlayerIdleStatus.h">
+      <Filter>Source\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\PlayerMoveStatus.h">
+      <Filter>Source\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CPlayerController.h">
+      <Filter>Source\ContentScript\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CPlayerStateManager.h">
+      <Filter>Source\ContentScript\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -594,12 +603,6 @@
     <ClCompile Include="Source\ScriptMgr.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripts\CPlayerController.cpp">
-      <Filter>Source\ContentScript\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\CPlayerStatus.cpp">
-      <Filter>Source\ContentScript\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scripts\CEnemyAnimator.cpp">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
@@ -650,6 +653,21 @@
     </ClCompile>
     <ClCompile Include="PrefabMaker.cpp">
       <Filter>GameEngine\Editor\MakerUI\PrefabMaker</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\PlayerStatus.cpp">
+      <Filter>Source\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\PlayerIdleStatus.cpp">
+      <Filter>Source\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\PlayerMoveStatus.cpp">
+      <Filter>Source\Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CPlayerController.cpp">
+      <Filter>Source\ContentScript\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CPlayerStateManager.cpp">
+      <Filter>Source\ContentScript\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -922,6 +940,9 @@
     </Filter>
     <Filter Include="GameEngine\Editor\MakerUI\PrefabMaker">
       <UniqueIdentifier>{d6f72840-520d-4a64-83ac-6b5c23d3d457}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Content">
+      <UniqueIdentifier>{7a11aa01-e465-404e-941c-44ba11802cf0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

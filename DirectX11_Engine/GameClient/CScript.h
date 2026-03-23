@@ -6,6 +6,7 @@
 // 필요한 자료형이 있다면 추가합니다.
 enum class SCRIPT_PARAM
 {
+    BOOL,
     INT,
     FLOAT,
     VEC2,

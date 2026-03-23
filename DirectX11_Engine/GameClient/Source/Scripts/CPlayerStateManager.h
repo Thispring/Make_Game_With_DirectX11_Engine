@@ -2,19 +2,16 @@
 #include "CScript.h"
 #include "Source\Content\PlayerStatus.h"
 
+// CPlayerStatus의 주소를 받아, 상태를 관리하는 클래스입니다.
 
-class CPlayerController :
+class CPlayerStateManager :
     public CScript
 {
 
 private:
-    PlayerStatus*                    m_Status;
-    vector<PlayerStatus*>            m_vecStatus;
-    
+    PlayerStatus*       m_Status;
+
 public:
-    //=========
-    // 멤버 함수
-    //=========
 
 
     //=============
@@ -22,7 +19,7 @@ public:
     //=============
     virtual void Begin() override;
     virtual void Tick() override;
-    CLONE(CPlayerController);
+    CLONE(CPlayerStateManager);
 
     virtual void SaveToLevelFile(FILE* _File) override;
     virtual void LoadFromLevelFile(FILE* _File) override;
@@ -31,6 +28,6 @@ public:
     //============
     // 생성, 소멸자
     //============
-    CPlayerController();
-    virtual ~CPlayerController();
+    CPlayerStateManager();
+    virtual ~CPlayerStateManager();
 };

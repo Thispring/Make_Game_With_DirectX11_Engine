@@ -257,6 +257,9 @@ call CodeGen.exe</Command>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Source\Content\PlayerIdleStatus.h" />
+    <ClInclude Include="Source\Content\PlayerMoveStatus.h" />
+    <ClInclude Include="Source\Content\PlayerStatus.h" />
     <ClInclude Include="Source\ScriptMgr.h" />
     <ClInclude Include="Source\Scripts\CCamMoveScript.h" />
     <ClInclude Include="Source\Scripts\CEnemyAnimator.h" />
@@ -265,7 +268,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="Source\Scripts\CEnemyStatus.h" />
     <ClInclude Include="Source\Scripts\CPlayerController.h" />
     <ClInclude Include="Source\Scripts\CPlayerAnimator.h" />
-    <ClInclude Include="Source\Scripts\CPlayerStatus.h" />
+    <ClInclude Include="Source\Scripts\CPlayerStateManager.h" />
     <ClInclude Include="SpriteMaker.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="StructuredBuffer.h" />
@@ -366,6 +369,9 @@ call CodeGen.exe</Command>
     <ClCompile Include="EPrefabUI.cpp" />
     <ClCompile Include="PrefabMaker.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
+    <ClCompile Include="Source\Content\PlayerIdleStatus.cpp" />
+    <ClCompile Include="Source\Content\PlayerMoveStatus.cpp" />
+    <ClCompile Include="Source\Content\PlayerStatus.cpp" />
     <ClCompile Include="Source\ScriptMgr.cpp" />
     <ClCompile Include="Source\Scripts\CCamMoveScript.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyAnimator.cpp" />
@@ -374,7 +380,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="Source\Scripts\CEnemyStatus.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerController.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerAnimator.cpp" />
-    <ClCompile Include="Source\Scripts\CPlayerStatus.cpp" />
+    <ClCompile Include="Source\Scripts\CPlayerStateManager.cpp" />
     <ClCompile Include="SpriteMaker.cpp" />
     <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="TaskMgr.cpp" />

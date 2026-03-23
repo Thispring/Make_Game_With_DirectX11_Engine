@@ -41,6 +41,25 @@ int main()
 		fclose(pExeptList);
 	}
 
+	// 읽기: 추상 클래스 목록 (생성자 호출을 생략할 클래스들)
+	FILE* pAbstractList = nullptr;
+	_wfopen_s(&pAbstractList, L"Abstract_Class_List.txt", L"r");
+
+	vector<wstring> strAbstract;
+
+	if (nullptr != pAbstractList)
+	{
+		wchar_t szAbsName[255] = L"";
+		while (true)
+		{
+			int iLen = fwscanf_s(pAbstractList, L"%s", szAbsName, 255);
+			if (iLen == -1)
+				break;
+			strAbstract.push_back(szAbsName);
+		}
+		fclose(pAbstractList);
+	}
+
 	while (true)
 	{
 		// 예외가 아닌경우, 스크립트 이름으로 본다.
@@ -157,12 +176,32 @@ int main()
 
 	for (UINT i = 0; i < g_vecName.size(); ++i)
 	{
-		fwprintf_s(pFile, L"\tif (L\"");
+        fwprintf_s(pFile, L"\tif (L\"");
 		fwprintf_s(pFile, g_vecName[i].c_str());
 		fwprintf_s(pFile, L"\" == _strScriptName)\n");
-		fwprintf_s(pFile, L"\t\treturn new ");
-		fwprintf_s(pFile, g_vecName[i].c_str());
-		fwprintf_s(pFile, L";\n");
+
+		// 추상 클래스인 경우에는 동적할당을 생략 (헤더/enum에는 포함됨)
+		bool bIsAbstract = false;
+		for (size_t ai = 0; ai < strAbstract.size(); ++ai)
+		{
+			if (g_vecName[i] == strAbstract[ai])
+			{
+				bIsAbstract = true;
+				break;
+			}
+		}
+
+		if (!bIsAbstract)
+		{
+			fwprintf_s(pFile, L"\t\treturn new ");
+			fwprintf_s(pFile, g_vecName[i].c_str());
+			fwprintf_s(pFile, L";\n");
+		}
+		else
+		{
+			// abstract class: skip instantiation
+			fwprintf_s(pFile, L"\t\t// abstract class - instantiation omitted\n");
+		}
 	}
 	fwprintf_s(pFile, L"\treturn nullptr;\n}\n\n");
 
@@ -183,9 +222,27 @@ int main()
 		fwprintf_s(pFile, strScriptUpperName.c_str());
 		fwprintf_s(pFile, L":\n");
 
-		fwprintf_s(pFile, L"\t\treturn new ");
-		fwprintf_s(pFile, g_vecName[i].c_str());
-		fwprintf_s(pFile, L";\n");
+		// 추상 클래스이면 인스턴스 반환을 생략하고 주석만 추가
+		bool bIsAbstractCase = false;
+		for (size_t ai = 0; ai < strAbstract.size(); ++ai)
+		{
+			if (g_vecName[i] == strAbstract[ai])
+			{
+				bIsAbstractCase = true;
+				break;
+			}
+		}
+
+		if (!bIsAbstractCase)
+		{
+			fwprintf_s(pFile, L"\t\treturn new ");
+			fwprintf_s(pFile, g_vecName[i].c_str());
+			fwprintf_s(pFile, L";\n");
+		}
+		else
+		{
+			fwprintf_s(pFile, L"\t\t// abstract class - instantiation omitted\n");
+		}
 
 		fwprintf_s(pFile, L"\t\tbreak;\n");
 	}
@@ -273,13 +330,31 @@ int main()
 			scriptNameUtf8 = "";
 		}
 
-		// 2) 비교문(UTF-8 문자열 리터럴) 출력: narrow 출력 사용
+       // 2) 비교문(UTF-8 문자열 리터럴) 출력: narrow 출력 사용
 		//    fprintf 사용하여 UTF-8 바이트를 그대로 파일에 쓴다.
 		fprintf(pFile, "\tif (0 == strcmp(_strScriptName, \"%s\"))\n", scriptNameUtf8.c_str());
 
-		// 3) return new ClassName; 은 기존 wide 출력 방식 유지 (클래스명은 ASCII일 가능성이 큼)
-		//    클래스 이름은 g_vecName[i] (예: "CCamMoveScript")이므로 wide로 안전하게 출력
-		fwprintf_s(pFile, L"\t\treturn new %ls;\n", g_vecName[i].c_str());
+		// 3) abstract 클래스인 경우 인스턴스 생성을 건너뜀
+		bool bIsAbstractNarrow = false;
+		for (size_t ai = 0; ai < strAbstract.size(); ++ai)
+		{
+			if (g_vecName[i] == strAbstract[ai])
+			{
+				bIsAbstractNarrow = true;
+				break;
+			}
+		}
+
+		if (!bIsAbstractNarrow)
+		{
+			// 3) return new ClassName; 은 기존 wide 출력 방식 유지 (클래스명은 ASCII일 가능성이 큼)
+			//    클래스 이름은 g_vecName[i] (예: "CCamMoveScript")이므로 wide로 안전하게 출력
+			fwprintf_s(pFile, L"\t\treturn new %ls;\n", g_vecName[i].c_str());
+		}
+		else
+		{
+			fwprintf_s(pFile, L"\t\t// abstract class - instantiation omitted\n");
+		}
 	}
 
 	fwprintf_s(pFile, L"\treturn nullptr;\n}\n\n");

@@ -14,6 +14,7 @@ GameObject::GameObject()
 	, m_Parent(nullptr)
 	, m_LayerIdx(-1)
 	, m_Dead(false)
+	, m_IsActive(true)
 {
 }
 
@@ -26,6 +27,8 @@ GameObject::GameObject(const GameObject& _Origin)
 	// -1, false로 초기화
 	, m_LayerIdx(-1)
 	, m_Dead(false)
+	// 원본의 활성화 여부를 받음
+	, m_IsActive(_Origin.m_IsActive)
 {
 	/*************************************************************
 	* 복사 생성자로 가지고 있던 Component들을 깊은 복사
@@ -69,6 +72,10 @@ void GameObject::RegisterLayer()
 
 void GameObject::Begin()
 {
+	// 비활성화 상태라면 호출 X
+	if (!m_IsActive)
+		return;
+
 	// 처음 한 번 실행 되었을 때
 	// 스크립트의 Begin과
 	for (size_t i = 0; i < m_vecScripts.size(); i++)
@@ -90,6 +97,10 @@ void GameObject::Begin()
 
 void GameObject::Tick()
 {
+	// 비활성화 상태라면 호출 X
+	if (!m_IsActive)
+		return;
+
 	// Scripts의 개수만큼 Tick 실행
 	for (size_t i = 0; i < m_vecScripts.size(); ++i)
 	{
@@ -126,6 +137,10 @@ void GameObject::Tick()
 
 void GameObject::FinalTick()
 {
+	// 비활성화 상태라면 호출 X
+	if (!m_IsActive)
+		return;
+
 	// Component의 FinalTick을 호출
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
@@ -153,6 +168,9 @@ void GameObject::FinalTick()
 void GameObject::FinalTick_Editor()
 {
 	// Editor 오브젝트 전용 FinalTick
+	// 비활성화 상태라면 호출 X
+	if (!m_IsActive)
+		return;
 
 	// Component의 FinalTick을 호출
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)

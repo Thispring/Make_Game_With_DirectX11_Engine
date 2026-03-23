@@ -4,6 +4,7 @@
 #include "TreeUI.h"
 #include "imguiFunc.h"
 #include "LevelMgr.h"
+#include "EditorMgr.h"
 #include <Source/ScriptMgr.h>
 
 EScriptUI::EScriptUI()
@@ -38,6 +39,10 @@ void EScriptUI::SetScript(CScript* _Script)
 
 void EScriptUI::Tick_UI()
 {
+	// 비활성화로 요소 출력을 막기보단, Script 멤버가 복사되는지 확인
+	//if (m_TargetScript->GetOwner()->GetIsActive() == false)
+	//	return;
+
 	m_ItemHeight = 0;
 
 	// 스크립트 이름 출력
@@ -61,6 +66,7 @@ void EScriptUI::Tick_UI()
 	// Script 파라미터
 	const vector<tScriptParam>& vecParam = m_TargetScript->GetScriptParam();
 
+	ImGui::Separator();
 	for (size_t i = 0; i < vecParam.size(); ++i)
 	{
 		// 같은 타입의 파라미터를 여러개 가질 수 있기에
@@ -70,16 +76,44 @@ void EScriptUI::Tick_UI()
 
 		switch (vecParam[i].Param)
 		{
+		case SCRIPT_PARAM::BOOL:
+		{
+			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
+			ImGui::SameLine(160);
+
+			string Key = "##Bool";
+			Key += ID;
+
+			ImGui::Checkbox(Key.c_str(), (bool*)vecParam[i].Data);
+			AddItemHeight();
+		}
+			break;
 		case SCRIPT_PARAM::INT:
+		{
+			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
+			ImGui::SameLine(160);
+
+			string Key = "##Int";
+			Key += ID;
+
+			ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.4f);
+			if (vecParam[i].IsInput)
+				ImGui::InputInt(Key.c_str(), (int*)vecParam[i].Data, vecParam[i].Step);
+			else
+				ImGui::DragInt(Key.c_str(), (int*)vecParam[i].Data, vecParam[i].Step);
+
+			AddItemHeight();
+		}
 			break;
 		case SCRIPT_PARAM::FLOAT:
 		{
 			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
-			ImGui::SameLine(120);
+			ImGui::SameLine(160);
 
 			string Key = "##Float";
 			Key += ID;
 
+			ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.4f);
 			if (vecParam[i].IsInput)
 				ImGui::InputFloat(Key.c_str(), (float*)vecParam[i].Data, vecParam[i].Step);
 			else
@@ -89,8 +123,36 @@ void EScriptUI::Tick_UI()
 		}
 		break;
 		case SCRIPT_PARAM::VEC2:
+		{
+			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
+
+			string Key = "##Vec2";
+			Key += ID;
+
+			if (vecParam[i].IsInput)
+				ImGui::InputFloat2(Key.c_str(), (float*)vecParam[i].Data);
+			else
+				ImGui::DragFloat2(Key.c_str(), (float*)vecParam[i].Data);
+
+			AddItemHeight();
+		}
 			break;
 		case SCRIPT_PARAM::VEC4:
+		{
+			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
+			ImGui::SameLine(160);
+
+			string Key = "##Vec4";
+			Key += ID;
+
+			ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.4f);
+			if (vecParam[i].IsInput)
+				ImGui::InputFloat4(Key.c_str(), (float*)vecParam[i].Data);
+			else
+				ImGui::DragFloat4(Key.c_str(), (float*)vecParam[i].Data);
+
+			AddItemHeight();
+		}
 			break;
 		case SCRIPT_PARAM::MATRIX:
 			break;
@@ -99,10 +161,24 @@ void EScriptUI::Tick_UI()
 		case SCRIPT_PARAM::MATERIAL:
 			break;
 		case SCRIPT_PARAM::STRING:
+		{
+			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
+			//ImGui::SameLine(160);
+
+			string Key = "##String";
+			Key += ID;
+
+			string* pName = static_cast<string*>(vecParam[i].Data);
+			string name = *pName;
+			//ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.4f);
+			ImGui::InputText(Key.c_str(), &name, 255);
+		}
 			break;
 		default:
 			break;
 		}
+		SPACING_UI(2);
+		ImGui::Separator();
 	}
 
 	SetSizeAsChild(Vec2(0.f, (float)m_ItemHeight));

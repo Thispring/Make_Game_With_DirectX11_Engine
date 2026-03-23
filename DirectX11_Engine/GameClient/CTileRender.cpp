@@ -52,8 +52,11 @@ void CTileRender::Render()
 	GetMaterial()->SetTexture(TEX_0, m_TileMap->GetAtlas());
 	// NOTE(26-03-20): Col, Row를 .fx로 전달할때 값이 어떻게 전달되며,
 	// .fx에서 어떻게 값이 쓰이는지 질문하기
-	GetMaterial()->SetScalar(INT_0, m_TileMap->GetCol());
-	GetMaterial()->SetScalar(INT_1, m_TileMap->GetRow());
+	//GetMaterial()->SetScalar(INT_0, m_TileMap->GetCol());
+	//GetMaterial()->SetScalar(INT_1, m_TileMap->GetRow());
+	// 원래 코드
+	GetMaterial()->SetScalar(INT_0, m_TileMap->GetRow());
+	GetMaterial()->SetScalar(INT_1, m_TileMap->GetCol());
 	GetMaterial()->Binding();
 		
 	GetMesh()->Render();
@@ -102,8 +105,8 @@ void CTileRender::SetTileMap(Ptr<ATileMap> _TileMap)
 	Vec2 TileSize = m_TileMap->GetTileSize();
 
 	// 수정: X는 타일 가로 * 열(Col), Y는 타일 세로 * 행(Row)
-	//Vec3 vScale = Vec3(TileSize.x * (float)Col, TileSize.y * (float)Row, 1.f);
-	Vec3 vScale = Vec3(TileSize.x * (float)Row, TileSize.y * (float)Col, 1.f);
+	Vec3 vScale = Vec3(TileSize.x * (float)Col, TileSize.y * (float)Row, 1.f);
+	//Vec3 vScale = Vec3(TileSize.x * (float)Row, TileSize.y * (float)Col, 1.f);
 	Transform()->SetRelativeScale(vScale);
 
 	// TileMap 의 Sprite 의 UV 정보를 받아옴

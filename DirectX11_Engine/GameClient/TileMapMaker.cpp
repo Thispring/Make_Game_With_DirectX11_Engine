@@ -161,9 +161,9 @@ void TileMapMaker::Tick_UI()
 		if (!m_IsShowInit)
 		{
 			m_vecSprite.clear();
-			for (int i = 0; i < m_Col; ++i)
+			for (int i = 0; i < m_Row; ++i)
 			{
-				for (int j = 0; j < m_Row; ++j)
+				for (int j = 0; j < m_Col; ++j)
 				{
 					Ptr<Asset> pAsset = AssetMgr::GetInst()->FindAsset(ASSET_TYPE::SPRITE, L"Sprite\\grid.sprite");
 					Ptr<ASprite> pSprite = (ASprite*)pAsset.Get();
@@ -175,12 +175,12 @@ void TileMapMaker::Tick_UI()
 		}
 
 		// TileSize가 보이는 것보다 작아서 보정치 *2
-		for (int i = 0; i < m_Col; ++i) // 세로줄 반복
+		for (int i = 0; i < m_Row; ++i) // 세로줄 반복
 		{
 			// 줄이 바뀔 때마다 ID 충돌 방지를 위한 Group ID
 			ImGui::PushID(i);
 
-			for (int j = 0; j < m_Row; ++j) // 가로줄 반복
+			for (int j = 0; j < m_Col; ++j) // 가로줄 반복
 			{
 				// 첫 번째 열(j=0)이 아닐 때만 SameLine (옆으로 붙이기)
 				if (j > 0) ImGui::SameLine();

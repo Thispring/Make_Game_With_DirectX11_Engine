@@ -36,12 +36,12 @@ void ETileMapUI::Tick_UI()
 
 
 	int Count = 0;
-	for (UINT i = 0; i < col; ++i)
+	for (UINT i = 0; i < row; ++i)
 	{
 		// 줄이 바뀔 때마다 ID 충돌 방지를 위한 Group ID
 		ImGui::PushID(i);
 
-		for (UINT j = 0; j < row; ++j)
+		for (UINT j = 0; j < col; ++j)
 		{
 			// 첫 번째 열(j=0)이 아닐 때만 SameLine (옆으로 붙이기)
 			if (j > 0) ImGui::SameLine();

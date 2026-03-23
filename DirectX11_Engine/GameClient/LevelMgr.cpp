@@ -8,7 +8,7 @@
 #include "CollisionMgr.h"
 
 #include "Source/Scripts/CCamMoveScript.h"
-#include "Source/Scripts/CPlayerStatus.h"
+
 #include "Source/Scripts/CEnemySpawner.h"
 #include "Source/Scripts/CPlayerAnimator.h"
 #include "CSpriteRender.h"

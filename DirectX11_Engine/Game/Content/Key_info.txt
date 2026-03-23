@@ -194,47 +194,7 @@ KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: UP
-KEY_STATE: RELEASED
-Source File: CPlayerController.cpp
-
-Comment: No Comment
-KEY: UP
+KEY: A
 KEY_STATE: PRESSED
-Source File: CPlayerController.cpp
-
-Comment: No Comment
-KEY: DOWN
-KEY_STATE: PRESSED
-Source File: CPlayerController.cpp
-
-Comment: No Comment
-KEY: RIGHT
-KEY_STATE: PRESSED
-Source File: CPlayerController.cpp
-
-Comment: No Comment
-KEY: LEFT
-KEY_STATE: PRESSED
-Source File: CPlayerController.cpp
-
-Comment: No Comment
-KEY: SPACE
-KEY_STATE: PRESSED
-Source File: CPlayerController.cpp
-
-Comment: 이전 프레임에 Jump 했다면 다시 추락중으로 변경
-KEY: SPACE
-KEY_STATE: RELEASED
-Source File: CPlayerController.cpp
-
-Comment: No Comment
-KEY: F
-KEY_STATE: TAP
-Source File: CPlayerController.cpp
-
-Comment: 펀치
-KEY: Z
-KEY_STATE: TAP
 Source File: CPlayerController.cpp
 

@@ -71,6 +71,8 @@ void Inspector::Tick_UI()
 
 	#pragma region Layer Index
 	ImGui::Text("Object Layer Index");
+	ImGui::SameLine(200.f);
+	ImGui::Text("IsActive");
 	SPACING_UI(3);
 
 	// Layer 이름 표시
@@ -104,8 +106,7 @@ void Inspector::Tick_UI()
 		// 원본 TargetObject 삭제 요청
 		m_TargetObject->Destroy();
 	}
-	SPACING_UI(5);
-	ImGui::Separator();
+
 	#pragma endregion
 
 	#pragma region GameObject 비활성화 버튼
@@ -119,9 +120,16 @@ void Inspector::Tick_UI()
 	// Tick을 중지하는 식으로 구현합니다. Render는 MainCamera의 
 	// 특정 Layer 렌더링 비활성화로 구현하며,
 	// 각 Render Component 코드에서 예외를 두지 않습니다.
-	static bool check = true;
-	ImGui::Checkbox("checkbox", &check);
+	ImGui::SameLine(200.f);
+	bool isActive = m_TargetObject->GetIsActive();
+	if (ImGui::Checkbox("##IsActive", &isActive))
+	{
+		m_TargetObject->SetIsActive(isActive);
+	}
 
+
+	SPACING_UI(5);
+	ImGui::Separator();
 	#pragma endregion	
 
 

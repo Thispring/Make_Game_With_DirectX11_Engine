@@ -34,6 +34,9 @@ private:
 	// 오브젝트가 다음 프레임에 삭제될 지 여부
 	bool						m_Dead;
 
+	// 활성/비활성화 여부
+	bool						m_IsActive;
+
 
 	//=================
 	// private 멤버 함수
@@ -105,6 +108,7 @@ public:
 	//=========
 	// Get, Set
 	//=========
+	GET_SET(bool, IsActive);
 	Ptr<Component> GetComponent(COMPONENT_TYPE _Type) { return m_Com[(UINT)_Type]; }
 	Ptr<CRenderComponent> GetRenderCom() { return m_RenderCom; }
 	Ptr<GameObject> GetParent() { return m_Parent; }
