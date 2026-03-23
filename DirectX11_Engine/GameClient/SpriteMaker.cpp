@@ -8,14 +8,15 @@
 
 SpriteMaker::SpriteMaker()
 	: EditorUI("SpriteMaker")
-	, m_TextureName {}
-	, m_SliceUV {}
+	, m_TextureName{}
+	, m_SliceUV{}
 	, m_StartLoop(0)
 	, m_EndLoop(0)
-	, m_SpriteName {}
+	, m_SpriteName{}
 	, m_OriIdx(0)
 	, m_Row(0)
 	, m_Col(0)
+	, m_EndOriIdx(0)
 
 {
 }
@@ -35,6 +36,7 @@ void SpriteMaker::ClearSetting()
 	m_OriIdx = 0;
 	m_Row = 0;
 	m_Col = 0;
+	m_EndOriIdx = 0;
 }
 
 void SpriteMaker::Tick_UI()
@@ -83,7 +85,7 @@ void SpriteMaker::Tick_UI()
 		if (ImGui::Button("OK", ImVec2(120, 0)))
 		{
 			// 저장 및 초기화
-			AssetMgr::GetInst()->CreateEngineSprite(m_TextureName, m_SliceUV, m_StartLoop, m_EndLoop, m_SpriteName, m_OriIdx, m_Row, m_Col);
+			AssetMgr::GetInst()->CreateEngineSprite(m_TextureName, m_SliceUV, m_StartLoop, m_EndLoop, m_SpriteName, m_OriIdx, m_EndOriIdx, m_Row, m_Col);
 			ClearSetting();
 			ImGui::CloseCurrentPopup();
 		}
@@ -198,6 +200,20 @@ void SpriteMaker::Tick_UI()
 	IMGUI_REQUIRED()
 	ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
 		"Start Y (Texture Slicing)");
+	SPACING_UI(5);
+	ImGui::Separator();
+	#pragma endregion
+	
+	#pragma region End Origin Index
+	OutputTitle("End Origin Index", ColorConvertIntToVec4(4.f, 135.f, 35.f));
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);
+	if (ImGui::DragInt("##ENDORIGINIDX", &m_EndOriIdx, 1.f, 0, INT_MAX))
+	{
+		SetEndOriIdx(m_EndOriIdx);
+	}
+	IMGUI_OPTIONAL()
+		ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+			"When setting the End Origin Index value,\nLoop from Origin Index to End Origin Index to produce the sprites.");
 	SPACING_UI(5);
 	ImGui::Separator();
 	#pragma endregion

@@ -69,6 +69,19 @@ float4 PS_Sprite(VS_OUT _input) : SV_Target
             discard;
         }
         
+        // Boss Sprite 파란색 부분 제거
+        // 오차 허용값
+        //float epsilon = 0.001f;
+        //float3 targetColor = float3(0.f, 0.f, 0.23529412f);
+
+        //if (abs(vColor.r - targetColor.r) < epsilon &&
+        //abs(vColor.g - targetColor.g) < epsilon &&
+        //abs(vColor.b - targetColor.b) < epsilon &&
+        //abs(vColor.a - 1.f) < epsilon)
+        //{
+        //    discard;
+        //}
+        
         if (vColor.a == 0.f)
             discard;
     }

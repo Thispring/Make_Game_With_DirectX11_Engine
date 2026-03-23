@@ -28,7 +28,7 @@ public:
 	// map을 이용해 Asset을 찾는 함수
 	void AddAsset(const wstring& _Key, Ptr<Asset> _Asset);
 	Ptr<Asset> FindAsset(ASSET_TYPE _Type, const wstring& _Key);
-
+	
 	void CreateEngineMesh();
 	void CreateEngineShader();
 	void CreateEngineTexture();
@@ -37,7 +37,7 @@ public:
 	void CreateEnginePrefab(Ptr<GameObject> _Object);
 
 	// 매개변수를 받아, 외부에서 사용할 수 있도록 오버로딩
-	void CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _SpriteName, int _OriIdx = 0, int _Row = 0, int _Col = 0);
+	void CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _SpriteName, int _OriIdx = 0, int _EndOriIdx = 0, int _Row = 0, int _Col = 0);
 	void CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wstring _ShaderName, RENDER_DOMAIN _Domain);
 	void CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Start, int _End, bool _IsReverse);
 	void CreateEngineTileMap(vector<Ptr<ASprite>>& _vecSprite, wstring _TileMapName, wstring _AtlasName, UINT _Row, UINT _Col, Vec2 _TileSize);

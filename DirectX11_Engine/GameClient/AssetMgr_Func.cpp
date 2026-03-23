@@ -383,7 +383,7 @@ void AssetMgr::CreateEnginePrefab(Ptr<GameObject> _Object)
 	pPrefab->Save(FilePath);
 }	
 
-void AssetMgr::CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _SpriteName, int _OriIdx, int _Row, int _Col)
+void AssetMgr::CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartLoop, int _EndLoop, wstring _SpriteName, int _OriIdx, int _EndOriIdx, int _Row, int _Col)
 {
 	#pragma region Atlas 이미지에서 Texture를 생성하는 방법
 	Ptr<ATexture> pAtlas = FIND(ATexture, _TextureName);		// Texture 생성 시 설정한 이름 String을 입력합니다. 
@@ -399,83 +399,97 @@ void AssetMgr::CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartL
 	// 위에서 설정한 값과 반복문을 이용하여
 	// Texture 이미지를 잘라 Sprite를 생성합니다. 
 	Ptr<ASprite> pSprite = nullptr;
-	for (int i = _StartLoop; i < _EndLoop; ++i)	// 몇 번 반복할지는, 몇 개의 이미지를 만들지에 맞게 결정합니다.
+	
+	// EndOriIdx가 디폴트로 0이 들어왔다면, 1번만 반복하게
+	// EndOriIdx를 OriIdx + 1로 지정합니다.
+	if (_EndOriIdx == 0)
+		_EndOriIdx = _OriIdx + 1;
+
+	int NameCount = _StartLoop;
+	for (_OriIdx; _OriIdx < _EndOriIdx; ++_OriIdx)
 	{
-		// Sprite의 이름을 설정합니다.
-		// 만약 파일 형식으로 제작을 원한다면, 폴더 경로 + 확장자명을 적어둡니다.
-		wchar_t Buff[50] = {};
-
-		//==================================================================
-		// NOTE(26-03-09): _Path 매개변수로 받았을 때, %d를 어떻게 합칠지 고민하기
-		//==================================================================
-		// _Path는 0%d 이전까지만 받고, 이후는 함수에서 +연산으로 붙이게 하기
-		// std::to_wstring(i) 로 붙이는 방법이 있음
-		// 10 이하이면 "0%d"로 네이밍 ex) 02.sprite
-		wstring spritePath = {};
-
-		// _Row, _Cow이 디폴트로 들어왔을 때 -> 00 2자리 네이밍 사용
-		if (i < 10 && _Row == 0 && _Col == 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(i) + L".sprite";
-		else spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(i) + L".sprite";
-
-		// _Row, _Cow이 정해졌다는 건, 100개 이상의 sprite 제작 -> 000 3자리 네이밍 사용
-		if (i < 10 && i >= 0 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(0) + to_wstring(i) + L".sprite";
-		else if (i < 100 && i >= 10 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(i) + L".sprite";
-		else if (i >= 100 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(i) + L".sprite";
-
-		pSprite = new ASprite;
-		pSprite->SetName(spritePath);
-		pSprite->SetAtlas(pAtlas);
-
-		// UV 기준 원점 설정
-		// 원점 공식:
-		// 파라미터로 받은 인덱스 * (_Slice.y / Height)
-		//float Origin = _OriIdx * (_Slice.y / Height);
-		//pSprite->SetLeftTopUV(Vec2((_Slice.x / Width) * (float)i, Origin));
-
-		// [수정 제안]
-		// i 값을 이용해 현재 몇 번째 열(col), 몇 번째 행(row)인지 계산
-		int CountPerRow = (int)(Width / _Slice.x); // 한 줄에 들어가는 개수 (27개)
-
-		// 현재 행(Row) 인덱스: 200 / 27 = 7
-		int CurrentRow = i / CountPerRow;
-
-		// 현재 열(Col) 인덱스: 200 % 27 = 11
-		int CurrentCol = i % CountPerRow;
-
-		// X 좌표: (1/27) * 11 = 0.4074... (정상 범위)
-		float UV_X = (_Slice.x / Width) * (float)CurrentCol;
-
-		// NOTE(26-03-18): 아래 공식으로 인해 Height 기준 어디서 부터 자를지가 모두 0으로 통일됨
-		// 임시로 Origin 매개변수가 0이 아니면 (설정되었다면) UV_Y를 다른 공식으로 계산하기
-		//
-		// Y 좌표: (1/9) * 7 = 0.7777...
-		float UV_Y = (_Slice.y / Height) * (float)CurrentRow;
-		
-		if (_OriIdx != 0)
+		for (int i = _StartLoop; i < _EndLoop; ++i)	// 몇 번 반복할지는, 몇 개의 이미지를 만들지에 맞게 결정합니다.
 		{
-			float Origin = _OriIdx * (_Slice.y / Height);
-			UV_Y = ((float)i, Origin);
+			// Sprite의 이름을 설정합니다.
+			// 만약 파일 형식으로 제작을 원한다면, 폴더 경로 + 확장자명을 적어둡니다.
+			wchar_t Buff[50] = {};
+
+			//==================================================================
+			// NOTE(26-03-09): _Path 매개변수로 받았을 때, %d를 어떻게 합칠지 고민하기
+			//==================================================================
+			// _Path는 0%d 이전까지만 받고, 이후는 함수에서 +연산으로 붙이게 하기
+			// std::to_wstring(i) 로 붙이는 방법이 있음
+			// 10 이하이면 "0%d"로 네이밍 ex) 02.sprite
+			wstring spritePath = {};
+
+			// _Row, _Cow이 디폴트로 들어왔을 때 -> 00 2자리 네이밍 사용
+			if (NameCount < 10 && _Row == 0 && _Col == 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(NameCount) + L".sprite";
+			else spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(NameCount) + L".sprite";
+
+			// _Row, _Cow이 정해졌다는 건, 100개 이상의 sprite 제작 -> 000 3자리 네이밍 사용
+			if (NameCount < 10 && NameCount >= 0 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(0) + to_wstring(NameCount) + L".sprite";
+			else if (NameCount < 100 && NameCount >= 10 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(NameCount) + L".sprite";
+			else if (NameCount >= 100 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(NameCount) + L".sprite";
+
+			pSprite = new ASprite;
+			pSprite->SetName(spritePath);
+			pSprite->SetAtlas(pAtlas);
+
+			// UV 기준 원점 설정
+			// 원점 공식:
+			// 파라미터로 받은 인덱스 * (_Slice.y / Height)
+			//float Origin = _OriIdx * (_Slice.y / Height);
+			//pSprite->SetLeftTopUV(Vec2((_Slice.x / Width) * (float)i, Origin));
+
+			// [수정 제안]
+			// i 값을 이용해 현재 몇 번째 열(col), 몇 번째 행(row)인지 계산
+			int CountPerRow = (int)(Width / _Slice.x); // 한 줄에 들어가는 개수 (27개)
+
+			// 현재 행(Row) 인덱스: 200 / 27 = 7
+			int CurrentRow = i / CountPerRow;
+
+			// 현재 열(Col) 인덱스: 200 % 27 = 11
+			int CurrentCol = i % CountPerRow;
+
+			// X 좌표: (1/27) * 11 = 0.4074... (정상 범위)
+			float UV_X = (_Slice.x / Width) * (float)CurrentCol;
+
+			// NOTE(26-03-18): 아래 공식으로 인해 Height 기준 어디서 부터 자를지가 모두 0으로 통일됨
+			// 임시로 Origin 매개변수가 0이 아니면 (설정되었다면) UV_Y를 다른 공식으로 계산하기
+			//
+			// Y 좌표: (1/9) * 7 = 0.7777...
+			float UV_Y = (_Slice.y / Height) * (float)CurrentRow;
+		
+			if (_OriIdx != 0)
+			{
+				float Origin = _OriIdx * (_Slice.y / Height);
+				UV_Y = ((float)i, Origin);
+			}
+
+			pSprite->SetLeftTopUV(Vec2(UV_X, UV_Y));
+
+			// x, y축 각각 '자를 해상도'에서 '아틀라스 해상도'를 나누기
+			pSprite->SetSliceUV(_Slice / Vec2(Width, Height));
+
+			// BackgorundUV는 자를 해상도(UV 기준 정규화) * 2로 설정 
+			//==================================================================
+			// NOTE(26-03-09): _Slice 매개변수를 UV 기준 정규화하는 기능 구현하기
+			//==================================================================
+			Vec2 bgUV = { ((_Slice.x / Width) * 2), ((_Slice.y / Height) * 2) };
+			pSprite->SetBackgroundUV(bgUV);
+
+			// 만들어진 Sprite를 등록합니다.
+			// 
+			// AddAsset => 런타임에만 등록
+			AddAsset(pSprite->GetName(), pSprite.Get());
+			// Save => 파일 형태로 등록
+			pSprite->Save(CONTENT_PATH + pSprite->GetKey());	// 경로가 곧 Key 값
+
+			// 반복이 끝나면 NameCount 1 증가
+			++NameCount;
 		}
-
-		pSprite->SetLeftTopUV(Vec2(UV_X, UV_Y));
-
-		// x, y축 각각 '자를 해상도'에서 '아틀라스 해상도'를 나누기
-		pSprite->SetSliceUV(_Slice / Vec2(Width, Height));
-
-		// BackgorundUV는 자를 해상도(UV 기준 정규화) * 2로 설정 
-		//==================================================================
-		// NOTE(26-03-09): _Slice 매개변수를 UV 기준 정규화하는 기능 구현하기
-		//==================================================================
-		Vec2 bgUV = { ((_Slice.x / Width) * 2), ((_Slice.y / Height) * 2) };
-		pSprite->SetBackgroundUV(bgUV);
-
-		// 만들어진 Sprite를 등록합니다.
-		// 
-		// AddAsset => 런타임에만 등록
-		AddAsset(pSprite->GetName(), pSprite.Get());
-		// Save => 파일 형태로 등록
-		pSprite->Save(CONTENT_PATH + pSprite->GetKey());	// 경로가 곧 Key 값
 	}
+
 	#pragma endregion
 }
 

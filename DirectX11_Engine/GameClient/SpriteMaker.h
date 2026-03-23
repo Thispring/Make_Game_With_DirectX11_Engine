@@ -19,6 +19,7 @@ private:
     int         m_OriIdx;
     int         m_Row;
     int         m_Col;
+    int         m_EndOriIdx;
 
 
     //=================
@@ -50,6 +51,7 @@ public:
     GET_SET(int, OriIdx);
     GET_SET(int, Row);
     GET_SET(int, Col);
+    GET_SET(int, EndOriIdx);
 
 
     //============
