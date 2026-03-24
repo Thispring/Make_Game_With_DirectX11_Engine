@@ -3,18 +3,8 @@
 // 프로그램에서 사용 중인 KEY enum
 enum class KEY
 {
-	Q, 
-	W, 
-	E, 
-	R, 
-	A, 
-	S, 
-	D, 
-	F, 
-	Z, 
-	X, 
-	C, 
-	V,
+	A, B, C, D, E, F, G, H, I, J, K, L, M,
+	N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
 
 	LBTN,
 	RBTN,
@@ -49,7 +39,7 @@ enum class KEY
 // None  TAP Pressed  Released None
 //  |     |  |			  |     |
 //  V     V  V            V     V 
-//  ____				 _______________
+//  ____				 _____________
 //	    \_______________/
 //
 // KEY 입력 상태 enum
@@ -72,15 +62,15 @@ class KeyMgr
 private:
 	vector<KeyInfo> m_vecKeys;
 
-	Vec2 m_MousePos;				// 이번 프레임 마우스 좌표
-	Vec2 m_MousePrevPos;			// 이전 프레임 마우스 좌표
-	Vec2 m_MouseDir;				// 마우스 진행 방향
+	Vec2 m_MousePos;			// 이번 프레임 마우스 좌표
+	Vec2 m_MousePrevPos; 		// 이전 프레임 마우스 좌표
+	Vec2 m_MouseDir; 			// 마우스 진행 방향
 
-	int m_MouseWheelDelta;			// 마우스 휠 정보
+	int m_MouseWheelDelta; 		// 마우스 휠 정보
 
-	bool m_isKeyPressed;				// Key 입력이 있었는지 여부
+	bool m_isKeyPressed; 			// Key 입력이 있었는지 여부
 
-	bool m_Active;		// Key입력을 받을지 말지를 결정
+	bool m_Active; 		// Key입력을 받을지 말지를 결정
 
 public:
 	//=========
@@ -128,7 +118,7 @@ public:
 // 자주 사용되는 함수 재정의
 #define KEY_CHECK(key, state) KeyMgr::GetInst()->GetKeyState(key) == state
 
-#define KEY_TAP(key)		KEY_CHECK(key, KEY_STATE::TAP)
-#define KEY_PRESSED(key)	KEY_CHECK(key, KEY_STATE::PRESSED)
-#define KEY_RELEASED(key)	KEY_CHECK(key, KEY_STATE::RELEASED)
-#define KEY_NONE(key)		KEY_CHECK(key, KEY_STATE::NONE)
+#define KEY_TAP(key)        KEY_CHECK(key, KEY_STATE::TAP)
+#define KEY_PRESSED(key)    KEY_CHECK(key, KEY_STATE::PRESSED)
+#define KEY_RELEASED(key)   KEY_CHECK(key, KEY_STATE::RELEASED)
+#define KEY_NONE(key)       KEY_CHECK(key, KEY_STATE::NONE)

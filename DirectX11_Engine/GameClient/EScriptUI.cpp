@@ -162,6 +162,9 @@ void EScriptUI::Tick_UI()
 			break;
 		case SCRIPT_PARAM::STRING:
 		{
+			// NOTE(26-03-24): string 데이터 UI 출력 방식 다르게 설계 생각해보기
+			// ex) 포인터에서 미리 문자열 GetName 등을 통해 받은 문자열 매개변수를 출력하도록
+
 			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
 			//ImGui::SameLine(160);
 

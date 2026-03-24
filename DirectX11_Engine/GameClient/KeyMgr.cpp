@@ -5,19 +5,9 @@
 // KEY와 대응되는 인덱스 설정
 UINT g_KeyIndex[(UINT)KEY::KEY_END] =
 {
-	'Q',
-	'W',
-	'E',
-	'R',
-	'A',
-	'S',
-	'D',
-	'F',
-	'Z',
-	'X',
-	'C',
-	'V',
-		
+	'A','B','C','D','E','F','G','H','I','J','K','L','M',
+	'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+	
 	VK_LBUTTON,
 	VK_RBUTTON,
 
@@ -115,7 +105,7 @@ void KeyMgr::Tick()
 				m_vecKeys[i].isPressed = false;
 			}
 
-		}	
+		}
 
 
 	}
@@ -141,8 +131,8 @@ void KeyMgr::Tick()
 
 	// 마우스 좌표 계산
 	POINT pt = {};
-	GetCursorPos(&pt);	// 윈도우 기준 마우스 좌표
-	ScreenToClient(Engine::GetInst()->GetMainWndHwnd(), &pt);	// 클라이언트(윈도우 핸들) 기준 마우스 좌표
+	GetCursorPos(&pt); 	// 윈도우 기준 마우스 좌표
+	ScreenToClient(Engine::GetInst()->GetMainWndHwnd(), &pt); 	// 클라이언트(윈도우 핸들) 기준 마우스 좌표
 
 	m_MousePrevPos = m_MousePos;
 	m_MousePos = Vec2((float)pt.x, (float)pt.y);

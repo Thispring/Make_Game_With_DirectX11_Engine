@@ -4,7 +4,7 @@
 #include "TimeMgr.h"
 #include "CTransform.h"
 #include "CCamera.h"
-
+#include "LevelMgr.h"
 
 CEditorCamMoveScript::CEditorCamMoveScript()
 	: CScript(-1)	// Engine 용 Script이기 때문에 따로 처리
@@ -29,6 +29,10 @@ void CEditorCamMoveScript::Begin()
 
 void CEditorCamMoveScript::Tick()
 {
+	// Level Play가 아닐때만 작동
+	if (LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
+		return;
+
 	// 매 프레임 마다 현재 위치, 회전을 갱신
 	if (!m_isMoving)
 	{
@@ -49,12 +53,12 @@ void CEditorCamMoveScript::Tick()
 
 	// SPACE KEY를 누르면 위치, 회전 상태 초기화
 	// Resets the position and rotation when the SPACE KEY is pressed.
-	if (KEY_PRESSED(KEY::SPACE))
+	if (KEY_PRESSED(KEY::O))
 		MoveOrigin();
 
 	// LSHIFT KEY를 누르면 카메라의 투영방식 스위칭
 	// Switches the camera's projection method when the LSHIFT KEY is pressed.
-	if (KEY_TAP(KEY::LSHIFT))
+	if (KEY_TAP(KEY::F2))
 		SwitchingType(Camera()->GetTypeRef());
 }
 
@@ -84,18 +88,18 @@ void CEditorCamMoveScript::OrthoCamMove()
 {
 	Vec3 vPos = Transform()->GetRelativePos();
 
-	if (KEY_PRESSED(KEY::W))
+	if (KEY_PRESSED(KEY::UP))
 		vPos.y += E_DT * 500.f;
-	if (KEY_PRESSED(KEY::S))
+	if (KEY_PRESSED(KEY::DOWN))
 		vPos.y -= E_DT * 500.f;
-	if (KEY_PRESSED(KEY::A))
+	if (KEY_PRESSED(KEY::LEFT))
 		vPos.x -= E_DT * 500.f;
-	if (KEY_PRESSED(KEY::D))
+	if (KEY_PRESSED(KEY::RIGHT))
 		vPos.x += E_DT * 500.f;
 
-	if (KEY_PRESSED(KEY::Z))
+	if (KEY_PRESSED(KEY::Q))
 		vPos.z += E_DT * 250.0f;
-	if (KEY_PRESSED(KEY::X))
+	if (KEY_PRESSED(KEY::E))
 		vPos.z -= E_DT * 250.0f;
 
 	Transform()->SetRelativePos(vPos);
@@ -107,24 +111,20 @@ void CEditorCamMoveScript::PrespecCamMove()
 	Vec3 vPos = Transform()->GetRelativePos();
 	Vec3 vRot = Transform()->GetRelativeRot();
 
-	if (KEY_PRESSED(KEY::W))
+	if (KEY_PRESSED(KEY::UP))
 		vPos.y += E_DT * 250.f;
-	if (KEY_PRESSED(KEY::S))
+	if (KEY_PRESSED(KEY::DOWN))
 		vPos.y -= E_DT * 250.0f;
-	if (KEY_PRESSED(KEY::A))
+	if (KEY_PRESSED(KEY::LEFT))
 		vPos.x -= E_DT * 250.0f;
-	if (KEY_PRESSED(KEY::D))
+	if (KEY_PRESSED(KEY::RIGHT))
 		vPos.x += E_DT * 250.0f;
 
-	if (KEY_PRESSED(KEY::Z))
+	if (KEY_PRESSED(KEY::Q))
 		vPos.z += E_DT * 250.0f;
-	if (KEY_PRESSED(KEY::X))
+	if (KEY_PRESSED(KEY::E))
 		vPos.z -= E_DT * 250.0f;
 
-	if (KEY_PRESSED(KEY::Q))
-		vRot.y -= E_DT * XM_PI;
-	if (KEY_PRESSED(KEY::E))
-		vRot.y += E_DT * XM_PI;
 
 	Transform()->SetRelativePos(vPos);
 	Transform()->SetRelativeRot(vRot);

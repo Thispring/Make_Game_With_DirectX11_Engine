@@ -1,7 +1,6 @@
 #pragma once
 #include "PlayerStatus.h"
-
-class PlayerMoveStatus :
+class PlayerJumpStatus :
     public PlayerStatus
 {
 
@@ -21,8 +20,8 @@ public:
 
     //============
     // 생성, 소멸자
-    //============  
-    PlayerMoveStatus();
-    virtual ~PlayerMoveStatus();
+    //============
+    PlayerJumpStatus();
+    virtual ~PlayerJumpStatus();
 };
 

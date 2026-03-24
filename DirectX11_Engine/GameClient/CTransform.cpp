@@ -118,3 +118,35 @@ Vec3 CTransform::GetWorldScale()
 
 	return vWorldScale;
 }
+
+Vec3 CTransform::GetWorldRot()
+{
+	// 로컬 회전부터 시작해서 부모 체인의 로컬 회전을 더함
+	Vec3 vWorldRot = m_RelativeRot;
+
+	Ptr<GameObject> pParent = GetOwner()->GetParent();
+
+	while (nullptr != pParent)
+	{
+		vWorldRot += pParent->Transform()->GetRelativeRot();
+		pParent = pParent->GetParent();
+	}
+
+	return vWorldRot;
+}
+
+void CTransform::SetWorldRot(const Vec3& _WorldRot)
+{
+	// 부모 체인의 회전을 합산하여 로컬 회전으로 변환
+	Vec3 parentRot = Vec3(0.f, 0.f, 0.f);
+
+	Ptr<GameObject> pParent = GetOwner()->GetParent();
+
+	while (nullptr != pParent)
+	{
+		parentRot += pParent->Transform()->GetRelativeRot();
+		pParent = pParent->GetParent();
+	}
+
+	m_RelativeRot = _WorldRot - parentRot;
+}

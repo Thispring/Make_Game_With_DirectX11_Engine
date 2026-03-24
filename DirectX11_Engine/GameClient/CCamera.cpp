@@ -10,6 +10,7 @@
 #include "Layer.h"
 
 #include "GameObject.h"
+#include "Engine.h"
 
 CCamera::CCamera()
 	: Component(COMPONENT_TYPE::CAMERA)
@@ -229,4 +230,34 @@ void CCamera::LoadFromLevelFile(FILE* _File)
 	fread(&m_AspectRatio, sizeof(float), 1, _File);
 	fread(&m_FOV, sizeof(float), 1, _File);
 	fread(&m_OrthoScale, sizeof(float), 1, _File);
+}
+
+Vec3 CCamera::ScreenToWorldPos(const Vec2& _ScreenPos, float _ZNormalized /*= 0.f*/)
+{
+	// 엔진 해상도 (클라이언트 픽셀)
+	Vec2 res = Engine::GetInst()->GetResolution();
+	float vpX = 0.f;
+	float vpY = 0.f;
+	float vpW = res.x;
+	float vpH = res.y;
+
+	// XMVector3Unproject expects screen coords: (x, y, z), viewport and matrices
+	XMVECTOR screenVec = XMVectorSet(_ScreenPos.x, _ScreenPos.y, _ZNormalized, 0.f);
+
+	XMVECTOR worldVec = XMVector3Unproject(
+		screenVec,
+		vpX, vpY, vpW, vpH,
+		0.0f, 1.0f,
+		m_matProj,
+		m_matView,
+		XMMatrixIdentity() // world matrix (여기서는 identity)
+	);
+
+	Vec3 out(
+		XMVectorGetX(worldVec),
+		XMVectorGetY(worldVec),
+		XMVectorGetZ(worldVec)
+	);
+
+	return out;
 }

@@ -4,6 +4,7 @@
 #include "LevelMgr.h"
 #include "GameObject.h"
 
+#include "EditorMgr.h"
 #include "imguiFunc.h"
 #include "Source\ScriptMgr.h"
 
@@ -33,10 +34,20 @@ void Inspector::Tick_UI()
 	if (strName.empty())
 		strName = "No Name";
 
-	ImGui::Button(strName.c_str());
+	// Object 이름 변경
+	ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
+	if (ImGui::InputText("##OBJNAME", &strName, ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		wstring wStrName = wstring(strName.begin(), strName.end());
+		m_TargetObject->SetName(wStrName);
+		Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
+		ChangeLevel(pLevel->GetKey());
+		return;
+	}
+	
 
 	// 위 버튼과 같은 라인 끝쪽에 삭제 버튼 추가하기
-	ImGui::SameLine(250.f);
+	ImGui::SameLine(300.f);
 
 	// 색상있는 버튼 UI 생성하는 함수, imguiFunc.cpp에 구현
 	if (ImGuiFunc::ColoredButton("Destroy", ImVec4(1.f, 0.2f, 0.2f, 1.f), ImVec2(100.f, 20.f)))

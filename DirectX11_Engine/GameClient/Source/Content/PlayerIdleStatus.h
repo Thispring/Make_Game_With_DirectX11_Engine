@@ -5,8 +5,6 @@ class PlayerIdleStatus :
     public PlayerStatus
 {
     // 상수 멤버로 Flipbook enum값 저장
-private:
-    const int       m_FlipbookIndex;
 
 public:
     //=============
@@ -19,6 +17,8 @@ public:
     virtual void Tick() override;
     virtual void FinalTick() override;
     virtual int GetFlipbookIndex() override;
+    virtual unique_ptr<PlayerStatus> Clone() const override;
+
 
     //============
     // 생성, 소멸자

@@ -1,6 +1,7 @@
 #pragma once
 #include "CScript.h"
 #include "CPlayerData.h"
+#include "CPlayerStateManager.h"
 #include "Source\Content\PlayerStatus.h"
 
 
@@ -9,18 +10,16 @@ class CPlayerController :
 {
 
 private:
-    Ptr<CPlayerData>    m_PlayerData;   // 관리자 클래스에서 동일한 CPlayerData를 가리키고 있어야 합니다.
-
-    // 현재 상태
-    PlayerStatus*                    m_CurStatus;
-    // Player 상태 목록
-    vector<PlayerStatus*>            m_vecStatus;
+    Ptr<CPlayerData>            m_PlayerData;   // 관리자 클래스에서 동일한 CPlayerData를 가리키고 있어야 합니다.
+    Ptr<CPlayerStateManager>    m_StatusMgr;
 
 public:
     //=========
     // 멤버 함수
     //=========
-
+    void Move();
+    void Jump();
+    void Attack();
 
     //=============
     // 상속 멤버 함수

@@ -1,5 +1,6 @@
 #pragma once
 #include "CScript.h"
+#include "GameObject.h"
 
 // Script를 상속받는 콘텐츠 스크립트 Component 입니다.
 // Player의 체력, 공격력 등의 정보를 이 객체에서 정의하고 관리합니다.
@@ -9,6 +10,8 @@ class CPlayerData :
 {
 
 private:
+    Ptr<GameObject>     m_TargetObject;
+
     float               m_FullHP;
     float               m_CurHP;
     float               m_Damage;
@@ -23,11 +26,15 @@ public:
     //=========
     // 멤버 함수
     //=========
+    void BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
+    void Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
+    void EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
 
 
     //=============
     // 상속 멤버 함수
     //=============
+    virtual void Init() override;       // Component 클래스 추상 멤버
     virtual void Begin() override;
     virtual void Tick() override;
     CLONE(CPlayerData);
@@ -46,6 +53,7 @@ public:
     GET_SET(int, DeathCount);
     GET_SET(bool, IsDead);
     GET_SET(bool, IsFalling);
+    GET_SET(Ptr<GameObject>, TargetObject);
 
 
     //============

@@ -1,70 +1,60 @@
 Comment: Resets the position and rotation when the SPACE KEY is pressed.
-KEY: SPACE
+KEY: O
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: Switches the camera's projection method when the LSHIFT KEY is pressed.
-KEY: LSHIFT
+KEY: F2
 KEY_STATE: TAP
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: W
+KEY: UP
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: S
+KEY: DOWN
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: A
+KEY: LEFT
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: D
+KEY: RIGHT
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: Z
+KEY: Q
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: X
+KEY: E
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: W
+KEY: UP
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: S
+KEY: DOWN
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: A
+KEY: LEFT
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: D
-KEY_STATE: PRESSED
-Source File: CEditorCamMoveScript.cpp
-
-Comment: No Comment
-KEY: Z
-KEY_STATE: PRESSED
-Source File: CEditorCamMoveScript.cpp
-
-Comment: No Comment
-KEY: X
+KEY: RIGHT
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
@@ -98,83 +88,83 @@ KEY: F9
 KEY_STATE: TAP
 Source File: RenderMgr.cpp
 
-Comment: Change Debug Cam Move Mode
-KEY: ALPHA0
+Comment: No Comment
+KEY: SPACE
+KEY_STATE: PRESSED
+Source File: PlayerJumpStatus.cpp
+
+Comment: No Comment
+KEY: A
+KEY_STATE: PRESSED
+Source File: PlayerMoveStatus.cpp
+
+Comment: No Comment
+KEY: D
+KEY_STATE: PRESSED
+Source File: PlayerMoveStatus.cpp
+
+Comment: Change Cam Move Mode
+KEY: F1
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
-Comment: Change InGame Cam Move Mode
-KEY: ALPHA1
+Comment: Resets the position and rotation when the I KEY is pressed.
+KEY: O
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
-Comment: Resets the position and rotation when the RSHIFT KEY is pressed.
-KEY: RSHIFT
-KEY_STATE: PRESSED
-Source File: CCamMoveScript.cpp
-
-Comment: Switches the camera's projection method when the LSHIFT KEY is pressed.
-KEY: LSHIFT
+Comment: Switches the camera's projection method when the F4 KEY is pressed.
+KEY: F2
 KEY_STATE: TAP
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: W
+KEY: UP
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: S
+KEY: DOWN
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: A
+KEY: LEFT
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: D
+KEY: RIGHT
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: Z
+KEY: Q
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: X
+KEY: E
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: W
+KEY: UP
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: S
+KEY: DOWN
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: A
+KEY: LEFT
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: D
-KEY_STATE: PRESSED
-Source File: CCamMoveScript.cpp
-
-Comment: No Comment
-KEY: Z
-KEY_STATE: PRESSED
-Source File: CCamMoveScript.cpp
-
-Comment: No Comment
-KEY: X
+KEY: RIGHT
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
@@ -196,5 +186,15 @@ Source File: CCamMoveScript.cpp
 Comment: No Comment
 KEY: A
 KEY_STATE: PRESSED
+Source File: CPlayerController.cpp
+
+Comment: No Comment
+KEY: SPACE
+KEY_STATE: PRESSED
+Source File: CPlayerController.cpp
+
+Comment: 이전에 눌렸다면, Idle로 변경
+KEY: A
+KEY_STATE: RELEASED
 Source File: CPlayerController.cpp
 

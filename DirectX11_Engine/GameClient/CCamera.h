@@ -80,6 +80,12 @@ public:
     void SetFOV(float _Degree) { m_FOV = _Degree * (XM_PI / 180.f); }   // 60분법을 라디안으로
 
 
+    // 마우스 좌표 획득은 윈도우를 보고 있는 카메라에서 담당합니다.
+    // _ScreenPos : 클라이언트(윈도우) 기준 픽셀 좌표 (왼쪽 상단-origin)
+    // _ZNormalized : 0..1 범위의 깊이 값 (0 = near plane, 1 = far plane). 2D에서는 0 사용 권장.
+    Vec3 ScreenToWorldPos(const Vec2& _ScreenPos, float _ZNormalized = 0.f);
+
+
     //============
     // 생성, 소멸자
     //============

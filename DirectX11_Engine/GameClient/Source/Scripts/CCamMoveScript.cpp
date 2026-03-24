@@ -30,19 +30,27 @@ void CCamMoveScript::Begin()
 	m_InGameRot = Transform()->GetRelativeRot();
 
 	// Player 게임 오브젝트를 찾아서 등록
-	//m_Target = LevelMgr::GetInst()->FindObjectByName(L"Player");
+	m_Target = LevelMgr::GetInst()->FindObjectByName(L"Player");
 }
 
 void CCamMoveScript::Tick()
 {
-	// Change Debug Cam Move Mode
-	if (KEY_PRESSED(KEY::ALPHA0))
-		m_MoveMode = CAM_MOVE_MODE::DEBUG;
-	
-	// Change InGame Cam Move Mode
-	if (KEY_PRESSED(KEY::ALPHA1))
-		m_MoveMode = CAM_MOVE_MODE::INGAME;
+	// Change Cam Move Mode
+	if (KEY_PRESSED(KEY::F1))
+	{
+		// F1 키로 카메라 모드 스위칭
+		if (m_MoveMode == CAM_MOVE_MODE::DEBUG)
+		{
+			m_MoveMode = CAM_MOVE_MODE::INGAME;
+			return;
+		}
 
+		if (m_MoveMode == CAM_MOVE_MODE::INGAME)
+		{
+			m_MoveMode = CAM_MOVE_MODE::DEBUG;
+			return;
+		}
+	}
 
 	// Debug 모드일 때만 아래 이동 함수를 실행
 	if (m_MoveMode == CAM_MOVE_MODE::DEBUG)
@@ -60,24 +68,24 @@ void CCamMoveScript::Tick()
 	// InGame에서는 Player의 방향키 이동과 같은 속도와 방향으로 이동
 	else if (m_MoveMode == CAM_MOVE_MODE::INGAME)
 	{
-		//Vec3 vPos = Transform()->GetRelativePos();
+		Vec3 vPos = Transform()->GetRelativePos();
 
-		//// Player의 Z축을 제외하고 가져옵니다.
-		//Vec3 playerPos = m_Target->Transform()->GetRelativePos();
-		//playerPos.z = vPos.z;
+		// Player의 Z축을 제외하고 가져옵니다.
+		Vec3 playerPos = m_Target->Transform()->GetRelativePos();
+		playerPos.z = vPos.z;
 
-		//GetOwner()->Transform()->SetRelativePos(playerPos);
+		GetOwner()->Transform()->SetRelativePos(playerPos);
 	}
 
 
-	// RSHIFT KEY를 누르면 위치, 회전 상태 초기화
-	// Resets the position and rotation when the RSHIFT KEY is pressed.
-	if (KEY_PRESSED(KEY::RSHIFT))
+	// I KEY를 누르면 위치, 회전 상태 초기화
+	// Resets the position and rotation when the I KEY is pressed.
+	if (KEY_PRESSED(KEY::O))
 		MoveOrigin();
 
-	// LSHIFT KEY를 누르면 카메라의 투영방식 스위칭
-	// Switches the camera's projection method when the LSHIFT KEY is pressed.
-	if (KEY_TAP(KEY::LSHIFT))
+	// F4 KEY를 누르면 카메라의 투영방식 스위칭
+	// Switches the camera's projection method when the F4 KEY is pressed.
+	if (KEY_TAP(KEY::F2))
 		SwitchingType(Camera()->GetTypeRef());
 }
 
@@ -117,18 +125,18 @@ void CCamMoveScript::OrthoCamMove()
 {
 	Vec3 vPos = Transform()->GetRelativePos();
 
-	if (KEY_PRESSED(KEY::W))
+	if (KEY_PRESSED(KEY::UP))
 		vPos.y += DT * 500.f;
-	if (KEY_PRESSED(KEY::S))
+	if (KEY_PRESSED(KEY::DOWN))
 		vPos.y -= DT * 500.f;
-	if (KEY_PRESSED(KEY::A))
+	if (KEY_PRESSED(KEY::LEFT))
 		vPos.x -= DT * 500.f;
-	if (KEY_PRESSED(KEY::D))
+	if (KEY_PRESSED(KEY::RIGHT))
 		vPos.x += DT * 500.f;
 
-	if (KEY_PRESSED(KEY::Z))
+	if (KEY_PRESSED(KEY::Q))
 		vPos.z += DT * 250.0f;
-	if (KEY_PRESSED(KEY::X))
+	if (KEY_PRESSED(KEY::E))
 		vPos.z -= DT * 250.0f;
 
 	Transform()->SetRelativePos(vPos);
@@ -140,24 +148,19 @@ void CCamMoveScript::PrespecCamMove()
 	Vec3 vPos = Transform()->GetRelativePos();
 	Vec3 vRot = Transform()->GetRelativeRot();
 
-	if (KEY_PRESSED(KEY::W))
+	if (KEY_PRESSED(KEY::UP))
 		vPos.y += DT * 250.f;
-	if (KEY_PRESSED(KEY::S))
+	if (KEY_PRESSED(KEY::DOWN))
 		vPos.y -= DT * 250.0f;
-	if (KEY_PRESSED(KEY::A))
+	if (KEY_PRESSED(KEY::LEFT))
 		vPos.x -= DT * 250.0f;
-	if (KEY_PRESSED(KEY::D))
+	if (KEY_PRESSED(KEY::RIGHT))
 		vPos.x += DT * 250.0f;
 
-	if (KEY_PRESSED(KEY::Z))
-		vPos.z += DT * 250.0f;
-	if (KEY_PRESSED(KEY::X))
-		vPos.z -= DT * 250.0f;
-
 	if (KEY_PRESSED(KEY::Q))
-		vRot.y -= DT * XM_PI;
+		vPos.z += DT * 250.0f;
 	if (KEY_PRESSED(KEY::E))
-		vRot.y += DT * XM_PI;
+		vPos.z -= DT * 250.0f;
 
 	Transform()->SetRelativePos(vPos);
 	Transform()->SetRelativeRot(vRot);

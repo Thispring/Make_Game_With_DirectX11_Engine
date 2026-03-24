@@ -62,6 +62,15 @@ public:
     void SetIndependentScale(bool _On) { m_IndependentScale = _On; }
     bool IsIndependentScale() { return m_IndependentScale; }
 
+    // ------------ 추가 : World 회전 Get / Set ------------
+    // 월드 회전(라디안, Euler X,Y,Z)을 반환합니다. 부모 체인을 따라 로컬 회전을 합산합니다.
+    Vec3 GetWorldRot();
+
+    // 월드 회전(라디안, Euler X,Y,Z)으로 세팅합니다.
+    // 내부적으로 부모 회전을 빼서 로컬 회전으로 저장합니다.
+    void SetWorldRot(const Vec3& _WorldRot);
+    // ----------------------------------------------------
+
 
     //============
     // 생성, 소멸자
