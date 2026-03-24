@@ -9,6 +9,7 @@
 #include "Scripts/CEnemyStatus.h"
 #include "Scripts/CPlayerAnimator.h"
 #include "Scripts/CPlayerController.h"
+#include "Scripts/CPlayerData.h"
 #include "Scripts/CPlayerStateManager.h"
 
 void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
@@ -20,6 +21,7 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CEnemyStatus");
 	_vec.push_back(L"CPlayerAnimator");
 	_vec.push_back(L"CPlayerController");
+	_vec.push_back(L"CPlayerData");
 	_vec.push_back(L"CPlayerStateManager");
 }
 
@@ -39,6 +41,8 @@ CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CPlayerAnimator;
 	if (L"CPlayerController" == _strScriptName)
 		return new CPlayerController;
+	if (L"CPlayerData" == _strScriptName)
+		return new CPlayerData;
 	if (L"CPlayerStateManager" == _strScriptName)
 		return new CPlayerStateManager;
 	return nullptr;
@@ -68,6 +72,9 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERCONTROLLER:
 		return new CPlayerController;
+		break;
+	case (UINT)SCRIPT_TYPE::PLAYERDATA:
+		return new CPlayerData;
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERSTATEMANAGER:
 		return new CPlayerStateManager;
@@ -108,6 +115,10 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CPlayerController";
 		break;
 
+	case SCRIPT_TYPE::PLAYERDATA:
+		return L"CPlayerData";
+		break;
+
 	case SCRIPT_TYPE::PLAYERSTATEMANAGER:
 		return L"CPlayerStateManager";
 		break;
@@ -141,6 +152,9 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	case PLAYERCONTROLLER: return "CPlayerController";
 		break;
 
+	case PLAYERDATA: return "CPlayerData";
+		break;
+
 	case PLAYERSTATEMANAGER: return "CPlayerStateManager";
 		break;
 
@@ -171,6 +185,8 @@ CScript * ScriptMgr::GetScript(const char* _strScriptName)
 		return new CPlayerAnimator;
 	if (0 == strcmp(_strScriptName, "CPlayerController"))
 		return new CPlayerController;
+	if (0 == strcmp(_strScriptName, "CPlayerData"))
+		return new CPlayerData;
 	if (0 == strcmp(_strScriptName, "CPlayerStateManager"))
 		return new CPlayerStateManager;
 	return nullptr;
@@ -193,6 +209,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 		return PLAYERANIMATOR;
 	if (L"CPlayerController" == _strScriptName)
 		return PLAYERCONTROLLER;
+	if (L"CPlayerData" == _strScriptName)
+		return PLAYERDATA;
 	if (L"CPlayerStateManager" == _strScriptName)
 		return PLAYERSTATEMANAGER;
 	return SCRIPT_TYPE_END;
@@ -215,6 +233,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 		return PLAYERANIMATOR;
 	if (0 == strcmp(_strScriptName, "CPlayerController"))
 		return PLAYERCONTROLLER;
+	if (0 == strcmp(_strScriptName, "CPlayerData"))
+		return PLAYERDATA;
 	if (0 == strcmp(_strScriptName, "CPlayerStateManager"))
 		return PLAYERSTATEMANAGER;
 	return SCRIPT_TYPE_END;

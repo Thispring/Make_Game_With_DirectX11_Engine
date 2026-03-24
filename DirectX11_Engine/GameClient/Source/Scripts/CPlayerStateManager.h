@@ -1,15 +1,25 @@
 #pragma once
 #include "CScript.h"
+#include "CPlayerData.h"
 #include "Source\Content\PlayerStatus.h"
-
+#include <memory>
 // CPlayerStatus의 주소를 받아, 상태를 관리하는 클래스입니다.
+
+
 
 class CPlayerStateManager :
     public CScript
 {
 
 private:
-    PlayerStatus*       m_Status;
+    Ptr<CPlayerData>                        m_PlayerData;   // 관리자 클래스에서 동일한 CPlayerData를 가리키고 있어야 합니다.
+
+    /**************************************************************************
+    * PlayerStatus에 스마트 포인터를 사용한다면, 엔진에 구현된 Ptr.h가 아닌
+    * std unique_ptr를 사용합니다. (콘텐츠용도로 만들었기에 엔진 차원 Entity 상속 X)
+    **************************************************************************/
+    PlayerStatus*                           m_CurStatus;
+    vector<unique_ptr<PlayerStatus>>        m_vecStatus;
 
 public:
 
@@ -23,6 +33,12 @@ public:
 
     virtual void SaveToLevelFile(FILE* _File) override;
     virtual void LoadFromLevelFile(FILE* _File) override;
+
+
+    //=========
+    // Get, Set
+    //=========
+    GET_SET(PlayerStatus*, CurStatus);  // Get, Set을 통해서만 Controller에서 상태 변경
 
 
     //============

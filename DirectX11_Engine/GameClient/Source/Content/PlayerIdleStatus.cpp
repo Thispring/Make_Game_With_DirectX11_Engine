@@ -3,6 +3,7 @@
 
 
 PlayerIdleStatus::PlayerIdleStatus()
+	: m_FlipbookIndex(0)
 {
 }
 
@@ -20,6 +21,8 @@ void PlayerIdleStatus::LoadFromLevelFile(FILE* _File)
 
 void PlayerIdleStatus::Begin()
 {
+	// Flipbook 재생
+
 }
 
 void PlayerIdleStatus::Tick()
@@ -28,4 +31,9 @@ void PlayerIdleStatus::Tick()
 
 void PlayerIdleStatus::FinalTick()
 {
+}
+
+int PlayerIdleStatus::GetFlipbookIndex()
+{
+	return m_FlipbookIndex;
 }

@@ -13,6 +13,7 @@
 #include <time.h>		// 난수 생성
 #include <algorithm>
 #include <chrono>
+#include <memory>		// C++ 스타일
 
 // 파일 입출력
 #include <iostream>

@@ -343,6 +343,9 @@
     <ClInclude Include="Source\Scripts\CPlayerStateManager.h">
       <Filter>Source\ContentScript\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Scripts\CPlayerData.h">
+      <Filter>Source\ContentScript\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -667,6 +670,9 @@
       <Filter>Source\ContentScript\Player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\CPlayerStateManager.cpp">
+      <Filter>Source\ContentScript\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CPlayerData.cpp">
       <Filter>Source\ContentScript\Player</Filter>
     </ClCompile>
   </ItemGroup>

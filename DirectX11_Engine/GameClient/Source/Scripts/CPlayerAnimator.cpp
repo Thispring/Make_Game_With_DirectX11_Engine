@@ -77,19 +77,18 @@ void CPlayerAnimator::CheckState()
 
 void CPlayerAnimator::Begin()
 {
-	// Begin에서 m_Target을 생성된 Player 오브젝트로 설정
-	//m_Target = GetOwner()->GetScript<CPlayerStatus>();
-
-	// PrevState의 디폴트는 IDLE로 설정 (문제가 없다면 IDLE이 CurState로 들어오기 때문)
-	//m_PrevState = PLAYER_STATE::IDLE;
+	// 상태 매니저 콘텐츠 스크립트 클래스 등록
+	m_StatusMgr = GetOwner()->GetScript<CPlayerStateManager>();
 }
 
 void CPlayerAnimator::Tick()
 {
-	// 매 프레임 마다, 상태를 갱신
-	//m_CurState = m_Target->GetState();
-
-	//CheckState();
+	if (m_StatusMgr->GetCurStatus())
+	{
+		// 현재 상태에 접근해, 재생할 Flipbook의 Enum or 문자열 or 인덱스 번호를 가져옵니다.
+		int Idx = m_StatusMgr->GetCurStatus()->GetFlipbookIndex();
+		GetOwner()->FlipbookRender()->Play(Idx, 8 , -1);
+	}
 }
 
 void CPlayerAnimator::SaveToLevelFile(FILE* _File)
