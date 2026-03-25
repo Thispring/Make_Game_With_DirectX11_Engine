@@ -1,31 +1,31 @@
 #include "pch.h"
-#include "PlayerJumpStatus.h"
+#include "PlayerJumpState.h"
 #include "KeyMgr.h"
 #include "TimeMgr.h"
 
-PlayerJumpStatus::PlayerJumpStatus()
+PlayerJumpState::PlayerJumpState()
 {
-	m_FlipbookIndex = PLAYER_FLIPBOOK::JUMP;
+	m_FlipbookIndex = PLAYER_STATE::JUMP;
 }
 
-PlayerJumpStatus::~PlayerJumpStatus()
-{
-}
-
-void PlayerJumpStatus::SaveToLevelFile(FILE* _File)
+PlayerJumpState::~PlayerJumpState()
 {
 }
 
-void PlayerJumpStatus::LoadFromLevelFile(FILE* _File)
+void PlayerJumpState::SaveToLevelFile(FILE* _File)
 {
 }
 
-void PlayerJumpStatus::Begin()
+void PlayerJumpState::LoadFromLevelFile(FILE* _File)
+{
+}
+
+void PlayerJumpState::Begin()
 {
 
 }
 
-void PlayerJumpStatus::Tick()
+void PlayerJumpState::Tick()
 {
 	if (KEY_PRESSED(KEY::SPACE))
 	{
@@ -42,16 +42,16 @@ void PlayerJumpStatus::Tick()
 	}
 }
 
-void PlayerJumpStatus::FinalTick()
+void PlayerJumpState::FinalTick()
 {
 }
 
-int PlayerJumpStatus::GetFlipbookIndex()
+PLAYER_STATE PlayerJumpState::GetFlipbookIndex()
 {
-	return (int)m_FlipbookIndex;
+	return m_FlipbookIndex;
 }
 
-unique_ptr<PlayerStatus> PlayerJumpStatus::Clone() const
+unique_ptr<PlayerState> PlayerJumpState::Clone() const
 {
-	return make_unique<PlayerJumpStatus>(*this);
+	return make_unique<PlayerJumpState>(*this);
 }

@@ -1,8 +1,8 @@
 #include "pch.h"
-#include "PlayerStatus.h"
+#include "PlayerState.h"
 #include "LevelMgr.h"
 
-PlayerStatus::PlayerStatus()
+PlayerState::PlayerState()
 {
 	if (m_PlayerData == nullptr)
 	{
@@ -12,11 +12,11 @@ PlayerStatus::PlayerStatus()
 
 }
 
-PlayerStatus::~PlayerStatus()
+PlayerState::~PlayerState()
 {
 
 }
 
-void PlayerStatus::Init()
+void PlayerState::Init()
 {
 }

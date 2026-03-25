@@ -1,7 +1,8 @@
 #pragma once
-#include "PlayerStatus.h"
-class PlayerJumpStatus :
-    public PlayerStatus
+#include "PlayerState.h"
+
+class PlayerMoveState :
+    public PlayerState
 {
 
 public:
@@ -14,14 +15,14 @@ public:
     virtual void Begin() override;
     virtual void Tick() override;
     virtual void FinalTick() override;
-    virtual int GetFlipbookIndex() override;
-    virtual unique_ptr<PlayerStatus> Clone() const override;
+    virtual PLAYER_STATE GetFlipbookIndex() override;
+    virtual unique_ptr<PlayerState> Clone() const override;
 
 
     //============
     // 생성, 소멸자
-    //============
-    PlayerJumpStatus();
-    virtual ~PlayerJumpStatus();
+    //============  
+    PlayerMoveState();
+    virtual ~PlayerMoveState();
 };
 

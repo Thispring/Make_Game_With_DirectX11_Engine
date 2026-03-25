@@ -88,13 +88,14 @@ void CEditorCamMoveScript::OrthoCamMove()
 {
 	Vec3 vPos = Transform()->GetRelativePos();
 
-	if (KEY_PRESSED(KEY::UP))
+    // Use WASD for editor ortho camera movement
+	if (KEY_PRESSED(KEY::W))
 		vPos.y += E_DT * 500.f;
-	if (KEY_PRESSED(KEY::DOWN))
+	if (KEY_PRESSED(KEY::S))
 		vPos.y -= E_DT * 500.f;
-	if (KEY_PRESSED(KEY::LEFT))
+	if (KEY_PRESSED(KEY::A))
 		vPos.x -= E_DT * 500.f;
-	if (KEY_PRESSED(KEY::RIGHT))
+	if (KEY_PRESSED(KEY::D))
 		vPos.x += E_DT * 500.f;
 
 	if (KEY_PRESSED(KEY::Q))
@@ -111,13 +112,14 @@ void CEditorCamMoveScript::PrespecCamMove()
 	Vec3 vPos = Transform()->GetRelativePos();
 	Vec3 vRot = Transform()->GetRelativeRot();
 
-	if (KEY_PRESSED(KEY::UP))
+    // Use WASD for editor perspective camera movement
+	if (KEY_PRESSED(KEY::W))
 		vPos.y += E_DT * 250.f;
-	if (KEY_PRESSED(KEY::DOWN))
+	if (KEY_PRESSED(KEY::S))
 		vPos.y -= E_DT * 250.0f;
-	if (KEY_PRESSED(KEY::LEFT))
+	if (KEY_PRESSED(KEY::A))
 		vPos.x -= E_DT * 250.0f;
-	if (KEY_PRESSED(KEY::RIGHT))
+	if (KEY_PRESSED(KEY::D))
 		vPos.x += E_DT * 250.0f;
 
 	if (KEY_PRESSED(KEY::Q))

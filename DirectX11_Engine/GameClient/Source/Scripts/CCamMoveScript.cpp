@@ -125,13 +125,14 @@ void CCamMoveScript::OrthoCamMove()
 {
 	Vec3 vPos = Transform()->GetRelativePos();
 
-	if (KEY_PRESSED(KEY::UP))
+    // Move using WASD instead of arrow keys
+	if (KEY_PRESSED(KEY::W))
 		vPos.y += DT * 500.f;
-	if (KEY_PRESSED(KEY::DOWN))
+	if (KEY_PRESSED(KEY::S))
 		vPos.y -= DT * 500.f;
-	if (KEY_PRESSED(KEY::LEFT))
+	if (KEY_PRESSED(KEY::A))
 		vPos.x -= DT * 500.f;
-	if (KEY_PRESSED(KEY::RIGHT))
+	if (KEY_PRESSED(KEY::D))
 		vPos.x += DT * 500.f;
 
 	if (KEY_PRESSED(KEY::Q))
@@ -148,13 +149,14 @@ void CCamMoveScript::PrespecCamMove()
 	Vec3 vPos = Transform()->GetRelativePos();
 	Vec3 vRot = Transform()->GetRelativeRot();
 
-	if (KEY_PRESSED(KEY::UP))
+    // Use WASD for in-game camera movement as well
+	if (KEY_PRESSED(KEY::W))
 		vPos.y += DT * 250.f;
-	if (KEY_PRESSED(KEY::DOWN))
+	if (KEY_PRESSED(KEY::S))
 		vPos.y -= DT * 250.0f;
-	if (KEY_PRESSED(KEY::LEFT))
+	if (KEY_PRESSED(KEY::A))
 		vPos.x -= DT * 250.0f;
-	if (KEY_PRESSED(KEY::RIGHT))
+	if (KEY_PRESSED(KEY::D))
 		vPos.x += DT * 250.0f;
 
 	if (KEY_PRESSED(KEY::Q))

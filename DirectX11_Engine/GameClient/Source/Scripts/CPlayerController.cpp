@@ -17,11 +17,11 @@ CPlayerController::~CPlayerController()
 
 void CPlayerController::Move()
 {
-	if (KEY_PRESSED(KEY::A) || KEY_PRESSED(KEY::D))
+	if (KEY_PRESSED(KEY::LEFT) || KEY_PRESSED(KEY::RIGHT))
 	{
-		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::MOVE));
+		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::WALK));
 		// 상태 변경을 알림
-		if (m_StatusMgr->GetChangeCount() == 0) m_StatusMgr->ChangeState();
+		m_StatusMgr->ChangeState();
 	}
 }
 
@@ -31,7 +31,16 @@ void CPlayerController::Jump()
 	{
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::JUMP));
 		// 상태 변경을 알림
-		if (m_StatusMgr->GetChangeCount() == 0) m_StatusMgr->ChangeState();
+		m_StatusMgr->ChangeState();
+	}
+}
+
+void CPlayerController::Punch()
+{
+	if (KEY_TAP(KEY::Z))
+	{
+		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::PUNCH));
+		m_StatusMgr->ChangeState();
 	}
 }
 
@@ -46,7 +55,8 @@ void CPlayerController::Begin()
 void CPlayerController::Tick()
 {
 	// 이전에 눌렸다면, Idle로 변경
-	if (KEY_RELEASED(KEY::A) || KEY_RELEASED(KEY::D) || KEY_RELEASED(KEY::SPACE))
+	if (KEY_RELEASED(KEY::LEFT) || KEY_RELEASED(KEY::RIGHT) || KEY_RELEASED(KEY::SPACE) || 
+		KEY_RELEASED(KEY::Z))
 	{
 		// 이전에 조건문에 있는 Key를 눌렀었고, 현재 상태가 IDLE이 아니면
 		// IDLE 상태로 전환
@@ -54,7 +64,7 @@ void CPlayerController::Tick()
 		{
 			m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
 
-			if (m_StatusMgr->GetChangeCount() == 0) m_StatusMgr->ChangeState();
+			m_StatusMgr->ChangeState();
 
 			// 전환이 성공했을때만 return
 			return;
@@ -64,6 +74,8 @@ void CPlayerController::Tick()
 	Move();
 
 	Jump();
+
+	Punch();
 }
 
 void CPlayerController::SaveToLevelFile(FILE* _File)

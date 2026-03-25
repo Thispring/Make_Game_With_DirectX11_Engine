@@ -21,6 +21,8 @@ private:
 
     bool                m_IsDead;
     bool                m_IsFalling;        // true일 때만 Tick에서 y축으로 DT 만큼 음수 이동
+    
+    bool                m_IsAttack;         // 공격 중인지 여부, 공격 상태는 1가지만 가능합니다.
 
 public:
     //=========
@@ -53,6 +55,7 @@ public:
     GET_SET(int, DeathCount);
     GET_SET(bool, IsDead);
     GET_SET(bool, IsFalling);
+    GET_SET(bool, IsAttack);
     GET_SET(Ptr<GameObject>, TargetObject);
 
 

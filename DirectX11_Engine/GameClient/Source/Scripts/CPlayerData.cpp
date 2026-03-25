@@ -13,6 +13,8 @@ CPlayerData::CPlayerData()
 
 	, m_IsDead(false)
 	, m_IsFalling(true)
+	, m_IsAttack(false)
+
 	, m_TargetObject(nullptr)
 {
 }
@@ -33,6 +35,7 @@ void CPlayerData::Init()
 
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsDead, L"IsDead", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsFalling, L"IsFalling", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsAttack, L"IsAttack", true, 0.f);
 	//AddScriptParam(SCRIPT_PARAM::STRING, &m_TargetObject, L"TargetObjectName", true, 0.f);
 }
 

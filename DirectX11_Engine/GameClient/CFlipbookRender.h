@@ -15,6 +15,8 @@ private:
     float                   m_FPS;              // 애니메이션 프레임 수
     float                   m_AccTime;          // 현재 시간
 
+    int                     m_PrevFlipbook;     // 이전에 재생했던 Flipbook vector 인덱스
+
     // ImGui에서 재생 컨트롤용으로 사용 중인 bool 변수
     // EFlipbookRenderUI 클래스에 의존하고 있어서 사용 주의 필요
     bool                    m_IsStop;
@@ -57,6 +59,7 @@ public:
     bool GetFinish() { return m_Finish; }
     const vector<Ptr<AFlipbook>>& GetVecFlipbook() { return m_vecFlipbook; }
     GET_SET(int, CurFlipbook);
+    GET_SET(int, PrevFlipbook);
     GET_SET(int, RepeatCount);
     GET_SET(float, FPS);
     GET_SET(bool, IsStop);

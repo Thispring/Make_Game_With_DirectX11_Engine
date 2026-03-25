@@ -3,9 +3,10 @@
 
 #include "LevelMgr.h"
 
-#include "Source\Content\PlayerIdleStatus.h"
-#include "Source\Content\PlayerMoveStatus.h"
-#include "Source\Content\PlayerJumpStatus.h"
+#include "Source\Content\PlayerIdleState.h"
+#include "Source\Content\PlayerMoveState.h"
+#include "Source\Content\PlayerJumpState.h"
+#include "Source\Content\PlayerMeleeAttackState.h"
 
 int CPlayerStateManager::m_ChangeCount = 0;
 
@@ -22,6 +23,7 @@ CPlayerStateManager::CPlayerStateManager()
 	, m_CurStatus(nullptr)
     , m_PrevStatus(nullptr)
 	, m_vecStatus {}
+    , m_StateNum(0)
 {
 
 }
@@ -76,16 +78,26 @@ void CPlayerStateManager::ChangeState()
     // 바뀐 상태의 Begin을 호출
     m_PrevStatus->FinalTick();
     m_CurStatus->Begin();
-    // 바뀐 상태를 갱신
-    m_PrevStatus = m_CurStatus;
 
-    // 성공적으로 바뀌었다면 true 반환
-    if (m_PrevStatus == m_CurStatus)
+    // 이전 상태와 현재 상태가 같이 않았다면
+    // 바뀐 상태를 갱신
+    if (m_PrevStatus != m_CurStatus)
     {
+        m_PrevStatus = m_CurStatus;
+
+        // 성공적으로 바뀌었다면 true 반환
         SetStateChange();
         // m_ChangeCount는 최종적으로 0으로 유지
         m_ChangeCount = 0;
+
+        m_StateNum = (int)m_CurStatus->GetFlipbookIndex();
     }
+
+}
+
+void CPlayerStateManager::Init()
+{
+    AddScriptParam(SCRIPT_PARAM::FLOAT, &m_StateNum, L"StateNume", true, 0.f);
 }
 
 void CPlayerStateManager::Begin()
@@ -94,15 +106,20 @@ void CPlayerStateManager::Begin()
 	m_PlayerData = GetOwner()->GetScript<CPlayerData>();
 
 	// 상태 클래스 등록
-	m_vecStatus.push_back(make_unique<PlayerIdleStatus>());
-	m_vecStatus.push_back(make_unique<PlayerMoveStatus>());
-	m_vecStatus.push_back(make_unique<PlayerJumpStatus>());
+	m_vecStatus.push_back(make_unique<PlayerIdleState>());  // 0
+
+	m_vecStatus.push_back(make_unique<PlayerMoveState>());  // 1 -> MoveState의 파생 클래스 WalkState로 변경해야함
+	m_vecStatus.push_back(make_unique<PlayerJumpState>());  // 2
+
+	m_vecStatus.push_back(make_unique<PlayerPunchState>());  // 3
 
 	// 현재 상태를 Idle로 등록
 	m_CurStatus = m_vecStatus[(int)PLAYER_STATE::IDLE].get();
     // 이전 상태 등록
     m_PrevStatus = m_CurStatus;
 	m_CurStatus->Begin();
+    // 상태 번호는 Flipbook Index enum class를 전달받기
+    m_StateNum = (int)m_CurStatus->GetFlipbookIndex();
 }
 
 void CPlayerStateManager::Tick()

@@ -15,6 +15,7 @@ CFlipbookRender::CFlipbookRender()
 	, m_RepeatCount(0)
 	, m_IsStop(false)
 	, m_CurFlipbook(0)
+	, m_PrevFlipbook(0)
 {
 }
 
@@ -44,6 +45,10 @@ bool CFlipbookRender::CheckFinish()
 			return true;
 		}
 	}
+
+	// 명시적 false 반환
+	// 이전은 특정 조건에만 false 반환
+	return false;
 }
 
 void CFlipbookRender::DeleteFlipbook(int _Idx)
@@ -54,14 +59,24 @@ void CFlipbookRender::DeleteFlipbook(int _Idx)
 
 void CFlipbookRender::Play(int _FlipbookIdx, float _FPS, int _RepeatCount)
 {
-	// 다시 Play를 호출했을 때, m_CurSprite를 0으로 초기화하여,
-	// 다른 FlipBook의 Sprite를 처음부터 재생
-	m_CurSprite = 0;
+	// 동일한 Flipbook에 대해 매번 Play를 호출하면
+	// m_AccTime을 리셋하여 애니메이션이 진행되지 않는 문제가 발생.
+	// 따라서 동일 Flipbook인 경우에는 누적 시간을 유지하도록 변경.
+	bool IsNewFlipbook = (_FlipbookIdx != m_PrevFlipbook);
 
-	m_CurFlipbook = _FlipbookIdx;
+	if (IsNewFlipbook)
+	{
+		// 새로운 Flipbook이면 처음부터 재생
+		m_CurSprite = 0;
+		m_AccTime = 0.f;
+	}
+
+	// 현재, 이전 상태 Flipbook 인덱스 저장
+	m_CurFlipbook = m_PrevFlipbook = _FlipbookIdx;
 	m_RepeatCount = _RepeatCount;
 	m_FPS = _FPS;
-	m_AccTime = 0.f;
+
+	// 만약 강제 초기화가 필요하면(옵션) 여기서 처리
 }
 
 void CFlipbookRender::FinalTick()
@@ -72,6 +87,10 @@ void CFlipbookRender::FinalTick()
 		return;
 
 	if (CheckFinish())
+		return;
+
+	// FPS가 0일 경우 분모가 0이 됨
+	if (m_FPS <= 0.f)
 		return;
 
 	float fLmit = 1.f / m_FPS;

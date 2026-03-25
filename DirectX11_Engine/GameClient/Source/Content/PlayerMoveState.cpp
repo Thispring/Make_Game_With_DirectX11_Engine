@@ -1,33 +1,33 @@
 #include "pch.h"
-#include "PlayerMoveStatus.h"
-#include "PlayerStatus.h"
+#include "PlayerMoveState.h"
+#include "PlayerState.h"
 #include "TimeMgr.h"
 #include "KeyMgr.h"
 
-PlayerMoveStatus::PlayerMoveStatus()
+PlayerMoveState::PlayerMoveState()
 {
-	m_FlipbookIndex = PLAYER_FLIPBOOK::MOVE;
+	m_FlipbookIndex = PLAYER_STATE::WALK;
 }
 
-PlayerMoveStatus::~PlayerMoveStatus()
-{
-}
-
-void PlayerMoveStatus::SaveToLevelFile(FILE* _File)
+PlayerMoveState::~PlayerMoveState()
 {
 }
 
-void PlayerMoveStatus::LoadFromLevelFile(FILE* _File)
+void PlayerMoveState::SaveToLevelFile(FILE* _File)
 {
 }
 
-void PlayerMoveStatus::Begin()
+void PlayerMoveState::LoadFromLevelFile(FILE* _File)
 {
 }
 
-void PlayerMoveStatus::Tick()
+void PlayerMoveState::Begin()
 {
-	if (KEY_PRESSED(KEY::A))
+}
+
+void PlayerMoveState::Tick()
+{
+	if (KEY_PRESSED(KEY::LEFT))
 	{
 		// Player의 데이터를 받아와 Position 변경
 		Vec3 vPos = m_PlayerData->GetTargetObject()->Transform()->GetRelativePos();
@@ -45,7 +45,7 @@ void PlayerMoveStatus::Tick()
 		m_PlayerData->GetTargetObject()->Transform()->SetRelativeScale(vScale);
 	}
 	
-	if (KEY_PRESSED(KEY::D))
+	if (KEY_PRESSED(KEY::RIGHT))
 	{
 		// Player의 데이터를 받아와 Position 변경
 		Vec3 vPos = m_PlayerData->GetTargetObject()->Transform()->GetRelativePos();
@@ -65,18 +65,18 @@ void PlayerMoveStatus::Tick()
 
 }
 
-void PlayerMoveStatus::FinalTick()
+void PlayerMoveState::FinalTick()
 {
 
 }
 
-int PlayerMoveStatus::GetFlipbookIndex()
+PLAYER_STATE PlayerMoveState::GetFlipbookIndex()
 {
-	return (int)m_FlipbookIndex;
+	return m_FlipbookIndex;
 }
 
-unique_ptr<PlayerStatus> PlayerMoveStatus::Clone() const
+unique_ptr<PlayerState> PlayerMoveState::Clone() const
 {
-	return make_unique<PlayerMoveStatus>(*this);
+	return make_unique<PlayerMoveState>(*this);
 }
 	

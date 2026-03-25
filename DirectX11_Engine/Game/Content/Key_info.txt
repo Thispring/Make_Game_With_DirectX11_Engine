@@ -8,23 +8,23 @@ KEY: F2
 KEY_STATE: TAP
 Source File: CEditorCamMoveScript.cpp
 
-Comment: No Comment
-KEY: UP
+Comment: Use WASD for editor ortho camera movement
+KEY: W
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: DOWN
+KEY: S
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: LEFT
+KEY: A
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: RIGHT
+KEY: D
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
@@ -38,23 +38,23 @@ KEY: E
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
-Comment: No Comment
-KEY: UP
+Comment: Use WASD for editor perspective camera movement
+KEY: W
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: DOWN
+KEY: S
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: LEFT
+KEY: A
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: RIGHT
+KEY: D
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
@@ -91,17 +91,27 @@ Source File: RenderMgr.cpp
 Comment: No Comment
 KEY: SPACE
 KEY_STATE: PRESSED
-Source File: PlayerJumpStatus.cpp
+Source File: PlayerJumpState.cpp
 
 Comment: No Comment
-KEY: A
-KEY_STATE: PRESSED
-Source File: PlayerMoveStatus.cpp
+KEY: Z
+KEY_STATE: RELEASED
+Source File: PlayerMeleeAttackState.cpp
 
 Comment: No Comment
-KEY: D
+KEY: Z
+KEY_STATE: TAP
+Source File: PlayerMeleeAttackState.cpp
+
+Comment: No Comment
+KEY: LEFT
 KEY_STATE: PRESSED
-Source File: PlayerMoveStatus.cpp
+Source File: PlayerMoveState.cpp
+
+Comment: No Comment
+KEY: RIGHT
+KEY_STATE: PRESSED
+Source File: PlayerMoveState.cpp
 
 Comment: Change Cam Move Mode
 KEY: F1
@@ -118,23 +128,23 @@ KEY: F2
 KEY_STATE: TAP
 Source File: CCamMoveScript.cpp
 
-Comment: No Comment
-KEY: UP
+Comment: Move using WASD instead of arrow keys
+KEY: W
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: DOWN
+KEY: S
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: LEFT
+KEY: A
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: RIGHT
+KEY: D
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
@@ -148,23 +158,23 @@ KEY: E
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
-Comment: No Comment
-KEY: UP
+Comment: Use WASD for in-game camera movement as well
+KEY: W
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: DOWN
+KEY: S
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: LEFT
+KEY: A
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: RIGHT
+KEY: D
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
@@ -184,7 +194,7 @@ KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: A
+KEY: LEFT
 KEY_STATE: PRESSED
 Source File: CPlayerController.cpp
 
@@ -193,8 +203,13 @@ KEY: SPACE
 KEY_STATE: PRESSED
 Source File: CPlayerController.cpp
 
+Comment: No Comment
+KEY: Z
+KEY_STATE: TAP
+Source File: CPlayerController.cpp
+
 Comment: 이전에 눌렸다면, Idle로 변경
-KEY: A
+KEY: LEFT
 KEY_STATE: RELEASED
 Source File: CPlayerController.cpp
 

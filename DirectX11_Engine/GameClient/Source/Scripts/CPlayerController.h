@@ -2,7 +2,7 @@
 #include "CScript.h"
 #include "CPlayerData.h"
 #include "CPlayerStateManager.h"
-#include "Source\Content\PlayerStatus.h"
+#include "Source\Content\PlayerState.h"
 
 
 class CPlayerController :
@@ -19,7 +19,8 @@ public:
     //=========
     void Move();
     void Jump();
-    void Attack();
+    void Punch();
+
 
     //=============
     // 상속 멤버 함수

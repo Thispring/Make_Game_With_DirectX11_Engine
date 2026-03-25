@@ -277,9 +277,6 @@
     <ClInclude Include="Source\Scripts\CEnemySpawner.h">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\CCamMoveScript.h">
-      <Filter>Source\ContentScript</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ScriptMgr.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -337,23 +334,38 @@
     <ClInclude Include="Source\Scripts\CPlayerData.h">
       <Filter>Source\ContentScript\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Content\PlayerIdleStatus.h">
-      <Filter>Source\OtherContent\Player</Filter>
+    <ClInclude Include="Source\Content\PlayerState.h">
+      <Filter>Source\OtherContent\PlayerStatus</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Content\PlayerMoveStatus.h">
-      <Filter>Source\OtherContent\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Content\PlayerStatus.h">
-      <Filter>Source\OtherContent\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Content\PlayerJumpStatus.h">
-      <Filter>Source\OtherContent\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\CParallaxLayer.h">
-      <Filter>Source\ContentScript</Filter>
+    <ClInclude Include="Source\Scripts\CCamMoveScript.h">
+      <Filter>Source\ContentScript\Etc</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\CLightObjectMove.h">
-      <Filter>Source\ContentScript</Filter>
+      <Filter>Source\ContentScript\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CParallaxLayer.h">
+      <Filter>Source\ContentScript\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="contentEnum.h">
+      <Filter>Source\ContentHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\PlayerMeleeAttackState.h">
+      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\PlayerRangedAttackState.h">
+      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\PlayerSpecialAttackState.h">
+      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\PlayerIdleState.h">
+      <Filter>Source\OtherContent\PlayerStatus\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\PlayerJumpState.h">
+      <Filter>Source\OtherContent\PlayerStatus\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\PlayerMoveState.h">
+      <Filter>Source\OtherContent\PlayerStatus\Move</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -609,9 +621,6 @@
     <ClCompile Include="Source\Scripts\CEnemySpawner.cpp">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripts\CCamMoveScript.cpp">
-      <Filter>Source\ContentScript</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ScriptMgr.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -675,23 +684,35 @@
     <ClCompile Include="Source\Scripts\CPlayerData.cpp">
       <Filter>Source\ContentScript\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Content\PlayerIdleStatus.cpp">
-      <Filter>Source\OtherContent\Player</Filter>
+    <ClCompile Include="Source\Content\PlayerState.cpp">
+      <Filter>Source\OtherContent\PlayerStatus</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Content\PlayerMoveStatus.cpp">
-      <Filter>Source\OtherContent\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Content\PlayerStatus.cpp">
-      <Filter>Source\OtherContent\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Content\PlayerJumpStatus.cpp">
-      <Filter>Source\OtherContent\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\CParallaxLayer.cpp">
-      <Filter>Source\ContentScript</Filter>
+    <ClCompile Include="Source\Scripts\CCamMoveScript.cpp">
+      <Filter>Source\ContentScript\Etc</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\CLightObjectMove.cpp">
-      <Filter>Source\ContentScript</Filter>
+      <Filter>Source\ContentScript\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CParallaxLayer.cpp">
+      <Filter>Source\ContentScript\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\PlayerRangedAttackState.cpp">
+      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\PlayerMeleeAttackState.cpp">
+      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\PlayerSpecialAttackState.cpp">
+      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\PlayerIdleState.cpp">
+      <Filter>Source\OtherContent\PlayerStatus\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\PlayerJumpState.cpp">
+      <Filter>Source\OtherContent\PlayerStatus\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\PlayerMoveState.cpp">
+      <Filter>Source\OtherContent\PlayerStatus\Move</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -968,8 +989,26 @@
     <Filter Include="Source\OtherContent">
       <UniqueIdentifier>{7a11aa01-e465-404e-941c-44ba11802cf0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\OtherContent\Player">
+    <Filter Include="Source\ContentScript\Etc">
+      <UniqueIdentifier>{95c10a01-16c3-4146-92cf-976dfa6280c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ContentHeader">
+      <UniqueIdentifier>{1e93140c-97f3-463c-9daf-4d683fa86eb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\PlayerStatus">
       <UniqueIdentifier>{3d02fad9-af6b-4bde-be2a-5a2136b246a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\PlayerStatus\Attack">
+      <UniqueIdentifier>{3633d35b-f103-4b87-b811-f0a31f99c5b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\PlayerStatus\Idle">
+      <UniqueIdentifier>{23ada6ef-f685-47cd-b0fc-84db8d5f0557}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\PlayerStatus\Jump">
+      <UniqueIdentifier>{e1fa6413-9a91-4c59-b6d8-b6e9abdd968d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\PlayerStatus\Move">
+      <UniqueIdentifier>{db612a66-6614-4a45-a8f0-49e723993c4a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
