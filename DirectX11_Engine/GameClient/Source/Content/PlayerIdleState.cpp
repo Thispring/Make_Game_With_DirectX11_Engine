@@ -27,12 +27,8 @@ void PlayerIdleState::Begin()
 
 void PlayerIdleState::Tick()
 {
-	if (m_PlayerData->GetIsFalling() == true)
-	{
-		Vec3 vPos = m_PlayerData->GetTargetObject()->Transform()->GetRelativePos();
-		vPos.y -= DT * 120.f;
-		m_PlayerData->GetTargetObject()->Transform()->SetRelativePos(vPos);
-	}
+	PlayerState::ApplyGravity();
+
 }
 
 void PlayerIdleState::FinalTick()

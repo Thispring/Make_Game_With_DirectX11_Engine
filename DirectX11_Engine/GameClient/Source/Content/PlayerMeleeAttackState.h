@@ -70,8 +70,8 @@ public:
 #pragma endregion
 
 
-#pragma region KickState
-class PlayerKickState :
+#pragma region PlayerMiddleKickState
+class PlayerMiddleKickState :
     public PlayerMeleeAttackState
 {
 
@@ -96,7 +96,39 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerKickState();
-    virtual ~PlayerKickState();
+    PlayerMiddleKickState();
+    virtual ~PlayerMiddleKickState();
+};
+#pragma endregion
+
+
+#pragma region PlayerHighKickState
+class PlayerHighKickState :
+    public PlayerMeleeAttackState
+{
+
+private:
+
+public:
+
+    //=============
+    // 상속 멤버 함수
+    //=============
+    virtual void Begin() override;
+    virtual void Tick() override;
+    virtual void FinalTick() override;
+    virtual PLAYER_STATE GetFlipbookIndex() override;
+
+    virtual void SaveToLevelFile(FILE* _File) override;
+    virtual void LoadFromLevelFile(FILE* _File) override;
+    // Deep-copy 지원을 위한 가상 클론 함수 추가
+    virtual unique_ptr<PlayerState> Clone() const override;
+
+
+    //============
+    // 생성, 소멸자
+    //============
+    PlayerHighKickState();
+    virtual ~PlayerHighKickState();
 };
 #pragma endregion

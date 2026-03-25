@@ -7,6 +7,7 @@ CPlayerData::CPlayerData()
 	, m_FullHP(10.f)
 	, m_CurHP(m_FullHP)
 	, m_Damage(2.f)
+	, m_JumpVelocity(10.f)
 	, m_Speed(120.f)
 
 	, m_DeathCount(0)
@@ -16,6 +17,9 @@ CPlayerData::CPlayerData()
 	, m_IsAttack(false)
 
 	, m_TargetObject(nullptr)
+
+	, m_Gravity(980.f)
+	, m_VelocityY(0.f)
 {
 }
 
@@ -25,6 +29,9 @@ CPlayerData::~CPlayerData()
 
 void CPlayerData::Init()
 {
+	// Level 시작 시, 벡터를 초기화
+	ClearScriptParam();
+
 	// Init은 AddComponent 시점에 이루어짐
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_FullHP, L"FullHP", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_CurHP, L"CurHP", true, 0.f);

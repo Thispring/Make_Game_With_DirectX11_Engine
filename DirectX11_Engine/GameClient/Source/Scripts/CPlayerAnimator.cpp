@@ -16,9 +16,39 @@ CPlayerAnimator::~CPlayerAnimator()
 }
 
 
-void CPlayerAnimator::CheckState()
+void CPlayerAnimator::Play()
 {
+	// 현재 상태에 접근해, 재생할 Flipbook의 Enum or 문자열 or 인덱스 번호를 가져옵니다.
+	PLAYER_STATE Idx = m_StatusMgr->GetCurStatus()->GetFlipbookIndex();
+	int fps = 0;
+	int repCount = 0;
 
+	// 추가:
+	// 상태에 따라 조건 분기하여, Flipbook의 FPS를 다르게 전달
+	// 반복 여부도 따로 변수로 설정하여, Play 하나로 통일시키기
+	switch (Idx)
+	{
+	case PLAYER_STATE::IDLE: fps = 10; repCount = -1;
+		break;
+	case PLAYER_STATE::WALK: fps = 10; repCount = -1;
+		break;
+	case PLAYER_STATE::JUMP: fps = 10; repCount = 1;
+		break;
+	case PLAYER_STATE::PUNCH: fps = 20; repCount = 1;
+		break;
+	case PLAYER_STATE::HIGH_KICK: fps = 15; repCount = 1;
+		break;
+	case PLAYER_STATE::MIDDLE_KICK: fps = 15; repCount = 1;
+		break;
+	case PLAYER_STATE::LOW_KICK: fps = 15; repCount = 1;
+		break;
+	case PLAYER_STATE::END:
+		break;
+	default:
+		break;
+	}
+
+	GetOwner()->FlipbookRender()->Play((int)Idx, fps, repCount);
 }
 
 void CPlayerAnimator::Begin()
@@ -29,50 +59,22 @@ void CPlayerAnimator::Begin()
 
 void CPlayerAnimator::Tick()
 {	
-	if (GetOwner()->FlipbookRender()->GetFinish() == true)
-		m_IsPlaying = false;
-
-	//// 만약 FlipBook이 재생 중이면 스킵
-	//if (m_IsPlaying)
-	//{
-	//	return;
-	//}
-
-	if (m_StatusMgr->GetCurStatus())
+	// 현재 상태가 PUNCH이고, Flipbook 재생이 끝났는지 확인
+	if (m_StatusMgr->GetCurStatus()->GetFlipbookIndex() == PLAYER_STATE::PUNCH &&
+		GetOwner()->FlipbookRender()->GetFinish() ||
+		m_StatusMgr->GetCurStatus()->GetFlipbookIndex() == PLAYER_STATE::MIDDLE_KICK &&
+		GetOwner()->FlipbookRender()->GetFinish() ||
+		m_StatusMgr->GetCurStatus()->GetFlipbookIndex() == PLAYER_STATE::JUMP &&
+		GetOwner()->FlipbookRender()->GetFinish()
+		)
 	{
-		// 현재 상태에 접근해, 재생할 Flipbook의 Enum or 문자열 or 인덱스 번호를 가져옵니다.
-		PLAYER_STATE Idx = m_StatusMgr->GetCurStatus()->GetFlipbookIndex();
-		int fps = 0;
-
-		// 추가:
-		// 상태에 따라 조건 분기하여, Flipbook의 FPS를 다르게 전달
-		switch (Idx)
-		{
-		case PLAYER_STATE::IDLE: fps = 10;
-			break;
-		case PLAYER_STATE::WALK: fps = 10;
-			break;
-		case PLAYER_STATE::JUMP: fps = 10;
-			break;
-		case PLAYER_STATE::PUNCH: fps = 20;
-			break;
-		case PLAYER_STATE::HIGH_KICK: fps = 20;
-			break;
-		case PLAYER_STATE::MIDDLE_KICK: fps = 20;
-			break;
-		case PLAYER_STATE::LOW_KICK: fps = 20;
-			break;
-		case PLAYER_STATE::END:
-			break;
-		default:
-			break;
-		}
-
-		if (m_IsPlaying == false && m_StatusMgr->IsStateChange() == true)
-			GetOwner()->FlipbookRender()->Play((int)Idx, fps, 1);
-
-		m_IsPlaying = true;
-	}
+		// 상태를 Idle로 변경
+		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
+		m_StatusMgr->ChangeState();
+		// Idle 애니메이션 재생
+		Play();
+		return;
+	}	
 
 }
 

@@ -7,11 +7,21 @@
 class CParallaxLayer :
     public CScript
 {
-private:
+private: 
+    // 배경은 Sky, Ground, Sea, Cloud 4개 * 2 = 8개로 구성되어있습니다.
+    // 최상위 부모를 먼저 움직여보고, 부자연스럽다면 개별 자식 오브젝트를 개별로 컨트롤
+
     Ptr<GameObject>     m_TargetPlayer;   // Player 오브젝트 참조
-    // NOTE(26-03-24): 빌드 시, Vec3 링킹 오류 발생
-    // Math 헤더를 참조할 수 없어서 발생한 것으로 추정
+    vector<Ptr<GameObject>> m_firstBackGround;
+    vector<Ptr<GameObject>> m_secondBackGround;
+
+    vector<Vec3>        m_firstBackGroundInitPos;
+    vector<Vec3>        m_secondBackGroundInitPos;
+
     Vec3                m_PrevTargetPos;  // 이전 프레임의 플레이어 위치
+    Vec3                m_CurTargetPos;
+    Vec3                m_ScrollOffset; // 누적 이동량(스크롤 오프셋)
+
     float               m_ParallaxFactor; // 0.0 ~ 1.0 (작을수록 더 멀리 있는 효과)
     float               m_Smooth;         // 0 = 즉시, 클수록 부드럽게 따라감
 

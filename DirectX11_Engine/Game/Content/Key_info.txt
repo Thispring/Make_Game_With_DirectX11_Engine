@@ -89,18 +89,13 @@ KEY_STATE: TAP
 Source File: RenderMgr.cpp
 
 Comment: No Comment
-KEY: SPACE
-KEY_STATE: PRESSED
-Source File: PlayerJumpState.cpp
-
-Comment: No Comment
 KEY: Z
 KEY_STATE: RELEASED
 Source File: PlayerMeleeAttackState.cpp
 
 Comment: No Comment
 KEY: Z
-KEY_STATE: TAP
+KEY_STATE: PRESSED
 Source File: PlayerMeleeAttackState.cpp
 
 Comment: No Comment
@@ -112,6 +107,11 @@ Comment: No Comment
 KEY: RIGHT
 KEY_STATE: PRESSED
 Source File: PlayerMoveState.cpp
+
+Comment: 임시 비활성화 Key 코드 추가하기
+KEY: G
+KEY_STATE: TAP
+Source File: PlayerState.cpp
 
 Comment: Change Cam Move Mode
 KEY: F1
@@ -193,23 +193,23 @@ KEY: LBTN
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
-Comment: No Comment
+Comment: 걷기는 누르고 있는 동안 상태 유지
 KEY: LEFT
 KEY_STATE: PRESSED
 Source File: CPlayerController.cpp
 
-Comment: No Comment
+Comment: 점프는 TAP으로 트리거 (원샷)
 KEY: SPACE
-KEY_STATE: PRESSED
+KEY_STATE: TAP
 Source File: CPlayerController.cpp
 
-Comment: No Comment
+Comment: 펀치도 TAP으로 트리거 (원샷)
 KEY: Z
 KEY_STATE: TAP
 Source File: CPlayerController.cpp
 
-Comment: 이전에 눌렸다면, Idle로 변경
-KEY: LEFT
-KEY_STATE: RELEASED
+Comment: Key 조합에 따라 다른 Kick 동작 나타나게 구현
+KEY: X
+KEY_STATE: TAP
 Source File: CPlayerController.cpp
 

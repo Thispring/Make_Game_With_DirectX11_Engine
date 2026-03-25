@@ -24,6 +24,7 @@ public:
     // 멤버 함수
     //=========
     void Init();
+    void ApplyGravity();
 
 
     //=============

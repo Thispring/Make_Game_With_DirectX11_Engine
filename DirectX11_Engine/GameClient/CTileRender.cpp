@@ -102,12 +102,12 @@ void CTileRender::SetTileMap(Ptr<ATileMap> _TileMap)
 	// 크키 조정
 	UINT Row = m_TileMap->GetRow();
 	UINT Col = m_TileMap->GetCol();
-	Vec2 TileSize = m_TileMap->GetTileSize();
+	//Vec2 TileSize = m_TileMap->GetTileSize();
 
-	// 수정: X는 타일 가로 * 열(Col), Y는 타일 세로 * 행(Row)
-	Vec3 vScale = Vec3(TileSize.x * (float)Col, TileSize.y * (float)Row, 1.f);
-	//Vec3 vScale = Vec3(TileSize.x * (float)Row, TileSize.y * (float)Col, 1.f);
-	Transform()->SetRelativeScale(vScale);
+	// NOTE(26-03-25): Tile 사이즈에 맞게 Scale 결정하는 코드 임시 비활성화
+	//// 수정: X는 타일 가로 * 열(Col), Y는 타일 세로 * 행(Row)
+	//Vec3 vScale = Vec3(TileSize.x * (float)Col, TileSize.y * (float)Row, 1.f);
+	//Transform()->SetRelativeScale(vScale);
 
 	// TileMap 의 Sprite 의 UV 정보를 받아옴
 	vector<Ptr<ASprite>> vecSprites = m_TileMap->GetSprites();

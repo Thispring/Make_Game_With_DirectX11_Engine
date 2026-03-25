@@ -20,6 +20,7 @@ public:
     void Move();
     void Jump();
     void Punch();
+    void Kick();
 
 
     //=============

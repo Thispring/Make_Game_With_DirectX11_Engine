@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CPlayerStateManager.h"
 
+#include "CPlayerAnimator.h"
+
 #include "LevelMgr.h"
 
 #include "Source\Content\PlayerIdleState.h"
@@ -91,6 +93,10 @@ void CPlayerStateManager::ChangeState()
         m_ChangeCount = 0;
 
         m_StateNum = (int)m_CurStatus->GetFlipbookIndex();
+
+
+        // PlayerAnimator를 불러와 Play 함수 호출
+        GetOwner()->GetScript<CPlayerAnimator>()->Play();
     }
 
 }
@@ -113,11 +119,16 @@ void CPlayerStateManager::Begin()
 
 	m_vecStatus.push_back(make_unique<PlayerPunchState>());  // 3
 
+	m_vecStatus.push_back(make_unique<PlayerHighKickState>());  // 4
+	m_vecStatus.push_back(make_unique<PlayerMiddleKickState>());  // 5
+
 	// 현재 상태를 Idle로 등록
 	m_CurStatus = m_vecStatus[(int)PLAYER_STATE::IDLE].get();
     // 이전 상태 등록
     m_PrevStatus = m_CurStatus;
 	m_CurStatus->Begin();
+    // StateChange를 최초로 호출할때 true를 보장, flipbook 재생을 위함
+    SetStateChange();
     // 상태 번호는 Flipbook Index enum class를 전달받기
     m_StateNum = (int)m_CurStatus->GetFlipbookIndex();
 }

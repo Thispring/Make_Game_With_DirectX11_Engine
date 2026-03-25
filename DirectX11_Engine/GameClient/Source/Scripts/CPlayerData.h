@@ -16,6 +16,7 @@ private:
     float               m_CurHP;
     float               m_Damage;
     float               m_Speed;
+    float               m_JumpVelocity;
 
     int                 m_DeathCount;
 
@@ -23,6 +24,13 @@ private:
     bool                m_IsFalling;        // true일 때만 Tick에서 y축으로 DT 만큼 음수 이동
     
     bool                m_IsAttack;         // 공격 중인지 여부, 공격 상태는 1가지만 가능합니다.
+
+
+    //===============================
+    // 물리 관련 멤버 변수, 파일로 저장 X
+    //===============================
+    const float         m_Gravity;          // 980.0f로 초기화
+    float               m_VelocityY;        // Y축 수직 속도
 
 public:
     //=========
@@ -52,12 +60,17 @@ public:
     GET_SET(float, CurHP);
     GET_SET(float, Damage);
     GET_SET(float, Speed);
+    GET_SET(float, JumpVelocity);
+
     GET_SET(int, DeathCount);
+
     GET_SET(bool, IsDead);
     GET_SET(bool, IsFalling);
     GET_SET(bool, IsAttack);
     GET_SET(Ptr<GameObject>, TargetObject);
 
+    GET(float, Gravity);
+    GET_SET(float, VelocityY);
 
     //============
     // 생성, 소멸자

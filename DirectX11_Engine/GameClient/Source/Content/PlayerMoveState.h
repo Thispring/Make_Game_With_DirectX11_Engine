@@ -1,6 +1,10 @@
 #pragma once
 #include "PlayerState.h"
 
+// NOTE(26-03-25):
+// MoveState는 현재 Walk 기능만 수행,
+// 추후 이동 방식이 다양화 된다면, 해당 클래스 파일에서
+// 파생 클래스들을 생성
 class PlayerMoveState :
     public PlayerState
 {

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "PlayerMeleeAttackState.h"
 #include "KeyMgr.h"
+#include "Source\Scripts\CPlayerStateManager.h"
 
 #pragma region PlayerMeleeAttackState
 PlayerMeleeAttackState::PlayerMeleeAttackState()
@@ -70,15 +71,23 @@ void PlayerPunchState::Tick()
 	//	m_PlayerData->SetIsAttack(isAttck);
 	//}
 
-	if (KEY_TAP(KEY::Z))
-	{
-		bool isAttck = true;
-		m_PlayerData->SetIsAttack(isAttck);
-	}
+	bool isAttck = true;
+	m_PlayerData->SetIsAttack(isAttck);
+	//if (KEY_PRESSED(KEY::Z))
+	//{
+	//	bool isAttck = true;
+	//	m_PlayerData->SetIsAttack(isAttck);
+	//}
 }
 
 void PlayerPunchState::FinalTick()
 {
+	bool isAttck = false;
+	m_PlayerData->SetIsAttack(isAttck);
+
+	// Idle 상태로 변경
+	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
+	pMgr->SetCurStatus(pMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerPunchState::GetFlipbookIndex()
@@ -102,41 +111,100 @@ unique_ptr<PlayerState> PlayerPunchState::Clone() const
 #pragma endregion
 
 
-#pragma region KickState
-PlayerKickState::PlayerKickState()
+#pragma region PlayerMiddleKickState
+PlayerMiddleKickState::PlayerMiddleKickState()
+{
+	m_FlipbookIndex = PLAYER_STATE::MIDDLE_KICK;
+}
+
+PlayerMiddleKickState::~PlayerMiddleKickState()
 {
 }
 
-PlayerKickState::~PlayerKickState()
+void PlayerMiddleKickState::Begin()
 {
 }
 
-void PlayerKickState::Begin()
+void PlayerMiddleKickState::Tick()
 {
+	bool isAttck = true;
+	m_PlayerData->SetIsAttack(isAttck);
 }
 
-void PlayerKickState::Tick()
+void PlayerMiddleKickState::FinalTick()
 {
+	bool isAttck = false;
+	m_PlayerData->SetIsAttack(isAttck);
+
+	// Idle 상태로 변경
+	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
+	pMgr->SetCurStatus(pMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
 }
 
-void PlayerKickState::FinalTick()
-{
-}
-
-PLAYER_STATE PlayerKickState::GetFlipbookIndex()
+PLAYER_STATE PlayerMiddleKickState::GetFlipbookIndex()
 {
 	return m_FlipbookIndex;
 }
 
-void PlayerKickState::SaveToLevelFile(FILE* _File)
+void PlayerMiddleKickState::SaveToLevelFile(FILE* _File)
 {
 }
 
-void PlayerKickState::LoadFromLevelFile(FILE* _File)
+void PlayerMiddleKickState::LoadFromLevelFile(FILE* _File)
 {
 }
 
-unique_ptr<PlayerState> PlayerKickState::Clone() const
+unique_ptr<PlayerState> PlayerMiddleKickState::Clone() const
+{
+	return unique_ptr<PlayerState>();
+}
+#pragma endregion
+
+
+#pragma region PlayerHighKickState
+PlayerHighKickState::PlayerHighKickState()
+{
+	m_FlipbookIndex = PLAYER_STATE::HIGH_KICK;
+}
+
+PlayerHighKickState::~PlayerHighKickState()
+{
+}
+
+void PlayerHighKickState::Begin()
+{
+}
+
+void PlayerHighKickState::Tick()
+{
+	bool isAttck = true;
+	m_PlayerData->SetIsAttack(isAttck);
+}
+
+void PlayerHighKickState::FinalTick()
+{
+	bool isAttck = false;
+	m_PlayerData->SetIsAttack(isAttck);
+
+	// Idle 상태로 변경
+	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
+	pMgr->SetCurStatus(pMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
+}
+
+PLAYER_STATE PlayerHighKickState::GetFlipbookIndex()
+{
+	return m_FlipbookIndex;
+}
+
+void PlayerHighKickState::SaveToLevelFile(FILE* _File)
+{
+}
+
+void PlayerHighKickState::LoadFromLevelFile(FILE* _File)
+{
+}
+
+unique_ptr<PlayerState> PlayerHighKickState::Clone() const
 {
 	return unique_ptr<PlayerState>();
 }

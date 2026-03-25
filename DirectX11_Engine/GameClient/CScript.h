@@ -43,6 +43,8 @@ protected:
     void Destroy(); 
     // m_vecScriptParam 데이터 push back 함수
     void AddScriptParam(SCRIPT_PARAM _Type, void* _Data, const wstring& _Desc, bool _IsInput = true, float _Step = 1.f);
+    // m_vecScriptParam 벡터를 clear하는 함수
+    void ClearScriptParam();
     // Prefab을 가져와 객체로 생성하는 함수
     void Instantiate(class APrefab* _Prefab, int _LayerIdx, Vec3 _WorldPos);
 

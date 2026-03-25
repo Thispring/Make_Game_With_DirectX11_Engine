@@ -194,7 +194,7 @@ void CFlipbookRender::SaveToLevelFile(FILE* _File)
 
 	fwrite(&m_CurFlipbook, sizeof(int), 1, _File);
 	fwrite(&m_CurSprite, sizeof(int), 1, _File);
-	fwrite(&m_FPS, sizeof(int), 1, _File);
+	fwrite(&m_FPS, sizeof(float), 1, _File);
 	fwrite(&m_RepeatCount, sizeof(int), 1, _File);
 }
 
@@ -213,6 +213,6 @@ void CFlipbookRender::LoadFromLevelFile(FILE* _File)
 
 	fread(&m_CurFlipbook, sizeof(int), 1, _File);
 	fread(&m_CurSprite, sizeof(int), 1, _File);
-	fread(&m_FPS, sizeof(int), 1, _File);
+	fread(&m_FPS, sizeof(float), 1, _File);
 	fread(&m_RepeatCount, sizeof(int), 1, _File);
 }

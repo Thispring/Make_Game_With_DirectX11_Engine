@@ -27,11 +27,12 @@ void PlayerMoveState::Begin()
 
 void PlayerMoveState::Tick()
 {
+	PlayerState::ApplyGravity();
+
 	if (KEY_PRESSED(KEY::LEFT))
 	{
 		// Player의 데이터를 받아와 Position 변경
 		Vec3 vPos = m_PlayerData->GetTargetObject()->Transform()->GetRelativePos();
-		Vec3 vRot = m_PlayerData->GetTargetObject()->Transform()->GetRelativeRot();
 		Vec3 vScale = m_PlayerData->GetTargetObject()->Transform()->GetRelativeScale();
 
 		// Scale x축 음수화
@@ -41,7 +42,6 @@ void PlayerMoveState::Tick()
 		vPos.x -= DT * m_PlayerData->GetSpeed();
 
 		m_PlayerData->GetTargetObject()->Transform()->SetRelativePos(vPos);
-		m_PlayerData->GetTargetObject()->Transform()->SetRelativeRot(vRot);
 		m_PlayerData->GetTargetObject()->Transform()->SetRelativeScale(vScale);
 	}
 	
@@ -49,7 +49,6 @@ void PlayerMoveState::Tick()
 	{
 		// Player의 데이터를 받아와 Position 변경
 		Vec3 vPos = m_PlayerData->GetTargetObject()->Transform()->GetRelativePos();
-		Vec3 vRot = m_PlayerData->GetTargetObject()->Transform()->GetRelativeRot();
 		Vec3 vScale = m_PlayerData->GetTargetObject()->Transform()->GetRelativeScale();
 
 		// Scale x축 양수화
@@ -59,7 +58,6 @@ void PlayerMoveState::Tick()
 		vPos.x += DT * m_PlayerData->GetSpeed();
 
 		m_PlayerData->GetTargetObject()->Transform()->SetRelativePos(vPos);
-		m_PlayerData->GetTargetObject()->Transform()->SetRelativeRot(vRot);
 		m_PlayerData->GetTargetObject()->Transform()->SetRelativeScale(vScale);
 	}
 
