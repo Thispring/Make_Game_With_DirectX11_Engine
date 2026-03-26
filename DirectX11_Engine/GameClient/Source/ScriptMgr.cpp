@@ -7,6 +7,7 @@
 #include "Scripts/CEnemyBehavior.h"
 #include "Scripts/CEnemySpawner.h"
 #include "Scripts/CEnemyStatus.h"
+#include "Scripts/CEnergyBlast.h"
 #include "Scripts/CLightObjectMove.h"
 #include "Scripts/CParallaxLayer.h"
 #include "Scripts/CPlayerAnimator.h"
@@ -21,6 +22,7 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CEnemyBehavior");
 	_vec.push_back(L"CEnemySpawner");
 	_vec.push_back(L"CEnemyStatus");
+	_vec.push_back(L"CEnergyBlast");
 	_vec.push_back(L"CLightObjectMove");
 	_vec.push_back(L"CParallaxLayer");
 	_vec.push_back(L"CPlayerAnimator");
@@ -41,6 +43,8 @@ CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CEnemySpawner;
 	if (L"CEnemyStatus" == _strScriptName)
 		return new CEnemyStatus;
+	if (L"CEnergyBlast" == _strScriptName)
+		return new CEnergyBlast;
 	if (L"CLightObjectMove" == _strScriptName)
 		return new CLightObjectMove;
 	if (L"CParallaxLayer" == _strScriptName)
@@ -74,6 +78,9 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYSTATUS:
 		return new CEnemyStatus;
+		break;
+	case (UINT)SCRIPT_TYPE::ENERGYBLAST:
+		return new CEnergyBlast;
 		break;
 	case (UINT)SCRIPT_TYPE::LIGHTOBJECTMOVE:
 		return new CLightObjectMove;
@@ -119,6 +126,10 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::ENEMYSTATUS:
 		return L"CEnemyStatus";
+		break;
+
+	case SCRIPT_TYPE::ENERGYBLAST:
+		return L"CEnergyBlast";
 		break;
 
 	case SCRIPT_TYPE::LIGHTOBJECTMOVE:
@@ -168,6 +179,9 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	case ENEMYSTATUS: return "CEnemyStatus";
 		break;
 
+	case ENERGYBLAST: return "CEnergyBlast";
+		break;
+
 	case LIGHTOBJECTMOVE: return "CLightObjectMove";
 		break;
 
@@ -209,6 +223,8 @@ CScript * ScriptMgr::GetScript(const char* _strScriptName)
 		return new CEnemySpawner;
 	if (0 == strcmp(_strScriptName, "CEnemyStatus"))
 		return new CEnemyStatus;
+	if (0 == strcmp(_strScriptName, "CEnergyBlast"))
+		return new CEnergyBlast;
 	if (0 == strcmp(_strScriptName, "CLightObjectMove"))
 		return new CLightObjectMove;
 	if (0 == strcmp(_strScriptName, "CParallaxLayer"))
@@ -237,6 +253,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 		return ENEMYSPAWNER;
 	if (L"CEnemyStatus" == _strScriptName)
 		return ENEMYSTATUS;
+	if (L"CEnergyBlast" == _strScriptName)
+		return ENERGYBLAST;
 	if (L"CLightObjectMove" == _strScriptName)
 		return LIGHTOBJECTMOVE;
 	if (L"CParallaxLayer" == _strScriptName)
@@ -265,6 +283,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 		return ENEMYSPAWNER;
 	if (0 == strcmp(_strScriptName, "CEnemyStatus"))
 		return ENEMYSTATUS;
+	if (0 == strcmp(_strScriptName, "CEnergyBlast"))
+		return ENERGYBLAST;
 	if (0 == strcmp(_strScriptName, "CLightObjectMove"))
 		return LIGHTOBJECTMOVE;
 	if (0 == strcmp(_strScriptName, "CParallaxLayer"))

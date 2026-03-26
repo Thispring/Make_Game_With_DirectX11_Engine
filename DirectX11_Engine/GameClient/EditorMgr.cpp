@@ -32,7 +32,7 @@
 
 
 EditorMgr::EditorMgr()
-    : m_ShowDemo(true)
+    : m_ShowDemo(false)     // ImGui Demo UI 활성/비활성
 {
 }
 
@@ -154,27 +154,27 @@ void EditorMgr::CreateEditorUI()
 
     // Maker UI들은 디폴트로 비활성화 처리
     pUI = new SpriteMaker;
-    //pUI->SetActive(false);
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new FlipbookMaker;
-    //pUI->SetActive(false);
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new TileMapMaker;
-    //pUI->SetActive(false);
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new MaterialMaker;
-    //pUI->SetActive(false);
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new GameObjectMaker;
-    //pUI->SetActive(false);
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
     pUI = new PrefabMaker;
-    //pUI->SetActive(false);
+    pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
 }

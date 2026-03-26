@@ -18,7 +18,6 @@ CPlayerData::CPlayerData()
 
 	, m_TargetObject(nullptr)
 
-	, m_Gravity(980.f)
 	, m_VelocityY(0.f)
 {
 }

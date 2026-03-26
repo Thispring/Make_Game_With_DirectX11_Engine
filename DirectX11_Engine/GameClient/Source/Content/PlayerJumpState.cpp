@@ -36,7 +36,7 @@ void PlayerJumpState::Tick()
     float VelY = m_PlayerData->GetVelocityY();
 
     // 중력 적용: 속도가 점점 아래(+) 방향으로 커짐
-    VelY += m_PlayerData->GetGravity() * DT * 10.f;;
+    VelY += GRAVITY_CONSTANT * DT * 10.f;;
     m_PlayerData->SetVelocityY(VelY);
 
     // 위치 업데이트

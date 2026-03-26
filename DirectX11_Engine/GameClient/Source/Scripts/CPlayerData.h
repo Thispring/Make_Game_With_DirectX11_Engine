@@ -29,7 +29,6 @@ private:
     //===============================
     // 물리 관련 멤버 변수, 파일로 저장 X
     //===============================
-    const float         m_Gravity;          // 980.0f로 초기화
     float               m_VelocityY;        // Y축 수직 속도
 
 public:
@@ -69,7 +68,6 @@ public:
     GET_SET(bool, IsAttack);
     GET_SET(Ptr<GameObject>, TargetObject);
 
-    GET(float, Gravity);
     GET_SET(float, VelocityY);
 
     //============

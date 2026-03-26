@@ -43,7 +43,7 @@ void PlayerState::ApplyGravity()
 		// 1. 중력 가속도를 현재 속도에 누적 (v = v + a * dt)
 		// 아래로 떨어지는 것이므로 속도값을 증가(또는 감소)시킵니다.
 		float curVelocity = m_PlayerData->GetVelocityY();
-		curVelocity -= m_PlayerData->GetGravity() * DT;
+		curVelocity -= GRAVITY_CONSTANT * DT;
 		m_PlayerData->SetVelocityY(curVelocity);
 
 

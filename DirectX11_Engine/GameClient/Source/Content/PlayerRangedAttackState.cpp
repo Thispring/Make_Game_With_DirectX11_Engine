@@ -39,5 +39,45 @@ unique_ptr<PlayerState> PlayerRangedAttackState::Clone() const
 {
 	return unique_ptr<PlayerState>();
 }
+#pragma endregion
 
+
+#pragma region PlayerChargeState
+PlayerChargeState::PlayerChargeState()
+{
+}
+
+PlayerChargeState::~PlayerChargeState()
+{
+}
+
+void PlayerChargeState::Begin()
+{
+}
+
+void PlayerChargeState::Tick()
+{
+}
+
+void PlayerChargeState::FinalTick()
+{
+}
+
+PLAYER_STATE PlayerChargeState::GetFlipbookIndex()
+{
+	return m_FlipbookIndex;
+}
+
+void PlayerChargeState::SaveToLevelFile(FILE* _File)
+{
+}
+
+void PlayerChargeState::LoadFromLevelFile(FILE* _File)
+{
+}
+
+unique_ptr<PlayerState> PlayerChargeState::Clone() const
+{
+	return unique_ptr<PlayerState>();
+}
 #pragma endregion

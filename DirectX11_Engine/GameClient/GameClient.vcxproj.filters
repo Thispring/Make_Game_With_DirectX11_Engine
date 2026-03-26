@@ -367,6 +367,9 @@
     <ClInclude Include="Source\Content\PlayerMoveState.h">
       <Filter>Source\OtherContent\PlayerStatus\Move</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Scripts\CEnergyBlast.h">
+      <Filter>Source\ContentScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -713,6 +716,9 @@
     </ClCompile>
     <ClCompile Include="Source\Content\PlayerMoveState.cpp">
       <Filter>Source\OtherContent\PlayerStatus\Move</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CEnergyBlast.cpp">
+      <Filter>Source\ContentScript</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
