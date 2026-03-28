@@ -323,6 +323,8 @@ void AssetMgr::CreateEngineTexture()
 	Load<ATexture>(L"skyImg", L"Texture\\BackGround\\sky.png");
 	Load<ATexture>(L"groundImg", L"Texture\\BackGround\\far-grounds.png");
 
+	Load<ATexture>(L"fullBGImg", L"Texture\\BackGround\\magic-cliffs.png");
+
 	// TileMap Atlas
 	Load<ATexture>(L"tile_Atlas", L"Texture\\BackGround\\tileset.png");
 	Load<ATexture>(L"remapTile_Atlas", L"Texture\\BackGround\\remapTileSet.png");
