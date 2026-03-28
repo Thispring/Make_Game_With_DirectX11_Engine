@@ -1,6 +1,11 @@
 #include "pch.h"
+
 #include "AssetMgr.h"
 #include "PathMgr.h"
+
+#include "GameObject.h"
+#include "Device.h"
+#include "Source/Scripts/CCamMoveScript.h"
 
 void AssetMgr::CreateEngineMesh()
 {
@@ -590,4 +595,74 @@ void AssetMgr::CreateEngineTileMap(vector<Ptr<ASprite>>& _vecSprite, wstring _Ti
 	AddAsset(pTileMap->GetName(), pTileMap.Get());
 	pTileMap->Save(CONTENT_PATH + pTileMap->GetKey());
 	#pragma endregion
+}
+
+void AssetMgr::CreateEngineLevel(wstring _LevelName)
+{
+	// Level 에셋 생성은, 받은 이름으로 Level을 만듭니다.
+	// 기본 오브젝트로 Directional Light와 MainCamera 만 제공합니다.
+	// 필요한 GameObject나 Layer 이름은 Editor를 이용하여 추가합니다.
+	
+	Ptr<ALevel> pLevel = new ALevel;
+	_LevelName = L"Level\\" + _LevelName + L".lv";
+	pLevel->SetName(_LevelName);
+
+	#pragma region 카메라, 광원 오브젝트
+	Ptr<GameObject> pObject = nullptr;
+
+	//======
+	// 카메라
+	//======
+	pObject = new GameObject;
+	pObject->SetName(L"MainCamera");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CCamera);
+	pObject->AddComponent(new CCamMoveScript);
+
+	pObject->Camera()->LayerCheckAll();
+	// Layer 번호 31은 UI 레이어로 설정, editer 로 설정했기 때문에(개발용)
+	//pObject->Camera()->LayerCheck(31);
+
+	pObject->Transform()->SetRelativePos({ 0.f, 0.f, -100.f });
+	pObject->Transform()->SetRelativeRot({ 0.f, 0.f, 0.f });
+
+	pObject->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+	pObject->Camera()->SetFar(1000.f);
+	pObject->Camera()->SetFOV(90.f);
+	pObject->Camera()->SetOrthoScale(1.f);
+	Vec2 vResolution = Device::GetInst()->GetRenderResolution();
+	pObject->Camera()->SetAspectRatio(vResolution.x / vResolution.y);	// 종횡비(AspectRatio)
+	pObject->Camera()->SetWidth(vResolution.x);							// height 멤버가 없는대신, width 정보만 설정하고 종횡비를 사용
+
+	// 생성된 오브젝트 등록 (0번 레이어에, 위에 생성한 오브젝트 등록)
+	pLevel->AddObject(0, pObject);
+
+
+	//============
+	// 광원 오브젝트
+	//============
+	pObject = new GameObject;
+	pObject->SetName(L"Light");
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CLight2D);
+
+	pObject->Light2D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
+	pObject->Light2D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
+	pObject->Light2D()->SetAmbient(Vec3(0.15f, 0.15f, 0.15f));
+
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
+
+	pLevel->AddObject(0, pObject);
+	#pragma endregion
+	
+	// 레벨 변경점 체크
+	pLevel->SetChanged();
+
+	// 생성한 Level을 Asset으로 등록
+	AddAsset(pLevel->GetName(), pLevel.Get());
+	pLevel->Save(CONTENT_PATH + pLevel->GetKey());
+
+	// TaskMgr에 요청하는 Level 변경은
+	// 생성 단계에서 실행하지 않습니다. 
 }

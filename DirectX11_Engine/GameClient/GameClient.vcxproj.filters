@@ -370,6 +370,9 @@
     <ClInclude Include="Source\Scripts\CEnergyBlast.h">
       <Filter>Source\ContentScript</Filter>
     </ClInclude>
+    <ClInclude Include="LevelMaker.h">
+      <Filter>GameEngine\Editor\MakerUI\LevelMaker</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -720,6 +723,9 @@
     <ClCompile Include="Source\Scripts\CEnergyBlast.cpp">
       <Filter>Source\ContentScript</Filter>
     </ClCompile>
+    <ClCompile Include="LevelMaker.cpp">
+      <Filter>GameEngine\Editor\MakerUI\LevelMaker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -1015,6 +1021,9 @@
     </Filter>
     <Filter Include="Source\OtherContent\PlayerStatus\Move">
       <UniqueIdentifier>{db612a66-6614-4a45-a8f0-49e723993c4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Editor\MakerUI\LevelMaker">
+      <UniqueIdentifier>{2f0d74f7-829d-41b8-8d5e-7e6a80eeae62}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

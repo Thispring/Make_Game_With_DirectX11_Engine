@@ -41,6 +41,7 @@ public:
 	void CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wstring _ShaderName, RENDER_DOMAIN _Domain);
 	void CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, int _Start, int _End, bool _IsReverse);
 	void CreateEngineTileMap(vector<Ptr<ASprite>>& _vecSprite, wstring _TileMapName, wstring _AtlasName, UINT _Row, UINT _Col, Vec2 _TileSize);
+	void CreateEngineLevel(wstring _LevelName);
 
 	// 코드로 Asset을 제작하는 부분을 모아서 정리 (백업용)
 	void CreateAssetByCode();

@@ -68,6 +68,13 @@ void CCamMoveScript::Tick()
 	// InGame에서는 Player의 방향키 이동과 같은 속도와 방향으로 이동
 	else if (m_MoveMode == CAM_MOVE_MODE::INGAME)
 	{
+		// NOTE(26-03-28):
+		// 해당 조건문은, 특정 Level에서만 사용합니다.
+		// 임시로 Level의 Key값 문자열을 비교하여, 사용하지 않은 Level에서 return 반환
+		// ex)Normal_Stage_0
+		if (LevelMgr::GetInst()->GetCurLevel()->GetKey() != L"Level\\Normal_Stage_0.lv")
+			return;
+
 		Vec3 vPos = Transform()->GetRelativePos();
 
 		// Player의 Z축을 제외하고 가져옵니다.

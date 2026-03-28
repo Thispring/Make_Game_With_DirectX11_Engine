@@ -81,15 +81,15 @@ void ContentUI::Renew()
 	// Tree 비우기
 	m_Tree->Clear();
 
-	// 에셧 종류별로 Tree에 추가
+	// 에셋 종류별로 Tree에 추가
 	for (UINT i = 0; i < (UINT)ASSET_TYPE::END; i++)
 	{
-		// 에셧의 이름에 해당하는 노드를 추가
+		// 에셋의 이름에 해당하는 노드를 추가
 		// (enum 타입을 문자열로 바꾸는 함수 이용)
 		Ptr<TreeNode> pNode = m_Tree->AddItem(nullptr, ToString((ASSET_TYPE)i));
 		pNode->SetFramed(true);
 
-		// 해당 에셧에 있는 모든 이름을 받아와서 하위 자식으로 추가
+		// 해당 에셋에 있는 모든 이름을 받아와서 하위 자식으로 추가
 		vector<wstring> vecNames;
 		AssetMgr::GetInst()->GetAssetNames((ASSET_TYPE)i, vecNames);
 
