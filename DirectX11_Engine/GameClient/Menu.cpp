@@ -42,10 +42,12 @@ void Menu::File()
 	{
 		if (ImGui::MenuItem("Level Save"))
 		{
+			// Level의 변경점 저장, 기존에 만들었던 Level 저장 버튼 활용
 		}
 
 		if (ImGui::MenuItem("Level Load"))
 		{
+			// Level Asset List를 보여주고, 선택한 Level을 불러오기
 		}
 
 		ImGui::EndMenu();
