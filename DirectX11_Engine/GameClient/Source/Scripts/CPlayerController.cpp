@@ -114,7 +114,8 @@ void CPlayerController::EnergyBlastShot()
 		// void Instantiate함수를 사용하면, 복제가 아닌, Prefab이 가리키는 같은 GameObject에 참조
 
 		// 자식오브젝트의 위치와 스케일을 전달해야함
-		GameObject* pBlastObj = InstantiateObject(pBlast.Get(), 4, vAnchorPos + vAnchorScale * vDir);
+		// 인덱스 요청은 InstantiateObject 함수의 매개변수로 하고 있음
+		GameObject* pBlastObj = InstantiateObject(pBlast.Get(), 5, vAnchorPos + vAnchorScale * vDir);
 		//GameObject* pBlastObj = InstantiateObject(pBlast.Get(), 4, vAnchorPos + vMyScale * 0.5f * vDir);
 			
 		// 2. 복제된 오브젝트의 스크립트에 SetUp 호출

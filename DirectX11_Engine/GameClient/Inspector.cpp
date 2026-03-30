@@ -91,6 +91,10 @@ void Inspector::Tick_UI()
 	Layer* pLayer = pLevel->GetLayer();
 	int tIdx = GetTargetObject()->GetLayerIdx();
 	//pLayer[tIdx].GetName();
+	
+	// NOTE(26-03-30):
+	// ContentUI에서 Prefab정보를 전달하면
+	// Idx가 -1로 설정, 아직 등록되지 않은 오브젝트이기 때문
 	string layerName = string(pLayer[tIdx].GetName().begin(), pLayer[tIdx].GetName().end());
 	ImGui::Text(layerName.c_str());
 
@@ -406,5 +410,64 @@ void Inspector::SetTargetAsset(Ptr<Asset> _Asset)
 		ASSET_TYPE Type = m_TargetAsset->GetType();
 		m_arrAssetUI[(UINT)Type]->SetActive(true);
 		m_arrAssetUI[(UINT)Type]->SetTargetAsset(m_TargetAsset);
+	}
+
+	// ASSET_TYPE이 Prefab일 경우
+	// 하위 자식으로 Component를 가지고 있다면
+	// 해당 Component UI 를 활성화
+	if (m_TargetAsset->GetType() == ASSET_TYPE::PREFAB)
+	{
+		// m_TargetObject를 사용하지 않고, Prefab이 들고 있는
+		// GameObject 정보를 가져와, 매개변수로 사용합니다.
+		Ptr<APrefab> pPrefab = (APrefab*)m_TargetAsset.Get();
+		Ptr<GameObject> pObj = pPrefab->GetGameObject();
+
+		for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
+		{
+			if (nullptr == m_arrComUI[i])
+				continue;
+
+			// 자식 UI 클래스의 멤버에도 오브젝트 정보를 등록
+			m_arrComUI[i]->SetTarget(pObj);
+		}
+
+		// TargetObject가 Script를 얼마나 가지고 있는지 검사, 등록
+		if (pObj != nullptr)
+		{
+			// 오브젝트의 Script에 대응하는 ScriptUI를 활성/비활성화
+			const vector<Ptr<CScript>>& vecScripts = pObj->GetScripts();
+
+			// 오브젝트가 보유한 Script 개수에 비해서 대응할 ScriptUI의 개수가 모자르면
+			// 동적으로 추가합니다.
+			if (m_vecScriptUI.size() < vecScripts.size())
+			{
+				int AddCount = vecScripts.size() - m_vecScriptUI.size();
+
+				for (int i = 0; i < AddCount; ++i)
+				{
+					EScriptUI* pScriptUI = new EScriptUI;
+					pScriptUI->SetSizeAsChild(Vec2(0.f, 150.f));
+					AddChildUI(pScriptUI);
+
+					m_vecScriptUI.push_back(pScriptUI);
+				}
+			}
+
+			// 오브젝트에서 가져온 Script를 각각의 ScriptUI에 세팅
+			for (size_t i = 0; i < m_vecScriptUI.size(); ++i)
+			{
+				if (vecScripts.size() <= i)
+					m_vecScriptUI[i]->SetScript(nullptr);
+				else
+					m_vecScriptUI[i]->SetScript(vecScripts[i].Get());
+			}
+		}
+		else
+		{
+			for (size_t i = 0; i < m_vecScriptUI.size(); ++i)
+			{
+				m_vecScriptUI[i]->SetScript(nullptr);
+			}
+		}
 	}
 }

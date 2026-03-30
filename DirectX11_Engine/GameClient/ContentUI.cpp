@@ -63,7 +63,7 @@ void ContentUI::SelectAsset(DWORD_PTR _Asset)
 	// NOTE(26-03-20): 아래 방식으로 UI를 띄울 수는 있지만
 	// 원본이 건드려져, 문제가 발생할 수 있음
 	// 다른 설계방식 고려해보기
-	//// 클릭한게 Prefab이라면, 오브젝트 정보를 Inspector에 전달
+	// 클릭한게 Prefab이라면, 오브젝트 정보를 Inspector에 전달
 	//if (pAsset->GetType() == ASSET_TYPE::PREFAB)
 	//{
 	//	Ptr<APrefab> pPrefab = (APrefab*)pAsset.Get();

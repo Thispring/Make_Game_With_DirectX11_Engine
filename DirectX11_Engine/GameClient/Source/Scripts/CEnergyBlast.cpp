@@ -33,6 +33,24 @@ void CEnergyBlast::SetUp(Vec3 _Dir)
 	}
 }
 
+bool CEnergyBlast::DestroyBlast()
+{
+	// 충돌했거나, 일정시간이 지나서 삭제 요청하는 경우
+	// 이 함수를 호출하여, Dead Flipbook을 실행하고, Flipbook이 정지되면
+	// TaskMgr에게 삭제 요청,
+	// 사라지는 Flipbook이 재생될때는 로직활성화를 막기 위해
+	// bool 변수를 추가합니다.
+	
+	// 함수에서 사라지는 Flipbook만 Play 요청하고
+	// Tick에서 재생이 멈추었는지 검사
+	if (m_IsDestroy)
+		return false;
+
+	m_IsDestroy = true;
+	GetOwner()->FlipbookRender()->Play(1, 10, 1);
+	return false;
+}
+
 void CEnergyBlast::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 
@@ -40,7 +58,9 @@ void CEnergyBlast::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCo
 
 void CEnergyBlast::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-
+	// Enemy Layer에서만 작동하게 조건문 실행
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == 4)
+		DestroyBlast();
 }
 
 void CEnergyBlast::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
@@ -57,6 +77,17 @@ void CEnergyBlast::Begin()
 
 void CEnergyBlast::Tick()
 {
+	if (m_IsDestroy)
+	{
+		// Flipbook이 끝났는지 체크
+		if (GetOwner()->FlipbookRender()->GetFinish())
+		{
+			Destroy(); // 실제 삭제
+		}
+		// 아직 재생이 끝나지 않았으면 return
+		return;
+	}
+
 	// 생성된 방향으로 3초간 가속도를 붙여 발사됩니다.
 	// 이전 프로젝트 미사일 발사 코드 참조
 	// 3초가 지났거나, Enemy와 부딪혔다면 삭제요청
@@ -72,7 +103,7 @@ void CEnergyBlast::Tick()
 	// 3초이상 지났다면 삭제요청
 	if (m_TravelTime >= 3.f)
 	{
-		Destroy();
+		DestroyBlast();
 		return;
 	}
 }
