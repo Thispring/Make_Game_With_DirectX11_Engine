@@ -23,5 +23,6 @@ public:
     // 생성, 소멸자
     //============
     EnemyMoveState();
+    EnemyMoveState(const std::wstring& ownerName);
     virtual ~EnemyMoveState();
 };

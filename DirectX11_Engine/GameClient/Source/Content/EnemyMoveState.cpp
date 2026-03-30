@@ -5,6 +5,11 @@ EnemyMoveState::EnemyMoveState()
 {
 }
 
+EnemyMoveState::EnemyMoveState(const std::wstring& ownerName)
+	: EnemyState(ownerName)
+{
+}
+
 EnemyMoveState::~EnemyMoveState()
 {
 }

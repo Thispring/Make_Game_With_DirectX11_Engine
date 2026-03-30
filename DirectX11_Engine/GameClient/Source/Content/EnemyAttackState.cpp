@@ -5,6 +5,11 @@ EnemyAttackState::EnemyAttackState()
 {
 }
 
+EnemyAttackState::EnemyAttackState(const wstring& ownerName)
+	: EnemyState(ownerName)
+{
+}
+
 EnemyAttackState::~EnemyAttackState()
 {
 }

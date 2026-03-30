@@ -20,6 +20,10 @@ CEnemyStateManager::CEnemyStateManager()
 }
 
 // 복사 생성자: m_vecStatus 내부 객체들을 Clone()으로 복제
+// NOTE(26-03-30):
+// 해당 복사 생성자가 Level이 Play 될때만 호출되는게 보장되는지 확인하고
+// 호출이 보장이 되지 않는다면, EnemyState의 생성자에서 초기화 하는 부분을
+// 다른 함수로 등록하거나, 다른 설계방식을 도입하기 
 CEnemyStateManager::CEnemyStateManager(const CEnemyStateManager& _Origin)
     : CScript(SCRIPT_TYPE::ENEMYSTATEMANAGER)
     , m_EnemyData(_Origin.m_EnemyData) // Ptr 타입이 복사 가능하다고 가정
@@ -60,15 +64,52 @@ CEnemyStateManager::~CEnemyStateManager()
 }
 
 
-void CEnemyStateManager::Begin()
+void CEnemyStateManager::SetUp()
 {
     m_EnemyData = GetOwner()->GetScript<CEnemyData>();
 
     // 상태 클래스 등록
-    m_vecStatus.push_back(make_unique<EnemyIdleState>());  // 0
-    m_vecStatus.push_back(make_unique<EnemyMoveState>());  // 1
-    m_vecStatus.push_back(make_unique<EnemyJumpState>());  // 2
-    m_vecStatus.push_back(make_unique<EnemyAttackState>());  // 3
+    // 각 상태 생성자에 소유자 이름(예: 현재 오브젝트 이름)을 전달
+    // 람다식 or map에 미리 등록하여, 문자열에 맞는 Key 값 정수를 Begin 시점에
+    // 조건문으로 전달하여, Enemy 특징에 맞는 객체 생성
+    // 함수 포인터를 전달받아 상태 전이 고려
+
+    // m_EnemyType 이 결정되었으므로, 필요한 상태 클래스를 조건분기하여, 각 상태 벡터에 생성 및 등록합니다.
+    const wstring ownerName = GetOwner()->GetName();
+
+    switch (m_EnemyData->GetEnemyType())
+    {
+    case ENEMY_TYPE::DEMON:
+    {
+        m_vecStatus.push_back(make_unique<EnemyIdleState>(ownerName));  // 0
+        m_vecStatus.push_back(make_unique<EnemyMoveState>(ownerName));  // 1
+        m_vecStatus.push_back(make_unique<EnemyJumpState>(ownerName));  // 2
+        m_vecStatus.push_back(make_unique<EnemyAttackState>(ownerName));  // 3
+    }
+        break;
+    case ENEMY_TYPE::SKULL:
+    {
+        m_vecStatus.push_back(make_unique<EnemyIdleState>(ownerName));  // 0
+        m_vecStatus.push_back(make_unique<EnemyMoveState>(ownerName));  // 1
+        m_vecStatus.push_back(make_unique<EnemyJumpState>(ownerName));  // 2
+        m_vecStatus.push_back(make_unique<EnemyAttackState>(ownerName));  // 3
+    }
+        break;
+    case ENEMY_TYPE::FLYING:
+
+        break;
+    case ENEMY_TYPE::FLOWER:
+
+        break;
+    case ENEMY_TYPE::BOSS:
+
+        break;
+    case ENEMY_TYPE::END:
+
+        break;
+    default:
+        break;
+    }
 
     // 현재 상태를 Idle로 등록
     m_CurStatus = m_vecStatus[(int)PLAYER_STATE::IDLE].get();
@@ -79,6 +120,11 @@ void CEnemyStateManager::Begin()
     //SetStateChange();
     // 상태 번호는 Flipbook Index enum class를 전달받기
     //m_StateNum = (int)m_CurStatus->GetFlipbookIndex();
+
+}
+
+void CEnemyStateManager::Begin()
+{
 }
 
 void CEnemyStateManager::Tick()

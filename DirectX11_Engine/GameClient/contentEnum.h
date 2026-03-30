@@ -24,20 +24,50 @@ enum class PLAYER_STATE
 
 enum class ENEMY_STATE
 {
-    IDLE,
+    // ENEMY_STATE는 파생 클래스의 생성자에서 EnemyState의 ENEMY_STATE 멤버값을
+    // 변경하게 하는 구조로 되어 있기에, 명시적으로 '타입_상태' 로 네이밍 + EnemyStateManager에 
+    // 할당한 index 순서대로 값을 고정 시킵니다.
 
-    MOVE,
-    JUMP,
-
-    // ENEMY_TYPE 별 공격 Flipbook index는 다를 수 있으니
-    // ATTACK의 경우 원하는 값을 대입하여 사용합니다.
-    // index가 겹치지 않도록 값대입을 합니다.
+    // DEMON 타입 상태 (인덱스는 EnemyStateManager의 등록 순서와 일치)
+    DEMON_IDLE = 0,
+    DEMON_MOVE = 1,
+    DEMON_JUMP = 2,
     DEMON_ATTACK = 3,
+    DEMON_HIT = 4,
+    DEMON_DEAD = 5,
 
-    DEAD,
+    // SKULL 타입 상태 (같은 인덱스 규칙을 사용)
+    SKULL_IDLE = 0,
+    SKULL_MOVE = 1,
+    SKULL_JUMP = 2,
+    SKULL_ATTACK = 3,
+    SKULL_HIT = 4,
+    SKULL_DEAD = 5,
 
+    // FLYING 타입 상태
+    FLYING_IDLE = 0,
+    FLYING_MOVE = 1,
+    FLYING_JUMP = 2,
+    FLYING_ATTACK = 3,
+    FLYING_HIT = 4,
+    FLYING_DEAD = 5,
 
-    END,
+    // FLOWER 타입 상태
+    FLOWER_IDLE = 0,
+    FLOWER_MOVE = 1,
+    FLOWER_JUMP = 2,
+    FLOWER_ATTACK = 3,
+    FLOWER_HIT = 4,
+    FLOWER_DEAD = 5,
+
+    // BOSS 타입 상태
+    BOSS_IDLE = 0,
+    BOSS_MOVE = 1,
+    BOSS_JUMP = 2,
+    BOSS_ATTACK = 3,
+    BOSS_HIT = 4,
+    BOSS_DEAD = 5,
+
 };
 
 enum class ENEMY_TYPE

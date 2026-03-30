@@ -23,5 +23,6 @@ public:
     // 생성, 소멸자
     //============
     EnemyAttackState();
+    EnemyAttackState(const wstring& ownerName);
     virtual ~EnemyAttackState();
 };

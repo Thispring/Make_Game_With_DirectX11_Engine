@@ -8,3 +8,5 @@
 #include "struct.h"
 
 #include "extern.h"
+
+#include "contentFunc.h"

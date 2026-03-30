@@ -5,6 +5,11 @@ EnemyJumpState::EnemyJumpState()
 {
 }
 
+EnemyJumpState::EnemyJumpState(const std::wstring& ownerName)
+	: EnemyState(ownerName)
+{
+}
+
 EnemyJumpState::~EnemyJumpState()
 {
 }

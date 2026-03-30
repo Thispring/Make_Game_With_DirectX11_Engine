@@ -9,6 +9,8 @@ class RenderMgr
 	SINGLE(RenderMgr);
 private:
 	Ptr<CCamera>			m_MainCam;
+	// UI 카메라 추가하려면 CCamera 멤버를 더 추가
+	//Ptr<CCamera>			m_MainCam;
 	Ptr<CCamera>			m_EditorCam;				// Engine Editor 모드에서 사용할 카메라 오브젝트
 
 	Ptr<GameObject>			m_DbgObj;					// 디버그 렌더링을 위한 Dummy GameObject

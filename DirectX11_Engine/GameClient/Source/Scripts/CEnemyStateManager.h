@@ -20,6 +20,8 @@ private:
     
 
 public:
+    void SetUp();
+
 
     //=============
     // 상속 멤버 함수

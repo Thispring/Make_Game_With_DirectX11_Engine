@@ -1,6 +1,7 @@
 #pragma once
 #include "CScript.h"
 #include "GameObject.h"
+#include "contentEnum.h"
 
 // 게임에 등장하는 모든 Enemy의 체력, 공격력 등의 정보를 이 객체에서 정의하고 관리합니다.
 // Enemy의 타입별로 멤버를 다르게 설정할 수 있도록 설계합니다.
@@ -11,6 +12,7 @@ class CEnemyData :
 
 private:
     Ptr<GameObject>     m_TargetObject;
+    ENEMY_TYPE          m_EnemyType;
 
     Vec3                m_OriginPos;
     Vec3                m_CurPos;
@@ -66,6 +68,7 @@ public:
     GET_SET(Vec3, CurPos);
 
     GET_SET(Ptr<GameObject>, TargetObject);
+    GET_SET(ENEMY_TYPE, EnemyType);
 
     GET_SET(float, VelocityY);
 

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CEnemyData.h"
+#include "CEnemyStateManager.h"
 #include "CCollider2D.h"
 #include "LevelMgr.h"
 
@@ -45,7 +46,21 @@ void CEnemyData::Init()
 
 void CEnemyData::Begin()
 {
-	m_TargetObject = LevelMgr::GetInst()->FindObjectByName(L"mon1");
+	m_TargetObject = LevelMgr::GetInst()->FindObjectByName(GetOwner()->GetName());
+
+	// GetName 조건에 따라 ENEMY_TYPE 초기화를 다르게 진행
+	// ENEMY_TYPE을 EnemyData에서 저장하고, TYPE 조건문 마다
+	// 각자 다른 ENEMY_STATE를 호출받게 설정?
+	if (GetOwner()->GetName() == L"mon1")
+		m_EnemyType = ENEMY_TYPE::DEMON;
+	else if (GetOwner()->GetName() == L"mon2")
+		m_EnemyType = ENEMY_TYPE::SKULL;
+	else if (GetOwner()->GetName() == L"mon3")
+		m_EnemyType = ENEMY_TYPE::FLYING;
+	else if (GetOwner()->GetName() == L"mon4")
+		m_EnemyType = ENEMY_TYPE::FLOWER;
+	else
+		assert(nullptr);
 
 	// 기존 위치는 Begin에서 초기화
 	m_OriginPos = Vec3(0.f, 0.f, 0.f);
@@ -54,6 +69,12 @@ void CEnemyData::Begin()
 	ADD_DYNAMIC_BEGIN_OVERLAP(CEnemyData::BeginOverlap);
 	ADD_DYNAMIC_OVERLAP(CEnemyData::Overlap);
 	ADD_DYNAMIC_END_OVERLAP(CEnemyData::EndOverlap);
+
+	// m_TargetObject에 같이 있는 CEnemyStateManager 객체의 주소를 얻어와
+	// SetUp 함수 호출, 호출 순서를 보장하기 위함
+	// Script의 Begin을 호출한다면, 등록된 순서대로 각 콘텐츠 스크립트의 Begin이 호출되기 때문에
+	// State 생성 부분을 m_EnemyType이 결정된 이후 호출하게 합니다.
+	m_TargetObject->GetScript<CEnemyStateManager>()->SetUp();
 }
 
 void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
@@ -63,6 +84,12 @@ void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherColl
 void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 	m_IsFalling = false;
+
+	// Layer Index 5번은 Player 투사체
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == 5)
+	{
+		// Hit 상태로 변경하고, 데미지 계산
+	}
 }
 
 void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
