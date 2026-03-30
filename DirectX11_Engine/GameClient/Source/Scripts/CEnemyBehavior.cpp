@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "CEnemyBehavior.h"
-#include "CEnemyStatus.h"
+#include "CEnemyStateManager.h"
 #include "LevelMgr.h"
 
 CEnemyBehavior::CEnemyBehavior()
@@ -15,7 +15,7 @@ CEnemyBehavior::~CEnemyBehavior()
 void CEnemyBehavior::Begin()
 {
 	// Script 주소 참조
-	m_Status = GetOwner()->GetScript<CEnemyStatus>();
+	m_Status = GetOwner()->GetScript<CEnemyStateManager>();
 }
 
 void CEnemyBehavior::Tick()

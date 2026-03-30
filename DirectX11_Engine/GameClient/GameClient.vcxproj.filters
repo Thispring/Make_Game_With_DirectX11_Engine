@@ -280,7 +280,7 @@
     <ClInclude Include="Source\ScriptMgr.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\CEnemyStatus.h">
+    <ClInclude Include="Source\Scripts\CEnemyStateManager.h">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\CEnemyAnimator.h">
@@ -372,6 +372,24 @@
     </ClInclude>
     <ClInclude Include="LevelMaker.h">
       <Filter>GameEngine\Editor\MakerUI\LevelMaker</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CEnemyData.h">
+      <Filter>Source\ContentScript\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\EnemyState.h">
+      <Filter>Source\OtherContent\EnemyStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\EnemyMoveState.h">
+      <Filter>Source\OtherContent\EnemyStatus\Move</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\EnemyAttackState.h">
+      <Filter>Source\OtherContent\EnemyStatus\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\EnemyIdleState.h">
+      <Filter>Source\OtherContent\EnemyStatus\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\EnemyJumpState.h">
+      <Filter>Source\OtherContent\EnemyStatus\Jump</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -636,7 +654,7 @@
     <ClCompile Include="Source\Scripts\CEnemyBehavior.cpp">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripts\CEnemyStatus.cpp">
+    <ClCompile Include="Source\Scripts\CEnemyStateManager.cpp">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="SpriteMaker.cpp">
@@ -725,6 +743,24 @@
     </ClCompile>
     <ClCompile Include="LevelMaker.cpp">
       <Filter>GameEngine\Editor\MakerUI\LevelMaker</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CEnemyData.cpp">
+      <Filter>Source\ContentScript\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\EnemyState.cpp">
+      <Filter>Source\OtherContent\EnemyStatus</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\EnemyMoveState.cpp">
+      <Filter>Source\OtherContent\EnemyStatus\Move</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\EnemyAttackState.cpp">
+      <Filter>Source\OtherContent\EnemyStatus\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\EnemyIdleState.cpp">
+      <Filter>Source\OtherContent\EnemyStatus\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\EnemyJumpState.cpp">
+      <Filter>Source\OtherContent\EnemyStatus\Jump</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1024,6 +1060,21 @@
     </Filter>
     <Filter Include="GameEngine\Editor\MakerUI\LevelMaker">
       <UniqueIdentifier>{2f0d74f7-829d-41b8-8d5e-7e6a80eeae62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\EnemyStatus">
+      <UniqueIdentifier>{dc01566a-d2b3-42ba-89f4-db605a5ce480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\EnemyStatus\Attack">
+      <UniqueIdentifier>{8be0559a-8cf2-41f3-aea8-a0cfd4c29534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\EnemyStatus\Idle">
+      <UniqueIdentifier>{e4593472-002f-4bd0-8a6c-1323f676ca67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\EnemyStatus\Jump">
+      <UniqueIdentifier>{47d4c88b-a44d-479c-86a4-34ee1a17553e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\EnemyStatus\Move">
+      <UniqueIdentifier>{c06deca9-96df-4d28-b30f-d2bfebcc100d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

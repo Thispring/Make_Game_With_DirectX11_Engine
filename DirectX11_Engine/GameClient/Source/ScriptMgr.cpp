@@ -5,8 +5,9 @@
 #include "Scripts/CCamMoveScript.h"
 #include "Scripts/CEnemyAnimator.h"
 #include "Scripts/CEnemyBehavior.h"
+#include "Scripts/CEnemyData.h"
 #include "Scripts/CEnemySpawner.h"
-#include "Scripts/CEnemyStatus.h"
+#include "Scripts/CEnemyStateManager.h"
 #include "Scripts/CEnergyBlast.h"
 #include "Scripts/CLightObjectMove.h"
 #include "Scripts/CParallaxLayer.h"
@@ -20,8 +21,9 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CCamMoveScript");
 	_vec.push_back(L"CEnemyAnimator");
 	_vec.push_back(L"CEnemyBehavior");
+	_vec.push_back(L"CEnemyData");
 	_vec.push_back(L"CEnemySpawner");
-	_vec.push_back(L"CEnemyStatus");
+	_vec.push_back(L"CEnemyStateManager");
 	_vec.push_back(L"CEnergyBlast");
 	_vec.push_back(L"CLightObjectMove");
 	_vec.push_back(L"CParallaxLayer");
@@ -39,10 +41,12 @@ CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CEnemyAnimator;
 	if (L"CEnemyBehavior" == _strScriptName)
 		return new CEnemyBehavior;
+	if (L"CEnemyData" == _strScriptName)
+		return new CEnemyData;
 	if (L"CEnemySpawner" == _strScriptName)
 		return new CEnemySpawner;
-	if (L"CEnemyStatus" == _strScriptName)
-		return new CEnemyStatus;
+	if (L"CEnemyStateManager" == _strScriptName)
+		return new CEnemyStateManager;
 	if (L"CEnergyBlast" == _strScriptName)
 		return new CEnergyBlast;
 	if (L"CLightObjectMove" == _strScriptName)
@@ -73,11 +77,14 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::ENEMYBEHAVIOR:
 		return new CEnemyBehavior;
 		break;
+	case (UINT)SCRIPT_TYPE::ENEMYDATA:
+		return new CEnemyData;
+		break;
 	case (UINT)SCRIPT_TYPE::ENEMYSPAWNER:
 		return new CEnemySpawner;
 		break;
-	case (UINT)SCRIPT_TYPE::ENEMYSTATUS:
-		return new CEnemyStatus;
+	case (UINT)SCRIPT_TYPE::ENEMYSTATEMANAGER:
+		return new CEnemyStateManager;
 		break;
 	case (UINT)SCRIPT_TYPE::ENERGYBLAST:
 		return new CEnergyBlast;
@@ -120,12 +127,16 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CEnemyBehavior";
 		break;
 
+	case SCRIPT_TYPE::ENEMYDATA:
+		return L"CEnemyData";
+		break;
+
 	case SCRIPT_TYPE::ENEMYSPAWNER:
 		return L"CEnemySpawner";
 		break;
 
-	case SCRIPT_TYPE::ENEMYSTATUS:
-		return L"CEnemyStatus";
+	case SCRIPT_TYPE::ENEMYSTATEMANAGER:
+		return L"CEnemyStateManager";
 		break;
 
 	case SCRIPT_TYPE::ENERGYBLAST:
@@ -173,10 +184,13 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	case ENEMYBEHAVIOR: return "CEnemyBehavior";
 		break;
 
+	case ENEMYDATA: return "CEnemyData";
+		break;
+
 	case ENEMYSPAWNER: return "CEnemySpawner";
 		break;
 
-	case ENEMYSTATUS: return "CEnemyStatus";
+	case ENEMYSTATEMANAGER: return "CEnemyStateManager";
 		break;
 
 	case ENERGYBLAST: return "CEnergyBlast";
@@ -219,10 +233,12 @@ CScript * ScriptMgr::GetScript(const char* _strScriptName)
 		return new CEnemyAnimator;
 	if (0 == strcmp(_strScriptName, "CEnemyBehavior"))
 		return new CEnemyBehavior;
+	if (0 == strcmp(_strScriptName, "CEnemyData"))
+		return new CEnemyData;
 	if (0 == strcmp(_strScriptName, "CEnemySpawner"))
 		return new CEnemySpawner;
-	if (0 == strcmp(_strScriptName, "CEnemyStatus"))
-		return new CEnemyStatus;
+	if (0 == strcmp(_strScriptName, "CEnemyStateManager"))
+		return new CEnemyStateManager;
 	if (0 == strcmp(_strScriptName, "CEnergyBlast"))
 		return new CEnergyBlast;
 	if (0 == strcmp(_strScriptName, "CLightObjectMove"))
@@ -249,10 +265,12 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 		return ENEMYANIMATOR;
 	if (L"CEnemyBehavior" == _strScriptName)
 		return ENEMYBEHAVIOR;
+	if (L"CEnemyData" == _strScriptName)
+		return ENEMYDATA;
 	if (L"CEnemySpawner" == _strScriptName)
 		return ENEMYSPAWNER;
-	if (L"CEnemyStatus" == _strScriptName)
-		return ENEMYSTATUS;
+	if (L"CEnemyStateManager" == _strScriptName)
+		return ENEMYSTATEMANAGER;
 	if (L"CEnergyBlast" == _strScriptName)
 		return ENERGYBLAST;
 	if (L"CLightObjectMove" == _strScriptName)
@@ -279,10 +297,12 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 		return ENEMYANIMATOR;
 	if (0 == strcmp(_strScriptName, "CEnemyBehavior"))
 		return ENEMYBEHAVIOR;
+	if (0 == strcmp(_strScriptName, "CEnemyData"))
+		return ENEMYDATA;
 	if (0 == strcmp(_strScriptName, "CEnemySpawner"))
 		return ENEMYSPAWNER;
-	if (0 == strcmp(_strScriptName, "CEnemyStatus"))
-		return ENEMYSTATUS;
+	if (0 == strcmp(_strScriptName, "CEnemyStateManager"))
+		return ENEMYSTATEMANAGER;
 	if (0 == strcmp(_strScriptName, "CEnergyBlast"))
 		return ENERGYBLAST;
 	if (0 == strcmp(_strScriptName, "CLightObjectMove"))

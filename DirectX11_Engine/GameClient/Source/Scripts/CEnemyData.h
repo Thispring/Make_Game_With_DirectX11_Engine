@@ -1,20 +1,17 @@
 #pragma once
 #include "CScript.h"
 #include "GameObject.h"
-#include "APrefab.h"
 
-// Script를 상속받는 콘텐츠 스크립트 Component 입니다.
-// Player의 체력, 공격력 등의 정보를 이 객체에서 정의하고 관리합니다.
+// 게임에 등장하는 모든 Enemy의 체력, 공격력 등의 정보를 이 객체에서 정의하고 관리합니다.
+// Enemy의 타입별로 멤버를 다르게 설정할 수 있도록 설계합니다.
 // 멤버는 GET_SET 함수로만 접근을 허용합니다.
-class CPlayerData :
+class CEnemyData :
     public CScript
 {
 
 private:
     Ptr<GameObject>     m_TargetObject;
-    Ptr<GameObject>     m_AnchorObject;
-    Ptr<APrefab>        m_EnergyBlast;      // Player가 발사하는 에너지파 프리팹
-    
+
     Vec3                m_OriginPos;
     Vec3                m_CurPos;
 
@@ -24,18 +21,11 @@ private:
     float               m_Speed;
     float               m_JumpVelocity;
 
-    int                 m_DeathCount;
-    int                 m_DirNum;
-
     bool                m_IsDead;
     bool                m_IsFalling;        // true일 때만 Tick에서 y축으로 DT 만큼 음수 이동
-    
-    bool                m_IsAttack;         // 공격 중인지 여부, 공격 상태는 1가지만 가능합니다.
 
+    bool                m_IsAttack;     
 
-    //===============================
-    // 물리 관련 멤버 변수, 파일로 저장 X
-    //===============================
     float               m_VelocityY;        // Y축 수직 속도
 
 public:
@@ -53,7 +43,7 @@ public:
     virtual void Init() override;       // Component 클래스 추상 멤버
     virtual void Begin() override;
     virtual void Tick() override;
-    CLONE(CPlayerData);
+    CLONE(CEnemyData);
 
     virtual void SaveToLevelFile(FILE* _File) override;
     virtual void LoadFromLevelFile(FILE* _File) override;
@@ -68,25 +58,20 @@ public:
     GET_SET(float, Speed);
     GET_SET(float, JumpVelocity);
 
-    GET_SET(int, DeathCount);
-    GET_SET(int, DirNum);
-
     GET_SET(bool, IsDead);
     GET_SET(bool, IsFalling);
     GET_SET(bool, IsAttack);
-    
+
     GET_SET(Vec3, OriginPos);
     GET_SET(Vec3, CurPos);
 
     GET_SET(Ptr<GameObject>, TargetObject);
-    GET_SET(Ptr<GameObject>, AnchorObject);
-    GET_SET(Ptr<APrefab>, EnergyBlast);
 
     GET_SET(float, VelocityY);
 
     //============
     // 생성, 소멸자
     //============
-    CPlayerData();
-    virtual ~CPlayerData();
+    CEnemyData();
+    virtual ~CEnemyData();
 };

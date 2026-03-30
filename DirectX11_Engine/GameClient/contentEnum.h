@@ -21,3 +21,34 @@ enum class PLAYER_STATE
 
     END,
 };
+
+enum class ENEMY_STATE
+{
+    IDLE,
+
+    MOVE,
+    JUMP,
+
+    // ENEMY_TYPE 별 공격 Flipbook index는 다를 수 있으니
+    // ATTACK의 경우 원하는 값을 대입하여 사용합니다.
+    // index가 겹치지 않도록 값대입을 합니다.
+    DEMON_ATTACK = 3,
+
+    DEAD,
+
+
+    END,
+};
+
+enum class ENEMY_TYPE
+{
+    // TYPE 네이밍은 Flipbook 이미지에 따름
+    DEMON,
+    SKULL,
+    FLYING,
+    FLOWER,
+
+    BOSS,
+
+    END,
+};

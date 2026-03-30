@@ -59,7 +59,7 @@ void CEnergyBlast::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCo
 void CEnergyBlast::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 	// Enemy Layer에서만 작동하게 조건문 실행
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == 4)
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == 6)
 		DestroyBlast();
 }
 

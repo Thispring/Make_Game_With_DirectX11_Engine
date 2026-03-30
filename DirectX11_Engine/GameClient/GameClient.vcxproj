@@ -259,6 +259,11 @@ call CodeGen.exe</Command>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Source\Content\EnemyAttackState.h" />
+    <ClInclude Include="Source\Content\EnemyIdleState.h" />
+    <ClInclude Include="Source\Content\EnemyJumpState.h" />
+    <ClInclude Include="Source\Content\EnemyState.h" />
+    <ClInclude Include="Source\Content\EnemyMoveState.h" />
     <ClInclude Include="Source\Content\PlayerIdleState.h" />
     <ClInclude Include="Source\Content\PlayerJumpState.h" />
     <ClInclude Include="Source\Content\PlayerMeleeAttackState.h" />
@@ -270,8 +275,9 @@ call CodeGen.exe</Command>
     <ClInclude Include="Source\Scripts\CCamMoveScript.h" />
     <ClInclude Include="Source\Scripts\CEnemyAnimator.h" />
     <ClInclude Include="Source\Scripts\CEnemyBehavior.h" />
+    <ClInclude Include="Source\Scripts\CEnemyData.h" />
     <ClInclude Include="Source\Scripts\CEnemySpawner.h" />
-    <ClInclude Include="Source\Scripts\CEnemyStatus.h" />
+    <ClInclude Include="Source\Scripts\CEnemyStateManager.h" />
     <ClInclude Include="Source\Scripts\CEnergyBlast.h" />
     <ClInclude Include="Source\Scripts\CLightObjectMove.h" />
     <ClInclude Include="Source\Scripts\CParallaxLayer.h" />
@@ -380,6 +386,11 @@ call CodeGen.exe</Command>
     <ClCompile Include="EPrefabUI.cpp" />
     <ClCompile Include="PrefabMaker.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
+    <ClCompile Include="Source\Content\EnemyAttackState.cpp" />
+    <ClCompile Include="Source\Content\EnemyIdleState.cpp" />
+    <ClCompile Include="Source\Content\EnemyJumpState.cpp" />
+    <ClCompile Include="Source\Content\EnemyState.cpp" />
+    <ClCompile Include="Source\Content\EnemyMoveState.cpp" />
     <ClCompile Include="Source\Content\PlayerIdleState.cpp" />
     <ClCompile Include="Source\Content\PlayerJumpState.cpp" />
     <ClCompile Include="Source\Content\PlayerMeleeAttackState.cpp" />
@@ -391,8 +402,9 @@ call CodeGen.exe</Command>
     <ClCompile Include="Source\Scripts\CCamMoveScript.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyAnimator.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyBehavior.cpp" />
+    <ClCompile Include="Source\Scripts\CEnemyData.cpp" />
     <ClCompile Include="Source\Scripts\CEnemySpawner.cpp" />
-    <ClCompile Include="Source\Scripts\CEnemyStatus.cpp" />
+    <ClCompile Include="Source\Scripts\CEnemyStateManager.cpp" />
     <ClCompile Include="Source\Scripts\CEnergyBlast.cpp" />
     <ClCompile Include="Source\Scripts\CLightObjectMove.cpp" />
     <ClCompile Include="Source\Scripts\CParallaxLayer.cpp" />

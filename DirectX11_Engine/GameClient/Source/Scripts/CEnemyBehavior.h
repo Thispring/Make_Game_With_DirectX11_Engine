@@ -1,14 +1,14 @@
 #pragma once
 #include "CScript.h"
 
-class CEnemyStatus;
+class CEnemyStateManager;
 
 class CEnemyBehavior :
     public CScript
 {
 
 private:
-    Ptr<CEnemyStatus> m_Status;
+    Ptr<CEnemyStateManager> m_Status;
 
 public:
     //=============

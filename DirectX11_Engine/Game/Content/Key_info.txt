@@ -88,6 +88,11 @@ KEY: F9
 KEY_STATE: TAP
 Source File: RenderMgr.cpp
 
+Comment: // 임시 비활성화 Key 코드 추가하기
+KEY: G
+KEY_STATE: TAP
+Source File: EnemyState.cpp
+
 Comment: No Comment
 KEY: Z
 KEY_STATE: RELEASED

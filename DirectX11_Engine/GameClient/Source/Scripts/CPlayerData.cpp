@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CPlayerData.h"
 #include "LevelMgr.h"
+#include "AssetMgr.h"
 
 CPlayerData::CPlayerData()
 	: CScript(SCRIPT_TYPE::PLAYERDATA)
@@ -16,6 +17,9 @@ CPlayerData::CPlayerData()
 	, m_IsDead(false)
 	, m_IsFalling(true)
 	, m_IsAttack(false)
+
+	, m_OriginPos {}
+	, m_CurPos {}
 
 	, m_TargetObject(nullptr)
 	, m_AnchorObject(nullptr)
@@ -54,6 +58,17 @@ void CPlayerData::Begin()
 {
 	m_TargetObject = LevelMgr::GetInst()->FindObjectByName(L"Player");
 	m_AnchorObject = LevelMgr::GetInst()->FindObjectByName(L"Anchor");
+	
+	// 기존 위치는 Begin에서 초기화
+	m_OriginPos = Vec3(0.f, 0.f, 0.f);
+	m_CurPos = m_OriginPos;
+
+	// Scale을 받아와서 초기 방향 정보 초기화
+	Vec3 vScale = m_TargetObject->Transform()->GetRelativeScale();
+	if (vScale.x < 0)
+		m_DirNum = -1;
+	else
+		m_DirNum = 1;
 
 	ADD_DYNAMIC_BEGIN_OVERLAP(CPlayerData::BeginOverlap);
 	ADD_DYNAMIC_OVERLAP(CPlayerData::Overlap);
@@ -81,8 +96,28 @@ void CPlayerData::Tick()
 
 void CPlayerData::SaveToLevelFile(FILE* _File)
 {
+	// 파일로 저장해야할 멤버 정리
+	// m_TargetObject, m_AnchorObject는 Begin에서 초기화 하므로 파일 저장 X
+
+	// 파일 저장 조건을
+	// 프로그램을 재실행하는가? 라는 조건을 두고
+	// 먼저 재실행한다 하더라도, 저장 및 불러오기가 필요한 멤버 먼저 저장
+
+	// m_OriginPos, m_CurPos
+	// m_FullHP, m_CurHP, m_Damage, m_Speed, m_JumpVelocity
+	// m_DeathCount
+	//
+	// 위 멤버는 재실행할때, 해당 정보를 불러와서 이어하길 원한다면 파일에 저장합니다.
+	// 
+	//fwrite(&m_FullHP, sizeof(float), 1, _File);
+	//fwrite(&m_Damage, sizeof(float), 1, _File);
+	//fwrite(&m_Speed, sizeof(float), 1, _File);
+	//fwrite(&m_JumpVelocity, sizeof(float), 1, _File);
+
+	SaveAssetRef(_File, m_EnergyBlast.Get());
 }
 
 void CPlayerData::LoadFromLevelFile(FILE* _File)
 {
+	m_EnergyBlast = LoadAssetRef<APrefab>(_File);
 }
