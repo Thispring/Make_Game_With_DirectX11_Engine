@@ -209,3 +209,53 @@ unique_ptr<PlayerState> PlayerHighKickState::Clone() const
 	return unique_ptr<PlayerState>();
 }
 #pragma endregion
+
+
+#pragma region PlayerLowKickState
+PlayerLowKickState::PlayerLowKickState()
+{
+	m_FlipbookIndex = PLAYER_STATE::LOW_KICK;
+}
+
+PlayerLowKickState::~PlayerLowKickState()
+{
+}
+
+void PlayerLowKickState::Begin()
+{
+}
+
+void PlayerLowKickState::Tick()
+{
+	bool isAttck = true;
+	m_PlayerData->SetIsAttack(isAttck);
+}
+
+void PlayerLowKickState::FinalTick()
+{
+	bool isAttck = false;
+	m_PlayerData->SetIsAttack(isAttck);
+
+	// Idle 상태로 변경
+	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
+	pMgr->SetCurStatus(pMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
+}
+
+PLAYER_STATE PlayerLowKickState::GetFlipbookIndex()
+{
+	return m_FlipbookIndex;
+}
+
+void PlayerLowKickState::SaveToLevelFile(FILE* _File)
+{
+}
+
+void PlayerLowKickState::LoadFromLevelFile(FILE* _File)
+{
+}
+
+unique_ptr<PlayerState> PlayerLowKickState::Clone() const
+{
+	return unique_ptr<PlayerState>();
+}
+#pragma endregion

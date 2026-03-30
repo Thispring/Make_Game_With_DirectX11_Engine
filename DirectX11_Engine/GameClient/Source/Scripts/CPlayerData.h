@@ -1,6 +1,7 @@
 #pragma once
 #include "CScript.h"
 #include "GameObject.h"
+#include "APrefab.h"
 
 // Script를 상속받는 콘텐츠 스크립트 Component 입니다.
 // Player의 체력, 공격력 등의 정보를 이 객체에서 정의하고 관리합니다.
@@ -11,6 +12,8 @@ class CPlayerData :
 
 private:
     Ptr<GameObject>     m_TargetObject;
+    Ptr<GameObject>     m_AnchorObject;
+    Ptr<APrefab>        m_EnergyBlast;      // Player가 발사하는 에너지파 프리팹
 
     float               m_FullHP;
     float               m_CurHP;
@@ -19,6 +22,7 @@ private:
     float               m_JumpVelocity;
 
     int                 m_DeathCount;
+    int                 m_DirNum;
 
     bool                m_IsDead;
     bool                m_IsFalling;        // true일 때만 Tick에서 y축으로 DT 만큼 음수 이동
@@ -62,11 +66,14 @@ public:
     GET_SET(float, JumpVelocity);
 
     GET_SET(int, DeathCount);
+    GET_SET(int, DirNum);
 
     GET_SET(bool, IsDead);
     GET_SET(bool, IsFalling);
     GET_SET(bool, IsAttack);
     GET_SET(Ptr<GameObject>, TargetObject);
+    GET_SET(Ptr<GameObject>, AnchorObject);
+    GET_SET(Ptr<APrefab>, EnergyBlast);
 
     GET_SET(float, VelocityY);
 

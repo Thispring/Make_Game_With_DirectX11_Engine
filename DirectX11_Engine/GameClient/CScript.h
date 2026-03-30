@@ -15,6 +15,7 @@ enum class SCRIPT_PARAM
 
     TEXTURE,
     MATERIAL,
+    PREFAB,
     STRING,     // 포인터 변수 사용 시, 가리키고 있는 대상의 이름 표시
 };
 
@@ -47,6 +48,7 @@ protected:
     void ClearScriptParam();
     // Prefab을 가져와 객체로 생성하는 함수
     void Instantiate(class APrefab* _Prefab, int _LayerIdx, Vec3 _WorldPos);
+    GameObject* InstantiateObject(class APrefab* _Prefab, int _LayerIdx, Vec3 _WorldPos);
 
 public:
     //=============

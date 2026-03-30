@@ -12,6 +12,7 @@ class CPlayerController :
 private:
     Ptr<CPlayerData>            m_PlayerData;   // 관리자 클래스에서 동일한 CPlayerData를 가리키고 있어야 합니다.
     Ptr<CPlayerStateManager>    m_StatusMgr;
+    int m_TempDir;
 
 public:
     //=========
@@ -21,6 +22,7 @@ public:
     void Jump();
     void Punch();
     void Kick();
+    void EnergyBlastShot();
 
 
     //=============

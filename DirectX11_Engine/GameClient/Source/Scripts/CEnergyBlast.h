@@ -11,6 +11,7 @@ class CEnergyBlast :
 {
 
 private:
+    Vec3 m_Dir;
     float       m_TravelTime;
     float       m_Speed;
     float       m_Damage;
@@ -23,6 +24,8 @@ public:
     //=========
     // 멤버 함수
     //=========
+    void SetUp(Vec3 _Dir);
+
     void BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
     void Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
     void EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);

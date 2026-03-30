@@ -49,3 +49,17 @@ void CScript::Instantiate(APrefab* _Prefab, int _LayerIdx, Vec3 _WorldPos)
 
     CreateObject(pObject, _LayerIdx);
 }
+
+GameObject* CScript::InstantiateObject(APrefab* _Prefab, int _LayerIdx, Vec3 _WorldPos)
+{
+    if (_Prefab == nullptr)
+        return nullptr;
+
+    GameObject* pObject = _Prefab->Instantiate();
+
+    pObject->Transform()->SetRelativePos(_WorldPos);
+
+    CreateObject(pObject, _LayerIdx);
+
+    return pObject;
+}

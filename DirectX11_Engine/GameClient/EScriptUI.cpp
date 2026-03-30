@@ -160,6 +160,46 @@ void EScriptUI::Tick_UI()
 			break;
 		case SCRIPT_PARAM::MATERIAL:
 			break;
+		case SCRIPT_PARAM::PREFAB:
+		{
+			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
+			ImGui::SameLine(160);
+
+			string Key = "##Prefab";
+			Key += ID;
+
+			Ptr<APrefab> pPrefab = *((Ptr<APrefab>*)vecParam[i].Data);
+
+			string PrefabName = "None";
+			if (nullptr != pPrefab)
+			{
+				PrefabName = string(pPrefab->GetKey().begin(), pPrefab->GetKey().end());
+			}
+
+			ImGui::InputText(Key.c_str(), PrefabName.data(), PrefabName.length() + 1, ImGuiInputTextFlags_ReadOnly);
+			AddItemHeight();
+
+			// 특정 위젯에서 드래그가 발생했고, 해당 위젯 위에 마우스가 호버링 중인지
+			if (ImGui::BeginDragDropTarget())
+			{
+				const ImGuiPayload* PayLoad = ImGui::AcceptDragDropPayload("ContentUI");
+				if (PayLoad)
+				{
+					DWORD_PTR data = *((DWORD_PTR*)PayLoad->Data);
+					Ptr<Asset> pAsset = (Asset*)data;
+
+					if (ASSET_TYPE::PREFAB == pAsset->GetType())
+					{
+						*((Ptr<APrefab>*)vecParam[i].Data) = ((APrefab*)pAsset.Get());
+					}
+				}
+
+				ImGui::EndDragDropTarget();
+			}
+
+			AddItemHeight();
+		}
+			break;
 		case SCRIPT_PARAM::STRING:
 		{
 			// NOTE(26-03-24): string 데이터 UI 출력 방식 다르게 설계 생각해보기

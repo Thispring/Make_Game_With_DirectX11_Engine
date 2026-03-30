@@ -42,6 +42,8 @@ void CPlayerAnimator::Play()
 		break;
 	case PLAYER_STATE::LOW_KICK: fps = 15; repCount = 1;
 		break;
+	case PLAYER_STATE::ENERGYBLAST_SHOT: fps = 15; repCount = 1;
+		break;
 	case PLAYER_STATE::END:
 		break;
 	default:
@@ -65,6 +67,8 @@ void CPlayerAnimator::Tick()
 		m_StatusMgr->GetCurStatus()->GetFlipbookIndex() == PLAYER_STATE::MIDDLE_KICK &&
 		GetOwner()->FlipbookRender()->GetFinish() ||
 		m_StatusMgr->GetCurStatus()->GetFlipbookIndex() == PLAYER_STATE::JUMP &&
+		GetOwner()->FlipbookRender()->GetFinish() ||
+		m_StatusMgr->GetCurStatus()->GetFlipbookIndex() == PLAYER_STATE::ENERGYBLAST_SHOT &&
 		GetOwner()->FlipbookRender()->GetFinish()
 		)
 	{

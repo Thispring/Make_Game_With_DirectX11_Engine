@@ -9,6 +9,7 @@
 #include "Source\Content\PlayerMoveState.h"
 #include "Source\Content\PlayerJumpState.h"
 #include "Source\Content\PlayerMeleeAttackState.h"
+#include "Source\Content\PlayerRangedAttackState.h"
 
 int CPlayerStateManager::m_ChangeCount = 0;
 
@@ -121,6 +122,10 @@ void CPlayerStateManager::Begin()
 
 	m_vecStatus.push_back(make_unique<PlayerHighKickState>());  // 4
 	m_vecStatus.push_back(make_unique<PlayerMiddleKickState>());  // 5
+	m_vecStatus.push_back(make_unique<PlayerLowKickState>());  // 6
+	
+    m_vecStatus.push_back(make_unique<PlayerEnergyBlastShotState>());  // 7
+
 
 	// 현재 상태를 Idle로 등록
 	m_CurStatus = m_vecStatus[(int)PLAYER_STATE::IDLE].get();

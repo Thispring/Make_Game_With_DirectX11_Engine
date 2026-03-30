@@ -193,7 +193,12 @@ KEY: LBTN
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
-Comment: 걷기는 누르고 있는 동안 상태 유지
+Comment: No Comment
+KEY: RIGHT
+KEY_STATE: PRESSED
+Source File: CPlayerController.cpp
+
+Comment: No Comment
 KEY: LEFT
 KEY_STATE: PRESSED
 Source File: CPlayerController.cpp
@@ -210,6 +215,11 @@ Source File: CPlayerController.cpp
 
 Comment: Key 조합에 따라 다른 Kick 동작 나타나게 구현
 KEY: X
+KEY_STATE: TAP
+Source File: CPlayerController.cpp
+
+Comment: No Comment
+KEY: C
 KEY_STATE: TAP
 Source File: CPlayerController.cpp
 

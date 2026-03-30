@@ -17,5 +17,7 @@ enum class PLAYER_STATE
     MIDDLE_KICK,
     LOW_KICK,
 
+    ENERGYBLAST_SHOT,
+
     END,
 };

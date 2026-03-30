@@ -11,12 +11,15 @@ CPlayerData::CPlayerData()
 	, m_Speed(120.f)
 
 	, m_DeathCount(0)
+	, m_DirNum(1)
 
 	, m_IsDead(false)
 	, m_IsFalling(true)
 	, m_IsAttack(false)
 
 	, m_TargetObject(nullptr)
+	, m_AnchorObject(nullptr)
+	, m_EnergyBlast(nullptr)
 
 	, m_VelocityY(0.f)
 {
@@ -42,12 +45,15 @@ void CPlayerData::Init()
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsDead, L"IsDead", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsFalling, L"IsFalling", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsAttack, L"IsAttack", true, 0.f);
+
+	AddScriptParam(SCRIPT_PARAM::PREFAB, &m_EnergyBlast, L"EnergyBlast", true, 0.f);
 	//AddScriptParam(SCRIPT_PARAM::STRING, &m_TargetObject, L"TargetObjectName", true, 0.f);
 }
 
 void CPlayerData::Begin()
 {
 	m_TargetObject = LevelMgr::GetInst()->FindObjectByName(L"Player");
+	m_AnchorObject = LevelMgr::GetInst()->FindObjectByName(L"Anchor");
 
 	ADD_DYNAMIC_BEGIN_OVERLAP(CPlayerData::BeginOverlap);
 	ADD_DYNAMIC_OVERLAP(CPlayerData::Overlap);
