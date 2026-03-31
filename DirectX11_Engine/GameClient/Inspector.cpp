@@ -139,10 +139,12 @@ void Inspector::Tick_UI()
 	#pragma endregion	
 
 
-	#pragma region Layer Index
 	ImGui::Text("Object Layer Index");
 	ImGui::SameLine(200.f);
 	ImGui::Text("IsActive");
+	//ImGui::SameLine(300.f);
+	//ImGui::Text("LayerFixed");
+	#pragma region Layer Index
 	SPACING_UI(3);
 
 	// Layer 이름 표시
@@ -200,9 +202,19 @@ void Inspector::Tick_UI()
 	{
 		m_TargetObject->SetIsActive(isActive);
 	}
-	SPACING_UI(5);
-	ImGui::Separator();
 	#pragma endregion	
+
+
+	//#pragma region LayerFixed
+	//ImGui::SameLine(300.f);
+	//bool isFixed = m_TargetObject->GetLayerFixed();
+	//if (ImGui::Checkbox("##LayerFixed", &isFixed))
+	//{
+	//	m_TargetObject->SetLayerFixed(isFixed);
+	//}
+	//SPACING_UI(5);
+	//ImGui::Separator();
+	//#pragma endregion	
 
 
 	#pragma region Add Component 버튼 

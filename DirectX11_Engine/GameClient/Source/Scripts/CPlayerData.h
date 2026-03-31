@@ -32,6 +32,7 @@ private:
     
     bool                m_IsAttack;         // 공격 중인지 여부, 공격 상태는 1가지만 가능합니다.
 
+    bool                m_IsMeleeTrigger;
 
     //===============================
     // 물리 관련 멤버 변수, 파일로 저장 X
@@ -42,6 +43,7 @@ public:
     //=========
     // 멤버 함수
     //=========
+
     void BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
     void Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
     void EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
@@ -83,6 +85,7 @@ public:
     GET_SET(Ptr<APrefab>, EnergyBlast);
 
     GET_SET(float, VelocityY);
+    GET_SET(bool, IsMeleeTrigger);
 
     //============
     // 생성, 소멸자

@@ -55,7 +55,7 @@ void Layer::AddObject(Ptr<GameObject> _Object)
 	{
 		GameObject* pObject = queue.front();
 		queue.pop_front();
-
+		
 		pObject->m_LayerIdx = m_LayerIdx;
 
 		for (size_t i = 0; i < pObject->m_vecChild.size(); ++i)

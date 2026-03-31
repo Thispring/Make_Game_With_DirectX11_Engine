@@ -14,6 +14,7 @@
 #include "Scripts/CPlayerAnimator.h"
 #include "Scripts/CPlayerController.h"
 #include "Scripts/CPlayerData.h"
+#include "Scripts/CPlayerMeleeTrigger.h"
 #include "Scripts/CPlayerStateManager.h"
 
 void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
@@ -30,6 +31,7 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CPlayerAnimator");
 	_vec.push_back(L"CPlayerController");
 	_vec.push_back(L"CPlayerData");
+	_vec.push_back(L"CPlayerMeleeTrigger");
 	_vec.push_back(L"CPlayerStateManager");
 }
 
@@ -59,6 +61,8 @@ CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CPlayerController;
 	if (L"CPlayerData" == _strScriptName)
 		return new CPlayerData;
+	if (L"CPlayerMeleeTrigger" == _strScriptName)
+		return new CPlayerMeleeTrigger;
 	if (L"CPlayerStateManager" == _strScriptName)
 		return new CPlayerStateManager;
 	return nullptr;
@@ -103,6 +107,9 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERDATA:
 		return new CPlayerData;
+		break;
+	case (UINT)SCRIPT_TYPE::PLAYERMELEETRIGGER:
+		return new CPlayerMeleeTrigger;
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERSTATEMANAGER:
 		return new CPlayerStateManager;
@@ -163,6 +170,10 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CPlayerData";
 		break;
 
+	case SCRIPT_TYPE::PLAYERMELEETRIGGER:
+		return L"CPlayerMeleeTrigger";
+		break;
+
 	case SCRIPT_TYPE::PLAYERSTATEMANAGER:
 		return L"CPlayerStateManager";
 		break;
@@ -211,6 +222,9 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	case PLAYERDATA: return "CPlayerData";
 		break;
 
+	case PLAYERMELEETRIGGER: return "CPlayerMeleeTrigger";
+		break;
+
 	case PLAYERSTATEMANAGER: return "CPlayerStateManager";
 		break;
 
@@ -251,6 +265,8 @@ CScript * ScriptMgr::GetScript(const char* _strScriptName)
 		return new CPlayerController;
 	if (0 == strcmp(_strScriptName, "CPlayerData"))
 		return new CPlayerData;
+	if (0 == strcmp(_strScriptName, "CPlayerMeleeTrigger"))
+		return new CPlayerMeleeTrigger;
 	if (0 == strcmp(_strScriptName, "CPlayerStateManager"))
 		return new CPlayerStateManager;
 	return nullptr;
@@ -283,6 +299,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 		return PLAYERCONTROLLER;
 	if (L"CPlayerData" == _strScriptName)
 		return PLAYERDATA;
+	if (L"CPlayerMeleeTrigger" == _strScriptName)
+		return PLAYERMELEETRIGGER;
 	if (L"CPlayerStateManager" == _strScriptName)
 		return PLAYERSTATEMANAGER;
 	return SCRIPT_TYPE_END;
@@ -315,6 +333,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 		return PLAYERCONTROLLER;
 	if (0 == strcmp(_strScriptName, "CPlayerData"))
 		return PLAYERDATA;
+	if (0 == strcmp(_strScriptName, "CPlayerMeleeTrigger"))
+		return PLAYERMELEETRIGGER;
 	if (0 == strcmp(_strScriptName, "CPlayerStateManager"))
 		return PLAYERSTATEMANAGER;
 	return SCRIPT_TYPE_END;

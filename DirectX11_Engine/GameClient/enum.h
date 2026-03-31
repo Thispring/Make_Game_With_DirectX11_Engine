@@ -154,6 +154,8 @@ enum class TASK_TYPE
 	DESTROY_OBJECT,
 	CHANGE_LEVEL,
 	CHANGE_LEVEL_STATE,
+    // 프레임 이후로 연기된 작업: 오브젝트 활성/비활성 처리
+	SET_ACTIVE_OBJECT,
 };
 
 // 광원 타입

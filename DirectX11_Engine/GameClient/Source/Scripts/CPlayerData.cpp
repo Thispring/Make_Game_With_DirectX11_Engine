@@ -59,6 +59,16 @@ void CPlayerData::Begin()
 	// 문자열 방식으로 찾는 방법은 최대한 줄이기
 	m_TargetObject = GetOwner();
 	m_AnchorObject = GetOwner()->GetChild(0);
+
+	// NOTE(26-03-32):
+	// 자식 오브젝트 1, 2는 근거리 용, Collider를 가지고 있는 자식 오브젝트입니다.
+	// 항상 Layer 4번을 보장받을 수 있도록 Begin에서 4번으로 최종 세팅
+	GetOwner()->GetChild(1)->SetLayerIdx(4);
+	GetOwner()->GetChild(2)->SetLayerIdx(4);
+
+	// 시작 시 비활성화
+	GetOwner()->GetChild(1)->SetIsActive(false);
+	GetOwner()->GetChild(2)->SetIsActive(false);
 	
 	// 기존 위치는 Begin에서 초기화
 	m_OriginPos = Vec3(0.f, 0.f, 0.f);
@@ -78,6 +88,7 @@ void CPlayerData::Begin()
 
 void CPlayerData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
+
 }
 
 void CPlayerData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)

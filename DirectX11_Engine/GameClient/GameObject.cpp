@@ -17,6 +17,7 @@ GameObject::GameObject()
 	, m_LayerIdx(-1)
 	, m_Dead(false)
 	, m_IsActive(true)
+	, m_LayerFixed(false)	// 부모 자식 관계에 상관없이 저장된 Layer 번호를 보장하는 bool
 {
 }
 
@@ -31,6 +32,8 @@ GameObject::GameObject(const GameObject& _Origin)
 	, m_Dead(false)
 	// 원본의 활성화 여부를 받음
 	, m_IsActive(_Origin.m_IsActive)
+	// 원본의 Fixed 여부를 받음
+	, m_LayerFixed(_Origin.m_LayerFixed)
 {
 	/*************************************************************
 	* 복사 생성자로 가지고 있던 Component들을 깊은 복사
@@ -427,6 +430,12 @@ void GameObject::SaveToLevelFile(FILE* _File)
 		// 재귀호출
 		Child->SaveToLevelFile(_File);
 	}
+
+	// Layer 정보 저장
+	//fwrite(&m_LayerIdx, sizeof(int), 1, _File);
+	// LayerFixed 여부 저장
+	//fwrite(&m_LayerFixed, sizeof(bool), 1, _File);
+
 }
 
 void GameObject::LoadFromLevelFile(FILE* _File)
@@ -519,5 +528,20 @@ void GameObject::LoadFromLevelFile(FILE* _File)
 		AddChild(pChild);
 		pChild->LoadFromLevelFile(_File);
 	}
-
+	
+	// Layer 불러오기
+	/*********************************************************************************
+	* NOTE(26-03-31):
+	* Player의 자식 오브젝트에게 고유의 LayerIdx를 저장하고
+	* 불러오게 하기 위해 해당 구문 추가, 아래 코드가 이름 저장 바로
+	* 밑에 있다면, Prefab을 불러오는 과정에서 컴포넌트를 불러오는 과정에서
+	* 크래시 발생이 확인
+	* 
+	* 원인으로는 저장 순서로 인해 Prefab에 의도치 않게 m_LayerIdx이 0이 저장
+	* 혹은 불러오기가 되어, pref 바이너리 파일을 읽어오는 중 COMPONENT_TYPE도
+	* 정수 데이터고 m_LayerIdx도 정수 데이터라 0 다음 0이 읽히는 상황이 발생한 것으로 보임
+	*********************************************************************************/
+	//fread(&m_LayerIdx, sizeof(int), 1, _File);
+	// LayerFixed 여부 불러오기
+	//fread(&m_LayerFixed, sizeof(bool), 1, _File);
 }

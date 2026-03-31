@@ -74,6 +74,7 @@ void CPlayerController::Punch()
 	// 펀치도 TAP으로 트리거 (원샷)
     if (KEY_TAP(KEY::Z))
 	{
+		GetOwner()->GetChild(1)->SetIsActive(true);
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::PUNCH));
 		m_StatusMgr->ChangeState();
 	}
@@ -84,6 +85,7 @@ void CPlayerController::Kick()
 	// Key 조합에 따라 다른 Kick 동작 나타나게 구현
     if (KEY_TAP(KEY::X))
 	{
+		GetOwner()->GetChild(2)->SetIsActive(true);
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::MIDDLE_KICK));
 		m_StatusMgr->ChangeState();
 	}

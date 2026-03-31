@@ -286,6 +286,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="Source\Scripts\CPlayerController.h" />
     <ClInclude Include="Source\Scripts\CPlayerAnimator.h" />
     <ClInclude Include="Source\Scripts\CPlayerData.h" />
+    <ClInclude Include="Source\Scripts\CPlayerMeleeTrigger.h" />
     <ClInclude Include="Source\Scripts\CPlayerStateManager.h" />
     <ClInclude Include="SpriteMaker.h" />
     <ClInclude Include="struct.h" />
@@ -415,6 +416,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="Source\Scripts\CPlayerController.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerAnimator.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerData.cpp" />
+    <ClCompile Include="Source\Scripts\CPlayerMeleeTrigger.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerStateManager.cpp" />
     <ClCompile Include="SpriteMaker.cpp" />
     <ClCompile Include="StructuredBuffer.cpp" />

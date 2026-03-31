@@ -367,9 +367,6 @@
     <ClInclude Include="Source\Content\PlayerMoveState.h">
       <Filter>Source\OtherContent\PlayerStatus\Move</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\CEnergyBlast.h">
-      <Filter>Source\ContentScript</Filter>
-    </ClInclude>
     <ClInclude Include="LevelMaker.h">
       <Filter>GameEngine\Editor\MakerUI\LevelMaker</Filter>
     </ClInclude>
@@ -396,6 +393,12 @@
     </ClInclude>
     <ClInclude Include="Source\Content\EnemyDamageState.h">
       <Filter>Source\OtherContent\EnemyStatus\Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CPlayerMeleeTrigger.h">
+      <Filter>Source\ContentScript\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CEnergyBlast.h">
+      <Filter>Source\ContentScript\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -744,9 +747,6 @@
     <ClCompile Include="Source\Content\PlayerMoveState.cpp">
       <Filter>Source\OtherContent\PlayerStatus\Move</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripts\CEnergyBlast.cpp">
-      <Filter>Source\ContentScript</Filter>
-    </ClCompile>
     <ClCompile Include="LevelMaker.cpp">
       <Filter>GameEngine\Editor\MakerUI\LevelMaker</Filter>
     </ClCompile>
@@ -773,6 +773,12 @@
     </ClCompile>
     <ClCompile Include="Source\Content\EnemyDamageState.cpp">
       <Filter>Source\OtherContent\EnemyStatus\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CPlayerMeleeTrigger.cpp">
+      <Filter>Source\ContentScript\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CEnergyBlast.cpp">
+      <Filter>Source\ContentScript\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

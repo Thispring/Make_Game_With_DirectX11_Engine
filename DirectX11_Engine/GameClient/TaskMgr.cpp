@@ -14,6 +14,16 @@ TaskMgr::~TaskMgr()
 {
 }
 
+void TaskMgr::SetActiveDeferred(GameObject* _Object, bool _IsActive)
+{
+	TaskInfo info = {};
+	info.Type = TASK_TYPE::SET_ACTIVE_OBJECT;
+	info.Param_0 = (DWORD_PTR)_Object;
+	info.Param_1 = (DWORD_PTR)_IsActive;
+
+	AddTask(info);
+}
+
 void TaskMgr::Progress()
 {
 	// 이전 프레임에 있던 가비지 컬렉터에 있는 요소를 제거
@@ -94,6 +104,18 @@ void TaskMgr::Progress()
 			{
 				LEVEL_STATE NextState = (LEVEL_STATE)m_vecTask[i].Param_0;
 				LevelMgr::GetInst()->ChangeLevelState(NextState);
+			}
+				break;
+
+			case TASK_TYPE::SET_ACTIVE_OBJECT:
+			{
+				GameObject* pObj = (GameObject*)m_vecTask[i].Param_0;
+				bool bActive = (bool)m_vecTask[i].Param_1;
+
+				if (pObj && !pObj->IsDead())
+				{
+					pObj->SetIsActive(bActive);
+				}
 			}
 				break;
 		}

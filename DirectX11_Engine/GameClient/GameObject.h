@@ -41,6 +41,10 @@ private:
 	// Copy를 위한 static int 멤버 변수 추가
 	static int					m_CopyCount;
 
+	// 새로 추가: 이 오브젝트의 레이어가 "명시적으로 설정되어 고정"되었는지 여부
+	// (파일에서 읽어오거나 에디터에서 사용자가 SetLayerIdx로 설정한 경우 true)
+	bool						m_LayerFixed;
+
 	//=================
 	// private 멤버 함수
 	//=================
@@ -112,6 +116,7 @@ public:
 	// Get, Set
 	//=========
 	GET_SET(bool, IsActive);
+	GET_SET(bool, LayerFixed);
 	GET_SET(int, CopyCount);
 	Ptr<Component> GetComponent(COMPONENT_TYPE _Type) { return m_Com[(UINT)_Type]; }
 	Ptr<CRenderComponent> GetRenderCom() { return m_RenderCom; }

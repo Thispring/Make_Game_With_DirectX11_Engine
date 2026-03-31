@@ -20,4 +20,7 @@ public:
 	//=========
 	void AddTask(const TaskInfo& _Info) { m_vecTask.push_back(_Info); }
 	void Progress();
+
+	// 편의: 다음 프레임에 객체 활성화 상태를 변경하도록 예약하는 함수
+	void SetActiveDeferred(GameObject* _Object, bool _IsActive);
 };

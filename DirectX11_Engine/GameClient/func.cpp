@@ -36,6 +36,17 @@ void ChangeLevelState(LEVEL_STATE _NextState)
 	TaskMgr::GetInst()->AddTask(info);
 }
 
+// 다음 프레임에 오브젝트의 활성화 상태를 변경하도록 예약
+void SetActiveDeferred(GameObject* _Object, bool _IsActive)
+{
+	TaskInfo info = {};
+	info.Type = TASK_TYPE::SET_ACTIVE_OBJECT;
+	info.Param_0 = (DWORD_PTR)_Object;
+	info.Param_1 = (DWORD_PTR)_IsActive;
+
+	TaskMgr::GetInst()->AddTask(info);
+}
+
 // GameObject.h에 전방선언
 bool IsValid(Ptr<GameObject>& _Object)
 {
