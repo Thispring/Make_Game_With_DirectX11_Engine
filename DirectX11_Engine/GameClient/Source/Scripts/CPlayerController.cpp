@@ -30,9 +30,9 @@ void CPlayerController::Move()
 
 		// 방향 정보 Setter
 		m_PlayerData->SetDirNum(m_TempDir);
-		if (m_StatusMgr->GetCurStatus() != m_StatusMgr->GetStatusVec((int)PLAYER_STATE::WALK))
+        if (m_StatusMgr->GetCurStatus() != m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::WALK))
 		{
-			m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::WALK));
+			m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::WALK));
 			m_StatusMgr->ChangeState();
 		}
 	}
@@ -42,17 +42,17 @@ void CPlayerController::Move()
 
 		// 방향 정보 Setter
 		m_PlayerData->SetDirNum(m_TempDir);
-		if (m_StatusMgr->GetCurStatus() != m_StatusMgr->GetStatusVec((int)PLAYER_STATE::WALK))
+        if (m_StatusMgr->GetCurStatus() != m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::WALK))
 		{
-			m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::WALK));
+			m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::WALK));
 			m_StatusMgr->ChangeState();
 		}
 	}
 	else
 	{
-		if (m_StatusMgr->GetCurStatus() == m_StatusMgr->GetStatusVec((int)PLAYER_STATE::WALK))
+        if (m_StatusMgr->GetCurStatus() == m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::WALK))
 		{
-			m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
+			m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 			m_StatusMgr->ChangeState();
 		}
 	}
@@ -62,9 +62,9 @@ void CPlayerController::Move()
 void CPlayerController::Jump()
 {
 	// 점프는 TAP으로 트리거 (원샷)
-	if (KEY_TAP(KEY::SPACE))
+    if (KEY_TAP(KEY::SPACE))
 	{
-		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::JUMP));
+		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::JUMP));
 		m_StatusMgr->ChangeState();
 	}
 }
@@ -72,9 +72,9 @@ void CPlayerController::Jump()
 void CPlayerController::Punch()
 {
 	// 펀치도 TAP으로 트리거 (원샷)
-	if (KEY_TAP(KEY::Z))
+    if (KEY_TAP(KEY::Z))
 	{
-		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::PUNCH));
+		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::PUNCH));
 		m_StatusMgr->ChangeState();
 	}
 }
@@ -82,9 +82,9 @@ void CPlayerController::Punch()
 void CPlayerController::Kick()
 {
 	// Key 조합에 따라 다른 Kick 동작 나타나게 구현
-	if (KEY_TAP(KEY::X))
+    if (KEY_TAP(KEY::X))
 	{
-		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::MIDDLE_KICK));
+		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::MIDDLE_KICK));
 		m_StatusMgr->ChangeState();
 	}
 }
@@ -122,7 +122,7 @@ void CPlayerController::EnergyBlastShot()
 		pBlastObj->GetScript<CEnergyBlast>()->SetUp(vDir);
 
 
-		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::ENERGYBLAST_SHOT));
+    m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::ENERGYBLAST_SHOT));
 		m_StatusMgr->ChangeState();
 	}
 }

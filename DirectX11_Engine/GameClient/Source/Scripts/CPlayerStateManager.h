@@ -3,6 +3,7 @@
 #include "CPlayerData.h"
 #include "Source\Content\PlayerState.h"
 #include "contentEnum.h"
+#include <map>
 // CPlayerStatus의 주소를 받아, 상태를 관리하는 클래스입니다.
 
 class CPlayerStateManager :
@@ -18,7 +19,7 @@ private:
     **************************************************************************/
     PlayerState*                            m_CurStatus;
     PlayerState*                            m_PrevStatus;
-    vector<unique_ptr<PlayerState>>         m_vecStatus;
+    map<PLAYER_STATE, unique_ptr<PlayerState>> m_mapStatus;
 
     bool                                    m_IsChange;
 
@@ -43,7 +44,18 @@ public:
     //=========
     GET_SET(PlayerState*, CurStatus);  // Get, Set을 통해서만 Controller에서 상태 변경
     GET_SET(PlayerState*, PrevStatus);
-    PlayerState* GetStatusVec(int _Idx) { return m_vecStatus[_Idx].get(); }
+    PlayerState* GetStatusByPlayerState(PLAYER_STATE _State)
+    {
+        auto it = m_mapStatus.find(_State);
+        return (it != m_mapStatus.end()) ? it->second.get() : nullptr;
+    }
+
+    // 호환성: 기존 인덱스 기반 접근을 사용하는 코드 지원
+    PlayerState* GetStatusByIndex(int _Idx)
+    {
+        PLAYER_STATE st = static_cast<PLAYER_STATE>(_Idx);
+        return GetStatusByPlayerState(st);
+    }
     void SetChange() { m_IsChange = true; }
     bool IsChange();
 

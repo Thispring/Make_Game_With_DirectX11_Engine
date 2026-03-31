@@ -50,8 +50,8 @@ void PlayerJumpState::Tick()
 void PlayerJumpState::FinalTick()
 {
 	// Idle 상태로 변경
-	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
+    Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
+    pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 
 	// 점프 후 추락 상태로 전환
 	m_PlayerData->SetIsFalling(true);

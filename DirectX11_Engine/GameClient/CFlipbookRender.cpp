@@ -66,6 +66,10 @@ void CFlipbookRender::Play(int _FlipbookIdx, float _FPS, int _RepeatCount)
 
 	if (IsNewFlipbook)
 	{
+		// _FlipbookIdx이 -1이 들어왔다면, 강제로 Idle 재생하는것이므로
+		// 인덱스를 0으로 설정
+		if (_FlipbookIdx == -1)
+			_FlipbookIdx = 0;
 		// 새로운 Flipbook이면 처음부터 재생
 		m_CurSprite = 0;
 		m_AccTime = 0.f;

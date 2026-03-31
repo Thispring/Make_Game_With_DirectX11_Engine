@@ -10,7 +10,6 @@ class CPlayerAnimator :
 private:
     bool                        m_IsPlaying;        // FlipBook 재생이 1회 끝났는지 여부, false이면 아직 남아있는 Sprite가 있고, true를 얻어오면 1회 재생 끝
     Ptr<CPlayerStateManager>    m_StatusMgr;        // 상태 매니저의 원본 주소를 가져와, 현재 상태를 읽어와 알맞은 Flipbook을 재생합니다.
-    int m_LastFlipbookIndex;
 
 public:
     //=========

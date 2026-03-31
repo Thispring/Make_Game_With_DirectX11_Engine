@@ -116,8 +116,8 @@ void PlayerEnergyBlastShotState::FinalTick()
 	m_PlayerData->SetIsAttack(isAttck);
 
 	// Idle 상태로 변경
-	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
+    Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
+	pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerEnergyBlastShotState::GetFlipbookIndex()

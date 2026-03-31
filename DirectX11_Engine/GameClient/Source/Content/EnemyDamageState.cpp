@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "EnemyDamageState.h"
+#include "Source\Scripts\CEnemyStateManager.h"
 
 #pragma region EnemyDamageState
 EnemyDamageState::EnemyDamageState(Ptr<CEnemyData> _Data)
@@ -45,21 +46,10 @@ EnemyHitState::~EnemyHitState()
 {
 }
 
-void EnemyHitState::TakeDamage(float _Damge)
-{
-    float hp = m_EnemyData->GetCurHP();
-    hp -= _Damge;
-    m_EnemyData->SetCurHP(hp);
-
-    if (hp <= 0.f)
-    {
-        // Dead 상태 호출
-    }
-}
 
 void EnemyHitState::Begin()
 {
-    //TakeDamage();
+
 }
 
 void EnemyHitState::Tick()
@@ -68,6 +58,9 @@ void EnemyHitState::Tick()
 
 void EnemyHitState::FinalTick()
 {
+    //Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetOwner()->GetScript<CEnemyStateManager>();
+    //pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)GetEnemyStateToParam(m_EnemyData->GetEnemyType(), ENEMY_COMMON_STATE::IDLE)));
+    //pMgr->ChangeState();
 }
 
 ENEMY_STATE EnemyHitState::GetFlipbookIndex()

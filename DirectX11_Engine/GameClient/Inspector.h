@@ -10,6 +10,7 @@ class Inspector :
 {
 
 private:
+    Ptr<GameObject>         m_CopyObject;       // Inspector에서 복사할 오브젝트
     Ptr<GameObject>         m_TargetObject;
     Ptr<Asset>              m_TargetAsset;
     vector<Ptr<EScriptUI>>  m_vecScriptUI;

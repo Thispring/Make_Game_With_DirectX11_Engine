@@ -3,6 +3,8 @@
 #include "LevelMgr.h"
 #include "TimeMgr.h"
 
+#include "CEnemyData.h"
+
 CEnergyBlast::CEnergyBlast()
 	: CScript(SCRIPT_TYPE::ENERGYBLAST)
 	, m_Dir {}
@@ -53,14 +55,20 @@ bool CEnergyBlast::DestroyBlast()
 
 void CEnergyBlast::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == 6)
+	{
+		// 여기에서 _OtherCollider한테 데미지값을 전달해야함
+		_OtherCollider->GetOwner()->GetScript<CEnemyData>()->ApplyDamage(GetDamage());
+	}
 }
 
 void CEnergyBlast::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 	// Enemy Layer에서만 작동하게 조건문 실행
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == 6)
+	{
 		DestroyBlast();
+	}
 }
 
 void CEnergyBlast::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)

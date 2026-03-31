@@ -10,6 +10,7 @@
 
 Inspector::Inspector()
 	: EditorUI("Inspector")
+	, m_CopyObject {}
 {
 	CreateChildUI();
 	SetTargetObject(nullptr);
@@ -28,6 +29,7 @@ void Inspector::Tick_UI()
 	if (m_TargetObject == nullptr)
 		return;
 
+	#pragma region GameObject 이름
 	wstring Name = m_TargetObject->GetName();
 	string strName = string(Name.begin(), Name.end());
 
@@ -44,8 +46,9 @@ void Inspector::Tick_UI()
 		ChangeLevel(pLevel->GetKey());
 		return;
 	}
-	
+	#pragma endregion	
 
+	#pragma region Destroy GameObject 버튼 
 	// 위 버튼과 같은 라인 끝쪽에 삭제 버튼 추가하기
 	ImGui::SameLine(300.f);
 
@@ -77,8 +80,64 @@ void Inspector::Tick_UI()
 		}
 		ImGui::EndPopup();
 	}
+	SPACING_UI(5);
+	#pragma endregion	
+
+
+	#pragma region GameObject Copy 버튼
+	ImGui::Dummy(ImVec2(100.f, 20.f));
+	ImGui::SameLine(300.f);
+
+	// 색상있는 버튼 UI 생성하는 함수, imguiFunc.cpp에 구현
+	if (ImGuiFunc::ColoredButton("Copy", ImVec4(0.7f, 0.2f, 0.2f, 1.f), ImVec2(100.f, 20.f)))
+	{
+		ImGui::OpenPopup("Copy_GameObject?");
+	}
+
+	// Always center this window when appearing
+	ImVec2 centerCopy = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(centerCopy, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+	if (ImGui::BeginPopupModal("Copy_GameObject?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Do you want Copy this GameObject?");
+		ImGui::Separator();
+
+		if (ImGui::Button("OK", ImVec2(120, 0)))
+		{
+			// nullptr로 초기화
+			m_CopyObject = nullptr;
+			// GameObject 복사
+			// TargetObject를 복사생성하여, 해당 객체를 전달
+			m_CopyObject = new GameObject(*m_TargetObject.Get());
+
+			int copyCount = m_TargetObject->GetCopyCount();
+			// 이름은 복사대상 오브젝트의 이름 + _넘버링
+			wstring copyName = m_TargetObject->GetName() + L"_" + to_wstring(copyCount);
+			m_CopyObject->SetName(copyName);
+
+			// 현재 Level을 가져와, TargetObject를 변경할 layer에 등록
+			Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
+			LevelMgr::GetInst()->AddNewObject(m_CopyObject, pLevel, m_TargetObject->GetLayerIdx());
+
+			// 복사 카운트 증가 (기존 SetCopyCount(+1)는 항상 1로 설정될 수 있음)
+			m_TargetObject->SetCopyCount(copyCount + 1);
+
+			// 팝업 닫기 (이 줄이 없어서 OK 눌러도 계속 열려 있었음)
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
 	SPACING_UI(10);
 	ImGui::Separator();
+	#pragma endregion	
+
 
 	#pragma region Layer Index
 	ImGui::Text("Object Layer Index");
@@ -141,8 +200,6 @@ void Inspector::Tick_UI()
 	{
 		m_TargetObject->SetIsActive(isActive);
 	}
-
-
 	SPACING_UI(5);
 	ImGui::Separator();
 	#pragma endregion	

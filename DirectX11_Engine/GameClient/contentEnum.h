@@ -33,46 +33,47 @@ enum class ENEMY_STATE
     // 변경하게 하는 구조로 되어 있기에, 명시적으로 '타입_상태' 로 네이밍 + EnemyStateManager에 
     // 할당한 index 순서대로 값을 고정 시킵니다.
 
-    // DEMON 타입 상태 (인덱스는 EnemyStateManager의 등록 순서와 일치)
-    DEMON_IDLE = 0,
-    DEMON_MOVE = 1,
-    DEMON_JUMP = 2,
-    DEMON_ATTACK = 3,
-    DEMON_HIT = 4,
-    DEMON_DEAD = 5,
+    // DEMON 타입 상태
+    DEMON_IDLE,
+    DEMON_MOVE,
+    DEMON_JUMP,
+    DEMON_ATTACK,
+    DEMON_HIT,
+    DEMON_DEAD,
 
-    // SKULL 타입 상태 (같은 인덱스 규칙을 사용)
-    SKULL_IDLE = 0,
-    SKULL_MOVE = 1,
-    SKULL_JUMP = 2,
-    SKULL_ATTACK = 3,
-    SKULL_HIT = 4,
-    SKULL_DEAD = 5,
+    // SKULL 타입 상태
+    SKULL_IDLE,
+    SKULL_MOVE,
+    SKULL_JUMP,
+    SKULL_ATTACK,
+    SKULL_HIT,
+    SKULL_DEAD,
 
     // FLYING 타입 상태
-    FLYING_IDLE = 0,
-    FLYING_MOVE = 1,
-    FLYING_JUMP = 2,
-    FLYING_ATTACK = 3,
-    FLYING_HIT = 4,
-    FLYING_DEAD = 5,
+    FLYING_IDLE,
+    FLYING_MOVE,
+    FLYING_JUMP,
+    FLYING_ATTACK,
+    FLYING_HIT,
+    FLYING_DEAD,
 
     // FLOWER 타입 상태
-    FLOWER_IDLE = 0,
-    FLOWER_MOVE = 1,
-    FLOWER_JUMP = 2,
-    FLOWER_ATTACK = 3,
-    FLOWER_HIT = 4,
-    FLOWER_DEAD = 5,
+    FLOWER_IDLE,
+    FLOWER_MOVE,
+    FLOWER_JUMP,
+    FLOWER_ATTACK,
+    FLOWER_HIT,
+    FLOWER_DEAD,
 
     // BOSS 타입 상태
-    BOSS_IDLE = 0,
-    BOSS_MOVE = 1,
-    BOSS_JUMP = 2,
-    BOSS_ATTACK = 3,
-    BOSS_HIT = 4,
-    BOSS_DEAD = 5,
+    BOSS_IDLE,
+    BOSS_MOVE,
+    BOSS_JUMP,
+    BOSS_ATTACK,
+    BOSS_HIT,
+    BOSS_DEAD,
 
+    END,
 };
 
 

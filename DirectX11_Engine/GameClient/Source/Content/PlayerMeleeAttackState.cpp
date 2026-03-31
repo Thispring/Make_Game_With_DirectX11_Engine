@@ -33,23 +33,10 @@ void PlayerPunchState::Begin()
 
 void PlayerPunchState::Tick()
 {
-	// Z Key를 눌렀을때, CPlayerData에서 공격 관련
-	// bool 변수를 true로 변경, Z Key를 누르고 있지 않다면
-	// bool 변수를 false로 변경
-	
-	//if (KEY_RELEASED(KEY::Z))
-	//{
-	//	bool isAttck = false;
-	//	m_PlayerData->SetIsAttack(isAttck);
-	//}
-
 	bool isAttck = true;
 	m_PlayerData->SetIsAttack(isAttck);
-	//if (KEY_PRESSED(KEY::Z))
-	//{
-	//	bool isAttck = true;
-	//	m_PlayerData->SetIsAttack(isAttck);
-	//}
+
+	//m_PlayerData->GetOwner()->GetChild();
 }
 
 void PlayerPunchState::FinalTick()
@@ -58,8 +45,8 @@ void PlayerPunchState::FinalTick()
 	m_PlayerData->SetIsAttack(isAttck);
 
 	// Idle 상태로 변경
-	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
+    Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
+	pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerPunchState::GetFlipbookIndex()
@@ -110,8 +97,8 @@ void PlayerMiddleKickState::FinalTick()
 	m_PlayerData->SetIsAttack(isAttck);
 
 	// Idle 상태로 변경
-	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
+    Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
+	pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerMiddleKickState::GetFlipbookIndex()
@@ -162,7 +149,7 @@ void PlayerHighKickState::FinalTick()
 
 	// Idle 상태로 변경
 	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
+    pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerHighKickState::GetFlipbookIndex()
@@ -213,7 +200,7 @@ void PlayerLowKickState::FinalTick()
 
 	// Idle 상태로 변경
 	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
+    pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerLowKickState::GetFlipbookIndex()

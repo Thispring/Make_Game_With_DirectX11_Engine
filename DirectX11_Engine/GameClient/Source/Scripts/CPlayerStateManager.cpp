@@ -23,7 +23,7 @@ CPlayerStateManager::CPlayerStateManager()
 	: CScript(SCRIPT_TYPE::PLAYERSTATEMANAGER)
 	, m_CurStatus(nullptr)
     , m_PrevStatus(nullptr)
-	, m_vecStatus {}
+
 {
 
 }
@@ -36,29 +36,27 @@ CPlayerStateManager::CPlayerStateManager(const CPlayerStateManager& _Origin)
     , m_CurStatus(nullptr)
     , m_PrevStatus(nullptr)
 {
-    m_vecStatus.reserve(_Origin.m_vecStatus.size());
-
-    // 각 상태 객체를 Clone하여 벡터에 추가
-    for (const auto& srcPtr : _Origin.m_vecStatus)
+    // 원본 map의 각 상태를 Clone하여 새로운 map에 복제
+    for (const auto& pair : _Origin.m_mapStatus)
     {
-        if (srcPtr)
+        if (pair.second)
         {
-            m_vecStatus.push_back(srcPtr->Clone());
-        }
-        else
-        {
-            m_vecStatus.push_back(nullptr);
+            m_mapStatus[pair.first] = pair.second->Clone();
         }
     }
 
-    // m_CurStatus가 원본 벡터의 어느 요소인지 찾아서, 복제된 벡터의 동일 인덱스 요소의 포인터로 설정
+    // m_CurStatus가 원본 map의 어느 요소인지 찾아서, 복제된 map의 동일 키 요소의 포인터로 설정
     if (_Origin.m_CurStatus)
     {
-        for (size_t i = 0; i < _Origin.m_vecStatus.size(); ++i)
+        for (const auto& pair : _Origin.m_mapStatus)
         {
-            if (_Origin.m_vecStatus[i].get() == _Origin.m_CurStatus)
+            if (pair.second.get() == _Origin.m_CurStatus)
             {
-                m_CurStatus = (i < m_vecStatus.size() && m_vecStatus[i]) ? m_vecStatus[i].get() : nullptr;
+                auto it = m_mapStatus.find(pair.first);
+                if (it != m_mapStatus.end())
+                {
+                    m_CurStatus = it->second.get();
+                }
                 break;
             }
         }
@@ -104,24 +102,22 @@ void CPlayerStateManager::Begin()
 {
 	// Player의 공유 데이터 클래스 등록
 	m_PlayerData = GetOwner()->GetScript<CPlayerData>();
+    // 상태 클래스 등록 (map 기반)
+    m_mapStatus[PLAYER_STATE::IDLE] = make_unique<PlayerIdleState>(m_PlayerData);
+    m_mapStatus[PLAYER_STATE::WALK] = make_unique<PlayerMoveState>(m_PlayerData);
+    m_mapStatus[PLAYER_STATE::JUMP] = make_unique<PlayerJumpState>(m_PlayerData);
+    m_mapStatus[PLAYER_STATE::PUNCH] = make_unique<PlayerPunchState>(m_PlayerData);
+    m_mapStatus[PLAYER_STATE::HIGH_KICK] = make_unique<PlayerHighKickState>(m_PlayerData);
+    m_mapStatus[PLAYER_STATE::MIDDLE_KICK] = make_unique<PlayerMiddleKickState>(m_PlayerData);
+    m_mapStatus[PLAYER_STATE::LOW_KICK] = make_unique<PlayerLowKickState>(m_PlayerData);
+    m_mapStatus[PLAYER_STATE::ENERGYBLAST_SHOT] = make_unique<PlayerEnergyBlastShotState>(m_PlayerData);
 
-	// 상태 클래스 등록, 옆 주석은 인덱스 번호
-	m_vecStatus.push_back(make_unique<PlayerIdleState>(m_PlayerData));              // 0
-
-	m_vecStatus.push_back(make_unique<PlayerMoveState>(m_PlayerData));              // 1
-	m_vecStatus.push_back(make_unique<PlayerJumpState>(m_PlayerData));              // 2
-
-	m_vecStatus.push_back(make_unique<PlayerPunchState>(m_PlayerData));             // 3
-
-	m_vecStatus.push_back(make_unique<PlayerHighKickState>(m_PlayerData));          // 4
-	m_vecStatus.push_back(make_unique<PlayerMiddleKickState>(m_PlayerData));        // 5
-	m_vecStatus.push_back(make_unique<PlayerLowKickState>(m_PlayerData));           // 6
-	
-    m_vecStatus.push_back(make_unique<PlayerEnergyBlastShotState>(m_PlayerData));   // 7
-
-
-	// 현재 상태를 Idle로 등록
-	m_CurStatus = m_vecStatus[(int)PLAYER_STATE::IDLE].get();
+    // 현재 상태를 Idle로 등록 (map에서 안전하게 조회)
+    auto it = m_mapStatus.find(PLAYER_STATE::IDLE);
+    if (it != m_mapStatus.end())
+        m_CurStatus = it->second.get();
+    else
+        m_CurStatus = nullptr;
     // 이전 상태 등록
     m_PrevStatus = m_CurStatus;
 	m_CurStatus->Begin();

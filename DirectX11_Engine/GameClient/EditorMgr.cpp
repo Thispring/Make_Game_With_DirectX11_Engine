@@ -195,9 +195,11 @@ void EditorMgr::CreateEditorObject()
     pObject->AddComponent(new CCamera);
     pObject->AddComponent(new CEditorCamMoveScript);
     
+    pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, -350.f));
+
     pObject->Camera()->LayerCheckAll();
 
-    pObject->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+    pObject->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
     pObject->Camera()->SetFar(1000.f);
     pObject->Camera()->SetFOV(90.f);
     pObject->Camera()->SetOrthoScale(1.f);

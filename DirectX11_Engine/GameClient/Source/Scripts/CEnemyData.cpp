@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CEnemyData.h"
 #include "CEnemyStateManager.h"
+#include "Source\Content\EnemyDamageState.h"
 #include "CCollider2D.h"
 #include "LevelMgr.h"
 
@@ -82,6 +83,25 @@ void CEnemyData::Begin()
 	m_TargetObject->GetScript<CEnemyStateManager>()->SetUp();
 }
 
+void CEnemyData::ApplyDamage(float _Damage)
+{
+	// 실제 데미지 처리는 CEnemyData에서 진행
+	// FSM 설계상 여기에서 진행하면 안됨
+	float hp = GetCurHP();
+	hp -= _Damage;
+	SetCurHP(hp);
+
+	if (hp <= 0.f)
+	{
+		// Dead 상태 호출
+		m_IsDead = true;
+		int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::DEAD);
+		Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+		pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
+		pMgr->ChangeState();
+	}
+}
+
 void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 }
@@ -93,14 +113,18 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 	// Layer Index 5번은 Player 투사체
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == 5)
 	{
+		// 죽었다면 HIT 상태로 되돌리기 X
+		if (m_IsDead)
+			return;
+
 		// Type에 따라 구별되는 ENEMY_STATE를 반환
 		int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::HIT);
 		// Hit 상태로 변경하고, 데미지 계산
 
 		// 현재 상태를 얻어오고
 		// 그 상태를 세팅
-		Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
-		pMgr->SetCurStatus(pMgr->GetStatusVec(state));
+        Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+		pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
 		pMgr->ChangeState();
 	}
 }
@@ -108,6 +132,20 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 	m_IsFalling = true;
+
+	// Player 투사체와 충돌 후 호출되는지 확인
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == 5)
+	{
+		// 죽었다면 IDLE 상태로 되돌리기 X
+		if (m_IsDead)
+			return;
+
+		// 중단이 걸렸으므로 여기에서 Idle로 상태변경
+		int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::IDLE);
+		Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+		pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
+		pMgr->ChangeState();
+	}
 }
 
 void CEnemyData::Tick()

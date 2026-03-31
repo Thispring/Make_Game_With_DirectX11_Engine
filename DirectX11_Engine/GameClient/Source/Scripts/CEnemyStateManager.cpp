@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "CEnemyStateManager.h"
+
+#include "CEnemyAnimator.h"
+
 #include "GameObject.h"
 #include "TimeMgr.h"
 
@@ -16,7 +19,6 @@ CEnemyStateManager::CEnemyStateManager()
 	: CScript(SCRIPT_TYPE::ENEMYSTATEMANAGER)
 	, m_CurStatus(nullptr)
 	, m_PrevStatus(nullptr)
-	, m_vecStatus{}
 {
 }
 
@@ -31,29 +33,27 @@ CEnemyStateManager::CEnemyStateManager(const CEnemyStateManager& _Origin)
     , m_CurStatus(nullptr)
     , m_PrevStatus(nullptr)
 {
-    m_vecStatus.reserve(_Origin.m_vecStatus.size());
-
-    // 각 상태 객체를 Clone하여 벡터에 추가
-    for (const auto& srcPtr : _Origin.m_vecStatus)
+    // 원본 map의 각 상태를 Clone하여 새로운 map에 복제
+    for (const auto& pair : _Origin.m_mapStatus)
     {
-        if (srcPtr)
+        if (pair.second)
         {
-            m_vecStatus.push_back(srcPtr->Clone());
-        }
-        else
-        {
-            m_vecStatus.push_back(nullptr);
+            m_mapStatus[pair.first] = pair.second->Clone();
         }
     }
 
-    // m_CurStatus가 원본 벡터의 어느 요소인지 찾아서, 복제된 벡터의 동일 인덱스 요소의 포인터로 설정
+    // m_CurStatus가 원본 map의 어느 요소인지 찾아서, 복제된 map의 동일 키 요소의 포인터로 설정
     if (_Origin.m_CurStatus)
     {
-        for (size_t i = 0; i < _Origin.m_vecStatus.size(); ++i)
+        for (const auto& pair : _Origin.m_mapStatus)
         {
-            if (_Origin.m_vecStatus[i].get() == _Origin.m_CurStatus)
+            if (pair.second.get() == _Origin.m_CurStatus)
             {
-                m_CurStatus = (i < m_vecStatus.size() && m_vecStatus[i]) ? m_vecStatus[i].get() : nullptr;
+                auto it = m_mapStatus.find(pair.first);
+                if (it != m_mapStatus.end())
+                {
+                    m_CurStatus = it->second.get();
+                }
                 break;
             }
         }
@@ -84,24 +84,29 @@ void CEnemyStateManager::SetUp()
     // 실제 로직에는 영향이 없어야 하는게 맞습니다.
     // StateManager에서는 현재 상태를 가리키는 포인터에
     // Tick 함수를 호출시키기 때문에, 인덱스 문제는 없어야함
+    // clear any existing registrations
+    m_mapStatus.clear();
+
     switch (m_EnemyData->GetEnemyType())
     {
     case ENEMY_TYPE::DEMON:
     {
-        m_vecStatus.push_back(make_unique<EnemyIdleState>(m_EnemyData));  // 0
-        m_vecStatus.push_back(make_unique<EnemyMoveState>(m_EnemyData));  // 1
-        m_vecStatus.push_back(make_unique<EnemyJumpState>(m_EnemyData));  // 2
-        m_vecStatus.push_back(make_unique<EnemyAttackState>(m_EnemyData));  // 3
-        m_vecStatus.push_back(make_unique<EnemyHitState>(m_EnemyData));  // 4
-        m_vecStatus.push_back(make_unique<EnemyDeadState>(m_EnemyData));  // 5
+        m_mapStatus[ENEMY_COMMON_STATE::IDLE] = make_unique<EnemyIdleState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::MOVE] = make_unique<EnemyMoveState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::JUMP] = make_unique<EnemyJumpState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::ATTACK] = make_unique<EnemyAttackState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::HIT] = make_unique<EnemyHitState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::DEAD] = make_unique<EnemyDeadState>(m_EnemyData);
     }
         break;
     case ENEMY_TYPE::SKULL:
     {
-        m_vecStatus.push_back(make_unique<EnemyIdleState>(m_EnemyData));  // 0
-        m_vecStatus.push_back(make_unique<EnemyMoveState>(m_EnemyData));  // 1
-        m_vecStatus.push_back(make_unique<EnemyJumpState>(m_EnemyData));  // 2
-        m_vecStatus.push_back(make_unique<EnemyAttackState>(m_EnemyData));  // 3
+        m_mapStatus[ENEMY_COMMON_STATE::IDLE] = make_unique<EnemyIdleState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::MOVE] = make_unique<EnemyMoveState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::JUMP] = make_unique<EnemyJumpState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::ATTACK] = make_unique<EnemyAttackState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::HIT] = make_unique<EnemyHitState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::DEAD] = make_unique<EnemyDeadState>(m_EnemyData);
     }
         break;
     case ENEMY_TYPE::FLYING:
@@ -120,14 +125,24 @@ void CEnemyStateManager::SetUp()
         break;
     }
 
-    // 현재 상태를 Idle로 등록
-    m_CurStatus = m_vecStatus[0].get();
+    // 현재 상태를 Idle로 등록 (map에서 안전하게 조회)
+    auto it = m_mapStatus.find(ENEMY_COMMON_STATE::IDLE);
+    if (it != m_mapStatus.end())
+    {
+        m_CurStatus = it->second.get();
+    }
+    else
+    {
+        m_CurStatus = nullptr;
+    }
     // 이전 상태 등록
     m_PrevStatus = m_CurStatus;
-    m_CurStatus->Begin();
-    // StateChange를 최초로 호출할때 true를 보장, flipbook 재생을 위함
-    SetChange();
+    if (m_CurStatus)
+        m_CurStatus->Begin();
 
+    // idle flipbook 재생 강제 보장
+    GetOwner()->FlipbookRender()->Play(-1, 10, -1);
+    //GetOwner()->GetScript<CEnemyAnimator>()->Play();
 }
 
 bool CEnemyStateManager::IsChange()
@@ -147,7 +162,7 @@ void CEnemyStateManager::ChangeState()
     m_CurStatus->Begin();
 
     // 이전 상태와 현재 상태가 같이 않았다면
-    // 바뀐 상태를 갱신
+    // 바뀐 상태를 갱신    
     if (m_PrevStatus != m_CurStatus)
     {
         m_PrevStatus = m_CurStatus;
@@ -156,7 +171,7 @@ void CEnemyStateManager::ChangeState()
         SetChange();
 
         // Animator를 불러와 Play 함수 호출
-        //GetOwner()->GetScript<CPlayerAnimator>()->Play();
+        GetOwner()->GetScript<CEnemyAnimator>()->Play();
     }
 }
 

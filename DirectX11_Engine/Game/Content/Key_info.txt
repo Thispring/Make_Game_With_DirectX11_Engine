@@ -94,16 +94,6 @@ KEY_STATE: TAP
 Source File: EnemyState.cpp
 
 Comment: No Comment
-KEY: Z
-KEY_STATE: RELEASED
-Source File: PlayerMeleeAttackState.cpp
-
-Comment: No Comment
-KEY: Z
-KEY_STATE: PRESSED
-Source File: PlayerMeleeAttackState.cpp
-
-Comment: No Comment
 KEY: LEFT
 KEY_STATE: PRESSED
 Source File: PlayerMoveState.cpp

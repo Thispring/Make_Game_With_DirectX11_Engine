@@ -37,6 +37,9 @@ private:
 	// 활성/비활성화 여부
 	bool						m_IsActive;
 
+	// NOTE(26-03-31):
+	// Copy를 위한 static int 멤버 변수 추가
+	static int					m_CopyCount;
 
 	//=================
 	// private 멤버 함수
@@ -109,6 +112,7 @@ public:
 	// Get, Set
 	//=========
 	GET_SET(bool, IsActive);
+	GET_SET(int, CopyCount);
 	Ptr<Component> GetComponent(COMPONENT_TYPE _Type) { return m_Com[(UINT)_Type]; }
 	Ptr<CRenderComponent> GetRenderCom() { return m_RenderCom; }
 	Ptr<GameObject> GetParent() { return m_Parent; }

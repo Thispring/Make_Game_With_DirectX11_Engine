@@ -9,6 +9,8 @@
 
 #include "CTransform.h"
 
+int GameObject::m_CopyCount = 0;
+
 GameObject::GameObject()
 	: m_Com{}
 	, m_Parent(nullptr)

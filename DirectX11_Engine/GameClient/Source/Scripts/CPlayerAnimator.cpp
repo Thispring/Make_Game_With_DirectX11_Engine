@@ -73,10 +73,10 @@ void CPlayerAnimator::Tick()
 		)
 	{
 		// 상태를 Idle로 변경
-		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusVec((int)PLAYER_STATE::IDLE));
+		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 		m_StatusMgr->ChangeState();
-		// Idle 애니메이션 재생
-		Play();
+		// 애니메이션 재생은 ChangeState 에서 Play를 호출하고 있음
+		//Play();
 		return;
 	}	
 

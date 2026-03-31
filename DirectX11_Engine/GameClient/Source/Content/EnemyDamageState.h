@@ -40,11 +40,6 @@ class EnemyHitState :
 {
 
 public:
-    //=========
-    // 멤버 함수
-    //=========
-    void TakeDamage(float _Damge);
-
 
     //=============
     // 상속 멤버 함수
