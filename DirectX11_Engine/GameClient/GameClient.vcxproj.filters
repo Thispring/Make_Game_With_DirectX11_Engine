@@ -391,6 +391,12 @@
     <ClInclude Include="Source\Content\EnemyJumpState.h">
       <Filter>Source\OtherContent\EnemyStatus\Jump</Filter>
     </ClInclude>
+    <ClInclude Include="contentFunc.h">
+      <Filter>Source\ContentHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\EnemyDamageState.h">
+      <Filter>Source\OtherContent\EnemyStatus\Damage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -762,6 +768,12 @@
     <ClCompile Include="Source\Content\EnemyJumpState.cpp">
       <Filter>Source\OtherContent\EnemyStatus\Jump</Filter>
     </ClCompile>
+    <ClCompile Include="contentFunc.cpp">
+      <Filter>Source\ContentHeader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\EnemyDamageState.cpp">
+      <Filter>Source\OtherContent\EnemyStatus\Damage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -1075,6 +1087,15 @@
     </Filter>
     <Filter Include="Source\OtherContent\EnemyStatus\Move">
       <UniqueIdentifier>{c06deca9-96df-4d28-b30f-d2bfebcc100d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\EnemyStatus\Damage">
+      <UniqueIdentifier>{3190e3da-1893-416b-a5a8-6df10951de01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\EnemyStatus\Patrol">
+      <UniqueIdentifier>{9c319a2e-22ca-41d5-bee6-b69ac3e4ac9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\OtherContent\EnemyStatus\Chase">
+      <UniqueIdentifier>{acb4a77e-3e28-492e-ac9e-8d6fca977e95}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

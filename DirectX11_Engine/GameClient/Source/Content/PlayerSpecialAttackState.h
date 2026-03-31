@@ -27,7 +27,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerSpecialAttackState();
+    PlayerSpecialAttackState(Ptr<CPlayerData> _Data);
     virtual ~PlayerSpecialAttackState();
 };
 

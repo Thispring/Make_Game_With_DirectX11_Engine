@@ -21,7 +21,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerJumpState();
+    PlayerJumpState(Ptr<CPlayerData> _Data);
     virtual ~PlayerJumpState();
 };
 

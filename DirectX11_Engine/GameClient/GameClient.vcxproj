@@ -175,6 +175,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="assets.h" />
     <ClInclude Include="CEditorCamMoveScript.h" />
     <ClInclude Include="contentEnum.h" />
+    <ClInclude Include="contentFunc.h" />
     <ClInclude Include="EAssetUI.h" />
     <ClInclude Include="ATexture.h" />
     <ClInclude Include="ATileMap.h" />
@@ -260,6 +261,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Source\Content\EnemyAttackState.h" />
+    <ClInclude Include="Source\Content\EnemyDamageState.h" />
     <ClInclude Include="Source\Content\EnemyIdleState.h" />
     <ClInclude Include="Source\Content\EnemyJumpState.h" />
     <ClInclude Include="Source\Content\EnemyState.h" />
@@ -307,6 +309,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="AssetMgr_Func.cpp" />
     <ClCompile Include="AssetMgr_Init.cpp" />
     <ClCompile Include="CEditorCamMoveScript.cpp" />
+    <ClCompile Include="contentFunc.cpp" />
     <ClCompile Include="EAssetUI.cpp" />
     <ClCompile Include="ATexture.cpp" />
     <ClCompile Include="ATileMap.cpp" />
@@ -387,6 +390,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="PrefabMaker.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
     <ClCompile Include="Source\Content\EnemyAttackState.cpp" />
+    <ClCompile Include="Source\Content\EnemyDamageState.cpp" />
     <ClCompile Include="Source\Content\EnemyIdleState.cpp" />
     <ClCompile Include="Source\Content\EnemyJumpState.cpp" />
     <ClCompile Include="Source\Content\EnemyState.cpp" />

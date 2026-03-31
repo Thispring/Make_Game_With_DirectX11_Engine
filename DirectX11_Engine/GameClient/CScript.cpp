@@ -28,9 +28,9 @@ void CScript::Destroy()
     TaskMgr::GetInst()->AddTask(info);
 }
 
-void CScript::AddScriptParam(SCRIPT_PARAM _Type, void* _Data, const wstring& _Desc, bool _IsInput, float _Step)
+void CScript::AddScriptParam(SCRIPT_PARAM _Type, void* _Data, const wstring& _Desc, bool _IsInput, float _Step, const vector<wstring>& _EnumOptions)
 {
-    m_vecScriptParam.push_back(tScriptParam{ _Type , _Data, _Desc, _IsInput, _Step });
+    m_vecScriptParam.push_back(tScriptParam{ _Type , _Data, _Desc, _IsInput, _Step, _EnumOptions });
 }
 
 void CScript::ClearScriptParam()

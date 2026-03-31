@@ -11,12 +11,10 @@
 #include "Source\Content\PlayerMeleeAttackState.h"
 #include "Source\Content\PlayerRangedAttackState.h"
 
-int CPlayerStateManager::m_ChangeCount = 0;
-
-bool CPlayerStateManager::IsStateChange()
+bool CPlayerStateManager::IsChange()
 {
-    bool IsTemp = m_IsStateChange;
-    m_IsStateChange = false;
+    bool IsTemp = m_IsChange;
+    m_IsChange = false;
 
     return IsTemp;
 }
@@ -26,12 +24,12 @@ CPlayerStateManager::CPlayerStateManager()
 	, m_CurStatus(nullptr)
     , m_PrevStatus(nullptr)
 	, m_vecStatus {}
-    , m_StateNum(0)
 {
 
 }
 
 // 복사 생성자: m_vecStatus 내부 객체들을 Clone()으로 복제
+// stl 스마트 포인터를 사용중인 멤버가 있어서 따로 구현
 CPlayerStateManager::CPlayerStateManager(const CPlayerStateManager& _Origin)
     : CScript(SCRIPT_TYPE::PLAYERSTATEMANAGER)
     , m_PlayerData(_Origin.m_PlayerData) // Ptr 타입이 복사 가능하다고 가정
@@ -73,7 +71,8 @@ CPlayerStateManager::~CPlayerStateManager()
 
 void CPlayerStateManager::ChangeState()
 {
-    ++m_ChangeCount;
+    // ChangeState함수는, Key 입력을 받는 Controller 내지는
+    // 체력 이벤트를 받는 다른 클래스에서 해당 함수를 호출 시킵니다.
 
 
     // 상태를 변경할때 마다 호출
@@ -89,22 +88,16 @@ void CPlayerStateManager::ChangeState()
         m_PrevStatus = m_CurStatus;
 
         // 성공적으로 바뀌었다면 true 반환
-        SetStateChange();
-        // m_ChangeCount는 최종적으로 0으로 유지
-        m_ChangeCount = 0;
-
-        m_StateNum = (int)m_CurStatus->GetFlipbookIndex();
-
+        SetChange();
 
         // PlayerAnimator를 불러와 Play 함수 호출
         GetOwner()->GetScript<CPlayerAnimator>()->Play();
     }
-
 }
 
 void CPlayerStateManager::Init()
 {
-    AddScriptParam(SCRIPT_PARAM::FLOAT, &m_StateNum, L"StateNume", true, 0.f);
+
 }
 
 void CPlayerStateManager::Begin()
@@ -112,19 +105,19 @@ void CPlayerStateManager::Begin()
 	// Player의 공유 데이터 클래스 등록
 	m_PlayerData = GetOwner()->GetScript<CPlayerData>();
 
-	// 상태 클래스 등록
-	m_vecStatus.push_back(make_unique<PlayerIdleState>());  // 0
+	// 상태 클래스 등록, 옆 주석은 인덱스 번호
+	m_vecStatus.push_back(make_unique<PlayerIdleState>(m_PlayerData));              // 0
 
-	m_vecStatus.push_back(make_unique<PlayerMoveState>());  // 1 -> MoveState의 파생 클래스 WalkState로 변경해야함
-	m_vecStatus.push_back(make_unique<PlayerJumpState>());  // 2
+	m_vecStatus.push_back(make_unique<PlayerMoveState>(m_PlayerData));              // 1
+	m_vecStatus.push_back(make_unique<PlayerJumpState>(m_PlayerData));              // 2
 
-	m_vecStatus.push_back(make_unique<PlayerPunchState>());  // 3
+	m_vecStatus.push_back(make_unique<PlayerPunchState>(m_PlayerData));             // 3
 
-	m_vecStatus.push_back(make_unique<PlayerHighKickState>());  // 4
-	m_vecStatus.push_back(make_unique<PlayerMiddleKickState>());  // 5
-	m_vecStatus.push_back(make_unique<PlayerLowKickState>());  // 6
+	m_vecStatus.push_back(make_unique<PlayerHighKickState>(m_PlayerData));          // 4
+	m_vecStatus.push_back(make_unique<PlayerMiddleKickState>(m_PlayerData));        // 5
+	m_vecStatus.push_back(make_unique<PlayerLowKickState>(m_PlayerData));           // 6
 	
-    m_vecStatus.push_back(make_unique<PlayerEnergyBlastShotState>());  // 7
+    m_vecStatus.push_back(make_unique<PlayerEnergyBlastShotState>(m_PlayerData));   // 7
 
 
 	// 현재 상태를 Idle로 등록
@@ -133,9 +126,8 @@ void CPlayerStateManager::Begin()
     m_PrevStatus = m_CurStatus;
 	m_CurStatus->Begin();
     // StateChange를 최초로 호출할때 true를 보장, flipbook 재생을 위함
-    SetStateChange();
-    // 상태 번호는 Flipbook Index enum class를 전달받기
-    m_StateNum = (int)m_CurStatus->GetFlipbookIndex();
+    SetChange();
+
 }
 
 void CPlayerStateManager::Tick()

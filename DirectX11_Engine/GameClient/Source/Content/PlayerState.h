@@ -44,7 +44,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerState();
+    PlayerState(Ptr<CPlayerData> _Data);
     virtual ~PlayerState();
 
 };

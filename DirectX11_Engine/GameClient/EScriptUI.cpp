@@ -217,6 +217,60 @@ void EScriptUI::Tick_UI()
 			ImGui::InputText(Key.c_str(), &name, 255);
 		}
 			break;
+		case SCRIPT_PARAM::ENUM_CLASS:
+		{
+			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
+			ImGui::SameLine(160);
+
+			string Key = "##EnumClass";
+			Key += ID;
+
+			// 옵션 목록(wstring)을 가져와서 char* 배열로 변환
+			const vector<wstring>& enumOpts = vecParam[i].EnumOptions;
+			vector<string> optUtf8;
+			vector<const char*> optPtrs;
+
+			if (enumOpts.empty())
+			{
+				// 옵션이 없다면 빈 Combo를 표시
+				const char* items[] = { "" };
+				static int item_current = 0;
+				ImGui::Combo(Key.c_str(), &item_current, items, IM_ARRAYSIZE(items));
+			}
+			else
+			{
+				optUtf8.reserve(enumOpts.size());
+				optPtrs.reserve(enumOpts.size());
+				for (const auto& w : enumOpts)
+				{
+					// 간단 ASCII 변환 (프로젝트에서 UTF-8 변환 유틸이 있으면 그걸 사용)
+					optUtf8.emplace_back(string(w.begin(), w.end()));
+					optPtrs.push_back(optUtf8.back().c_str());
+				}
+
+				// 현재 값(포인터가 가리키는 enum)을 인덱스로 변환
+				int curIndex = 0;
+				// enum의 기본값이 int로 표현 가능하다고 가정
+				curIndex = static_cast<int>(*(int*)vecParam[i].Data);
+
+				if (curIndex < 0) curIndex = 0;
+				if (curIndex >= (int)optPtrs.size()) curIndex = 0;
+
+				if (ImGui::Combo(Key.c_str(), &curIndex, optPtrs.data(), (int)optPtrs.size()))
+				{
+					// 변경 발생 시 실제 enum 값 업데이트
+					*(int*)vecParam[i].Data = curIndex;
+
+					// 필요하면 레벨 변경 플래그 처리 (예: ChangeLevel 호출 또는 에디터에 notify)
+					// Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
+					// ChangeLevel(pLevel->GetKey());
+				}
+			}
+
+			AddItemHeight();
+		}
+			break;
+
 		default:
 			break;
 		}
@@ -268,7 +322,7 @@ bool EScriptUI::DeleteScript(SCRIPT_TYPE _Type)
 			pObject->ReleaseContentScript(_Type);
 
 			// 현재 Level에 변경점을 알림
-			// LevelMgr의 ChangeLevel는 private 함수
+			// LevelMgr의 ChangeLevel은 private 함수
 			Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
 			ChangeLevel(pLevel->GetKey());
 			ImGui::CloseCurrentPopup();

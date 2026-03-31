@@ -4,9 +4,10 @@
 #include "TimeMgr.h"
 #include "Source\Scripts\CPlayerStateManager.h"
 
-PlayerJumpState::PlayerJumpState()
+PlayerJumpState::PlayerJumpState(Ptr<CPlayerData> _Data)
+    : PlayerState(_Data)
 {
-	m_FlipbookIndex = PLAYER_STATE::JUMP;
+    m_FlipbookIndex = PLAYER_STATE::JUMP;
 }
 
 PlayerJumpState::~PlayerJumpState()

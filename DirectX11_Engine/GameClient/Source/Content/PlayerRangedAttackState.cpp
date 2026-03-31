@@ -3,7 +3,8 @@
 #include "Source\Scripts\CPlayerStateManager.h"
 
 #pragma region PlayerRangedAttackState
-PlayerRangedAttackState::PlayerRangedAttackState()
+PlayerRangedAttackState::PlayerRangedAttackState(Ptr<CPlayerData> _Data)
+	: PlayerState(_Data)
 {
 }
 
@@ -44,7 +45,8 @@ unique_ptr<PlayerState> PlayerRangedAttackState::Clone() const
 
 
 #pragma region PlayerChargeState
-PlayerChargeState::PlayerChargeState()
+PlayerChargeState::PlayerChargeState(Ptr<CPlayerData> _Data)
+	: PlayerRangedAttackState(_Data)
 {
 }
 
@@ -90,7 +92,8 @@ unique_ptr<PlayerState> PlayerChargeState::Clone() const
 
 
 #pragma region PlayerEnergyBlastShotState
-PlayerEnergyBlastShotState::PlayerEnergyBlastShotState()
+PlayerEnergyBlastShotState::PlayerEnergyBlastShotState(Ptr<CPlayerData> _Data)
+	: PlayerRangedAttackState(_Data)
 {
 	m_FlipbookIndex = PLAYER_STATE::ENERGYBLAST_SHOT;
 }

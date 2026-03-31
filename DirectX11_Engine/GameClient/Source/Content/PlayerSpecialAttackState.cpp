@@ -2,7 +2,8 @@
 #include "PlayerSpecialAttackState.h"
 
 #pragma region PlayerSpecialAttackState
-PlayerSpecialAttackState::PlayerSpecialAttackState()
+PlayerSpecialAttackState::PlayerSpecialAttackState(Ptr<CPlayerData> _Data)
+	: PlayerState(_Data)
 {
 }
 

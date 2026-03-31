@@ -4,7 +4,8 @@
 #include "TimeMgr.h"
 #include "KeyMgr.h"
 
-PlayerMoveState::PlayerMoveState()
+PlayerMoveState::PlayerMoveState(Ptr<CPlayerData> _Data)
+	: PlayerState(_Data)
 {
 	m_FlipbookIndex = PLAYER_STATE::WALK;
 }

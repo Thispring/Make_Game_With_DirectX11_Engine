@@ -1,12 +1,9 @@
 #include "pch.h"
 #include "EnemyMoveState.h"
 
-EnemyMoveState::EnemyMoveState()
-{
-}
 
-EnemyMoveState::EnemyMoveState(const std::wstring& ownerName)
-	: EnemyState(ownerName)
+EnemyMoveState::EnemyMoveState(Ptr<CEnemyData> _Data)
+	: EnemyState(_Data)
 {
 }
 

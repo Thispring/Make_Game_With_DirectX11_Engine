@@ -4,7 +4,6 @@
 class PlayerIdleState :
     public PlayerState
 {
-    // 상수 멤버로 Flipbook enum값 저장
 
 public:
     //=============
@@ -23,7 +22,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerIdleState();
+    PlayerIdleState(Ptr<CPlayerData> _Data);
     virtual ~PlayerIdleState();
 };
 

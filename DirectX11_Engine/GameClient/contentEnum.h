@@ -22,6 +22,11 @@ enum class PLAYER_STATE
     END,
 };
 
+// ENEMY_TYPE에 따라 조건을 두어
+// ENEMY_STATE를 반환하는 함수를 만들기
+// ENEMY_TYPE과 int 를 파라미터로 받아서
+// 해당 TYPE에 int에 맞는 인덱스 반환
+// 만약 인덱스 범위가 안맞다면 assert로 크래시
 enum class ENEMY_STATE
 {
     // ENEMY_STATE는 파생 클래스의 생성자에서 EnemyState의 ENEMY_STATE 멤버값을
@@ -70,6 +75,7 @@ enum class ENEMY_STATE
 
 };
 
+
 enum class ENEMY_TYPE
 {
     // TYPE 네이밍은 Flipbook 이미지에 따름
@@ -81,4 +87,15 @@ enum class ENEMY_TYPE
     BOSS,
 
     END,
+};
+
+// 공통 상태 (모든 적 타입에 공통인 의미)
+enum class ENEMY_COMMON_STATE
+{
+    IDLE = 0,
+    MOVE = 1,
+    JUMP = 2,
+    ATTACK = 3,
+    HIT = 4,
+    DEAD = 5,
 };

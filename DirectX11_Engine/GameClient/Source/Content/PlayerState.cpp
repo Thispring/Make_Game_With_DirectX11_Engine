@@ -4,14 +4,11 @@
 #include "TimeMgr.h"
 #include "KeyMgr.h"
 
-PlayerState::PlayerState()
+PlayerState::PlayerState(Ptr<CPlayerData> _Data)
 {
-	if (m_PlayerData == nullptr)
-	{
-		Ptr<GameObject> pObj = LevelMgr::GetInst()->FindObjectByName(L"Player");
-		m_PlayerData = pObj->GetScript<CPlayerData>();
-	}
-
+	// 문자열로 찾는게 아닌, StateManager에서 생성할때
+	// StateManager의 멤버로 CPlayerData 객체 주소를 전달
+	m_PlayerData = _Data;
 }
 
 PlayerState::~PlayerState()

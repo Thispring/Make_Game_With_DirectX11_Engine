@@ -22,7 +22,6 @@ public:
     //============
     // 생성, 소멸자
     //============
-    EnemyIdleState();
-    EnemyIdleState(const wstring& ownerName);
+    EnemyIdleState(Ptr<CEnemyData> _Data);
     virtual ~EnemyIdleState();
 };

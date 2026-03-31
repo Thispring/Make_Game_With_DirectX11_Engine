@@ -14,25 +14,29 @@ class PlayerMeleeAttackState :
 private:
 
 public:
+    /*******************************************************
+    * PlayerMeleeAttackState도 부모 클래스의 역할을 하기 때문에
+    * 멤버함수 오버라이딩 구현 X
+    *******************************************************/
 
     //=============
     // 상속 멤버 함수
     //=============
-    virtual void Begin() override;
-    virtual void Tick() override;
-    virtual void FinalTick() override;
-    virtual PLAYER_STATE GetFlipbookIndex() override;
+    virtual void Begin() = 0;
+    virtual void Tick() = 0;
+    virtual void FinalTick() = 0;
+    virtual PLAYER_STATE GetFlipbookIndex() = 0;
 
-    virtual void SaveToLevelFile(FILE* _File) override;
-    virtual void LoadFromLevelFile(FILE* _File) override;
+    virtual void SaveToLevelFile(FILE* _File) = 0;
+    virtual void LoadFromLevelFile(FILE* _File) = 0;
     // Deep-copy 지원을 위한 가상 클론 함수 추가
-    virtual unique_ptr<PlayerState> Clone() const override;
+    virtual unique_ptr<PlayerState> Clone() const = 0;
 
 
     //============
     // 생성, 소멸자
     //============
-    PlayerMeleeAttackState();
+    PlayerMeleeAttackState(Ptr<CPlayerData> _Data);
     virtual ~PlayerMeleeAttackState();
 };
 #pragma endregion
@@ -64,7 +68,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerPunchState();
+    PlayerPunchState(Ptr<CPlayerData> _Data);
     virtual ~PlayerPunchState();
 };
 #pragma endregion
@@ -96,7 +100,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerMiddleKickState();
+    PlayerMiddleKickState(Ptr<CPlayerData> _Data);
     virtual ~PlayerMiddleKickState();
 };
 #pragma endregion
@@ -128,7 +132,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerHighKickState();
+    PlayerHighKickState(Ptr<CPlayerData> _Data);
     virtual ~PlayerHighKickState();
 };
 #pragma endregion
@@ -160,7 +164,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerLowKickState();
+    PlayerLowKickState(Ptr<CPlayerData> _Data);
     virtual ~PlayerLowKickState();
 };
 #pragma endregion

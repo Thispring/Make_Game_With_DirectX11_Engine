@@ -3,7 +3,8 @@
 #include "TimeMgr.h"
 
 
-PlayerIdleState::PlayerIdleState()
+PlayerIdleState::PlayerIdleState(Ptr<CPlayerData> _Data)
+	: PlayerState(_Data)
 {
 	m_FlipbookIndex = PLAYER_STATE::IDLE;
 }

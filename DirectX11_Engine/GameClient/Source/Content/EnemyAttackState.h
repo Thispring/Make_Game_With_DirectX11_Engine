@@ -22,7 +22,6 @@ public:
     //============
     // 생성, 소멸자
     //============
-    EnemyAttackState();
-    EnemyAttackState(const wstring& ownerName);
+    EnemyAttackState(Ptr<CEnemyData> _Data);
     virtual ~EnemyAttackState();
 };

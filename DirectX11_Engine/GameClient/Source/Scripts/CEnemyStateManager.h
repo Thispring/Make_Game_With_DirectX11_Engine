@@ -11,16 +11,20 @@ class CEnemyStateManager :
 {
 
 private:
-    Ptr<CEnemyData>                        m_EnemyData;
+    Ptr<CEnemyData>                         m_EnemyData;
 
-    EnemyState* m_CurStatus;
-    EnemyState* m_PrevStatus;
-    vector<unique_ptr<EnemyState>>        m_vecStatus;
+    EnemyState*                             m_CurStatus;
+    EnemyState*                             m_PrevStatus;
+    vector<unique_ptr<EnemyState>>          m_vecStatus;
 
-    
+    bool                                    m_IsChange;
 
 public:
+    //=========
+    // 멤버 함수
+    //=========
     void SetUp();
+    void ChangeState();
 
 
     //=============
@@ -33,7 +37,17 @@ public:
     virtual void SaveToLevelFile(FILE* _File) override;
     virtual void LoadFromLevelFile(FILE* _File) override;
 
-    
+
+    //=========
+    // Get, Set
+    //=========
+    GET_SET(EnemyState*, CurStatus); 
+    GET_SET(EnemyState*, PrevStatus);
+    EnemyState* GetStatusVec(int _Idx) { return m_vecStatus[_Idx].get(); }
+    void SetChange() { m_IsChange = true; }
+    bool IsChange();
+
+
     //============
     // 생성, 소멸자
     //============

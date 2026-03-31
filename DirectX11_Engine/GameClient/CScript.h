@@ -17,6 +17,7 @@ enum class SCRIPT_PARAM
     MATERIAL,
     PREFAB,
     STRING,     // 포인터 변수 사용 시, 가리키고 있는 대상의 이름 표시
+    ENUM_CLASS,
 };
 
 // ImGui로 전달할 데이터 구조체
@@ -27,6 +28,9 @@ struct tScriptParam
     wstring         Desc;
     bool            IsInput;
     float           Step;
+
+    // ENUM_CLASS일 경우 사용할 옵션 목록 (wstring으로 보관)
+    vector<wstring>         EnumOptions;
 };
 
 class CCollider2D;
@@ -43,7 +47,7 @@ protected:
     // 스크립트 컴포넌트의 오브젝트 삭제 요청 함수
     void Destroy(); 
     // m_vecScriptParam 데이터 push back 함수
-    void AddScriptParam(SCRIPT_PARAM _Type, void* _Data, const wstring& _Desc, bool _IsInput = true, float _Step = 1.f);
+    void AddScriptParam(SCRIPT_PARAM _Type, void* _Data, const wstring& _Desc, bool _IsInput = true, float _Step = 1.f, const vector<wstring>& _EnumOptions = {});
     // m_vecScriptParam 벡터를 clear하는 함수
     void ClearScriptParam();
     // Prefab을 가져와 객체로 생성하는 함수

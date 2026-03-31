@@ -56,8 +56,9 @@ void CPlayerData::Init()
 
 void CPlayerData::Begin()
 {
-	m_TargetObject = LevelMgr::GetInst()->FindObjectByName(L"Player");
-	m_AnchorObject = LevelMgr::GetInst()->FindObjectByName(L"Anchor");
+	// 문자열 방식으로 찾는 방법은 최대한 줄이기
+	m_TargetObject = GetOwner();
+	m_AnchorObject = GetOwner()->GetChild(0);
 	
 	// 기존 위치는 Begin에서 초기화
 	m_OriginPos = Vec3(0.f, 0.f, 0.f);

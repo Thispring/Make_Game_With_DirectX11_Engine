@@ -6,6 +6,7 @@
 
 CEnemyData::CEnemyData()
 	: CScript(SCRIPT_TYPE::ENEMYDATA)
+	// 멤버들은 추후 파일로 저장하여, 불러오는 방식을 사용합니다.
 	, m_FullHP(10.f)
 	, m_CurHP(m_FullHP)
 	, m_Damage(2.f)
@@ -20,6 +21,10 @@ CEnemyData::CEnemyData()
 	, m_CurPos{}
 
 	, m_VelocityY(0.f)
+
+	// EnemyType은 기본으로 END입니다.
+	// ImGui에서 지정해야 하며, 하지 않을경우 크래시
+	, m_EnemyType(ENEMY_TYPE::END)
 {
 }
 
@@ -42,25 +47,25 @@ void CEnemyData::Init()
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsFalling, L"IsFalling", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsAttack, L"IsAttack", true, 0.f);
 
+	// enum class ENEMY_TYPE을 ImGui에서 편집할 수 있도록 전달
+	// Level Play 전에 m_EnemyType을 미리 받을 수 있게 보장합니다.
+	AddScriptParam(SCRIPT_PARAM::ENUM_CLASS, &m_EnemyType, L"EnemyType", true, 0.f,
+		vector<wstring>{ L"DEMON", L"SKULL", L"FLYING", L"FLOWER", L"BOSS", L"END" });
 }
 
 void CEnemyData::Begin()
 {
-	m_TargetObject = LevelMgr::GetInst()->FindObjectByName(GetOwner()->GetName());
-
-	// GetName 조건에 따라 ENEMY_TYPE 초기화를 다르게 진행
-	// ENEMY_TYPE을 EnemyData에서 저장하고, TYPE 조건문 마다
-	// 각자 다른 ENEMY_STATE를 호출받게 설정?
-	if (GetOwner()->GetName() == L"mon1")
-		m_EnemyType = ENEMY_TYPE::DEMON;
-	else if (GetOwner()->GetName() == L"mon2")
-		m_EnemyType = ENEMY_TYPE::SKULL;
-	else if (GetOwner()->GetName() == L"mon3")
-		m_EnemyType = ENEMY_TYPE::FLYING;
-	else if (GetOwner()->GetName() == L"mon4")
-		m_EnemyType = ENEMY_TYPE::FLOWER;
-	else
-		assert(nullptr);
+	// NOTE(26-03-31):
+	// 문자열로 오브젝트를 지정하는 방식은 
+	// Enemy가 게임에 많이 스폰되는 경우
+	// 문자열이 같다고 보장 할 수 없습니다. 다른 방식 찾아보기
+	// 
+	// 조건문으로 타입을 정하는것이 아닌, 인스펙터에서
+	// 타입을 지정하고, 이를 저장 및 불러오는 방식으로 변경하기
+	m_TargetObject = GetOwner();
+	
+	// assert는 조건이 false일 때만 실행(중단)됩니다.
+	assert(m_EnemyType != ENEMY_TYPE::END && "EnemyType is End");
 
 	// 기존 위치는 Begin에서 초기화
 	m_OriginPos = Vec3(0.f, 0.f, 0.f);
@@ -88,7 +93,15 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 	// Layer Index 5번은 Player 투사체
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == 5)
 	{
+		// Type에 따라 구별되는 ENEMY_STATE를 반환
+		int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::HIT);
 		// Hit 상태로 변경하고, 데미지 계산
+
+		// 현재 상태를 얻어오고
+		// 그 상태를 세팅
+		Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+		pMgr->SetCurStatus(pMgr->GetStatusVec(state));
+		pMgr->ChangeState();
 	}
 }
 
@@ -104,10 +117,10 @@ void CEnemyData::Tick()
 
 void CEnemyData::SaveToLevelFile(FILE* _File)
 {
-
+	fwrite(&m_EnemyType, sizeof(ENEMY_TYPE), 1, _File);
 }
 
 void CEnemyData::LoadFromLevelFile(FILE* _File)
 {
-
+	fread(&m_EnemyType, sizeof(ENEMY_TYPE), 1, _File);
 }

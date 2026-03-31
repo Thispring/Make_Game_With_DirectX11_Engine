@@ -16,13 +16,11 @@ private:
     * PlayerState에 스마트 포인터를 사용한다면, 엔진에 구현된 Ptr.h가 아닌
     * std unique_ptr를 사용합니다. (콘텐츠용도로 만들었기에 엔진 차원 Entity 상속 X)
     **************************************************************************/
-    PlayerState*                           m_CurStatus;
-    PlayerState*                           m_PrevStatus;
-    vector<unique_ptr<PlayerState>>        m_vecStatus;
+    PlayerState*                            m_CurStatus;
+    PlayerState*                            m_PrevStatus;
+    vector<unique_ptr<PlayerState>>         m_vecStatus;
 
-    static int                              m_ChangeCount;
-    int                                     m_StateNum;
-    bool                                    m_IsStateChange;
+    bool                                    m_IsChange;
 
 public:
     void ChangeState();
@@ -46,9 +44,8 @@ public:
     GET_SET(PlayerState*, CurStatus);  // Get, Set을 통해서만 Controller에서 상태 변경
     GET_SET(PlayerState*, PrevStatus);
     PlayerState* GetStatusVec(int _Idx) { return m_vecStatus[_Idx].get(); }
-    void SetStateChange() { m_IsStateChange = true; }
-    bool IsStateChange();
-    GET_SET(int, ChangeCount);
+    void SetChange() { m_IsChange = true; }
+    bool IsChange();
 
 
     //============

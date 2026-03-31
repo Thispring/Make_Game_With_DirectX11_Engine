@@ -1,12 +1,8 @@
 #include "pch.h"
 #include "EnemyJumpState.h"
 
-EnemyJumpState::EnemyJumpState()
-{
-}
-
-EnemyJumpState::EnemyJumpState(const std::wstring& ownerName)
-	: EnemyState(ownerName)
+EnemyJumpState::EnemyJumpState(Ptr<CEnemyData> _Data)
+	: EnemyState(_Data)
 {
 }
 

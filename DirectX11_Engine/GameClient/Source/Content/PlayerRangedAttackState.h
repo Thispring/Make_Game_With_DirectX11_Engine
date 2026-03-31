@@ -27,7 +27,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerRangedAttackState();
+    PlayerRangedAttackState(Ptr<CPlayerData> _Data);
     virtual ~PlayerRangedAttackState();
 };
 #pragma endregion
@@ -59,7 +59,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerChargeState();
+    PlayerChargeState(Ptr<CPlayerData> _Data);
     virtual ~PlayerChargeState();
 };
 #pragma endregion
@@ -91,7 +91,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerReleaseState();
+    PlayerReleaseState(Ptr<CPlayerData> _Data);
     virtual ~PlayerReleaseState();
 };
 #pragma endregion
@@ -123,7 +123,7 @@ public:
     //============
     // 생성, 소멸자
     //============
-    PlayerEnergyBlastShotState();
+    PlayerEnergyBlastShotState(Ptr<CPlayerData> _Data);
     virtual ~PlayerEnergyBlastShotState();
 };
 

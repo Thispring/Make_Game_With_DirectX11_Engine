@@ -22,7 +22,6 @@ public:
     //============
     // 생성, 소멸자
     //============
-    EnemyJumpState();
-    EnemyJumpState(const wstring& ownerName);
+    EnemyJumpState(Ptr<CEnemyData> _Data);
     virtual ~EnemyJumpState();
 };

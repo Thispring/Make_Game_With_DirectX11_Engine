@@ -4,7 +4,8 @@
 #include "Source\Scripts\CPlayerStateManager.h"
 
 #pragma region PlayerMeleeAttackState
-PlayerMeleeAttackState::PlayerMeleeAttackState()
+PlayerMeleeAttackState::PlayerMeleeAttackState(Ptr<CPlayerData> _Data)
+	: PlayerState(_Data)
 {
 }
 
@@ -12,41 +13,12 @@ PlayerMeleeAttackState::~PlayerMeleeAttackState()
 {
 }
 
-void PlayerMeleeAttackState::Begin()
-{
-}
-
-void PlayerMeleeAttackState::Tick()
-{
-}
-
-void PlayerMeleeAttackState::FinalTick()
-{
-}
-
-PLAYER_STATE PlayerMeleeAttackState::GetFlipbookIndex()
-{
-	return m_FlipbookIndex;
-}
-
-void PlayerMeleeAttackState::SaveToLevelFile(FILE* _File)
-{
-}
-
-void PlayerMeleeAttackState::LoadFromLevelFile(FILE* _File)
-{
-}
-
-unique_ptr<PlayerState> PlayerMeleeAttackState::Clone() const
-{
-	return unique_ptr<PlayerState>();
-}
-
 #pragma endregion
 
 
 #pragma region PlayerPunchState
-PlayerPunchState::PlayerPunchState()
+PlayerPunchState::PlayerPunchState(Ptr<CPlayerData> _Data)
+	: PlayerMeleeAttackState(_Data)
 {
 	m_FlipbookIndex = PLAYER_STATE::PUNCH;
 }
@@ -112,7 +84,8 @@ unique_ptr<PlayerState> PlayerPunchState::Clone() const
 
 
 #pragma region PlayerMiddleKickState
-PlayerMiddleKickState::PlayerMiddleKickState()
+PlayerMiddleKickState::PlayerMiddleKickState(Ptr<CPlayerData> _Data)
+	: PlayerMeleeAttackState(_Data)
 {
 	m_FlipbookIndex = PLAYER_STATE::MIDDLE_KICK;
 }
@@ -162,7 +135,8 @@ unique_ptr<PlayerState> PlayerMiddleKickState::Clone() const
 
 
 #pragma region PlayerHighKickState
-PlayerHighKickState::PlayerHighKickState()
+PlayerHighKickState::PlayerHighKickState(Ptr<CPlayerData> _Data)
+	: PlayerMeleeAttackState(_Data)
 {
 	m_FlipbookIndex = PLAYER_STATE::HIGH_KICK;
 }
@@ -212,7 +186,8 @@ unique_ptr<PlayerState> PlayerHighKickState::Clone() const
 
 
 #pragma region PlayerLowKickState
-PlayerLowKickState::PlayerLowKickState()
+PlayerLowKickState::PlayerLowKickState(Ptr<CPlayerData> _Data)
+	: PlayerMeleeAttackState(_Data)
 {
 	m_FlipbookIndex = PLAYER_STATE::LOW_KICK;
 }

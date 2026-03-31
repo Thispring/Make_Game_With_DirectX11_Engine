@@ -1,12 +1,9 @@
 #include "pch.h"
 #include "EnemyAttackState.h"
 
-EnemyAttackState::EnemyAttackState()
-{
-}
 
-EnemyAttackState::EnemyAttackState(const wstring& ownerName)
-	: EnemyState(ownerName)
+EnemyAttackState::EnemyAttackState(Ptr<CEnemyData> _Data)
+	: EnemyState(_Data)
 {
 }
 
