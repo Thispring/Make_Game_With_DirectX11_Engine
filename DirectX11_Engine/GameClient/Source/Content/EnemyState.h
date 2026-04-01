@@ -1,15 +1,16 @@
 #pragma once
 #include "Source\Scripts\CEnemyData.h"
-#include "contentEnum.h"
 #include <string>
 
-// 1. CScript 비상속 이유: 
-//    - Begin/Tick 등 기존 메서드 이름 재사용 및 일관성 유지.
-//    - 레벨 로드 시점이 아닌, 실제 게임 플레이 시점에만 정확히 구동하기 위함.
-// 
-// 2. 충돌 처리 관련 (To-do):
-//    - 현재 Collider 콜백이 CScript 기반으로 설계되어 있어 임시로 Data 클래스(CScript 상속)에서 처리 중.
-//    - 추후 상태 클래스에서 직접 충돌 검사를 수행하도록 구조 개선 필요.
+/*****************************************************************************************************
+* 1. CScript 비상속 이유: 
+*    - Begin/Tick 등 기존 메서드 이름 재사용 및 일관성 유지.
+*    - 레벨 로드 시점이 아닌, 실제 게임 플레이 시점에만 정확히 구동하기 위함.
+* 
+* 2. 충돌 처리 관련 (To-do):
+*    - 현재 Collider 콜백이 CScript 기반으로 설계되어 있어 임시로 Data 클래스(CScript 상속)에서 처리 중.
+*    - 추후 상태 클래스에서 직접 충돌 검사를 수행하도록 구조 개선 필요.
+*****************************************************************************************************/
 class EnemyState
 {
 
@@ -24,19 +25,37 @@ protected:
     // 생성자에서 전달된 소유자(오브젝트) 이름
     wstring                 m_OwnerName;
 
+
+    //=============
+    // 상속 멤버 함수
+    //=============
+    virtual void OnBegin() = 0;
+    virtual void OnTick() = 0;
+    virtual void OnFinalTick() = 0;
+
 public:
     //=========
     // 멤버 함수
     //=========
     void ApplyGravity();
+    // 상태 진입 시, EnemyData 멤버인 timeInState를 초기화, 계산하는 함수
+    // 파생클래스의 Begin에서 초기화 함수 호출, Tick에서 계산하는 함수 호출
+    void CalTimeInState();
+    void ClearTimeInState();
+
+
+    //==========================================================
+    // 상태 진입/실행/종료 - 템플릿 메서드
+    // 부모가 공통 로직을 보장하도록 non-virtual 진입점으로 구현합니다.
+    //==========================================================
+    void Begin();
+    void Tick();
+    void FinalTick();
 
 
     //=============
     // 상속 멤버 함수
     //=============
-    virtual void Begin() = 0;
-    virtual void Tick() = 0;
-    virtual void FinalTick() = 0;
     virtual ENEMY_STATE GetFlipbookIndex() = 0;
 
     virtual void SaveToLevelFile(FILE* _File) = 0;
@@ -57,5 +76,4 @@ public:
     // EnemyData 포인터를 받아 초기화하는 생성자
     EnemyState(Ptr<CEnemyData> _Data);
     virtual ~EnemyState();
-
 };

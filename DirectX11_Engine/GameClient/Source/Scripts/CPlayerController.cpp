@@ -79,8 +79,7 @@ void CPlayerController::Punch()
     if (KEY_TAP(KEY::Z))
 	{
 		m_PlayerData->SetIsAttack();
-		//GetOwner()->GetChild(1)->SetIsActive(true);
-		GetOwner()->GetChild(1)->Collider2D()->SetEnabled(true);
+		GetOwner()->GetChild(PLAYER_PUNCH_ANCHOR)->Collider2D()->SetEnabled(true);
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::PUNCH));
 		m_StatusMgr->ChangeState();
 	}
@@ -92,8 +91,7 @@ void CPlayerController::Kick()
     if (KEY_TAP(KEY::X))
 	{
 		m_PlayerData->SetIsAttack();
-		//GetOwner()->GetChild(2)->SetIsActive(true);
-		GetOwner()->GetChild(2)->Collider2D()->SetEnabled(true);
+		GetOwner()->GetChild(PLAYER_KICK_ANCHOR)->Collider2D()->SetEnabled(true);
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::MIDDLE_KICK));
 		m_StatusMgr->ChangeState();
 	}
@@ -112,8 +110,8 @@ void CPlayerController::EnergyBlastShot()
 
 
 		// 자식 오브젝트인 Anchor는 index 0번째를 보장해야 합니다.
-		Vec3 vAnchorPos = GetOwner()->GetChild(0)->Transform()->GetWorldPos();
-		Vec3 vAnchorScale = GetOwner()->GetChild(0)->Transform()->GetWorldScale();
+		Vec3 vAnchorPos = GetOwner()->GetChild(PLAYER_PROJECTILE_ANCHOR)->Transform()->GetWorldPos();
+		Vec3 vAnchorScale = GetOwner()->GetChild(PLAYER_PROJECTILE_ANCHOR)->Transform()->GetWorldScale();
 
 		Vec3 vDir = Transform()->GetDir(DIR::RIGHT);
 		vDir *= m_PlayerData->GetDirNum();

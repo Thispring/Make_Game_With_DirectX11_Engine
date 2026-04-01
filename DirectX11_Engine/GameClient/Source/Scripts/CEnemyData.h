@@ -1,17 +1,20 @@
 #pragma once
 #include "CScript.h"
 #include "GameObject.h"
-#include "contentEnum.h"
 
-// 게임에 등장하는 모든 Enemy의 체력, 공격력 등의 정보를 이 객체에서 정의하고 관리합니다.
-// Enemy의 타입별로 멤버를 다르게 설정할 수 있도록 설계합니다.
-// 멤버는 GET_SET 함수로만 접근을 허용합니다.
+/*******************************************************************************
+* 게임에 등장하는 모든 Enemy의 체력, 공격력 등의 정보를 이 객체에서 정의하고 관리합니다.
+* Enemy의 타입별로 멤버를 다르게 설정할 수 있도록 설계합니다.
+* 멤버는 GET_SET 함수로만 접근을 허용합니다.
+*******************************************************************************/
 class CEnemyData :
     public CScript
 {
 
 private:
     Ptr<GameObject>     m_TargetObject;
+    Ptr<GameObject>     m_EyeObject;
+
     ENEMY_TYPE          m_EnemyType;
 
     Vec3                m_OriginPos;
@@ -20,15 +23,21 @@ private:
     float               m_FullHP;
     float               m_CurHP;
     float               m_Damage;
+    
     float               m_Speed;
     float               m_JumpVelocity;
+    float               m_VelocityY;        // Y축 수직 속도
+    float               m_Offset;
+    
+    float               m_timeSinceSpawn;
+    float               m_timeInState;
+
+    int                 m_Direction;        // 이동방향
 
     bool                m_IsDead;
     bool                m_IsFalling;        // true일 때만 Tick에서 y축으로 DT 만큼 음수 이동
-
     bool                m_IsAttack;     
 
-    float               m_VelocityY;        // Y축 수직 속도
 
 public:
     //=========
@@ -61,6 +70,12 @@ public:
     GET_SET(float, Damage);
     GET_SET(float, Speed);
     GET_SET(float, JumpVelocity);
+    GET_SET(float, VelocityY);
+    GET_SET(float, timeSinceSpawn);
+    GET_SET(float, timeInState);
+    GET_SET(float, Offset);
+
+    GET_SET(int, Direction);
 
     GET_SET(bool, IsDead);
     GET_SET(bool, IsFalling);
@@ -72,7 +87,6 @@ public:
     GET_SET(Ptr<GameObject>, TargetObject);
     GET_SET(ENEMY_TYPE, EnemyType);
 
-    GET_SET(float, VelocityY);
 
     //============
     // 생성, 소멸자

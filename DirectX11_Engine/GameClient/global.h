@@ -9,4 +9,10 @@
 
 #include "extern.h"
 
+
+//======================
+// 게임 콘텐츠 용(엔진용 X)
+//======================
 #include "contentFunc.h"
+#include "contentDefine.h"
+#include "contentEnum.h"

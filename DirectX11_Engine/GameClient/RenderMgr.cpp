@@ -156,6 +156,12 @@ void RenderMgr::Render_Debug()
 		case DBG_SHAPE::SPHERE:
 			m_DbgObj->MeshRender()->SetMesh(FIND(AMesh, L"SphereMesh"));
 			break;
+		case DBG_SHAPE::SECTOR:
+			m_DbgObj->MeshRender()->SetMesh(FIND(AMesh, L"ConeMesh_LineStrip"));
+			break;
+		case DBG_SHAPE::LARGE_BASE_CONE:
+			m_DbgObj->MeshRender()->SetMesh(FIND(AMesh, L"LargeBaseConeMesh_LineStrip"));
+			break;
 		}
 
 		// Transform 설정
@@ -164,7 +170,9 @@ void RenderMgr::Render_Debug()
 			m_DbgObj->Transform()->SetRelativePos((*iter).Pos);
 			m_DbgObj->Transform()->SetRelativeScale((*iter).Scale);
 			m_DbgObj->Transform()->SetRelativeRot((*iter).Rotation);
-			m_DbgObj->FinalTick();
+			// 이전 코드
+			//m_DbgObj->FinalTick();
+			m_DbgObj->Transform()->FinalTick();
 		}
 		else
 		{

@@ -40,8 +40,7 @@ void PlayerPunchState::Tick()
 void PlayerPunchState::FinalTick()
 {
 	m_PlayerData->OffIsAttack();
-	//m_PlayerData->GetTargetObject()->GetChild(1)->SetIsActive(false);
-	m_PlayerData->GetTargetObject()->GetChild(1)->Collider2D()->SetEnabled(false);
+	m_PlayerData->GetTargetObject()->GetChild(PLAYER_PUNCH_ANCHOR)->Collider2D()->SetEnabled(false);
 
 	// Idle 상태로 변경
     Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
@@ -92,8 +91,7 @@ void PlayerMiddleKickState::Tick()
 void PlayerMiddleKickState::FinalTick()
 {
 	m_PlayerData->OffIsAttack();
-	//m_PlayerData->GetTargetObject()->GetChild(2)->SetIsActive(false);
-	m_PlayerData->GetTargetObject()->GetChild(2)->Collider2D()->SetEnabled(false);
+	m_PlayerData->GetTargetObject()->GetChild(PLAYER_KICK_ANCHOR)->Collider2D()->SetEnabled(false);
 
 	// Idle 상태로 변경
     Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();

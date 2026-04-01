@@ -1,9 +1,13 @@
 #include "pch.h"
 #include "CEnemyData.h"
-#include "CEnemyStateManager.h"
-#include "Source\Content\EnemyDamageState.h"
-#include "CCollider2D.h"
+
 #include "LevelMgr.h"
+#include "TimeMgr.h"
+
+#include "CCollider2D.h"
+
+#include "Source\Content\EnemyDamageState.h"
+#include "CEnemyStateManager.h"
 #include "CPlayerData.h"
 #include "CPlayerMeleeTrigger.h"
 
@@ -13,8 +17,14 @@ CEnemyData::CEnemyData()
 	, m_FullHP(10.f)
 	, m_CurHP(m_FullHP)
 	, m_Damage(2.f)
-	, m_JumpVelocity(300.f)
 	, m_Speed(100.f)
+	, m_JumpVelocity(300.f)
+	, m_VelocityY(0.f)
+	, m_Offset(0.f)
+	, m_timeSinceSpawn(0.f)
+	, m_timeInState(0.f)
+
+	, m_Direction(1)		// 이동방향 1로 초기화
 
 	, m_IsDead(false)
 	, m_IsFalling(true)
@@ -22,8 +32,6 @@ CEnemyData::CEnemyData()
 
 	, m_OriginPos{}
 	, m_CurPos{}
-
-	, m_VelocityY(0.f)
 
 	// EnemyType은 기본으로 END입니다.
 	// ImGui에서 지정해야 하며, 하지 않을경우 크래시
@@ -45,6 +53,13 @@ void CEnemyData::Init()
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_CurHP, L"CurHP", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_Damage, L"Damage", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_Speed, L"Speed", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_JumpVelocity, L"JumpVelocity", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_VelocityY, L"VelocityY", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_Offset, L"Offset", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_timeSinceSpawn, L"timeSinceSpawn", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_timeInState, L"timeInState", true, 0.f);
+	
+	AddScriptParam(SCRIPT_PARAM::INT, &m_Direction, L"Direction", true, 0.f);
 
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsDead, L"IsDead", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsFalling, L"IsFalling", true, 0.f);
@@ -66,7 +81,9 @@ void CEnemyData::Begin()
 	// 조건문으로 타입을 정하는것이 아닌, 인스펙터에서
 	// 타입을 지정하고, 이를 저장 및 불러오는 방식으로 변경하기
 	m_TargetObject = GetOwner();
-	
+	m_EyeObject = GetOwner()->GetChild(ENEMY_EYES);
+	m_EyeObject->SetLayerIdx(9);
+
 	// assert는 조건이 false일 때만 실행(중단)됩니다.
 	assert(m_EnemyType != ENEMY_TYPE::END && "EnemyType is End");
 
@@ -89,7 +106,10 @@ void CEnemyData::ApplyDamage(float _Damage)
 {
 	// 해당 함수를 Player쪽 공격 스크립트에서 호출하고 있기 때문에
 	// HIT 상태 변경을 이쪽에서 처리합니다.
-
+	
+	// 죽은 상태에서 함수가 또 호출되면, HIT 상태로 되돌리기 X
+	if (m_IsDead)
+		return;
 
 	// 실제 데미지 처리는 CEnemyData에서 진행
 	// FSM 설계상 여기에서 진행하면 안됨
@@ -117,13 +137,7 @@ void CEnemyData::ApplyDamage(float _Damage)
 
 void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	// Layer Index 4번은 Player 근접공격
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == 5)
-	{
-		// 죽었다면 HIT 상태로 되돌리기 X
-		if (m_IsDead)
-			return;
-	}
+	
 }
 
 void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
@@ -135,36 +149,17 @@ void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 {
 	m_IsFalling = true;
 
-	// 죽었다면 IDLE 상태로 되돌리기 X
-	if (m_IsDead)
-		return;
-
 	// 중단이 걸렸으므로 여기에서 Idle로 상태변경
 	int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::IDLE);
 	Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
 	pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
 	pMgr->ChangeState();
-
-	//// Player 투사체와 충돌 후 호출되는지 확인
-	//if (_OtherCollider->GetOwner()->GetLayerIdx() == 5)
-	//{
-	//	// 죽었다면 IDLE 상태로 되돌리기 X
-	//	if (m_IsDead)
-	//		return;
-
-	//	// 중단이 걸렸으므로 여기에서 Idle로 상태변경
-	//	int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::IDLE);
-	//	Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
-	//	pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
-	//	pMgr->ChangeState();
-
-	//	// 근접공격이 끝났으므로 비활성화 신호 보내기
-	//}
 }
 
 void CEnemyData::Tick()
 {
-
+	// 소환 후 흐른 시간 계산
+	m_timeSinceSpawn += DT;
 }
 
 void CEnemyData::SaveToLevelFile(FILE* _File)

@@ -20,6 +20,9 @@ void DrawDebugRect(const Matrix& _matWorld, Vec4 _Color, float _Duration, bool _
 void DrawDebugSquare(const Matrix& _matWorld, Vec4 _Color, float _Duration, bool _DepthTest = false);
 // 원형 Render
 void DrawDebugCircle(Vec3 _Pos, float _Radius, Vec4 _Color, float _Duration, bool _DepthTest = false);
+// 부채꼴 Render (월드 공간 꼭짓점, 방향, 반지름)
+void DrawDebugSector(Vec3 _WorldTip, Vec3 _WorldDir, float _WorldRadius, Vec4 _Color, float _Duration, bool _DepthTest = false);
+void DrawDebugLargeBaseCone(Vec3 _WorldTip, Vec3 _WorldDir, float _WorldRadius, Vec4 _Color, float _Duration, bool _DepthTest = false);
 
 // 0 ~ 1로 제한하는 함수
 float Saturate(float _Data);	

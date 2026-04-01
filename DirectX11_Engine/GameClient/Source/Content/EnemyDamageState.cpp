@@ -47,16 +47,16 @@ EnemyHitState::~EnemyHitState()
 }
 
 
-void EnemyHitState::Begin()
+void EnemyHitState::OnBegin()
 {
 
 }
 
-void EnemyHitState::Tick()
+void EnemyHitState::OnTick()
 {
 }
 
-void EnemyHitState::FinalTick()
+void EnemyHitState::OnFinalTick()
 {
     //Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetOwner()->GetScript<CEnemyStateManager>();
     //pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)GetEnemyStateToParam(m_EnemyData->GetEnemyType(), ENEMY_COMMON_STATE::IDLE)));
@@ -116,17 +116,18 @@ EnemyDeadState::~EnemyDeadState()
 {
 }
 
-void EnemyDeadState::Begin()
+void EnemyDeadState::OnBegin()
 {
 }
 
-void EnemyDeadState::Tick()
+void EnemyDeadState::OnTick()
 {
 }
 
-void EnemyDeadState::FinalTick()
+void EnemyDeadState::OnFinalTick()
 {
 }
+
 
 ENEMY_STATE EnemyDeadState::GetFlipbookIndex()
 {

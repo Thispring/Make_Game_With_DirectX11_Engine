@@ -11,15 +11,15 @@ EnemyMoveState::~EnemyMoveState()
 {
 }
 
-void EnemyMoveState::Begin()
+void EnemyMoveState::OnBegin()
 {
 }
 
-void EnemyMoveState::Tick()
+void EnemyMoveState::OnTick()
 {
 }
 
-void EnemyMoveState::FinalTick()
+void EnemyMoveState::OnFinalTick()
 {
 }
 

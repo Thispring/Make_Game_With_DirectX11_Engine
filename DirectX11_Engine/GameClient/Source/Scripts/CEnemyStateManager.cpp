@@ -13,12 +13,17 @@
 #include "Source\Content\EnemyJumpState.h"
 #include "Source\Content\EnemyAttackState.h"
 #include "Source\Content\EnemyDamageState.h"
+#include "Source\Content\EnemyPatrolState.h"
+#include "Source\Content\EnemyChaseState.h"
 
 
 CEnemyStateManager::CEnemyStateManager()
 	: CScript(SCRIPT_TYPE::ENEMYSTATEMANAGER)
+    , m_EnemyData(nullptr)
 	, m_CurStatus(nullptr)
 	, m_PrevStatus(nullptr)
+    , m_mapStatus{}
+    , m_IsChange(false)
 {
 }
 
@@ -32,6 +37,8 @@ CEnemyStateManager::CEnemyStateManager(const CEnemyStateManager& _Origin)
     , m_EnemyData(_Origin.m_EnemyData) // Ptr 타입이 복사 가능하다고 가정
     , m_CurStatus(nullptr)
     , m_PrevStatus(nullptr)
+    , m_mapStatus{}
+    , m_IsChange(false)
 {
     // 원본 map의 각 상태를 Clone하여 새로운 map에 복제
     for (const auto& pair : _Origin.m_mapStatus)
@@ -84,6 +91,7 @@ void CEnemyStateManager::SetUp()
     // 실제 로직에는 영향이 없어야 하는게 맞습니다.
     // StateManager에서는 현재 상태를 가리키는 포인터에
     // Tick 함수를 호출시키기 때문에, 인덱스 문제는 없어야함
+    
     // clear any existing registrations
     m_mapStatus.clear();
 
@@ -97,6 +105,9 @@ void CEnemyStateManager::SetUp()
         m_mapStatus[ENEMY_COMMON_STATE::ATTACK] = make_unique<EnemyAttackState>(m_EnemyData);
         m_mapStatus[ENEMY_COMMON_STATE::HIT] = make_unique<EnemyHitState>(m_EnemyData);
         m_mapStatus[ENEMY_COMMON_STATE::DEAD] = make_unique<EnemyDeadState>(m_EnemyData);
+        
+        m_mapStatus[ENEMY_COMMON_STATE::PATROL] = make_unique<EnemyPatrolState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::CHASE] = make_unique<EnemyChaseState>(m_EnemyData);
     }
         break;
     case ENEMY_TYPE::SKULL:
@@ -107,21 +118,35 @@ void CEnemyStateManager::SetUp()
         m_mapStatus[ENEMY_COMMON_STATE::ATTACK] = make_unique<EnemyAttackState>(m_EnemyData);
         m_mapStatus[ENEMY_COMMON_STATE::HIT] = make_unique<EnemyHitState>(m_EnemyData);
         m_mapStatus[ENEMY_COMMON_STATE::DEAD] = make_unique<EnemyDeadState>(m_EnemyData);
+        
+        m_mapStatus[ENEMY_COMMON_STATE::PATROL] = make_unique<EnemyPatrolState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::CHASE] = make_unique<EnemyChaseState>(m_EnemyData);
     }
         break;
     case ENEMY_TYPE::FLYING:
+        // FLYING의 IDLE과 MOVE는 동일한 Flipbook 사용, JUMP 사용 X
+        m_mapStatus[ENEMY_COMMON_STATE::IDLE] = make_unique<EnemyIdleState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::MOVE] = make_unique<EnemyMoveState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::ATTACK] = make_unique<EnemyAttackState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::HIT] = make_unique<EnemyHitState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::DEAD] = make_unique<EnemyDeadState>(m_EnemyData);
 
+        m_mapStatus[ENEMY_COMMON_STATE::PATROL] = make_unique<EnemyPatrolState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::CHASE] = make_unique<EnemyChaseState>(m_EnemyData);
         break;
     case ENEMY_TYPE::FLOWER:
+        // FLOWER는 MOVE 사용 X, JUMP는 필수사용 X
+        m_mapStatus[ENEMY_COMMON_STATE::IDLE] = make_unique<EnemyIdleState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::JUMP] = make_unique<EnemyJumpState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::ATTACK] = make_unique<EnemyAttackState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::HIT] = make_unique<EnemyHitState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::DEAD] = make_unique<EnemyDeadState>(m_EnemyData);
 
+        m_mapStatus[ENEMY_COMMON_STATE::PATROL] = make_unique<EnemyPatrolState>(m_EnemyData);
+        m_mapStatus[ENEMY_COMMON_STATE::CHASE] = make_unique<EnemyChaseState>(m_EnemyData);
         break;
     case ENEMY_TYPE::BOSS:
 
-        break;
-    case ENEMY_TYPE::END:
-
-        break;
-    default:
         break;
     }
 
@@ -135,14 +160,15 @@ void CEnemyStateManager::SetUp()
     {
         m_CurStatus = nullptr;
     }
+
     // 이전 상태 등록
     m_PrevStatus = m_CurStatus;
     if (m_CurStatus)
         m_CurStatus->Begin();
 
     // idle flipbook 재생 강제 보장
+    // Flipbook Play 함수에 index로 -1을 받았을 때 처리해둠
     GetOwner()->FlipbookRender()->Play(-1, 10, -1);
-    //GetOwner()->GetScript<CEnemyAnimator>()->Play();
 }
 
 bool CEnemyStateManager::IsChange()
@@ -151,6 +177,19 @@ bool CEnemyStateManager::IsChange()
     m_IsChange = false;
 
     return IsTemp;
+}
+
+EnemyState* CEnemyStateManager::GetStatusByCommonState(ENEMY_COMMON_STATE _State)
+{
+    auto it = m_mapStatus.find(_State);
+    return (it != m_mapStatus.end()) ? it->second.get() : nullptr;
+}
+
+EnemyState* CEnemyStateManager::GetStatusByIndex(int _Idx)
+{
+    // ENEMY_STATE는 각 타입별로 0..5 값을 사용하므로 공통 상태로 캐스트 가능
+    ENEMY_COMMON_STATE common = static_cast<ENEMY_COMMON_STATE>(_Idx);
+    return GetStatusByCommonState(common);
 }
 
 void CEnemyStateManager::ChangeState()

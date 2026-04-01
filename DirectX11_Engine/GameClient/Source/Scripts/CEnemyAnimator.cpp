@@ -12,7 +12,6 @@ CEnemyAnimator::~CEnemyAnimator()
 {
 }
 
-extern int g_caseCounter = 0;
 void CEnemyAnimator::Play()
 {
 
@@ -37,7 +36,7 @@ void CEnemyAnimator::Play()
 		break;
 	case ENEMY_STATE::DEMON_HIT: fps = 10; repCount = 1;
 		break;
-	case ENEMY_STATE::DEMON_DEAD: fps = 10; repCount = 0; ++g_caseCounter;
+	case ENEMY_STATE::DEMON_DEAD: fps = 10; repCount = 0;
 		break;
 
 	case ENEMY_STATE::SKULL_IDLE:

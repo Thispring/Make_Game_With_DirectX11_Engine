@@ -2,7 +2,6 @@
 #include "CScript.h"
 #include "CPlayerData.h"
 #include "Source\Content\PlayerState.h"
-#include "contentEnum.h"
 #include <map>
 // CPlayerStatus의 주소를 받아, 상태를 관리하는 클래스입니다.
 

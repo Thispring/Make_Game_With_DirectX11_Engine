@@ -16,9 +16,8 @@ public:
     //=============
     // 상속 멤버 함수
     //=============
-    virtual void Begin() = 0;
-    virtual void Tick() = 0;
-    virtual void FinalTick() = 0;
+    // DamageState는 구체적 훅을 그대로 노출하지 않고
+    // 기본 클래스의 훅을 따릅니다.
     virtual ENEMY_STATE GetFlipbookIndex() = 0;
 
     virtual void SaveToLevelFile(FILE* _File) = 0;
@@ -44,9 +43,9 @@ public:
     //=============
     // 상속 멤버 함수
     //=============
-    virtual void Begin() override;
-    virtual void Tick() override;
-    virtual void FinalTick() override;
+    virtual void OnBegin() override;
+    virtual void OnTick() override;
+    virtual void OnFinalTick() override;
     virtual ENEMY_STATE GetFlipbookIndex() override;
 
     virtual void SaveToLevelFile(FILE* _File) override;
@@ -71,11 +70,11 @@ class EnemyDeadState :
 
 public:
     //=============
-    // 상속 멤버 함수
+    // 상속 멤버 함수 (훅)
     //=============
-    virtual void Begin() override;
-    virtual void Tick() override;
-    virtual void FinalTick() override;
+    virtual void OnBegin() override;
+    virtual void OnTick() override;
+    virtual void OnFinalTick() override;
     virtual ENEMY_STATE GetFlipbookIndex() override;
 
     virtual void SaveToLevelFile(FILE* _File) override;

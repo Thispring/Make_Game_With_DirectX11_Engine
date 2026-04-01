@@ -1,13 +1,13 @@
 #pragma once
 #include "EnemyState.h"
 
-class EnemyJumpState 
-    : public EnemyState
+class EnemyPatrolState :
+    public EnemyState
 {
 
 public:
     //=============
-    // 상속 멤버 함수 (훅)
+    // 상속 멤버 함수
     //=============
     void OnBegin() override;
     void OnTick() override;
@@ -22,6 +22,6 @@ public:
     //============
     // 생성, 소멸자
     //============
-    EnemyJumpState(Ptr<CEnemyData> _Data);
-    virtual ~EnemyJumpState();
+    EnemyPatrolState(Ptr<CEnemyData> _Data);
+    virtual ~EnemyPatrolState();
 };

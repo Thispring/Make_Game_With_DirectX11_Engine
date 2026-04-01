@@ -1,5 +1,5 @@
 #pragma once
-// 엔진 요소 제외, 콘텐츠 용으로 자주 사용될 Enum 값을 정의합니다.
+// 엔진 요소 X, 콘텐츠 용으로 자주 사용될 Enum 값을 정의합니다.
 
 
 // Player의 상태를 enum class로 정의합니다.
@@ -76,7 +76,6 @@ enum class ENEMY_STATE
     END,
 };
 
-
 enum class ENEMY_TYPE
 {
     // TYPE 네이밍은 Flipbook 이미지에 따름
@@ -99,4 +98,10 @@ enum class ENEMY_COMMON_STATE
     ATTACK = 3,
     HIT = 4,
     DEAD = 5,
+
+    // NOTE(26-04-01):
+    // 정찰 및 추적 상태 추가
+    // 사용 시, 인덱스 번호 주의
+    PATROL = 6,
+    CHASE = 7,
 };

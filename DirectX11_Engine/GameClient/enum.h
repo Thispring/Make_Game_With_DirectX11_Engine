@@ -43,6 +43,17 @@ enum class DBG_SHAPE
 	CIRCLE,
 	CUBE,
 	SPHERE,
+	SECTOR,
+	LARGE_BASE_CONE,
+};
+
+// Collider2D 모양
+enum class COLLIDER2D_SHAPE
+{
+	RECT,
+	CIRCLE,
+	SECTOR,
+	LARGE_BASE_CONE,
 };
 
 // Blend State 타입
@@ -92,9 +103,7 @@ enum class COMPONENT_TYPE
 
 	END,
 
-	// 하나의 오브젝트가 여러개의 Script를 가질 수 있도록
-	// 배열의 끝에 배치하고, Vector 자료형 활용
-	SCRIPT,	// 유니티 Script Component와 유사
+	SCRIPT,
 };
 
 // 방향 개념에 대한 enum

@@ -44,7 +44,10 @@ void CEditorCamMoveScript::Tick()
 	if (Camera()->GetProjType() == PROJ_TYPE::PERSPECTIVE)
 	{
 		PrespecCamMove();
-		MouseCamMove();
+		// NOTE(26-04-01):
+		// Editor 편집 시, 마우스 움직임이 불편하여
+		// 임시 비활성화
+		//MouseCamMove();
 	}
 	// 직교 투영
 	else if (Camera()->GetProjType() == PROJ_TYPE::ORTHOGRAPHIC)

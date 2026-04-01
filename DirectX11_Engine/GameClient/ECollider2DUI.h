@@ -9,6 +9,12 @@ private:
     // Component 제거 유무
     bool m_IsDelete;
 
+    //=================
+    // private 멤버 함수
+    //=================
+    COLLIDER2D_SHAPE StringToShape(const char* _Str);
+    const char* ShapeToString(COLLIDER2D_SHAPE _Shape);
+
 public:
     //=============
     // 상속 멤버 함수

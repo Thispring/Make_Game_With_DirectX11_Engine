@@ -10,15 +10,15 @@ EnemyJumpState::~EnemyJumpState()
 {
 }
 
-void EnemyJumpState::Begin()
+void EnemyJumpState::OnBegin()
 {
 }
 
-void EnemyJumpState::Tick()
+void EnemyJumpState::OnTick()
 {
 }
 
-void EnemyJumpState::FinalTick()
+void EnemyJumpState::OnFinalTick()
 {
 }
 

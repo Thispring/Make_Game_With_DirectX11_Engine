@@ -25,7 +25,7 @@ static bool isTest = false;
 void PlayerState::ApplyGravity()
 {
 	// 임시 비활성화 Key 코드 추가하기
-	if (KEY_TAP(KEY::G))
+	if (KEY_TAP(KEY::ALPHA9))
 	{
 		// bool Test 변수 토글
 		isTest = !isTest;

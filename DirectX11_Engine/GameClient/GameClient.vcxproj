@@ -174,6 +174,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="AssetMgr.h" />
     <ClInclude Include="assets.h" />
     <ClInclude Include="CEditorCamMoveScript.h" />
+    <ClInclude Include="contentDefine.h" />
     <ClInclude Include="contentEnum.h" />
     <ClInclude Include="contentFunc.h" />
     <ClInclude Include="EAssetUI.h" />
@@ -261,9 +262,11 @@ call CodeGen.exe</Command>
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Source\Content\EnemyAttackState.h" />
+    <ClInclude Include="Source\Content\EnemyChaseState.h" />
     <ClInclude Include="Source\Content\EnemyDamageState.h" />
     <ClInclude Include="Source\Content\EnemyIdleState.h" />
     <ClInclude Include="Source\Content\EnemyJumpState.h" />
+    <ClInclude Include="Source\Content\EnemyPatrolState.h" />
     <ClInclude Include="Source\Content\EnemyState.h" />
     <ClInclude Include="Source\Content\EnemyMoveState.h" />
     <ClInclude Include="Source\Content\PlayerIdleState.h" />
@@ -278,6 +281,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="Source\Scripts\CEnemyAnimator.h" />
     <ClInclude Include="Source\Scripts\CEnemyBehavior.h" />
     <ClInclude Include="Source\Scripts\CEnemyData.h" />
+    <ClInclude Include="Source\Scripts\CEnemyEyes.h" />
     <ClInclude Include="Source\Scripts\CEnemySpawner.h" />
     <ClInclude Include="Source\Scripts\CEnemyStateManager.h" />
     <ClInclude Include="Source\Scripts\CEnergyBlast.h" />
@@ -391,9 +395,11 @@ call CodeGen.exe</Command>
     <ClCompile Include="PrefabMaker.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
     <ClCompile Include="Source\Content\EnemyAttackState.cpp" />
+    <ClCompile Include="Source\Content\EnemyChaseState.cpp" />
     <ClCompile Include="Source\Content\EnemyDamageState.cpp" />
     <ClCompile Include="Source\Content\EnemyIdleState.cpp" />
     <ClCompile Include="Source\Content\EnemyJumpState.cpp" />
+    <ClCompile Include="Source\Content\EnemyPatrolState.cpp" />
     <ClCompile Include="Source\Content\EnemyState.cpp" />
     <ClCompile Include="Source\Content\EnemyMoveState.cpp" />
     <ClCompile Include="Source\Content\PlayerIdleState.cpp" />
@@ -408,6 +414,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="Source\Scripts\CEnemyAnimator.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyBehavior.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyData.cpp" />
+    <ClCompile Include="Source\Scripts\CEnemyEyes.cpp" />
     <ClCompile Include="Source\Scripts\CEnemySpawner.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyStateManager.cpp" />
     <ClCompile Include="Source\Scripts\CEnergyBlast.cpp" />

@@ -11,15 +11,15 @@ EnemyAttackState::~EnemyAttackState()
 {
 }
 
-void EnemyAttackState::Begin()
+void EnemyAttackState::OnBegin()
 {
 }
 
-void EnemyAttackState::Tick()
+void EnemyAttackState::OnTick()
 {
 }
 
-void EnemyAttackState::FinalTick()
+void EnemyAttackState::OnFinalTick()
 {
 }
 

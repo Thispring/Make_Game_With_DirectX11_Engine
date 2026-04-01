@@ -6,6 +6,7 @@
 #include "Scripts/CEnemyAnimator.h"
 #include "Scripts/CEnemyBehavior.h"
 #include "Scripts/CEnemyData.h"
+#include "Scripts/CEnemyEyes.h"
 #include "Scripts/CEnemySpawner.h"
 #include "Scripts/CEnemyStateManager.h"
 #include "Scripts/CEnergyBlast.h"
@@ -23,6 +24,7 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CEnemyAnimator");
 	_vec.push_back(L"CEnemyBehavior");
 	_vec.push_back(L"CEnemyData");
+	_vec.push_back(L"CEnemyEyes");
 	_vec.push_back(L"CEnemySpawner");
 	_vec.push_back(L"CEnemyStateManager");
 	_vec.push_back(L"CEnergyBlast");
@@ -45,6 +47,8 @@ CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CEnemyBehavior;
 	if (L"CEnemyData" == _strScriptName)
 		return new CEnemyData;
+	if (L"CEnemyEyes" == _strScriptName)
+		return new CEnemyEyes;
 	if (L"CEnemySpawner" == _strScriptName)
 		return new CEnemySpawner;
 	if (L"CEnemyStateManager" == _strScriptName)
@@ -83,6 +87,9 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYDATA:
 		return new CEnemyData;
+		break;
+	case (UINT)SCRIPT_TYPE::ENEMYEYES:
+		return new CEnemyEyes;
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYSPAWNER:
 		return new CEnemySpawner;
@@ -136,6 +143,10 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::ENEMYDATA:
 		return L"CEnemyData";
+		break;
+
+	case SCRIPT_TYPE::ENEMYEYES:
+		return L"CEnemyEyes";
 		break;
 
 	case SCRIPT_TYPE::ENEMYSPAWNER:
@@ -198,6 +209,9 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	case ENEMYDATA: return "CEnemyData";
 		break;
 
+	case ENEMYEYES: return "CEnemyEyes";
+		break;
+
 	case ENEMYSPAWNER: return "CEnemySpawner";
 		break;
 
@@ -249,6 +263,8 @@ CScript * ScriptMgr::GetScript(const char* _strScriptName)
 		return new CEnemyBehavior;
 	if (0 == strcmp(_strScriptName, "CEnemyData"))
 		return new CEnemyData;
+	if (0 == strcmp(_strScriptName, "CEnemyEyes"))
+		return new CEnemyEyes;
 	if (0 == strcmp(_strScriptName, "CEnemySpawner"))
 		return new CEnemySpawner;
 	if (0 == strcmp(_strScriptName, "CEnemyStateManager"))
@@ -283,6 +299,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 		return ENEMYBEHAVIOR;
 	if (L"CEnemyData" == _strScriptName)
 		return ENEMYDATA;
+	if (L"CEnemyEyes" == _strScriptName)
+		return ENEMYEYES;
 	if (L"CEnemySpawner" == _strScriptName)
 		return ENEMYSPAWNER;
 	if (L"CEnemyStateManager" == _strScriptName)
@@ -317,6 +335,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 		return ENEMYBEHAVIOR;
 	if (0 == strcmp(_strScriptName, "CEnemyData"))
 		return ENEMYDATA;
+	if (0 == strcmp(_strScriptName, "CEnemyEyes"))
+		return ENEMYEYES;
 	if (0 == strcmp(_strScriptName, "CEnemySpawner"))
 		return ENEMYSPAWNER;
 	if (0 == strcmp(_strScriptName, "CEnemyStateManager"))

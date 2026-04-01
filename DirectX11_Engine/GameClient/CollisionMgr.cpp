@@ -104,13 +104,36 @@ void CollisionMgr::CollisionBtwLayer(Layer* _Left, Layer* _Right)
 
 bool CollisionMgr::IsCollision(Ptr<CCollider2D> _LeftCol, Ptr<CCollider2D> _RightCol)
 {
-	// NOTE(26-04-01):
-	// 충돌 검사 비활성화를 확인하기 위해 IsEnabled 변수 및 함수 추가
-    // If either collider is disabled, treat as no-collision so EndOverlap can be triggered
 	if (!_LeftCol->IsEnabled() || !_RightCol->IsEnabled())
 		return false;
 
-	// 충돌은 두 충돌체가 겹쳐져 있는지를 확인해야함
+	COLLIDER2D_SHAPE lType = _LeftCol->GetShape();
+	COLLIDER2D_SHAPE rType = _RightCol->GetShape();
+
+	if (lType == COLLIDER2D_SHAPE::SECTOR)
+		return IsCollisionSectorVsAny(_LeftCol, _RightCol);
+	if (rType == COLLIDER2D_SHAPE::SECTOR)
+		return IsCollisionSectorVsAny(_RightCol, _LeftCol);
+
+	if (lType == COLLIDER2D_SHAPE::LARGE_BASE_CONE)
+		return IsCollisionLargeBaseConeVsAny(_LeftCol, _RightCol);
+	if (rType == COLLIDER2D_SHAPE::LARGE_BASE_CONE)
+		return IsCollisionLargeBaseConeVsAny(_RightCol, _LeftCol);
+
+	if (lType == COLLIDER2D_SHAPE::CIRCLE && rType == COLLIDER2D_SHAPE::CIRCLE)
+		return IsCollisionCircleVsCircle(_LeftCol, _RightCol);
+
+	if (lType == COLLIDER2D_SHAPE::RECT && rType == COLLIDER2D_SHAPE::CIRCLE)
+		return IsCollisionOBBvsCircle(_LeftCol, _RightCol);
+	if (lType == COLLIDER2D_SHAPE::CIRCLE && rType == COLLIDER2D_SHAPE::RECT)
+		return IsCollisionOBBvsCircle(_RightCol, _LeftCol);
+
+	// Both RECT
+	return IsCollisionOBBvsOBB(_LeftCol, _RightCol);
+}
+
+bool CollisionMgr::IsCollisionOBBvsOBB(Ptr<CCollider2D> _LeftCol, Ptr<CCollider2D> _RightCol)
+{
 	Ptr<AMesh> pRectMesh = FIND(AMesh, L"SquareMesh");
 
 	const Vtx* pVtx = pRectMesh->GetVtxSysMem();
@@ -118,8 +141,6 @@ bool CollisionMgr::IsCollision(Ptr<CCollider2D> _LeftCol, Ptr<CCollider2D> _Righ
 	const Matrix& matWorldLeft = _LeftCol->GetWorldMat();
 	const Matrix& matWorldRight = _RightCol->GetWorldMat();
 
-	// 월드 공간상에서 충돌을 검사하기 위해서, RectMesh 모델을 각 충돌체의 월드행렬을 곱해서 정점을 충돌체 꼭지점에 배치시킨다.
-	// 각 꼭지점끼리 빼서 두 충돌체의 표면 방향벡터를 각 충돌체로부터 2개씩 구한다.
 	Vec3 Axis[4] = {};
 	Axis[0] = XMVector3TransformCoord(pVtx[1].vPos, matWorldLeft) - XMVector3TransformCoord(pVtx[0].vPos, matWorldLeft);
 	Axis[1] = XMVector3TransformCoord(pVtx[3].vPos, matWorldLeft) - XMVector3TransformCoord(pVtx[0].vPos, matWorldLeft);
@@ -130,12 +151,9 @@ bool CollisionMgr::IsCollision(Ptr<CCollider2D> _LeftCol, Ptr<CCollider2D> _Righ
 
 	for (int i = 0; i < 4; ++i)
 	{
-		// 4 개의 축 중에서, 하나를 투영 목적지로 정함
-		// 원본값을 훼손하면 나중에 투영할때 문제가 생기기 때문에, 정규화한 벡터를 따로 지역변수로 둠
 		Vec3 vProjAxis = Axis[i];
 		vProjAxis.Normalize();
 
-		// 투영축으로 4개의 벡터를 투영시켜서 얻은 면적의 절반 길이를 구함
 		float Dot = 0.f;
 		for (int j = 0; j < 4; ++j)
 		{
@@ -143,15 +161,160 @@ bool CollisionMgr::IsCollision(Ptr<CCollider2D> _LeftCol, Ptr<CCollider2D> _Righ
 		}
 		Dot /= 2.f;
 
-		// 두 충돌체의 중심끼리 이은 벡터도 투영시킴
 		float fCenter = fabs(vCenter.Dot(vProjAxis));
 
-		// 중심끼리 이은 벡터의 면적이 더크다면, 두 충돌체를 나눌 수 있는 분리축이 존재함
 		if (fCenter > Dot)
 			return false;
 	}
 
 	return true;
+}
+
+bool CollisionMgr::IsCollisionCircleVsCircle(Ptr<CCollider2D> _LeftCol, Ptr<CCollider2D> _RightCol)
+{
+	float fDist = Vec3::Distance(_LeftCol->GetWorldCenter(), _RightCol->GetWorldCenter());
+	return fDist <= (_LeftCol->GetWorldRadius() + _RightCol->GetWorldRadius());
+}
+
+bool CollisionMgr::IsCollisionOBBvsCircle(Ptr<CCollider2D> _OBB, Ptr<CCollider2D> _Circle)
+{
+	Matrix matInverse = _OBB->GetWorldMat().Invert();
+	Vec3 vLocalCircle = XMVector3TransformCoord(_Circle->GetWorldCenter(), matInverse);
+
+	float rx = 0.5f;
+	float ry = 0.5f;
+
+	Vec3 vClosest = vLocalCircle;
+	if (vClosest.x < -rx) vClosest.x = -rx;
+	else if (vClosest.x > rx) vClosest.x = rx;
+	if (vClosest.y < -ry) vClosest.y = -ry;
+	else if (vClosest.y > ry) vClosest.y = ry;
+
+	Vec3 vWorldClosest = XMVector3TransformCoord(vClosest, _OBB->GetWorldMat());
+	float fDist = Vec3::Distance(vWorldClosest, _Circle->GetWorldCenter());
+
+	return fDist <= _Circle->GetWorldRadius();
+}
+
+bool CollisionMgr::IsPointInSector(Vec3 _Point, Vec3 _Tip, Vec3 _Dir, float _Radius, float _HalfAngle)
+{
+	Vec3 vToPoint = _Point - _Tip;
+	vToPoint.z = 0.f; // 2D only
+	float fDist = vToPoint.Length();
+
+	if (fDist > _Radius) return false;
+	if (fDist < 0.0001f) return true; // near tip
+
+	vToPoint.Normalize();
+	float fDot = _Dir.Dot(vToPoint);
+	return fDot >= cosf(_HalfAngle);
+}
+
+bool CollisionMgr::IsCollisionSectorVsAny(Ptr<CCollider2D> _Sector, Ptr<CCollider2D> _Target)
+{
+	Vec3 vTip = _Sector->GetWorldCenter();
+	Vec3 vDir = _Sector->GetWorldDir();
+	float fRadius = _Sector->GetWorldRadius();
+	float fHalfAngle = _Sector->GetHalfAngle();
+
+	if (_Target->GetShape() == COLLIDER2D_SHAPE::CIRCLE)
+	{
+		return IsPointInSector(_Target->GetWorldCenter(), vTip, vDir, fRadius, fHalfAngle) ||
+			Vec3::Distance(vTip, _Target->GetWorldCenter()) <= _Target->GetWorldRadius();
+	}
+
+	if (_Target->GetShape() == COLLIDER2D_SHAPE::RECT || _Target->GetShape() == COLLIDER2D_SHAPE::SECTOR)
+	{
+		if (IsPointInSector(_Target->GetWorldCenter(), vTip, vDir, fRadius, fHalfAngle))
+			return true;
+
+		if (_Target->GetShape() == COLLIDER2D_SHAPE::RECT)
+		{
+			Matrix mat = _Target->GetWorldMat();
+			Vec3 corners[4];
+			corners[0] = XMVector3TransformCoord(Vec3(-0.5f, -0.5f, 0.f), mat);
+			corners[1] = XMVector3TransformCoord(Vec3(-0.5f,  0.5f, 0.f), mat);
+			corners[2] = XMVector3TransformCoord(Vec3( 0.5f, -0.5f, 0.f), mat);
+			corners[3] = XMVector3TransformCoord(Vec3( 0.5f,  0.5f, 0.f), mat);
+			for (int i = 0; i < 4; ++i)
+			{
+				if (IsPointInSector(corners[i], vTip, vDir, fRadius, fHalfAngle))
+					return true;
+			}
+
+			Matrix matInverse = mat.Invert();
+			Vec3 vLocalTip = XMVector3TransformCoord(vTip, matInverse);
+			if (vLocalTip.x >= -0.5f && vLocalTip.x <= 0.5f && vLocalTip.y >= -0.5f && vLocalTip.y <= 0.5f) return true;
+		}
+	}
+
+	return false;
+}
+
+bool CollisionMgr::IsCollisionLargeBaseConeVsAny(Ptr<CCollider2D> _LBC, Ptr<CCollider2D> _Target)
+{
+	Matrix matInverse = _LBC->GetWorldMat().Invert();
+	Vec3 vLocalCenter = XMVector3TransformCoord(_Target->GetWorldCenter(), matInverse);
+
+	float fTargetRadius = 0.f;
+	if (_Target->GetShape() == COLLIDER2D_SHAPE::CIRCLE)
+	{
+		Vec3 vRadTest = XMVector3TransformNormal(Vec3(_Target->GetWorldRadius(), 0, 0), matInverse);
+		fTargetRadius = vRadTest.Length();
+	}
+
+	const float fLbcRadiusX = 1.0f;
+	const float fLbcRadiusY = 3.0f;
+	float fLbcHalfAngle = _LBC->GetHalfAngle();
+
+	float x = vLocalCenter.x;
+	float y = vLocalCenter.y;
+
+	if (_Target->GetShape() == COLLIDER2D_SHAPE::CIRCLE)
+	{
+		float angle = atan2f(fabs(x), y); 
+		if (angle > fLbcHalfAngle && y < 0.f)
+			return false;
+
+		float distSq = (x * x) / (fLbcRadiusX * fLbcRadiusX) + (y * y) / (fLbcRadiusY * fLbcRadiusY);
+		float ext = 1.f + (fTargetRadius / fLbcRadiusY); 
+
+		if (distSq <= ext * ext && y >= -fTargetRadius)
+			return true;
+	}
+	else if (_Target->GetShape() == COLLIDER2D_SHAPE::RECT || _Target->GetShape() == COLLIDER2D_SHAPE::SECTOR || _Target->GetShape() == COLLIDER2D_SHAPE::LARGE_BASE_CONE)
+	{
+		float angle = atan2f(fabs(x), y); 
+		if (angle <= fLbcHalfAngle && ((x*x)/(fLbcRadiusX*fLbcRadiusX) + (y*y)/(fLbcRadiusY*fLbcRadiusY)) <= 1.f)
+			return true;
+
+		if (_Target->GetShape() == COLLIDER2D_SHAPE::RECT)
+		{
+			Matrix matTargetLocal = _Target->GetWorldMat() * matInverse;
+			Vec3 corners[4];
+			corners[0] = XMVector3TransformCoord(Vec3(-0.5f, -0.5f, 0.f), matTargetLocal);
+			corners[1] = XMVector3TransformCoord(Vec3(-0.5f,  0.5f, 0.f), matTargetLocal);
+			corners[2] = XMVector3TransformCoord(Vec3( 0.5f, -0.5f, 0.f), matTargetLocal);
+			corners[3] = XMVector3TransformCoord(Vec3( 0.5f,  0.5f, 0.f), matTargetLocal);
+
+			for(int i=0; i<4; ++i)
+			{
+				float cx = corners[i].x;
+				float cy = corners[i].y;
+				float a = atan2f(fabs(cx), cy);
+				if (a <= fLbcHalfAngle && ((cx*cx)/(fLbcRadiusX*fLbcRadiusX) + (cy*cy)/(fLbcRadiusY*fLbcRadiusY)) <= 1.f)
+					return true;
+			}
+
+			// 중심 처리도 RECT의 경우
+			Vec3 lc = XMVector3TransformCoord(Vec3(0,0,0), matTargetLocal);
+			float lc_a = atan2f(fabs(lc.x), lc.y);
+			if (lc_a <= fLbcHalfAngle && ((lc.x*lc.x)/(fLbcRadiusX*fLbcRadiusX) + (lc.y*lc.y)/(fLbcRadiusY*fLbcRadiusY)) <= 1.f)
+				return true;
+		}
+	}
+
+	return false;
 }
 
 void CollisionMgr::Progress(Ptr<ALevel> _Level)

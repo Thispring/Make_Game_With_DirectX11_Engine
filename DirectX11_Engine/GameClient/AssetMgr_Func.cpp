@@ -185,6 +185,116 @@ void AssetMgr::CreateEngineMesh()
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddAsset(L"CircleMesh_LineStrip", pMesh.Get());
 
+
+	// =====================
+	// ConeMesh (부채꼴, 채움)
+	// =====================
+	// 꼭짓점이 원점, +Y 방향으로 퍼지는 부채꼴 (반각 45도, 총 90도)
+	vecVtx.clear();
+	vecIdx.clear();
+
+	const float fConeHalfAngle = XM_PIDIV4;   // 반각 45도
+	const float fConeRadius    = 0.5f;
+	const int   nConeSlice     = 20;
+
+	// 꼭짓점 (tip)
+	v.vPos   = Vec3(0.f, 0.f, 0.f);
+	v.vUV    = Vec2(0.5f, 0.5f);
+	v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
+	vecVtx.push_back(v);
+
+	// 호(arc) 정점: XY 평면상에서 +Y 기준 ±halfAngle
+	float fStartAngle = XM_PIDIV2 - fConeHalfAngle;
+	float fEndAngle   = XM_PIDIV2 + fConeHalfAngle;
+	for (int i = 0; i <= nConeSlice; ++i)
+	{
+		float theta  = fStartAngle + (fEndAngle - fStartAngle) / nConeSlice * i;
+		v.vPos   = Vec3(fConeRadius * cosf(theta), fConeRadius * sinf(theta), 0.f);
+		v.vUV    = Vec2(0.5f + cosf(theta), 0.5f - sinf(theta));
+		v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
+		vecVtx.push_back(v);
+	}
+
+	// 삼각형 팬 인덱스
+	for (int i = 0; i < nConeSlice; ++i)
+	{
+		vecIdx.push_back(0);
+		vecIdx.push_back(i + 1);
+		vecIdx.push_back(i + 2);
+	}
+
+	pMesh = new AMesh;
+	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
+	AddAsset(L"ConeMesh", pMesh.Get());
+
+
+	// ===================================
+	// ConeMesh_LineStrip (윤곽선, 디버그용)
+	// ===================================
+	// 인덱스만 교체: tip → 오른쪽 호 → 왼쪽 호 → tip (닫힌 경로)
+	vecIdx.clear();
+	vecIdx.push_back(0);                     // tip
+	for (int i = 1; i <= nConeSlice + 1; ++i)
+		vecIdx.push_back(i);                 // 호 정점들
+	vecIdx.push_back(0);                     // 다시 tip으로 닫기
+
+	pMesh = new AMesh;
+	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
+	AddAsset(L"ConeMesh_LineStrip", pMesh.Get());
+
+	// =================================
+	// LargeBaseConeMesh (넓고 낮은 원뿔)
+	// =================================
+	vecVtx.clear();
+	vecIdx.clear();
+
+	const float fLbcHalfAngle = 20.0f * XM_PI / 180.0f;
+	const float fLbcRadiusX = 1.0f; // 반지름(밑면 반경)을 더 길게
+	const float fLbcRadiusY = 3.0f; // 높이는 더 낮게
+	const int   nLbcSlice = 20;
+
+	// 꼭짓점 (tip)
+	v.vPos   = Vec3(0.f, 0.f, 0.f);
+	v.vUV    = Vec2(0.5f, 0.5f);
+	v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
+	vecVtx.push_back(v);
+
+	// 호(arc) 정점
+	float fLbcStartAngle = XM_PIDIV2 - fLbcHalfAngle;
+	float fLbcEndAngle   = XM_PIDIV2 + fLbcHalfAngle;
+	for (int i = 0; i <= nLbcSlice; ++i)
+	{
+		float theta  = fLbcStartAngle + (fLbcEndAngle - fLbcStartAngle) / nLbcSlice * i;
+		v.vPos   = Vec3(fLbcRadiusX * cosf(theta), fLbcRadiusY * sinf(theta), 0.f);
+		v.vUV    = Vec2(0.5f + cosf(theta), 0.5f - sinf(theta));
+		v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
+		vecVtx.push_back(v);
+	}
+
+	// 삼각형
+	for (int i = 0; i < nLbcSlice; ++i)
+	{
+		vecIdx.push_back(0);
+		vecIdx.push_back(i + 1);
+		vecIdx.push_back(i + 2);
+	}
+
+	pMesh = new AMesh;
+	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
+	AddAsset(L"LargeBaseConeMesh", pMesh.Get());
+
+	// ===================================
+	// LargeBaseConeMesh_LineStrip
+	// ===================================
+	vecIdx.clear();
+	vecIdx.push_back(0);
+	for (int i = 1; i <= nLbcSlice + 1; ++i)
+		vecIdx.push_back(i);
+	vecIdx.push_back(0);
+
+	pMesh = new AMesh;
+	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
+	AddAsset(L"LargeBaseConeMesh_LineStrip", pMesh.Get());
 }
 
 void AssetMgr::CreateEngineShader()

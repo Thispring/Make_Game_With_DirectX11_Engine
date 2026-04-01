@@ -7,11 +7,11 @@ class EnemyAttackState
 
 public:
     //=============
-    // 상속 멤버 함수
+    // 상속 멤버 함수 (훅)
     //=============
-    void Begin() override;
-    void Tick() override;
-    void FinalTick() override;
+    void OnBegin() override;
+    void OnTick() override;
+    void OnFinalTick() override;
     ENEMY_STATE GetFlipbookIndex() override;
 
     void SaveToLevelFile(FILE* _File) override;

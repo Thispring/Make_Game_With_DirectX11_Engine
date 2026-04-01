@@ -1,6 +1,5 @@
 #pragma once
 #include "Source\Scripts\CPlayerData.h"
-#include "contentEnum.h"
 // NOTE(26-03-23): PlayerState를 FSM 설계방식으로 변경합니다.
 // Player의 상세한 상태를 이 클래스에서 파생한 자식 클래스로 구현하고, 
 // 상태 변경을 확인하여 해당 자식의 함수 ex)Enter, Tick 을 호출합니다.

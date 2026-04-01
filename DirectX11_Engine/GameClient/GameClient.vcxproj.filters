@@ -335,7 +335,7 @@
       <Filter>Source\ContentScript\Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\PlayerState.h">
-      <Filter>Source\OtherContent\PlayerStatus</Filter>
+      <Filter>Source\GameContent\PlayerStatus</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\CCamMoveScript.h">
       <Filter>Source\ContentScript\Etc</Filter>
@@ -350,22 +350,22 @@
       <Filter>Source\ContentHeader</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\PlayerMeleeAttackState.h">
-      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Attack</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\PlayerRangedAttackState.h">
-      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Attack</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\PlayerSpecialAttackState.h">
-      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Attack</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\PlayerIdleState.h">
-      <Filter>Source\OtherContent\PlayerStatus\Idle</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Idle</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\PlayerJumpState.h">
-      <Filter>Source\OtherContent\PlayerStatus\Jump</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Jump</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\PlayerMoveState.h">
-      <Filter>Source\OtherContent\PlayerStatus\Move</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Move</Filter>
     </ClInclude>
     <ClInclude Include="LevelMaker.h">
       <Filter>GameEngine\Editor\MakerUI\LevelMaker</Filter>
@@ -374,31 +374,43 @@
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\EnemyState.h">
-      <Filter>Source\OtherContent\EnemyStatus</Filter>
+      <Filter>Source\GameContent\EnemyStatus</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\EnemyMoveState.h">
-      <Filter>Source\OtherContent\EnemyStatus\Move</Filter>
+      <Filter>Source\GameContent\EnemyStatus\Move</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\EnemyAttackState.h">
-      <Filter>Source\OtherContent\EnemyStatus\Attack</Filter>
+      <Filter>Source\GameContent\EnemyStatus\Attack</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\EnemyIdleState.h">
-      <Filter>Source\OtherContent\EnemyStatus\Idle</Filter>
+      <Filter>Source\GameContent\EnemyStatus\Idle</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\EnemyJumpState.h">
-      <Filter>Source\OtherContent\EnemyStatus\Jump</Filter>
+      <Filter>Source\GameContent\EnemyStatus\Jump</Filter>
     </ClInclude>
     <ClInclude Include="contentFunc.h">
       <Filter>Source\ContentHeader</Filter>
     </ClInclude>
     <ClInclude Include="Source\Content\EnemyDamageState.h">
-      <Filter>Source\OtherContent\EnemyStatus\Damage</Filter>
+      <Filter>Source\GameContent\EnemyStatus\Damage</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\CPlayerMeleeTrigger.h">
       <Filter>Source\ContentScript\Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\CEnergyBlast.h">
       <Filter>Source\ContentScript\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\EnemyChaseState.h">
+      <Filter>Source\GameContent\EnemyStatus\Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\EnemyPatrolState.h">
+      <Filter>Source\GameContent\EnemyStatus\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="contentDefine.h">
+      <Filter>Source\ContentHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CEnemyEyes.h">
+      <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -718,7 +730,7 @@
       <Filter>Source\ContentScript\Player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\PlayerState.cpp">
-      <Filter>Source\OtherContent\PlayerStatus</Filter>
+      <Filter>Source\GameContent\PlayerStatus</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\CCamMoveScript.cpp">
       <Filter>Source\ContentScript\Etc</Filter>
@@ -730,22 +742,22 @@
       <Filter>Source\ContentScript\Etc</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\PlayerRangedAttackState.cpp">
-      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Attack</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\PlayerMeleeAttackState.cpp">
-      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Attack</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\PlayerSpecialAttackState.cpp">
-      <Filter>Source\OtherContent\PlayerStatus\Attack</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Attack</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\PlayerIdleState.cpp">
-      <Filter>Source\OtherContent\PlayerStatus\Idle</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Idle</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\PlayerJumpState.cpp">
-      <Filter>Source\OtherContent\PlayerStatus\Jump</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Jump</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\PlayerMoveState.cpp">
-      <Filter>Source\OtherContent\PlayerStatus\Move</Filter>
+      <Filter>Source\GameContent\PlayerStatus\Move</Filter>
     </ClCompile>
     <ClCompile Include="LevelMaker.cpp">
       <Filter>GameEngine\Editor\MakerUI\LevelMaker</Filter>
@@ -754,31 +766,40 @@
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\EnemyState.cpp">
-      <Filter>Source\OtherContent\EnemyStatus</Filter>
+      <Filter>Source\GameContent\EnemyStatus</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\EnemyMoveState.cpp">
-      <Filter>Source\OtherContent\EnemyStatus\Move</Filter>
+      <Filter>Source\GameContent\EnemyStatus\Move</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\EnemyAttackState.cpp">
-      <Filter>Source\OtherContent\EnemyStatus\Attack</Filter>
+      <Filter>Source\GameContent\EnemyStatus\Attack</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\EnemyIdleState.cpp">
-      <Filter>Source\OtherContent\EnemyStatus\Idle</Filter>
+      <Filter>Source\GameContent\EnemyStatus\Idle</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\EnemyJumpState.cpp">
-      <Filter>Source\OtherContent\EnemyStatus\Jump</Filter>
+      <Filter>Source\GameContent\EnemyStatus\Jump</Filter>
     </ClCompile>
     <ClCompile Include="contentFunc.cpp">
       <Filter>Source\ContentHeader</Filter>
     </ClCompile>
     <ClCompile Include="Source\Content\EnemyDamageState.cpp">
-      <Filter>Source\OtherContent\EnemyStatus\Damage</Filter>
+      <Filter>Source\GameContent\EnemyStatus\Damage</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\CPlayerMeleeTrigger.cpp">
       <Filter>Source\ContentScript\Player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\CEnergyBlast.cpp">
       <Filter>Source\ContentScript\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\EnemyChaseState.cpp">
+      <Filter>Source\GameContent\EnemyStatus\Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\EnemyPatrolState.cpp">
+      <Filter>Source\GameContent\EnemyStatus\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CEnemyEyes.cpp">
+      <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1052,55 +1073,55 @@
     <Filter Include="GameEngine\Editor\MakerUI\PrefabMaker">
       <UniqueIdentifier>{d6f72840-520d-4a64-83ac-6b5c23d3d457}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\OtherContent">
-      <UniqueIdentifier>{7a11aa01-e465-404e-941c-44ba11802cf0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\ContentScript\Etc">
       <UniqueIdentifier>{95c10a01-16c3-4146-92cf-976dfa6280c9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\ContentHeader">
       <UniqueIdentifier>{1e93140c-97f3-463c-9daf-4d683fa86eb5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\OtherContent\PlayerStatus">
-      <UniqueIdentifier>{3d02fad9-af6b-4bde-be2a-5a2136b246a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\OtherContent\PlayerStatus\Attack">
-      <UniqueIdentifier>{3633d35b-f103-4b87-b811-f0a31f99c5b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\OtherContent\PlayerStatus\Idle">
-      <UniqueIdentifier>{23ada6ef-f685-47cd-b0fc-84db8d5f0557}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\OtherContent\PlayerStatus\Jump">
-      <UniqueIdentifier>{e1fa6413-9a91-4c59-b6d8-b6e9abdd968d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\OtherContent\PlayerStatus\Move">
-      <UniqueIdentifier>{db612a66-6614-4a45-a8f0-49e723993c4a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\Editor\MakerUI\LevelMaker">
       <UniqueIdentifier>{2f0d74f7-829d-41b8-8d5e-7e6a80eeae62}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\OtherContent\EnemyStatus">
+    <Filter Include="Source\GameContent">
+      <UniqueIdentifier>{7a11aa01-e465-404e-941c-44ba11802cf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameContent\PlayerStatus">
+      <UniqueIdentifier>{3d02fad9-af6b-4bde-be2a-5a2136b246a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameContent\PlayerStatus\Attack">
+      <UniqueIdentifier>{3633d35b-f103-4b87-b811-f0a31f99c5b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameContent\PlayerStatus\Idle">
+      <UniqueIdentifier>{23ada6ef-f685-47cd-b0fc-84db8d5f0557}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameContent\PlayerStatus\Jump">
+      <UniqueIdentifier>{e1fa6413-9a91-4c59-b6d8-b6e9abdd968d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameContent\PlayerStatus\Move">
+      <UniqueIdentifier>{db612a66-6614-4a45-a8f0-49e723993c4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameContent\EnemyStatus">
       <UniqueIdentifier>{dc01566a-d2b3-42ba-89f4-db605a5ce480}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\OtherContent\EnemyStatus\Attack">
+    <Filter Include="Source\GameContent\EnemyStatus\Attack">
       <UniqueIdentifier>{8be0559a-8cf2-41f3-aea8-a0cfd4c29534}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\OtherContent\EnemyStatus\Idle">
+    <Filter Include="Source\GameContent\EnemyStatus\Idle">
       <UniqueIdentifier>{e4593472-002f-4bd0-8a6c-1323f676ca67}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\OtherContent\EnemyStatus\Jump">
+    <Filter Include="Source\GameContent\EnemyStatus\Jump">
       <UniqueIdentifier>{47d4c88b-a44d-479c-86a4-34ee1a17553e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\OtherContent\EnemyStatus\Move">
+    <Filter Include="Source\GameContent\EnemyStatus\Move">
       <UniqueIdentifier>{c06deca9-96df-4d28-b30f-d2bfebcc100d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\OtherContent\EnemyStatus\Damage">
+    <Filter Include="Source\GameContent\EnemyStatus\Damage">
       <UniqueIdentifier>{3190e3da-1893-416b-a5a8-6df10951de01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\OtherContent\EnemyStatus\Patrol">
+    <Filter Include="Source\GameContent\EnemyStatus\Patrol">
       <UniqueIdentifier>{9c319a2e-22ca-41d5-bee6-b69ac3e4ac9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\OtherContent\EnemyStatus\Chase">
+    <Filter Include="Source\GameContent\EnemyStatus\Chase">
       <UniqueIdentifier>{acb4a77e-3e28-492e-ac9e-8d6fca977e95}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

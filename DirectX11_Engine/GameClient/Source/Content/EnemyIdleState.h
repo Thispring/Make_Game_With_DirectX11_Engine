@@ -9,9 +9,11 @@ public:
     //=============
     // 상속 멤버 함수
     //=============
-    void Begin() override;
-    void Tick() override;
-    void FinalTick() override;
+    // NOTE(26-04-01):
+    // 이제 부모의 non-virtual 진입점을 사용하므로 On* 훅만 구현
+    void OnBegin() override;
+    void OnTick() override;
+    void OnFinalTick() override;
     ENEMY_STATE GetFlipbookIndex() override;
 
     void SaveToLevelFile(FILE* _File) override;

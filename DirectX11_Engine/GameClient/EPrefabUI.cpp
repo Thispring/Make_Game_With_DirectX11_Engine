@@ -25,6 +25,17 @@ void EPrefabUI::Tick_UI()
 	Ptr<APrefab> pPrefab = (APrefab*)GetTargetAsset().Get();
 	Ptr<GameObject> pObj = pPrefab->GetGameObject();
 
+	// Save Button
+	// 버튼을 누르면 해당 경로에 파일 생성
+	if (ImGui::Button("Save##PrefabSaveBtn"))
+	{
+		// 생성된 파일경로가 파일의 위치이자, Key 값으로 사용
+		wstring FilePath = CONTENT_PATH + pPrefab->GetKey();
+		pPrefab->Save(FilePath);
+		ShowSaveMessage(pPrefab->GetKey());
+		return;
+	}
+
 	// m_TargetObject로 받아온 GameObject 정보를 ImGui에 출력
 	// GameObject의 정보 출력은 Inspector에서 직접처리하지 않고,
 	// Inspector의 자식 UI클래스에서 담당합니다.
@@ -330,7 +341,6 @@ void EPrefabUI::Tick_UI()
 
 	ImGui::Separator();
 	#pragma endregion
-
 
 
 }

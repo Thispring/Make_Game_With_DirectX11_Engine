@@ -18,6 +18,12 @@ class CCollider2D :
 {
 
 private:
+    COLLIDER2D_SHAPE m_Shape;       // 충돌체 모양
+    float            m_HalfAngle;   // 부채꼴용 반각 (라디안)
+    Vec3             m_WorldCenter; // 월드 기준 중심(혹은 부채꼴 팁)
+    Vec3             m_WorldDir;    // 월드 기준 방향 (부채꼴용)
+    float            m_WorldRadius; // 월드 기준 스케일값 (반지름 역할)
+
     Vec2    m_Scale;        // 충돌체의 크기
     Vec2    m_Offset;       // 충돌체가 부모 오브젝트와 얼마나 떨어져 있는지
     Matrix  m_matWorld;
@@ -66,6 +72,16 @@ public:
     GET_SET(Vec2, Scale);
     GET_SET(Vec2, Offset);
     const Matrix& GetWorldMat() { return m_matWorld; }
+
+    COLLIDER2D_SHAPE GetShape() const { return m_Shape; }
+    void             SetShape(COLLIDER2D_SHAPE _Shape) { m_Shape = _Shape; }
+
+    float GetHalfAngle() const { return m_HalfAngle; }
+    void  SetHalfAngle(float _HalfAngle) { m_HalfAngle = _HalfAngle; }
+
+    Vec3  GetWorldCenter() const { return m_WorldCenter; }
+    Vec3  GetWorldDir() const { return m_WorldDir; }
+    float GetWorldRadius() const { return m_WorldRadius; }
 
 
     //============

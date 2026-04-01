@@ -131,6 +131,47 @@ void DrawDebugCircle(Vec3 _Pos, float _Radius, Vec4 _Color, float _Duration, boo
     RenderMgr::GetInst()->AddDebugInfo(info);
 }
 
+void DrawDebugSector(Vec3 _WorldTip, Vec3 _WorldDir, float _WorldRadius, Vec4 _Color, float _Duration, bool _DepthTest)
+{
+    // ConeMesh_LineStrip은 +Y 방향, 반지름 0.5로 생성됨
+    // 1) Scale x2 → 반지름을 _WorldRadius로 맞춤
+    // 2) Z 회전  → +Y 축을 _WorldDir로 정렬
+    // 3) Translate → 꼭짓점을 _WorldTip으로 이동
+    float fAngle = atan2f(-_WorldDir.x, _WorldDir.y);   // +Y → _WorldDir 회전각
+
+    Matrix matScale = XMMatrixScaling(_WorldRadius * 2.f, _WorldRadius * 2.f, 1.f);
+    Matrix matRot   = XMMatrixRotationZ(fAngle);
+    Matrix matTrans = XMMatrixTranslation(_WorldTip.x, _WorldTip.y, _WorldTip.z);
+
+    DbgInfo info    = {};
+    info.Shape      = DBG_SHAPE::SECTOR;
+    info.matWorld   = matScale * matRot * matTrans;
+    info.Color      = _Color;
+    info.Age        = 0.f;
+    info.Life       = _Duration;
+	info.DepthTest  = _DepthTest;
+
+	RenderMgr::GetInst()->AddDebugInfo(info);
+}
+
+void DrawDebugLargeBaseCone(Vec3 _WorldTip, Vec3 _WorldDir, float _WorldRadius, Vec4 _Color, float _Duration, bool _DepthTest)
+{
+	float fAngle = atan2f(-_WorldDir.x, _WorldDir.y);
+	Matrix matScale = XMMatrixScaling(_WorldRadius * 2.f, _WorldRadius * 2.f, 1.f);
+	Matrix matRot   = XMMatrixRotationZ(fAngle);
+	Matrix matTrans = XMMatrixTranslation(_WorldTip.x, _WorldTip.y, _WorldTip.z);
+
+	DbgInfo info    = {};
+	info.Shape      = DBG_SHAPE::LARGE_BASE_CONE;
+	info.matWorld   = matScale * matRot * matTrans;
+	info.Color      = _Color;
+	info.Age        = 0.f;
+	info.Life       = _Duration;
+	info.DepthTest  = _DepthTest;
+
+	RenderMgr::GetInst()->AddDebugInfo(info);
+}
+
 float Saturate(float _Data)
 {
     if (1.f < _Data)
