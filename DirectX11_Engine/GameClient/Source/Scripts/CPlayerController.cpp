@@ -64,6 +64,10 @@ void CPlayerController::Jump()
 	// 점프는 TAP으로 트리거 (원샷)
     if (KEY_TAP(KEY::SPACE))
 	{
+		// 추락 상태일때 2단점프 방지
+		if (m_PlayerData->GetIsFalling() == true)
+			return;
+
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::JUMP));
 		m_StatusMgr->ChangeState();
 	}
@@ -74,7 +78,9 @@ void CPlayerController::Punch()
 	// 펀치도 TAP으로 트리거 (원샷)
     if (KEY_TAP(KEY::Z))
 	{
-		GetOwner()->GetChild(1)->SetIsActive(true);
+		m_PlayerData->SetIsAttack();
+		//GetOwner()->GetChild(1)->SetIsActive(true);
+		GetOwner()->GetChild(1)->Collider2D()->SetEnabled(true);
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::PUNCH));
 		m_StatusMgr->ChangeState();
 	}
@@ -85,7 +91,9 @@ void CPlayerController::Kick()
 	// Key 조합에 따라 다른 Kick 동작 나타나게 구현
     if (KEY_TAP(KEY::X))
 	{
-		GetOwner()->GetChild(2)->SetIsActive(true);
+		m_PlayerData->SetIsAttack();
+		//GetOwner()->GetChild(2)->SetIsActive(true);
+		GetOwner()->GetChild(2)->Collider2D()->SetEnabled(true);
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::MIDDLE_KICK));
 		m_StatusMgr->ChangeState();
 	}
@@ -124,7 +132,7 @@ void CPlayerController::EnergyBlastShot()
 		pBlastObj->GetScript<CEnergyBlast>()->SetUp(vDir);
 
 
-    m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::ENERGYBLAST_SHOT));
+		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::ENERGYBLAST_SHOT));
 		m_StatusMgr->ChangeState();
 	}
 }

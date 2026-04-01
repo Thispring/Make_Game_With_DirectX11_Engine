@@ -7,6 +7,7 @@ CCollider2D::CCollider2D()
 	: Component(COMPONENT_TYPE::COLLIDER2D)
 	, m_Scale(Vec2(1.f, 1.f))
 	, m_OverlapCount(0)
+    , m_Enabled(true)
 {
 
 }
@@ -15,7 +16,8 @@ CCollider2D::CCollider2D(const CCollider2D& _Origin)
 	: Component(_Origin)
 	, m_Offset(_Origin.m_Offset)
 	, m_Scale(_Origin.m_Scale)
-	, m_OverlapCount(0)
+    , m_OverlapCount(0)
+	, m_Enabled(_Origin.m_Enabled)
 {
 	// 원본과 같은 OverlapCount와 DELEGATE를 가리키면 안되기 때문에
 	// 복사생성자를 직접 구현

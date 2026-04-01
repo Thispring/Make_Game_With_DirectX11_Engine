@@ -104,6 +104,7 @@ PlayerEnergyBlastShotState::~PlayerEnergyBlastShotState()
 
 void PlayerEnergyBlastShotState::Begin()
 {
+	m_PlayerData->SetIsAttack();
 }
 
 void PlayerEnergyBlastShotState::Tick()
@@ -112,8 +113,7 @@ void PlayerEnergyBlastShotState::Tick()
 
 void PlayerEnergyBlastShotState::FinalTick()
 {
-	bool isAttck = false;
-	m_PlayerData->SetIsAttack(isAttck);
+	m_PlayerData->OffIsAttack();
 
 	// Idle 상태로 변경
     Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();

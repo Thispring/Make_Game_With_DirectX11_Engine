@@ -99,7 +99,7 @@ void ECameraUI::Tick_UI()
 
         ImGui::Text("FOV");
         ImGui::SameLine(SameLine);
-        float  FOV = GetTarget()->Camera()->GetFOV();
+        float FOV = GetTarget()->Camera()->GetFOV();
         ImGui::SetNextItemWidth(200);
         if (ImGui::DragFloat("##FOV", &FOV, 0.1f))
         {
@@ -109,10 +109,69 @@ void ECameraUI::Tick_UI()
         ImGui::EndDisabled();
 
 
-        float       m_Far;          // 카메라 시야 최대거리
-        float       m_Width;        // 직교투영 가로길이
-        float       m_AspectRatio;  // 종횡비 (가로 / 세로), 세로대비 가로의 길이 비율   
-        float       m_OrthoScale;   // 직교투영 배율
+        //====
+        // Far
+        //====
+        ImGui::Text("Far");
+        ImGui::SameLine(SameLine);
+        float Far = GetTarget()->Camera()->GetFar();
+        ImGui::SetNextItemWidth(200);
+        if (ImGui::DragFloat("##Far", &Far, 0.1f))
+        {
+            GetTarget()->Camera()->SetFar(Far);
+        }
+
+
+        //======
+        // Width
+        //======
+        ImGui::Text("Width");
+        ImGui::SameLine(SameLine);
+        float Width = GetTarget()->Camera()->GetWidth();
+        ImGui::SetNextItemWidth(200);
+        if (ImGui::DragFloat("##Width", &Width, 0.1f))
+        {
+            GetTarget()->Camera()->SetWidth(Width);
+        }
+        
+
+        //=============
+        // AspectRatio
+        //=============
+        ImGui::Text("AspectRatio");
+        ImGui::SameLine(SameLine);
+        float AspectRatio = GetTarget()->Camera()->GetAspectRatio();
+        ImGui::SetNextItemWidth(200);
+        if (ImGui::DragFloat("##AspectRatio", &AspectRatio, 0.1f))
+        {
+            GetTarget()->Camera()->SetAspectRatio(AspectRatio);
+        }
+
+
+        //===========
+        // OrthoScale
+        //===========
+        ImGui::Text("OrthoScale");
+        ImGui::SameLine(SameLine);
+        float OrthoScale = GetTarget()->Camera()->GetOrthoScale();
+        ImGui::SetNextItemWidth(200);
+        if (ImGui::DragFloat("##OrthoScale", &OrthoScale, 0.1f))
+        {
+            GetTarget()->Camera()->SetOrthoScale(OrthoScale);
+        }
+
+
+        //========
+        // IsUICam
+        //========
+        ImGui::Text("IsUICam");      
+        ImGui::SameLine(SameLine);
+        bool IsUICam = GetTarget()->Camera()->GetIsUICam();
+        ImGui::SetNextItemWidth(200);
+        if (ImGui::Checkbox("##IsUICam", &IsUICam))
+        {
+            GetTarget()->Camera()->SetIsUICam(IsUICam);
+        }
 
     }
 }

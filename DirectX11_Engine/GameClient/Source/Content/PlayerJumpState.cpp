@@ -24,45 +24,38 @@ void PlayerJumpState::LoadFromLevelFile(FILE* _File)
 
 void PlayerJumpState::Begin()
 {
-
+    // 점프 시작 시 한 번만 초기 속도 부여
+    // ApplyGravity()의 부호 규약에 맞추어 음수(상승 방향)로 설정합니다.
+    // m_JumpVelocity는 '절대값'으로 보관되는 설계라면 여기에서 부호를 반전.
+    m_PlayerData->SetVelocityY(fabsf(m_PlayerData->GetJumpVelocity()));
+    m_PlayerData->SetIsFalling(true);
+    m_PlayerData->SetIsJumping(true);
 }
 
 void PlayerJumpState::Tick()
 {
-    // 위 방향 속도를 순간적으로 부여 (y축이 위가 +라면 양수, 아래가 +라면 음수)
-    // 여기서는 일반적인 2D 좌표계(아래가 +Y)를 기준으로 하강이 +, 상승이 -라고 가정합니다.
-    m_PlayerData->SetVelocityY(m_PlayerData->GetJumpVelocity());
-    m_PlayerData->SetIsFalling(true);
+    // 물리 통합(중력 적용 및 위치 업데이트)은 공통 로직에 위임
+    ApplyGravity();
 
-    float VelY = m_PlayerData->GetVelocityY();
-
-    // 중력 적용: 속도가 점점 아래(+) 방향으로 커짐
-    VelY += GRAVITY_CONSTANT * DT * 10.f;;
-    m_PlayerData->SetVelocityY(VelY);
-
-    // 위치 업데이트
-    Vec3 vPos = m_PlayerData->GetTargetObject()->Transform()->GetRelativePos();
-    vPos.y += VelY * DT * 10.f;
-    m_PlayerData->GetTargetObject()->Transform()->SetRelativePos(vPos);
-
+    // 필요한 추가 공중 입력 처리(예: 좌우 이동, 점프 유지 등)는 여기에 추가
 }
 
 void PlayerJumpState::FinalTick()
 {
-	// Idle 상태로 변경
+    // 착지로 상태 전환되는 경우 FinalTick이 호출된다면 IsFalling을 false로 정리합니다.
+    // (무조건 Idle로 전환하는 로직이 적절한지 여부는 호출 시점에 따라 달라질 수 있으므로,
+    //  실제 착지 판정이 완료된 상황에서만 호출되도록 StateManager에서 보장되어야 합니다.)
+    m_PlayerData->SetIsJumping(false);
     Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
     pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
-
-	// 점프 후 추락 상태로 전환
-	m_PlayerData->SetIsFalling(true);
 }
 
 PLAYER_STATE PlayerJumpState::GetFlipbookIndex()
 {
-	return m_FlipbookIndex;
+    return m_FlipbookIndex;
 }
 
 unique_ptr<PlayerState> PlayerJumpState::Clone() const
 {
-	return make_unique<PlayerJumpState>(*this);
+    return make_unique<PlayerJumpState>(*this);
 }

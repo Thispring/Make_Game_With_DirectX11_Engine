@@ -104,6 +104,12 @@ void CollisionMgr::CollisionBtwLayer(Layer* _Left, Layer* _Right)
 
 bool CollisionMgr::IsCollision(Ptr<CCollider2D> _LeftCol, Ptr<CCollider2D> _RightCol)
 {
+	// NOTE(26-04-01):
+	// 충돌 검사 비활성화를 확인하기 위해 IsEnabled 변수 및 함수 추가
+    // If either collider is disabled, treat as no-collision so EndOverlap can be triggered
+	if (!_LeftCol->IsEnabled() || !_RightCol->IsEnabled())
+		return false;
+
 	// 충돌은 두 충돌체가 겹쳐져 있는지를 확인해야함
 	Ptr<AMesh> pRectMesh = FIND(AMesh, L"SquareMesh");
 

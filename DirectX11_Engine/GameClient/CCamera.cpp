@@ -16,6 +16,7 @@ CCamera::CCamera()
 	: Component(COMPONENT_TYPE::CAMERA)
 	, m_LayerCheck(0)
 	, m_OrthoScale(1.f)
+	, m_IsUICam(false)
 {
 }
 
@@ -134,6 +135,10 @@ void CCamera::Begin()
 	// 레벨이 시작될때 호출됨
 	// RenderMgr에 카메라(본인)를 등록
 	RenderMgr::GetInst()->RegisterCamera(this);
+
+	// 조건분기
+	if (m_IsUICam == true)
+		RenderMgr::GetInst()->RegisterUICamera(this);
 }
 
 void CCamera::FinalTick()
@@ -219,6 +224,7 @@ void CCamera::SaveToLevelFile(FILE* _File)
 	fwrite(&m_AspectRatio, sizeof(float), 1, _File);
 	fwrite(&m_FOV, sizeof(float), 1, _File);
 	fwrite(&m_OrthoScale, sizeof(float), 1, _File);
+	fwrite(&m_IsUICam, sizeof(bool), 1, _File);
 }
 
 void CCamera::LoadFromLevelFile(FILE* _File)
@@ -230,6 +236,7 @@ void CCamera::LoadFromLevelFile(FILE* _File)
 	fread(&m_AspectRatio, sizeof(float), 1, _File);
 	fread(&m_FOV, sizeof(float), 1, _File);
 	fread(&m_OrthoScale, sizeof(float), 1, _File);
+	fread(&m_IsUICam, sizeof(bool), 1, _File);
 }
 
 Vec3 CCamera::ScreenToWorldPos(const Vec2& _ScreenPos, float _ZNormalized /*= 0.f*/)

@@ -16,8 +16,8 @@ enum class SCRIPT_PARAM
     TEXTURE,
     MATERIAL,
     PREFAB,
-    STRING,     // 포인터 변수 사용 시, 가리키고 있는 대상의 이름 표시
     ENUM_CLASS,
+    PTR,            // Ptr 변수 사용 시, 가리키고 있는 대상의 이름 표시, nullptr이면 No name으로 표시
 };
 
 // ImGui로 전달할 데이터 구조체

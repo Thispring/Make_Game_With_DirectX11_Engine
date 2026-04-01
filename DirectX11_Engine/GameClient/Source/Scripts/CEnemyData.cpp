@@ -5,6 +5,7 @@
 #include "CCollider2D.h"
 #include "LevelMgr.h"
 #include "CPlayerData.h"
+#include "CPlayerMeleeTrigger.h"
 
 CEnemyData::CEnemyData()
 	: CScript(SCRIPT_TYPE::ENEMYDATA)
@@ -12,7 +13,7 @@ CEnemyData::CEnemyData()
 	, m_FullHP(10.f)
 	, m_CurHP(m_FullHP)
 	, m_Damage(2.f)
-	, m_JumpVelocity(10.f)
+	, m_JumpVelocity(300.f)
 	, m_Speed(100.f)
 
 	, m_IsDead(false)
@@ -86,11 +87,22 @@ void CEnemyData::Begin()
 
 void CEnemyData::ApplyDamage(float _Damage)
 {
+	// 해당 함수를 Player쪽 공격 스크립트에서 호출하고 있기 때문에
+	// HIT 상태 변경을 이쪽에서 처리합니다.
+
+
 	// 실제 데미지 처리는 CEnemyData에서 진행
 	// FSM 설계상 여기에서 진행하면 안됨
 	float hp = GetCurHP();
 	hp -= _Damage;
 	SetCurHP(hp);
+
+	// Type에 따라 구별되는 ENEMY_STATE를 반환
+	int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::HIT);
+	// 현재 상태를 얻어오고, 해당 상태를 세팅
+	Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+	pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
+	pMgr->ChangeState();
 
 	if (hp <= 0.f)
 	{
@@ -106,71 +118,48 @@ void CEnemyData::ApplyDamage(float _Damage)
 void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 	// Layer Index 4번은 Player 근접공격
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == 5 ||
-		_OtherCollider->GetOwner()->GetLayerIdx() == 4)
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == 5)
 	{
 		// 죽었다면 HIT 상태로 되돌리기 X
 		if (m_IsDead)
 			return;
-
-		// Type에 따라 구별되는 ENEMY_STATE를 반환
-		int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::HIT);
-		// Hit 상태로 변경하고, 데미지 계산
-
-		// 현재 상태를 얻어오고
-		// 그 상태를 세팅
-		Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
-		pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
-		pMgr->ChangeState();
 	}
 }
 
 void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 	m_IsFalling = false;
-
-	//// Layer Index 5번은 Player 투사체
-	//// Layer Index 4번은 Player 근접공격
-	//if (_OtherCollider->GetOwner()->GetLayerIdx() == 5 || 
-	//	_OtherCollider->GetOwner()->GetLayerIdx() == 4)
-	//{
-	//	// 죽었다면 HIT 상태로 되돌리기 X
-	//	if (m_IsDead)
-	//		return;
-
-	//	// Type에 따라 구별되는 ENEMY_STATE를 반환
-	//	int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::HIT);
-	//	// Hit 상태로 변경하고, 데미지 계산
-
-	//	// 현재 상태를 얻어오고
-	//	// 그 상태를 세팅
-	//  Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
-	//	pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
-	//	pMgr->ChangeState();
-	//}
 }
 
 void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 	m_IsFalling = true;
 
-	// Player 투사체와 충돌 후 호출되는지 확인
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == 5 ||
-		_OtherCollider->GetOwner()->GetLayerIdx() == 4)
-	{
-		// 죽었다면 IDLE 상태로 되돌리기 X
-		if (m_IsDead)
-			return;
+	// 죽었다면 IDLE 상태로 되돌리기 X
+	if (m_IsDead)
+		return;
 
-		// 중단이 걸렸으므로 여기에서 Idle로 상태변경
-		int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::IDLE);
-		Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
-		pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
-		pMgr->ChangeState();
+	// 중단이 걸렸으므로 여기에서 Idle로 상태변경
+	int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::IDLE);
+	Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+	pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
+	pMgr->ChangeState();
 
-		// 근접공격이 끝났으므로 비활성화 신호 보내기
-		//_OtherCollider->GetOwner()->GetScript<CPlayerData>()->SetIsMeleeTrigger(false);
-	}
+	//// Player 투사체와 충돌 후 호출되는지 확인
+	//if (_OtherCollider->GetOwner()->GetLayerIdx() == 5)
+	//{
+	//	// 죽었다면 IDLE 상태로 되돌리기 X
+	//	if (m_IsDead)
+	//		return;
+
+	//	// 중단이 걸렸으므로 여기에서 Idle로 상태변경
+	//	int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::IDLE);
+	//	Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+	//	pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
+	//	pMgr->ChangeState();
+
+	//	// 근접공격이 끝났으므로 비활성화 신호 보내기
+	//}
 }
 
 void CEnemyData::Tick()

@@ -22,6 +22,7 @@ private:
     Vec2    m_Offset;       // 충돌체가 부모 오브젝트와 얼마나 떨어져 있는지
     Matrix  m_matWorld;
     int     m_OverlapCount; // 충돌에 대한 카운트
+    bool    m_Enabled;      // 콜라이더 활성화 여부 (충돌 검사에 사용)
 
     vector<COLLISION_DELEGATE>  m_vecBeginDel;
     vector<COLLISION_DELEGATE>  m_vecOverDel;
@@ -44,6 +45,9 @@ public:
     void AddDynamicBeginOverlap(CScript* _Inst, COLLISION_EVENT _MemFunc);
     void AddDynamicOverlap(CScript* _Inst, COLLISION_EVENT _MemFunc);
     void AddDynamicEndOverlap(CScript* _Inst, COLLISION_EVENT _MemFunc);
+
+    void SetEnabled(bool _Enable) { m_Enabled = _Enable; }
+    bool IsEnabled() const { return m_Enabled; }
 
 
     //=============

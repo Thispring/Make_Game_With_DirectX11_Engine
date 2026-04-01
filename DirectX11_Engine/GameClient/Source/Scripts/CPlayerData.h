@@ -31,8 +31,7 @@ private:
     bool                m_IsFalling;        // true일 때만 Tick에서 y축으로 DT 만큼 음수 이동
     
     bool                m_IsAttack;         // 공격 중인지 여부, 공격 상태는 1가지만 가능합니다.
-
-    bool                m_IsMeleeTrigger;
+    bool                m_IsJumping;
 
     //===============================
     // 물리 관련 멤버 변수, 파일로 저장 X
@@ -75,7 +74,10 @@ public:
 
     GET_SET(bool, IsDead);
     GET_SET(bool, IsFalling);
-    GET_SET(bool, IsAttack);
+    GET_SET(bool, IsJumping);
+    bool GetIsAttack();
+    void SetIsAttack();
+    void OffIsAttack();
     
     GET_SET(Vec3, OriginPos);
     GET_SET(Vec3, CurPos);
@@ -85,7 +87,6 @@ public:
     GET_SET(Ptr<APrefab>, EnergyBlast);
 
     GET_SET(float, VelocityY);
-    GET_SET(bool, IsMeleeTrigger);
 
     //============
     // 생성, 소멸자

@@ -115,13 +115,29 @@ void EScriptUI::Tick_UI()
 
 			ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.4f);
 			if (vecParam[i].IsInput)
-				ImGui::InputFloat(Key.c_str(), (float*)vecParam[i].Data, vecParam[i].Step);
+			{
+				if (ImGui::InputFloat(Key.c_str(), (float*)vecParam[i].Data, vecParam[i].Step))
+				{
+					// 값이 변경됨. *pVal 에 이미 새 값이 들어감.
+					// 필요하면 여기서 추가 처리 (예: 레벨 변경 플래그 or 변경사항 저장)
+					// 
+					// NOTE(26-04-01):
+					// 아직 변경점을 저장하는 기능이 필요하진않아서
+					// 변경점 저장 기능이 필요할때, 여기서 Level Save 호출
+					//LevelMgr::GetInst()->GetCurLevel()->SetChanged();
+				}
+			}
 			else
+			{
+				// NOTE(26-04-01):
+				// DragFloat 실제로 드래그하는 옵션이 꺼져있는걸로 확인
+				// 추후 드래그로 값 변경하길 원하면 아래 함수 작동을 확인하고 수정
 				ImGui::DragFloat(Key.c_str(), (float*)vecParam[i].Data, vecParam[i].Step);
+			}
 			
 			AddItemHeight();
 		}
-		break;
+			break;
 		case SCRIPT_PARAM::VEC2:
 		{
 			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
@@ -200,23 +216,6 @@ void EScriptUI::Tick_UI()
 			AddItemHeight();
 		}
 			break;
-		case SCRIPT_PARAM::STRING:
-		{
-			// NOTE(26-03-24): string 데이터 UI 출력 방식 다르게 설계 생각해보기
-			// ex) 포인터에서 미리 문자열 GetName 등을 통해 받은 문자열 매개변수를 출력하도록
-
-			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
-			//ImGui::SameLine(160);
-
-			string Key = "##String";
-			Key += ID;
-
-			string* pName = static_cast<string*>(vecParam[i].Data);
-			string name = *pName;
-			//ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.4f);
-			ImGui::InputText(Key.c_str(), &name, 255);
-		}
-			break;
 		case SCRIPT_PARAM::ENUM_CLASS:
 		{
 			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
@@ -270,7 +269,36 @@ void EScriptUI::Tick_UI()
 			AddItemHeight();
 		}
 			break;
+		case SCRIPT_PARAM::PTR:
+		{
+			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
+			ImGui::SameLine(160);
 
+			string Key = "##Pointer";
+			Key += ID;
+
+			// vecParam[i].Data는 'Ptr<T>' 또는 'T*' 같은 포인터형 변수를 가리키는 주소임
+			// 먼저 저장소 주소 자체가 nullptr인지 체크
+			string display = "Empty";
+
+			if (vecParam[i].Data)
+			{
+				// 저장소의 첫 포인터값을 읽음 (Ptr<T>일 경우 내부 m_Ptr, raw T*일 경우 그 값)
+				void* innerPtr = *(void**)(vecParam[i].Data);
+
+				if (innerPtr)
+				{
+					// 엔진의 모든 게임 오브젝트/에셋이 Entity를 상속하므로 Entity로 캐스트하여 이름 획득
+					Entity* pEntity = reinterpret_cast<Entity*>(innerPtr);
+					const wstring& wname = pEntity->GetName();
+					display = string(wname.begin(), wname.end());
+				}
+			}
+
+			ImGui::InputText(Key.c_str(), (char*)display.c_str(), display.size() + 1, ImGuiInputTextFlags_ReadOnly);
+			AddItemHeight();
+		}
+			break;
 		default:
 			break;
 		}

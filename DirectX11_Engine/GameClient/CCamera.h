@@ -30,6 +30,8 @@ private:
     float       m_FOV;              // 원근 투영 시야각
     float       m_OrthoScale;       // 직교 투명 배율
 
+    bool        m_IsUICam;
+
     Matrix      m_matView;          // View 행렬
     Matrix      m_matProj;          // Proj 행렬
 
@@ -69,6 +71,7 @@ public:
     GET_SET(float, Width);
     GET_SET(float, AspectRatio);
     GET_SET(float, OrthoScale);
+    GET_SET(bool, IsUICam);
     UINT GetLayerCheck() { return m_LayerCheck; }
 
     // 자신의 PROJ_TYPE 레퍼런스를 반환

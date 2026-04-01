@@ -14,6 +14,7 @@ CPlayerMeleeTrigger::~CPlayerMeleeTrigger()
 {
 }
 
+
 void CPlayerMeleeTrigger::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == 6)
@@ -32,13 +33,20 @@ void CPlayerMeleeTrigger::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _Ot
 {
 }
 
+void CPlayerMeleeTrigger::Init()
+{
+}
+
 void CPlayerMeleeTrigger::Begin()
 {
 	m_PlayerData = GetOwner()->GetParent()->GetScript<CPlayerData>();
-
 	ADD_DYNAMIC_BEGIN_OVERLAP(CPlayerMeleeTrigger::BeginOverlap);
 	ADD_DYNAMIC_OVERLAP(CPlayerMeleeTrigger::Overlap);
 	ADD_DYNAMIC_END_OVERLAP(CPlayerMeleeTrigger::EndOverlap);
+
+	// Begin 초기화가 끝나고 스스로 비활성화 하게 변경
+	//GetOwner()->SetIsActive(false);
+	GetOwner()->Collider2D()->SetEnabled(false);
 }
 
 void CPlayerMeleeTrigger::Tick()

@@ -8,8 +8,8 @@ CPlayerData::CPlayerData()
 	, m_FullHP(10.f)
 	, m_CurHP(m_FullHP)
 	, m_Damage(2.f)
-	, m_JumpVelocity(10.f)
-	, m_Speed(120.f)
+	, m_JumpVelocity(500.f)
+	, m_Speed(250.f)
 
 	, m_DeathCount(0)
 	, m_DirNum(1)
@@ -17,6 +17,7 @@ CPlayerData::CPlayerData()
 	, m_IsDead(false)
 	, m_IsFalling(true)
 	, m_IsAttack(false)
+	, m_IsJumping(false)
 
 	, m_OriginPos {}
 	, m_CurPos {}
@@ -39,19 +40,23 @@ void CPlayerData::Init()
 	ClearScriptParam();
 
 	// Init은 AddComponent 시점에 이루어짐
-	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_FullHP, L"FullHP", true, 0.f);
-	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_CurHP, L"CurHP", true, 0.f);
-	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_Damage, L"Damage", true, 0.f);
-	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_Speed, L"Speed", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_FullHP, L"FullHP", false, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_CurHP, L"CurHP", false, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_Damage, L"Damage", false, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_Speed, L"Speed", false, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_JumpVelocity, L"JumpVelocity", false, 0.f);
 
 	AddScriptParam(SCRIPT_PARAM::INT, &m_DeathCount, L"DeathCount", true, 0.f);
 
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsDead, L"IsDead", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsFalling, L"IsFalling", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsJumping, L"IsJumping", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsAttack, L"IsAttack", true, 0.f);
 
 	AddScriptParam(SCRIPT_PARAM::PREFAB, &m_EnergyBlast, L"EnergyBlast", true, 0.f);
-	//AddScriptParam(SCRIPT_PARAM::STRING, &m_TargetObject, L"TargetObjectName", true, 0.f);
+
+	AddScriptParam(SCRIPT_PARAM::PTR, &m_TargetObject, L"TargetObject", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::PTR, &m_AnchorObject, L"AnchorObject", true, 0.f);
 }
 
 void CPlayerData::Begin()
@@ -65,10 +70,6 @@ void CPlayerData::Begin()
 	// 항상 Layer 4번을 보장받을 수 있도록 Begin에서 4번으로 최종 세팅
 	GetOwner()->GetChild(1)->SetLayerIdx(4);
 	GetOwner()->GetChild(2)->SetLayerIdx(4);
-
-	// 시작 시 비활성화
-	GetOwner()->GetChild(1)->SetIsActive(false);
-	GetOwner()->GetChild(2)->SetIsActive(false);
 	
 	// 기존 위치는 Begin에서 초기화
 	m_OriginPos = Vec3(0.f, 0.f, 0.f);
@@ -88,17 +89,25 @@ void CPlayerData::Begin()
 
 void CPlayerData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == 2)
+	{
+		// Layer 2번과 충돌했을 때만 m_IsFalling 상태를 변경
+		m_IsFalling = false;
+	}
 }
 
 void CPlayerData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	m_IsFalling = false;
+
 }
 
 void CPlayerData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	m_IsFalling = true;
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == 2)
+	{
+		// Layer 2번과 충돌했을 때만 m_IsFalling 상태를 변경
+		m_IsFalling = true;
+	}
 }
 
 void CPlayerData::Tick()
@@ -132,4 +141,23 @@ void CPlayerData::SaveToLevelFile(FILE* _File)
 void CPlayerData::LoadFromLevelFile(FILE* _File)
 {
 	m_EnergyBlast = LoadAssetRef<APrefab>(_File);
+}
+
+bool CPlayerData::GetIsAttack()
+{
+	bool isAttack = m_IsAttack;
+	m_IsAttack = false;
+
+	return isAttack;
+}
+
+void CPlayerData::SetIsAttack()
+{
+	m_IsAttack = true;
+}
+
+void CPlayerData::OffIsAttack()
+{
+	// false로 강제 전환 함수
+	m_IsAttack = false;
 }

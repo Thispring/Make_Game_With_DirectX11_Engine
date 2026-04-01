@@ -26,23 +26,25 @@ void CPlayerAnimator::Play()
 	// 추가:
 	// 상태에 따라 조건 분기하여, Flipbook의 FPS를 다르게 전달
 	// 반복 여부도 따로 변수로 설정하여, Play 하나로 통일시키기
+	//
+	// repCount 0이 1번 재생입니다. 
 	switch (Idx)
 	{
 	case PLAYER_STATE::IDLE: fps = 10; repCount = -1;
 		break;
 	case PLAYER_STATE::WALK: fps = 10; repCount = -1;
 		break;
-	case PLAYER_STATE::JUMP: fps = 10; repCount = 1;
+	case PLAYER_STATE::JUMP: fps = 10; repCount = 0;
 		break;
-	case PLAYER_STATE::PUNCH: fps = 20; repCount = 1;
+	case PLAYER_STATE::PUNCH: fps = 20; repCount = 0;
 		break;
-	case PLAYER_STATE::HIGH_KICK: fps = 15; repCount = 1;
+	case PLAYER_STATE::HIGH_KICK: fps = 15; repCount = 0;
 		break;
-	case PLAYER_STATE::MIDDLE_KICK: fps = 15; repCount = 1;
+	case PLAYER_STATE::MIDDLE_KICK: fps = 15; repCount = 0;
 		break;
-	case PLAYER_STATE::LOW_KICK: fps = 15; repCount = 1;
+	case PLAYER_STATE::LOW_KICK: fps = 15; repCount = 0;
 		break;
-	case PLAYER_STATE::ENERGYBLAST_SHOT: fps = 15; repCount = 1;
+	case PLAYER_STATE::ENERGYBLAST_SHOT: fps = 15; repCount = 0;
 		break;
 	case PLAYER_STATE::END:
 		break;

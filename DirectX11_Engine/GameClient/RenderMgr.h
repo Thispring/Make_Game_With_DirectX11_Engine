@@ -10,7 +10,7 @@ class RenderMgr
 private:
 	Ptr<CCamera>			m_MainCam;
 	// UI 카메라 추가하려면 CCamera 멤버를 더 추가
-	//Ptr<CCamera>			m_MainCam;
+	Ptr<CCamera>			m_UICam;
 	Ptr<CCamera>			m_EditorCam;				// Engine Editor 모드에서 사용할 카메라 오브젝트
 
 	Ptr<GameObject>			m_DbgObj;					// 디버그 렌더링을 위한 Dummy GameObject
@@ -36,6 +36,7 @@ public:
 	void Progress();
 	
 	void RegisterCamera(Ptr<CCamera> _Cam) { m_MainCam = _Cam; };
+	void RegisterUICamera(Ptr<CCamera> _Cam) { m_UICam = _Cam; };
 	void RegisterEditorCamera(Ptr<CCamera> _Cam) { m_EditorCam = _Cam; };
 	void AddDebugInfo(const DbgInfo& _Info) { if (m_IsDebugRender) m_DbgInfoList.push_back(_Info); }
 	void RegisterLight2D(Ptr<CLight2D> _Light2D) { m_vecLight2D.push_back(_Light2D); }

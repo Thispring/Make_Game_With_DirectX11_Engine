@@ -29,20 +29,19 @@ PlayerPunchState::~PlayerPunchState()
 
 void PlayerPunchState::Begin()
 {
+	m_PlayerData->SetIsAttack();
 }
 
 void PlayerPunchState::Tick()
 {
-	bool isAttck = true;
-	m_PlayerData->SetIsAttack(isAttck);
 
-	//m_PlayerData->GetOwner()->GetChild();
 }
 
 void PlayerPunchState::FinalTick()
 {
-	bool isAttck = false;
-	m_PlayerData->SetIsAttack(isAttck);
+	m_PlayerData->OffIsAttack();
+	//m_PlayerData->GetTargetObject()->GetChild(1)->SetIsActive(false);
+	m_PlayerData->GetTargetObject()->GetChild(1)->Collider2D()->SetEnabled(false);
 
 	// Idle 상태로 변경
     Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
@@ -83,18 +82,18 @@ PlayerMiddleKickState::~PlayerMiddleKickState()
 
 void PlayerMiddleKickState::Begin()
 {
+	m_PlayerData->SetIsAttack();
 }
 
 void PlayerMiddleKickState::Tick()
 {
-	bool isAttck = true;
-	m_PlayerData->SetIsAttack(isAttck);
 }
 
 void PlayerMiddleKickState::FinalTick()
 {
-	bool isAttck = false;
-	m_PlayerData->SetIsAttack(isAttck);
+	m_PlayerData->OffIsAttack();
+	//m_PlayerData->GetTargetObject()->GetChild(2)->SetIsActive(false);
+	m_PlayerData->GetTargetObject()->GetChild(2)->Collider2D()->SetEnabled(false);
 
 	// Idle 상태로 변경
     Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
@@ -134,18 +133,16 @@ PlayerHighKickState::~PlayerHighKickState()
 
 void PlayerHighKickState::Begin()
 {
+	m_PlayerData->SetIsAttack();
 }
 
 void PlayerHighKickState::Tick()
 {
-	bool isAttck = true;
-	m_PlayerData->SetIsAttack(isAttck);
 }
 
 void PlayerHighKickState::FinalTick()
 {
-	bool isAttck = false;
-	m_PlayerData->SetIsAttack(isAttck);
+	m_PlayerData->OffIsAttack();
 
 	// Idle 상태로 변경
 	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
@@ -185,18 +182,16 @@ PlayerLowKickState::~PlayerLowKickState()
 
 void PlayerLowKickState::Begin()
 {
+	m_PlayerData->SetIsAttack();
 }
 
 void PlayerLowKickState::Tick()
 {
-	bool isAttck = true;
-	m_PlayerData->SetIsAttack(isAttck);
 }
 
 void PlayerLowKickState::FinalTick()
 {
-	bool isAttck = false;
-	m_PlayerData->SetIsAttack(isAttck);
+	m_PlayerData->OffIsAttack();
 
 	// Idle 상태로 변경
 	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();

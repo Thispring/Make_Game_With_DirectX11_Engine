@@ -44,6 +44,12 @@ void RenderMgr::Progress()
 	// Level이 Play 상태라면 MainCam으로 렌더링
 	if (LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
 	{
+		if (m_UICam == nullptr)
+			return;
+
+		m_UICam->SortObejct();
+		m_UICam->Render();
+
 		if (m_MainCam == nullptr)
 			return;
 		
@@ -51,6 +57,7 @@ void RenderMgr::Progress()
 		m_MainCam->SortObejct();
 		// 카메라를 이용해서 레벨안에 있는 물체들을 렌더링
 		m_MainCam->Render();
+		
 	}
 	// Level이 Pause, Stop 상태라면, EditorCam으로 렌더링
 	else
@@ -60,6 +67,13 @@ void RenderMgr::Progress()
 
 		m_EditorCam->SortObejct();
 		m_EditorCam->Render();
+
+		// UI는 Editor에서도 편집해야하기 때문에
+		// 해당 조건문에도 렌더 요청
+		//if (m_UICam == nullptr)
+		//	return;
+		//m_UICam->SortObejct();
+		//m_UICam->Render();
 	}
 
 	// 디버그 렌더링 요청
