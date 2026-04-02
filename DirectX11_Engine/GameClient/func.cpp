@@ -385,3 +385,8 @@ wstring ExtractFileName(const wstring& fullPath)
 	// 길이 = 끝 위치 - 시작 위치
 	return fullPath.substr(startPos, lastUnderscorePos - startPos);
 }
+
+
+//=========================
+// const char* 변환 헬퍼 함수
+//=========================

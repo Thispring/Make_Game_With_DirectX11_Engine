@@ -156,9 +156,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     * 메모리 누수가 의심되는 구간에서 프로그램을 종료합니다.
     * 4 byte만 누수가 발생하는지 확인합니다.
     *************************************************/
-    //int* p = new int;
+    //int* p = DEBUG_NEW int;
+    //int* p = debug_new int;
     //long long* p2 = new long long;
-    _CrtDumpMemoryLeaks();
+    
+    // NOTE(26-04-02): 아래 함수를 main 이 부분에 넣으면
+    // static 키워드가 누수로 잡힘, static은 프로그램이 끝나야 해제가됨
+    //_CrtDumpMemoryLeaks();
     // 창이 꺼지면 while 루프가 나가지면서 프로그램 종료
     return (int) msg.wParam;
 }

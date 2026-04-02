@@ -6,6 +6,9 @@ class Menu :
 {
 
 private:
+    vector<wstring>     m_vecWStrLevel;
+    vector<string>      m_vecLevelName;
+
     //=================
     // private 멤버 함수
     //=================

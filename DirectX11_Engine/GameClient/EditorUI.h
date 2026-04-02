@@ -7,12 +7,12 @@ class EditorUI :
 {
 
 private:
-    string      m_UIName;       // 실제 UI의 이름
-    string      m_UIKey;        // 자료구조에서 사용할 고유의 Key 이름
+    string                  m_UIName;       // 실제 UI의 이름
+    string                  m_UIKey;        // 자료구조에서 사용할 고유의 Key 이름
 
-    bool        m_IsModal;      // Modal 방식 UI인지 여부
-    bool        m_Separator;    // 구분선을 표시할지 여부, 기본은 true
-    bool        m_Active;
+    bool                    m_IsModal;      // Modal 방식 UI인지 여부
+    bool                    m_Separator;    // 구분선을 표시할지 여부, 기본은 true
+    bool                    m_Active;
 
     EditorUI*               m_Parent;   // 부모인 EditorUI를 가리키는 포인터 (자식이 부모를 가리킬 때는 일반 포인터 사용)
     vector<Ptr<EditorUI>>   m_ChildUI;  // 자신을 상속받은 자식들을 가리키는 포인터를 모아놓은 vector

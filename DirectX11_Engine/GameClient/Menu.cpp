@@ -8,6 +8,8 @@
 
 Menu::Menu()
 	: EditorUI("Menu")
+	, m_vecWStrLevel{}
+	, m_vecLevelName{}
 {
 }
 
@@ -55,21 +57,21 @@ void Menu::File()
 			// List를 누르면, 해당 Level의 문자열을 func.cpp의 ChangeLevel에 매개변수로 전달
 			
 			// MenuItem을 눌렀다면, 프로젝트에 등록된 모든 Level Type 에셋의 이름을 등록
-			vector<wstring> wlevelNames;
-			vector<string> levelNames;
+			m_vecWStrLevel.clear();
+			m_vecLevelName.clear();
+
+			AssetMgr::GetInst()->GetAssetNames(ASSET_TYPE::LEVEL, m_vecWStrLevel);
 			
-			AssetMgr::GetInst()->GetAssetNames(ASSET_TYPE::LEVEL, wlevelNames);
-			
-			for (UINT i = 0; i < wlevelNames.size(); ++i)
+			for (UINT i = 0; i < m_vecWStrLevel.size(); ++i)
 			{
-				levelNames.push_back(string(wlevelNames[i].begin(), wlevelNames[i].end()));
+				m_vecLevelName.push_back(string(m_vecWStrLevel[i].begin(), m_vecWStrLevel[i].end()));
 
 				// Level 이름을 가져와 MenuItem 생성
-				if (ImGui::MenuItem(levelNames[i].c_str()))
+				if (ImGui::MenuItem(m_vecLevelName[i].c_str()))
 				{
 					// TaskMgr에게 다음 프레임에 실행할 Level을 변경하도록 요청
 					// wstring과 string 벡터는 같은 index에 같은 데이터를 보장해야 합니다.
-					ChangeLevel(wlevelNames[i]);
+					ChangeLevel(m_vecWStrLevel[i]);
 				}
 			}
 			ImGui::EndMenu();

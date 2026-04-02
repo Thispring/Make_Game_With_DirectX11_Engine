@@ -33,3 +33,8 @@
 // ImGui Text로 필수인지 선택인지를 표시하는 매크로
 #define IMGUI_REQUIRED() ImGui::TextColored(ImVec4(1.f, 0.2f, 0.2f, 1.0f), "(Required)");
 #define IMGUI_OPTIONAL() ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "(Optional)");
+
+
+//#define DEBUG_NEW new(THIS_FILE, __LINE__)
+
+#define DEBUG_NEW new( _NORMAL_BLOCK , __FILE__ , __LINE__ )
