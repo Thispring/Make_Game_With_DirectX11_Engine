@@ -179,7 +179,7 @@ int ALevel::Load(const wstring& _FilePath)
 		
 		for (size_t j = 0; j < parentCount; ++j)
 		{
-			Ptr<GameObject> pObject = new GameObject;
+			Ptr<GameObject> pObject = NEW GameObject;
 			pObject->LoadFromLevelFile(pFile);
 			AddObject(i, pObject);
 		}

@@ -30,11 +30,11 @@
 #include "EPrefabUI.h"
 
 
-#define ADD_COMPONENT_UI(ComponentType, type, Size) m_arrComUI[(UINT)ComponentType] = new type;\
+#define ADD_COMPONENT_UI(ComponentType, type, Size) m_arrComUI[(UINT)ComponentType] = NEW type;\
 													m_arrComUI[(UINT)ComponentType]->SetSizeAsChild(Size);\
 													AddChildUI(m_arrComUI[(UINT)ComponentType].Get());
 
-#define ADD_ASSET_UI(AssetType, type) m_arrAssetUI[(UINT)AssetType] = new type;\
+#define ADD_ASSET_UI(AssetType, type) m_arrAssetUI[(UINT)AssetType] = NEW type;\
 									  AddChildUI(m_arrAssetUI[(UINT)AssetType].Get());
 
 void Inspector::CreateChildUI()

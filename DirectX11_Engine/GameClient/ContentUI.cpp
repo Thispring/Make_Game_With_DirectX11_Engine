@@ -11,7 +11,7 @@
 ContentUI::ContentUI()
 	: EditorUI("ContentUI")
 {
-	m_Tree = new TreeUI;
+	m_Tree = NEW TreeUI;
 	m_Tree->SetSeparator(false);
 	m_Tree->AddDyanmicSelect(this, (DELEGATE_1)&ContentUI::SelectAsset);
 	AddChildUI(m_Tree.Get());

@@ -41,7 +41,7 @@ private:
     //=================
     // private 멤버 함수
     //=================
-    void ChangeState(ENEMY_COMMON_STATE _State);
+    void ChangeState(ENEMY_STATE _State);
 
 public:
     //=========

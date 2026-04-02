@@ -42,7 +42,7 @@ int AMesh::Create(Vtx* _VtxSysMem, UINT _VtxCount, UINT* _IdxSysMem, UINT _IdxCo
 	}
 
 	// 버텍스 데이터를 동적할당 해서 따로 저장해둡니다.
-	m_VtxSysMem = new Vtx[_VtxCount];
+	m_VtxSysMem = NEW Vtx[_VtxCount];
 	for (int i = 0; i < _VtxCount; ++i)
 	{
 		m_VtxSysMem[i] = _VtxSysMem[i];
@@ -67,7 +67,7 @@ int AMesh::Create(Vtx* _VtxSysMem, UINT _VtxCount, UINT* _IdxSysMem, UINT _IdxCo
 	}
 
 	// 인덱스 데이터를 동적할당 해서 따로 저장해둡니다.
-	m_IdxSysMem = new UINT[_IdxCount];
+	m_IdxSysMem = NEW UINT[_IdxCount];
 	for (int i = 0; i < _IdxCount; ++i)
 	{
 		m_IdxSysMem[i] = _IdxSysMem[i];

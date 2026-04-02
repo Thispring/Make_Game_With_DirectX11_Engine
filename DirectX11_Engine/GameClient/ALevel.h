@@ -40,7 +40,7 @@ public:
     Ptr<GameObject> FindObjectByName(const wstring& _Name);
 
     // Level을 복사하는 함수, 호출자 자신의 주소를 전달하여 동적할당
-    //ALevel* Clone() { return new ALevel(*this); }
+    //ALevel* Clone() { return NEW ALevel(*this); }
     CLONE(ALevel);
 
 

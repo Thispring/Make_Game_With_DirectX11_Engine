@@ -11,7 +11,7 @@
 Outliner::Outliner()
 	: EditorUI("Outliner")
 {
-	m_Tree = new TreeUI;
+	m_Tree = NEW TreeUI;
 	m_Tree->AddDyanmicSelect(this, (DELEGATE_1)&Outliner::SelectGameObject);
 	m_Tree->AddDyanmicDragDrop(this, (DELEGATE_2)&Outliner::AddChild);
 	

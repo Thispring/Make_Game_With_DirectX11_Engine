@@ -27,7 +27,7 @@ void CEnemyEyes::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherColl
 		// 디버그 들어오는것 확인
 		// Chase 상태로 전환
 		Ptr<CEnemyStateManager> pMgr = GetOwner()->GetParent()->GetScript<CEnemyStateManager>();
-		pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_COMMON_STATE::CHASE));
+		pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::CHASE));
 		pMgr->ChangeState();
 	}
 }
@@ -54,9 +54,9 @@ void CEnemyEyes::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 		Ptr<CEnemyStateManager> pMgr = GetOwner()->GetParent()->GetScript<CEnemyStateManager>();
 
 		// 현재 CHASE 중일 때만 IDLE로 전환 (다른 상태에서 호출 방지)
-		if (pMgr->GetCurStatus() == pMgr->GetStatusByIndex((int)ENEMY_COMMON_STATE::CHASE))
+		if (pMgr->GetCurStatus() == pMgr->GetStatusByIndex((int)ENEMY_STATE::CHASE))
 		{
-			pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_COMMON_STATE::IDLE));
+			pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::IDLE));
 			pMgr->ChangeState();
 		}
 	}

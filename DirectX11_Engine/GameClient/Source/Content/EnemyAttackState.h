@@ -15,7 +15,6 @@ public:
     void OnBegin() override;
     void OnTick() override;
     void OnFinalTick() override;
-    ENEMY_STATE GetFlipbookIndex() override;
 
     void SaveToLevelFile(FILE* _File) override;
     void LoadFromLevelFile(FILE* _File) override;

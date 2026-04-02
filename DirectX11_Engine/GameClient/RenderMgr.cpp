@@ -21,12 +21,12 @@ void RenderMgr::Init()
 {
 	// RenderMgr 초기화 함수에서 디버그 랜더에
 	// 관한 변수들을 초기화
-	m_DbgObj = new GameObject;
-	m_DbgObj->AddComponent(new CTransform);
-	m_DbgObj->AddComponent(new CMeshRender);
+	m_DbgObj = NEW GameObject;
+	m_DbgObj->AddComponent(NEW CTransform);
+	m_DbgObj->AddComponent(NEW CMeshRender);
 	m_DbgObj->MeshRender()->SetMaterial(FIND(AMaterial, L"Material\\DbgMtrl.mtrl"));
 
-	m_Light2DBuffer = new StructuredBuffer;
+	m_Light2DBuffer = NEW StructuredBuffer;
 }
 
 void RenderMgr::Progress()

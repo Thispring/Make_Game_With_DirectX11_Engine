@@ -124,27 +124,33 @@ void CEnemyData::TakeDamage(float _Damage)
 	hp -= _Damage;
 	SetCurHP(hp);
 
-	ChangeState(ENEMY_COMMON_STATE::HIT);
+	ChangeState(ENEMY_STATE::HIT);
 
 	if (hp <= 0.f)
 	{
 		// Dead 상태 호출
 		m_IsDead = true;
-		ChangeState(ENEMY_COMMON_STATE::DEAD);
+		ChangeState(ENEMY_STATE::DEAD);
 	}
 }
 
-void CEnemyData::ChangeState(ENEMY_COMMON_STATE _State)
+void CEnemyData::ChangeState(ENEMY_STATE _State)
 {
 	//=========================================
 	// CEnemyData 클래스에서만 사용할 상태 변경 함수
 	//=========================================
 
-	// Type에 따라 구별되는 ENEMY_STATE를 반환
-	int state = (int)GetEnemyStateToParam(m_EnemyType, _State);
-	// 현재 상태를 얻어오고, 해당 상태를 세팅
 	Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
+
+	// map에서 해당 ENEMY_STATE 키가 존재하는지 확인하고 포인터를 반환
+	EnemyState* pState = pMgr->GetStatusByCommonState(_State);
+	if (pState == nullptr)
+	{
+		assert(false && "ChangeState: Requested ENEMY_STATE not found in map");
+		return;
+	}
+
+	pMgr->SetCurStatus(pState);
 	pMgr->ChangeState();
 }
 
@@ -170,7 +176,7 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 	// Player와 충돌 시
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == 3)
 	{
-		ChangeState(ENEMY_COMMON_STATE::ATTACK);
+		ChangeState(ENEMY_STATE::ATTACK);
 	}
 }
 
@@ -184,12 +190,12 @@ void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 	// HIT, DEAD 상태에서는 IDLE로 강제 전환하지 않음
 	// 해당 상태들은 Flipbook 재생 완료 후 자체적으로 전이합니다.
 	Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
-	ENEMY_COMMON_STATE curState = pMgr->GetCurCommonState();
+	ENEMY_STATE curState = pMgr->GetCurCommonState();
 
-	if (curState == ENEMY_COMMON_STATE::HIT || curState == ENEMY_COMMON_STATE::DEAD)
+	if (curState == ENEMY_STATE::HIT || curState == ENEMY_STATE::DEAD)
 		return;
 
-	ChangeState(ENEMY_COMMON_STATE::IDLE);
+	ChangeState(ENEMY_STATE::IDLE);
 }
 
 void CEnemyData::Tick()

@@ -109,7 +109,7 @@ void Inspector::Tick_UI()
 			m_CopyObject = nullptr;
 			// GameObject 복사
 			// TargetObject를 복사생성하여, 해당 객체를 전달
-			m_CopyObject = new GameObject(*m_TargetObject.Get());
+			m_CopyObject = NEW GameObject(*m_TargetObject.Get());
 
 			int copyCount = m_TargetObject->GetCopyCount();
 			// 이름은 복사대상 오브젝트의 이름 + _넘버링
@@ -173,7 +173,7 @@ void Inspector::Tick_UI()
 		}
 
 		// TargetObject를 복사생성하여, 해당 객체를 전달
-		Ptr<GameObject> pCopy = new GameObject(*m_TargetObject.Get());
+		Ptr<GameObject> pCopy = NEW GameObject(*m_TargetObject.Get());
 
 		// 현재 Level을 가져와, TargetObject를 변경할 layer에 등록
 		Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
@@ -427,7 +427,7 @@ void Inspector::SetTargetObject(Ptr<GameObject> _Object)
 
 			for (int i = 0; i < AddCount; ++i)
 			{
-				EScriptUI* pScriptUI = new EScriptUI;
+				EScriptUI* pScriptUI = NEW EScriptUI;
 				pScriptUI->SetSizeAsChild(Vec2(0.f, 150.f));
 				AddChildUI(pScriptUI);
 
@@ -514,7 +514,7 @@ void Inspector::SetTargetAsset(Ptr<Asset> _Asset)
 
 				for (int i = 0; i < AddCount; ++i)
 				{
-					EScriptUI* pScriptUI = new EScriptUI;
+					EScriptUI* pScriptUI = NEW EScriptUI;
 					pScriptUI->SetSizeAsChild(Vec2(0.f, 150.f));
 					AddChildUI(pScriptUI);
 

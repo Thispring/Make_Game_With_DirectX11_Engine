@@ -314,40 +314,40 @@ Component* CreateComponent(COMPONENT_TYPE _Type)
 	switch (_Type)
 	{
 	case COMPONENT_TYPE::TRANSFORM:
-		return new CTransform;
+		return NEW CTransform;
 
 	case COMPONENT_TYPE::CAMERA:
-		return new CCamera;
+		return NEW CCamera;
 
 	case COMPONENT_TYPE::COLLIDER2D:
-		return new CCollider2D;
+		return NEW CCollider2D;
 
 	//case COMPONENT_TYPE::COLLIDER3D:
-		//return new CCollider3D;
+		//return NEW CCollider3D;
 
 	case COMPONENT_TYPE::LIGHT2D:
-		return new CLight2D;
+		return NEW CLight2D;
 
 	//case COMPONENT_TYPE::LIGHT3D:
-		//return new CLight3d;
+		//return NEW CLight3d;
 
 	case COMPONENT_TYPE::MESHRENDER:
-		return new CMeshRender;
+		return NEW CMeshRender;
 
 	case COMPONENT_TYPE::SPRITE_RENDER:
-		return new CSpriteRender; // 또는 CSpriterender (클래스명 확인 필요)
+		return NEW CSpriteRender; // 또는 CSpriterender (클래스명 확인 필요)
 
 	case COMPONENT_TYPE::BILLBOARD_RENDER:
-		return new CBillboardRender;
+		return NEW CBillboardRender;
 
 	case COMPONENT_TYPE::FLIPBOOK_RENDER:
-		return new CFlipbookRender;
+		return NEW CFlipbookRender;
 
 	//case COMPONENT_TYPE::PARTICLE_RENDER:
-		//return new CParticle_render;
+		//return NEW CParticle_render;
 
 	case COMPONENT_TYPE::TILE_RENDER:
-		return new CTileRender;
+		return NEW CTileRender;
 
 	case COMPONENT_TYPE::SCRIPT:
 		// 스크립트는 따로 리스트를 만들어서 추가, 관리

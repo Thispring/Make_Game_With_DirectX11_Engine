@@ -40,7 +40,7 @@ void AssetMgr::CreateAssetByCode()
 	// =========
 	// Std2DMtrl 
 	// =========
-	pMtrl = new AMaterial;
+	pMtrl = NEW AMaterial;
 	pMtrl->SetName(L"Material\\Std2DMtrl.mtrl");
 	pMtrl->SetShader(Find<AGraphicShader>(L"Std2DShader"));
 	pMtrl->SetTexture(TEX_0, Find<ATexture>(L"cubeImg"));
@@ -51,7 +51,7 @@ void AssetMgr::CreateAssetByCode()
 	// =====
 	// 디버그 
 	// =====
-	pMtrl = new AMaterial;
+	pMtrl = NEW AMaterial;
 	pMtrl->SetName(L"Material\\DbgMtrl.mtrl");
 	pMtrl->SetShader(Find<AGraphicShader>(L"DbgShader"));
 	pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_DEBUG);
@@ -83,7 +83,7 @@ void AssetMgr::CreateAssetByCode()
 		wchar_t Buff[50] = {};
 		swprintf_s(Buff, L"Sprite\\Test_Spirte_%d.sprite", i);		
 
-		pSprite = new ASprite;
+		pSprite = NEW ASprite;
 		pSprite->SetName(Buff);
 		pSprite->SetAtlas(pAtlas);
 
@@ -108,7 +108,7 @@ void AssetMgr::CreateAssetByCode()
 	// 반복문을 통해, 이어서 보여줄 sprite들을 가리키게 합니다.
 	Ptr<AFlipbook> pFlipbook = nullptr;
 
-	pFlipbook = new AFlipbook;
+	pFlipbook = NEW AFlipbook;
 	pFlipbook->SetName(L"Flipbook\\Test_Fb.flip");
 
 	// 해당 Flipbook에 몇개의 Sprite를 연속으로 재생할것인지를
@@ -130,7 +130,7 @@ void AssetMgr::CreateAssetByCode()
 	// =======
 	Ptr<ATileMap> pTileMap = nullptr;
 
-	pTileMap = new ATileMap;
+	pTileMap = NEW ATileMap;
 	pTileMap->SetName(L"TileMap\\TestTileMap.tile");
 	pTileMap->SetRowCol(2, 2);
 	pTileMap->SetTileSize(Vec2(16.f, 16.f));

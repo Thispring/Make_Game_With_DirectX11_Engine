@@ -129,7 +129,7 @@ void EPrefabUI::Tick_UI()
 		}
 
 		// TargetObject를 복사생성하여, 해당 객체를 전달
-		Ptr<GameObject> pCopy = new GameObject(*pObj.Get());
+		Ptr<GameObject> pCopy = NEW GameObject(*pObj.Get());
 
 		// 현재 Level을 가져와, TargetObject를 변경할 layer에 등록
 		Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();

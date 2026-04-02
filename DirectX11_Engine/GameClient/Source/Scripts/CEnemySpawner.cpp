@@ -18,13 +18,13 @@ CEnemySpawner::~CEnemySpawner()
 
 void CEnemySpawner::SpawnEnemy()
 {
-	GameObject* pObject = new GameObject;
+	GameObject* pObject = NEW GameObject;
 
 	pObject->SetName(L"Enemy");
 
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CFlipbookRender);
-	pObject->AddComponent(new CCollider2D);
+	pObject->AddComponent(NEW CTransform);
+	pObject->AddComponent(NEW CFlipbookRender);
+	pObject->AddComponent(NEW CCollider2D);
 
 	Vec3 vMyPos = GetOwner()->Transform()->GetRelativePos();
 	Vec3 vMyRot = GetOwner()->Transform()->GetRelativeRot();

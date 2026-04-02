@@ -38,7 +38,7 @@ int APrefab::Load(const wstring& _FilePath)
 	FILE* pFile = nullptr;
 	_wfopen_s(&pFile, _FilePath.c_str(), L"rb");
 
-	m_ProtoObj = new GameObject;
+	m_ProtoObj = NEW GameObject;
 	m_ProtoObj->LoadFromLevelFile(pFile);
 
 	fclose(pFile);

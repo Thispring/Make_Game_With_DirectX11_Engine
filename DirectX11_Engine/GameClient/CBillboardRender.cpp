@@ -42,7 +42,7 @@ void CBillboardRender::CreateMaterial()
 	if (pMtrl == nullptr)
 	{
 		// 재질 생성
-		pMtrl = new AMaterial;
+		pMtrl = NEW AMaterial;
 		pMtrl->SetName(L"Material\\BillboardMtrl.mtrl");
 
 		// 쉐이더를 찾아서 재질에 세팅
@@ -52,7 +52,7 @@ void CBillboardRender::CreateMaterial()
 		// 에셋매니저에 등록
 		if (pShader == nullptr)
 		{
-			pShader = new AGraphicShader;
+			pShader = NEW AGraphicShader;
 			pShader->SetName(L"BillboardShader");
 			pShader->CreateVertexShader(L"Shader\\billboard.fx", "VS_Billboard");
 			pShader->CreatePixelShader(L"Shader\\billboard.fx", "PS_Billboard");

@@ -7,7 +7,7 @@
 CTileRender::CTileRender()
 	: CRenderComponent(COMPONENT_TYPE::TILE_RENDER)
 {
-	m_Buffer = new StructuredBuffer;
+	m_Buffer = NEW StructuredBuffer;
 }
 
 CTileRender::CTileRender(const CTileRender& _Origin)
@@ -17,7 +17,7 @@ CTileRender::CTileRender(const CTileRender& _Origin)
 	, m_Buffer(nullptr)
 {
 	// 복사 시 동일한 구조체 버퍼를 가리키면 안되기 때문에 복사생성자 수동 구현
-	m_Buffer = new StructuredBuffer;
+	m_Buffer = NEW StructuredBuffer;
 }
 
 CTileRender::~CTileRender()
@@ -154,7 +154,7 @@ void CTileRender::CreateMaterial()
 	// 찾는 재질이 없으면 생성한다.
 	if (nullptr == pMtrl)
 	{
-		pMtrl = new AMaterial;
+		pMtrl = NEW AMaterial;
 		pMtrl->SetName(MtrlName);
 
 		// 쉐이더를 찾아서 재질에 세팅해준다.
@@ -163,7 +163,7 @@ void CTileRender::CreateMaterial()
 		// 찾는 쉐이더가 없으면 만들어서 에셋매니저에 등록해둔다
 		if (nullptr == pShader)
 		{
-			pShader = new AGraphicShader;
+			pShader = NEW AGraphicShader;
 			pShader->SetName(ShaderName);
 			pShader->CreateVertexShader(FilePath, VS);
 			pShader->CreatePixelShader(FilePath, PS);

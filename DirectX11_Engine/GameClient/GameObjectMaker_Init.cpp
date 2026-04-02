@@ -14,7 +14,7 @@
 #include "ETileRenderUI.h"
 #include "EBillboardRenderUI.h"
 
-#define ADD_COMPONENT_UI(ComponentType, type, Size) m_arrComUI[(UINT)ComponentType] = new type;\
+#define ADD_COMPONENT_UI(ComponentType, type, Size) m_arrComUI[(UINT)ComponentType] = NEW type;\
 													m_arrComUI[(UINT)ComponentType]->SetSizeAsChild(Size);\
 													AddChildUI(m_arrComUI[(UINT)ComponentType].Get());
 

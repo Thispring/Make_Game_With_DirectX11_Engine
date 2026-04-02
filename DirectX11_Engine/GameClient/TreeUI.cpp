@@ -168,7 +168,7 @@ Ptr<TreeNode> TreeUI::AddItem(Ptr<TreeNode> _ParentNode, string _Str, DWORD_PTR 
 	//=================================
 	// Node 자료구조 방식의 등록과 유사하다
 	//=================================
-	Ptr<TreeNode> pNewNode = new TreeNode;
+	Ptr<TreeNode> pNewNode = NEW TreeNode;
 	pNewNode->Str = _Str;
 	pNewNode->m_Owner = this;
 	pNewNode->Data = _Data;

@@ -49,7 +49,7 @@ void AMaterial::Clear()
 AMaterial* AMaterial::Clone()
 {
 	// 새로 동적할당한 객체 주소를 반환
-	return new AMaterial(*this);
+	return NEW AMaterial(*this);
 }
 
 int AMaterial::Save(const wstring& _FilePath)

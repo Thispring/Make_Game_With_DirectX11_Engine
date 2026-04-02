@@ -23,10 +23,6 @@ void EnemyMoveState::OnFinalTick()
 {
 }
 
-ENEMY_STATE EnemyMoveState::GetFlipbookIndex()
-{
-	return ENEMY_STATE();
-}
 
 void EnemyMoveState::SaveToLevelFile(FILE* _File)
 {

@@ -22,10 +22,6 @@ void EnemyJumpState::OnFinalTick()
 {
 }
 
-ENEMY_STATE EnemyJumpState::GetFlipbookIndex()
-{
-	return ENEMY_STATE();
-}
 
 void EnemyJumpState::SaveToLevelFile(FILE* _File)
 {

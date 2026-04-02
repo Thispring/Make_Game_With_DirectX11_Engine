@@ -58,6 +58,8 @@ public:
     }
     bool GetFinish() { return m_Finish; }
     const vector<Ptr<AFlipbook>>& GetVecFlipbook() { return m_vecFlipbook; }
+    // 인덱스로 해당 Flipbook 에셋을 반환하는 함수
+    const Ptr<AFlipbook>& GetVecFlipbook(int _Idx) { return m_vecFlipbook[_Idx]; }
     GET_SET(int, CurFlipbook);
     GET_SET(int, PrevFlipbook);
     GET_SET(int, RepeatCount);

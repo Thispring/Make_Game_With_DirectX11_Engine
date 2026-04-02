@@ -21,7 +21,7 @@
 						      _wfopen_s(&pFile, Path.c_str(), Mode);
 
 // 객체 복사 매크로
-#define CLONE(Type) Type* Clone() { return new Type(*this); }
+#define CLONE(Type) Type* Clone() { return NEW Type(*this); }
 
 // ImGui UI 간격 조정 매크로
 #define SPACING_UI(Count) for (int i = 0; i < Count; ++i) ImGui::Spacing();
@@ -35,6 +35,11 @@
 #define IMGUI_OPTIONAL() ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "(Optional)");
 
 
-//#define DEBUG_NEW new(THIS_FILE, __LINE__)
+//#define NEW new(THIS_FILE, __LINE__)
+//#define NEW new( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 
-#define DEBUG_NEW new( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#ifdef _DEBUG
+#define NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#else
+#define NEW new
+#endif

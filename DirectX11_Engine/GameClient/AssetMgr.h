@@ -151,7 +151,7 @@ Ptr<T> AssetMgr::Load(const wstring& _Key, const wstring& _RelativePath)
 		return pAsset;
 
 	// 에셋 객체 생성
-	pAsset = new T;
+	pAsset = NEW T;
 
 	// 입력된 경로로부터 에셋 로딩작업 진행	
 	pAsset->Load(CONTENT_PATH + _RelativePath);

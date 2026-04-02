@@ -133,52 +133,52 @@ void EditorMgr::CreateEditorUI()
     //===========================
     // 새로운 ImGui 창은 여기서 등록
     //===========================
-    pUI = new Menu;
+    pUI = NEW Menu;
     AddUI(pUI->GetUIName(), pUI);
 
-    pUI = new Inspector;
+    pUI = NEW Inspector;
     AddUI(pUI->GetUIName(), pUI);
 
-    pUI = new Outliner;
+    pUI = NEW Outliner;
     AddUI(pUI->GetUIName(), pUI);
 
-    pUI = new KeyList;
+    pUI = NEW KeyList;
     AddUI(pUI->GetUIName(), pUI);
 
-    pUI = new ListUI;
+    pUI = NEW ListUI;
     pUI->SetModal(true);    // Modal 방식으로 설정하려면 여기에서 true로 설정
     pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
-    pUI = new ContentUI;
+    pUI = NEW ContentUI;
     AddUI(pUI->GetUIName(), pUI);
 
     // Maker UI들은 디폴트로 비활성화 처리
-    pUI = new SpriteMaker;
+    pUI = NEW SpriteMaker;
     pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
-    pUI = new FlipbookMaker;
+    pUI = NEW FlipbookMaker;
     pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
-    pUI = new TileMapMaker;
+    pUI = NEW TileMapMaker;
     pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
-    pUI = new MaterialMaker;
+    pUI = NEW MaterialMaker;
     pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
-    pUI = new GameObjectMaker;
+    pUI = NEW GameObjectMaker;
     pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
-    pUI = new PrefabMaker;
+    pUI = NEW PrefabMaker;
     pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
-    pUI = new LevelMaker;
+    pUI = NEW LevelMaker;
     pUI->SetActive(false);
     AddUI(pUI->GetUIName(), pUI);
 
@@ -188,12 +188,12 @@ void EditorMgr::CreateEditorObject()
 {
     // Editor에서 사용하는 카메라 오브젝트 생성
     Ptr<GameObject> pObject = nullptr;
-    pObject = new GameObject;
+    pObject = NEW GameObject;
     pObject->SetName(L"EditorCamera");
 
-    pObject->AddComponent(new CTransform);
-    pObject->AddComponent(new CCamera);
-    pObject->AddComponent(new CEditorCamMoveScript);
+    pObject->AddComponent(NEW CTransform);
+    pObject->AddComponent(NEW CCamera);
+    pObject->AddComponent(NEW CEditorCamMoveScript);
     
     pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, -350.f));
 

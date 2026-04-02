@@ -463,40 +463,40 @@ void GameObject::LoadFromLevelFile(FILE* _File)
 		switch ((COMPONENT_TYPE)ComType)
 		{
 		case COMPONENT_TYPE::TRANSFORM:
-			pComponent = new CTransform;
+			pComponent = NEW CTransform;
 			break;
 		case COMPONENT_TYPE::CAMERA:
-			pComponent = new CCamera;
+			pComponent = NEW CCamera;
 			break;
 		case COMPONENT_TYPE::COLLIDER2D:
-			pComponent = new CCollider2D;
+			pComponent = NEW CCollider2D;
 			break;
 		case COMPONENT_TYPE::COLLIDER3D:
 			//
 			break;
 		case COMPONENT_TYPE::LIGHT2D:
-			pComponent = new CLight2D;
+			pComponent = NEW CLight2D;
 			break;
 		case COMPONENT_TYPE::LIGHT3D:
 			//
 			break;
 		case COMPONENT_TYPE::MESHRENDER:
-			pComponent = new CMeshRender;
+			pComponent = NEW CMeshRender;
 			break;
 		case COMPONENT_TYPE::SPRITE_RENDER:
-			pComponent = new CSpriteRender;
+			pComponent = NEW CSpriteRender;
 			break;
 		case COMPONENT_TYPE::BILLBOARD_RENDER:
-			pComponent = new CBillboardRender;
+			pComponent = NEW CBillboardRender;
 			break;
 		case COMPONENT_TYPE::FLIPBOOK_RENDER:
-			pComponent = new CFlipbookRender;
+			pComponent = NEW CFlipbookRender;
 			break;
 		case COMPONENT_TYPE::PARTICLE_RENDER:
 			//
 			break;
 		case COMPONENT_TYPE::TILE_RENDER:
-			pComponent = new CTileRender;
+			pComponent = NEW CTileRender;
 			break;
 		}
 
@@ -524,7 +524,7 @@ void GameObject::LoadFromLevelFile(FILE* _File)
 
 	for (size_t i = 0; i < ChildCount; ++i)
 	{
-		Ptr<GameObject> pChild = new GameObject;
+		Ptr<GameObject> pChild = NEW GameObject;
 		AddChild(pChild);
 		pChild->LoadFromLevelFile(_File);
 	}

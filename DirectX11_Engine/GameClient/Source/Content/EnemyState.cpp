@@ -6,7 +6,6 @@
 #include "KeyMgr.h"
 
 EnemyState::EnemyState(Ptr<CEnemyData> _Data)
-	: m_FlipbookIndex()
 {
 	m_EnemyData = _Data;
 }

@@ -18,28 +18,7 @@ EnemyDamageState::~EnemyDamageState()
 EnemyHitState::EnemyHitState(Ptr<CEnemyData> _Data)
     : EnemyDamageState(_Data)
 {
-    ENEMY_TYPE type = (ENEMY_TYPE)0;
-    if (m_EnemyData != nullptr)
-        type = m_EnemyData->GetEnemyType();
 
-    switch (type)
-    {
-    case ENEMY_TYPE::DEMON:
-        m_FlipbookIndex = ENEMY_STATE::DEMON_HIT;
-        break;
-    case ENEMY_TYPE::SKULL:
-        m_FlipbookIndex = ENEMY_STATE::SKULL_HIT;
-        break;
-    case ENEMY_TYPE::FLYING:
-        m_FlipbookIndex = ENEMY_STATE::FLYING_HIT;
-        break;
-    case ENEMY_TYPE::FLOWER:
-        m_FlipbookIndex = ENEMY_STATE::FLOWER_HIT;
-        break;
-    case ENEMY_TYPE::BOSS:
-        m_FlipbookIndex = ENEMY_STATE::BOSS_HIT;
-        break;
-    }
 }
 
 EnemyHitState::~EnemyHitState()
@@ -58,7 +37,7 @@ void EnemyHitState::OnTick()
 	if (m_EnemyData->GetTargetObject()->FlipbookRender()->GetFinish() == true)
 	{
 		Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetTargetObject()->GetScript<CEnemyStateManager>();
-		pMgr->SetCurStatus(pMgr->GetStatusByCommonState(ENEMY_COMMON_STATE::IDLE));
+		pMgr->SetCurStatus(pMgr->GetStatusByCommonState(ENEMY_STATE::IDLE));
 		pMgr->ChangeState();
 	}
 }
@@ -66,14 +45,10 @@ void EnemyHitState::OnTick()
 void EnemyHitState::OnFinalTick()
 {
     //Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetOwner()->GetScript<CEnemyStateManager>();
-    //pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)GetEnemyStateToParam(m_EnemyData->GetEnemyType(), ENEMY_COMMON_STATE::IDLE)));
+    //pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)GetEnemyStateToParam(m_EnemyData->GetEnemyType(), ENEMY_STATE::IDLE)));
     //pMgr->ChangeState();
 }
 
-ENEMY_STATE EnemyHitState::GetFlipbookIndex()
-{
-    return m_FlipbookIndex;
-}
 
 void EnemyHitState::SaveToLevelFile(FILE* _File)
 {
@@ -95,28 +70,7 @@ unique_ptr<EnemyState> EnemyHitState::Clone() const
 EnemyDeadState::EnemyDeadState(Ptr<CEnemyData> _Data)
     : EnemyDamageState(_Data)
 {
-    ENEMY_TYPE type = (ENEMY_TYPE)0;
-    if (m_EnemyData != nullptr)
-        type = m_EnemyData->GetEnemyType();
 
-    switch (type)
-    {
-    case ENEMY_TYPE::DEMON:
-        m_FlipbookIndex = ENEMY_STATE::DEMON_DEAD;
-        break;
-    case ENEMY_TYPE::SKULL:
-        m_FlipbookIndex = ENEMY_STATE::SKULL_DEAD;
-        break;
-    case ENEMY_TYPE::FLYING:
-        m_FlipbookIndex = ENEMY_STATE::FLYING_DEAD;
-        break;
-    case ENEMY_TYPE::FLOWER:
-        m_FlipbookIndex = ENEMY_STATE::FLOWER_DEAD;
-        break;
-    case ENEMY_TYPE::BOSS:
-        m_FlipbookIndex = ENEMY_STATE::BOSS_DEAD;
-        break;
-    }
 }
 
 EnemyDeadState::~EnemyDeadState()
@@ -141,11 +95,6 @@ void EnemyDeadState::OnFinalTick()
 {
 }
 
-
-ENEMY_STATE EnemyDeadState::GetFlipbookIndex()
-{
-    return m_FlipbookIndex;
-}
 
 void EnemyDeadState::SaveToLevelFile(FILE* _File)
 {

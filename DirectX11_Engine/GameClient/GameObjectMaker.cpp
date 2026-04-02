@@ -15,8 +15,8 @@ GameObjectMaker::GameObjectMaker()
 	, m_CloneObject(nullptr)
 {
 	CreateChildUI();
-	m_pObject = new GameObject;
-	m_pObject->AddComponent(new CTransform);	// Transform은 기본 생성
+	m_pObject = NEW GameObject;
+	m_pObject->AddComponent(NEW CTransform);	// Transform은 기본 생성
 }
 
 GameObjectMaker::~GameObjectMaker()
@@ -27,8 +27,8 @@ GameObjectMaker::~GameObjectMaker()
 void GameObjectMaker::ClearSetting()
 {
 	m_pObject = nullptr;
-	m_pObject = new GameObject;
-	m_pObject->AddComponent(new CTransform);	// Transform은 기본 생성
+	m_pObject = NEW GameObject;
+	m_pObject->AddComponent(NEW CTransform);	// Transform은 기본 생성
 
 	m_LevelName = {};
 	m_ObjectName = {};
@@ -77,7 +77,7 @@ void GameObjectMaker::Tick_UI()
 			// ClearSetting를 만나면 값이 초기화됨
 			m_CloneObject = nullptr;	// CloneObject 멤버는 다음 생성 요청 시, nullptr로 초기화 하여 재사용합니다.
 
-			m_CloneObject = new GameObject(*m_pObject.Get()); // Ptr::operator=(T*) 사용
+			m_CloneObject = NEW GameObject(*m_pObject.Get()); // Ptr::operator=(T*) 사용
 
 			int tempLayerIdx = m_LayerIdx;
 
@@ -381,7 +381,7 @@ void GameObjectMaker::SetTargetObject(Ptr<GameObject> _Object)
 
 			for (int i = 0; i < AddCount; ++i)
 			{
-				EScriptUI* pScriptUI = new EScriptUI;
+				EScriptUI* pScriptUI = NEW EScriptUI;
 				pScriptUI->SetSizeAsChild(Vec2(0.f, 150.f));
 				AddChildUI(pScriptUI);
 

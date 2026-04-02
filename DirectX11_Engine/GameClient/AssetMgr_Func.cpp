@@ -44,7 +44,7 @@ void AssetMgr::CreateEngineMesh()
 
 	// g_RectMesh 포인터를 활용해서, 동적할당
 	// 사각형 매쉬 생성
-	pSquareMesh = new AMesh;
+	pSquareMesh = NEW AMesh;
 	pSquareMesh->Create(squarVtx, 4, arrSquareIdx, 6);
 
 	// 에셋 매니저 등록
@@ -55,7 +55,7 @@ void AssetMgr::CreateEngineMesh()
 	// SquareMesh_LineStrip
 	// ====================
 	arrSquareIdx[0] = 0; 	arrSquareIdx[1] = 1;	arrSquareIdx[2] = 2;	arrSquareIdx[3] = 3; arrSquareIdx[4] = 0;
-	pSquareMesh = new AMesh;
+	pSquareMesh = NEW AMesh;
 	pSquareMesh->Create(squarVtx, 4, arrSquareIdx, 5);
 	AddAsset(L"SquareMesh_LineStrip", pSquareMesh.Get());
 
@@ -83,7 +83,7 @@ void AssetMgr::CreateEngineMesh()
 	rectVtx[3].vColor = Vec4(0.f, 0.f, 0.f, 0.f);
 
 	UINT arrRectIdx[6] = { 0, 2, 3, 0, 1, 2 };
-	pRectMesh = new AMesh;
+	pRectMesh = NEW AMesh;
 	pRectMesh->Create(rectVtx, 4, arrRectIdx, 6);
 	AddAsset(L"RectMesh", pRectMesh.Get());
 
@@ -92,7 +92,7 @@ void AssetMgr::CreateEngineMesh()
 	// RectMesh_LineStrip
 	// ==================
 	arrRectIdx[0] = 0; 	arrRectIdx[1] = 1;	arrRectIdx[2] = 2;	arrRectIdx[3] = 3; arrRectIdx[4] = 0;
-	pRectMesh = new AMesh;
+	pRectMesh = NEW AMesh;
 	pRectMesh->Create(rectVtx, 4, arrRectIdx, 5);
 	AddAsset(L"RectMesh_LineStrip", pRectMesh.Get());
 
@@ -119,7 +119,7 @@ void AssetMgr::CreateEngineMesh()
 	FRectVtx[3].vUV = Vec2(0.f, 1.f);
 	FRectVtx[3].vColor = Vec4(0.f, 0.f, 0.f, 0.f);
 
-	pFRectMesh = new AMesh;
+	pFRectMesh = NEW AMesh;
 	pFRectMesh->Create(FRectVtx, 4, arrRectIdx, 6);
 	AddAsset(L"FullRectMesh", pFRectMesh.Get());
 
@@ -167,7 +167,7 @@ void AssetMgr::CreateEngineMesh()
 
 	// 매쉬 생성
 	Ptr<AMesh> pMesh = nullptr;
-	pMesh = new AMesh;
+	pMesh = NEW AMesh;
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddAsset(L"CircleMesh", pMesh.Get());
 
@@ -181,7 +181,7 @@ void AssetMgr::CreateEngineMesh()
 		vecIdx.push_back(i + 1);
 	}
 
-	pMesh = new AMesh;
+	pMesh = NEW AMesh;
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddAsset(L"CircleMesh_LineStrip", pMesh.Get());
 
@@ -223,7 +223,7 @@ void AssetMgr::CreateEngineMesh()
 		vecIdx.push_back(i + 2);
 	}
 
-	pMesh = new AMesh;
+	pMesh = NEW AMesh;
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
 	AddAsset(L"ConeMesh", pMesh.Get());
 
@@ -238,7 +238,7 @@ void AssetMgr::CreateEngineMesh()
 		vecIdx.push_back(i);                 // 호 정점들
 	vecIdx.push_back(0);                     // 다시 tip으로 닫기
 
-	pMesh = new AMesh;
+	pMesh = NEW AMesh;
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
 	AddAsset(L"ConeMesh_LineStrip", pMesh.Get());
 
@@ -279,7 +279,7 @@ void AssetMgr::CreateEngineMesh()
 		vecIdx.push_back(i + 2);
 	}
 
-	pMesh = new AMesh;
+	pMesh = NEW AMesh;
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
 	AddAsset(L"LargeBaseConeMesh", pMesh.Get());
 
@@ -292,7 +292,7 @@ void AssetMgr::CreateEngineMesh()
 		vecIdx.push_back(i);
 	vecIdx.push_back(0);
 
-	pMesh = new AMesh;
+	pMesh = NEW AMesh;
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
 	AddAsset(L"LargeBaseConeMesh_LineStrip", pMesh.Get());
 }
@@ -304,7 +304,7 @@ void AssetMgr::CreateEngineShader()
 	// ===========================
 	Ptr<AGraphicShader> pShader = nullptr;
 
-	pShader = new AGraphicShader;
+	pShader = NEW AGraphicShader;
 	pShader->CreateVertexShader(L"Shader\\std2d.fx", "VS_Std2D");
 	pShader->CreatePixelShader(L"Shader\\std2d.fx", "PS_Std2D");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
@@ -319,7 +319,7 @@ void AssetMgr::CreateEngineShader()
 	// 2D ONE_ONE 쉐이더 생성
 	// =====================
 	pShader = nullptr;
-	pShader = new AGraphicShader;
+	pShader = NEW AGraphicShader;
 	pShader->CreateVertexShader(L"Shader\\std2d.fx", "VS_Std2D");
 	pShader->CreatePixelShader(L"Shader\\std2d.fx", "PS_Std2D");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
@@ -334,7 +334,7 @@ void AssetMgr::CreateEngineShader()
 	// 디버그 쉐이더 추가
 	//=================
 	pShader = nullptr;
-	pShader = new AGraphicShader;
+	pShader = NEW AGraphicShader;
 	pShader->CreateVertexShader(L"Shader\\dbg.fx", "VS_Debug");
 	pShader->CreatePixelShader(L"Shader\\dbg.fx", "PS_Debug");
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);	// 토폴로지 설정
@@ -351,7 +351,7 @@ void AssetMgr::CreateEngineShader()
 	// ===============
 	// BillboardShader
 	// ===============
-	pShader = new AGraphicShader;
+	pShader = NEW AGraphicShader;
 	pShader->SetName(L"BillboardShader");
 	pShader->CreateVertexShader(L"Shader\\billboard.fx", "VS_Billboard");
 	pShader->CreatePixelShader(L"Shader\\billboard.fx", "PS_Billboard");
@@ -365,7 +365,7 @@ void AssetMgr::CreateEngineShader()
 	// ============
 	// SpriteShader
 	// ============
-	pShader = new AGraphicShader;
+	pShader = NEW AGraphicShader;
 	pShader->SetName(L"SpriteShader");
 	pShader->CreateVertexShader(L"Shader\\sprite.fx", "VS_Sprite");
 	pShader->CreatePixelShader(L"Shader\\sprite.fx", "PS_Sprite");
@@ -379,7 +379,7 @@ void AssetMgr::CreateEngineShader()
 	// ==============
 	// FlipbookShader
 	// ==============
-	pShader = new AGraphicShader;
+	pShader = NEW AGraphicShader;
 	pShader->SetName(L"FlipbookShader");
 	pShader->CreateVertexShader(L"Shader\\flipbook.fx", "VS_Flipbook");
 	pShader->CreatePixelShader(L"Shader\\flipbook.fx", "PS_Flipbook");
@@ -393,7 +393,7 @@ void AssetMgr::CreateEngineShader()
 	// =============
 	// TileMapShader
 	// =============
-	pShader = new AGraphicShader;
+	pShader = NEW AGraphicShader;
 	pShader->SetName(L"TileShader");
 	pShader->CreateVertexShader(L"Shader\\tile.fx", "VS_Tile");
 	pShader->CreatePixelShader(L"Shader\\tile.fx", "PS_Tile");
@@ -454,7 +454,7 @@ void AssetMgr::CreateEngineMaterial()
 	// =========
 	// Std2DMtrl 
 	// =========
-	pMtrl = new AMaterial;
+	pMtrl = NEW AMaterial;
 	pMtrl->SetName(L"Material\\Std2DMtrl.mtrl");
 	pMtrl->SetShader(Find<AGraphicShader>(L"Std2DShader"));
 	pMtrl->SetTexture(TEX_0, Find<ATexture>(L"cubeImg"));
@@ -465,7 +465,7 @@ void AssetMgr::CreateEngineMaterial()
 	// =====
 	// 디버그 
 	// =====
-	pMtrl = new AMaterial;
+	pMtrl = NEW AMaterial;
 	pMtrl->SetName(L"Material\\DbgMtrl.mtrl");
 	pMtrl->SetShader(Find<AGraphicShader>(L"DbgShader"));
 	pMtrl->SetDomain(RENDER_DOMAIN::DOMAIN_DEBUG);
@@ -490,7 +490,7 @@ void AssetMgr::CreateEngineSprite()
 void AssetMgr::CreateEnginePrefab(Ptr<GameObject> _Object)
 {
 	// 매개변수로 전달받은 _Object을 파일로 저장
-	Ptr<APrefab> pPrefab = new APrefab;
+	Ptr<APrefab> pPrefab = NEW APrefab;
 	pPrefab->SetObject(_Object);
 	
 	wstring objectName = _Object->GetName();
@@ -548,7 +548,7 @@ void AssetMgr::CreateEngineSprite(wstring _TextureName, Vec2 _Slice, int _StartL
 			else if (NameCount < 100 && NameCount >= 10 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(0) + to_wstring(NameCount) + L".sprite";
 			else if (NameCount >= 100 && _Row != 0 && _Col != 0) spritePath = L"Sprite\\" + _SpriteName + L"_" + to_wstring(NameCount) + L".sprite";
 
-			pSprite = new ASprite;
+			pSprite = NEW ASprite;
 			pSprite->SetName(spritePath);
 			pSprite->SetAtlas(pAtlas);
 
@@ -615,7 +615,7 @@ void AssetMgr::CreateEngineMaterial(wstring _MtrlName, wstring _TextureName, wst
 	#pragma region Material 생성하는 방법
 	Ptr<AMaterial> pMtrl = nullptr;
 
-	pMtrl = new AMaterial;
+	pMtrl = NEW AMaterial;
 	_MtrlName = L"Material\\" + _MtrlName + L".mtrl";
 	pMtrl->SetName(_MtrlName);
 	pMtrl->SetShader(Find<AGraphicShader>(_ShaderName));
@@ -637,7 +637,7 @@ void AssetMgr::CreateEngineFlipbook(wstring _SpriteName, wstring _FlipbookName, 
 	// 반복문을 통해, 이어서 보여줄 sprite들을 가르키게 합니다.
 	Ptr<AFlipbook> pFlipbook = nullptr;
 
-	pFlipbook = new AFlipbook;
+	pFlipbook = NEW AFlipbook;
 	_FlipbookName = L"Flipbook\\" + _FlipbookName + L".flip";
 	pFlipbook->SetName(_FlipbookName);
 
@@ -682,7 +682,7 @@ void AssetMgr::CreateEngineTileMap(vector<Ptr<ASprite>>& _vecSprite, wstring _Ti
 	// =======
 	Ptr<ATileMap> pTileMap = nullptr;
 
-	pTileMap = new ATileMap;
+	pTileMap = NEW ATileMap;
 	_TileMapName = L"TileMap\\" + _TileMapName + L".tile";
 	pTileMap->SetAtlas(FIND(ATexture, _AtlasName));
 	pTileMap->SetName(_TileMapName);
@@ -715,7 +715,7 @@ void AssetMgr::CreateEngineLevel(wstring _LevelName)
 	// 기본 오브젝트로 Directional Light와 MainCamera 만 제공합니다.
 	// 필요한 GameObject나 Layer 이름은 Editor를 이용하여 추가합니다.
 	
-	Ptr<ALevel> pLevel = new ALevel;
+	Ptr<ALevel> pLevel = NEW ALevel;
 	_LevelName = L"Level\\" + _LevelName + L".lv";
 	pLevel->SetName(_LevelName);
 
@@ -725,12 +725,12 @@ void AssetMgr::CreateEngineLevel(wstring _LevelName)
 	//======
 	// 카메라
 	//======
-	pObject = new GameObject;
+	pObject = NEW GameObject;
 	pObject->SetName(L"MainCamera");
 
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CCamera);
-	pObject->AddComponent(new CCamMoveScript);
+	pObject->AddComponent(NEW CTransform);
+	pObject->AddComponent(NEW CCamera);
+	pObject->AddComponent(NEW CCamMoveScript);
 
 	pObject->Camera()->LayerCheckAll();
 	// Layer 번호 31은 UI 레이어로 설정, editer 로 설정했기 때문에(개발용)
@@ -754,10 +754,10 @@ void AssetMgr::CreateEngineLevel(wstring _LevelName)
 	//============
 	// 광원 오브젝트
 	//============
-	pObject = new GameObject;
+	pObject = NEW GameObject;
 	pObject->SetName(L"Light");
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CLight2D);
+	pObject->AddComponent(NEW CTransform);
+	pObject->AddComponent(NEW CLight2D);
 
 	pObject->Light2D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
 	pObject->Light2D()->SetLightColor(Vec3(1.f, 1.f, 1.f));

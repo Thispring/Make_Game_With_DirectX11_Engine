@@ -43,9 +43,9 @@ CEnemyStateManager::CEnemyStateManager(const CEnemyStateManager& _Origin)
     // 원본 map의 각 상태를 Clone하여 새로운 map에 복제
     for (const auto& pair : _Origin.m_mapStatus)
     {
-        if (pair.second)
+        if (pair.second.first)
         {
-            m_mapStatus[pair.first] = pair.second->Clone();
+            m_mapStatus[pair.first] = std::make_pair(pair.second.first->Clone(), pair.second.second);
         }
     }
 
@@ -54,12 +54,12 @@ CEnemyStateManager::CEnemyStateManager(const CEnemyStateManager& _Origin)
     {
         for (const auto& pair : _Origin.m_mapStatus)
         {
-            if (pair.second.get() == _Origin.m_CurStatus)
+            if (pair.second.first.get() == _Origin.m_CurStatus)
             {
                 auto it = m_mapStatus.find(pair.first);
                 if (it != m_mapStatus.end())
                 {
-                    m_CurStatus = it->second.get();
+                    m_CurStatus = it->second.first.get();
                 }
                 break;
             }
@@ -99,51 +99,34 @@ void CEnemyStateManager::SetUp()
     {
     case ENEMY_TYPE::DEMON:
     {
-        m_mapStatus[ENEMY_COMMON_STATE::IDLE] = make_unique<EnemyIdleState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::MOVE] = make_unique<EnemyMoveState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::JUMP] = make_unique<EnemyJumpState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::ATTACK] = make_unique<EnemyAttackState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::HIT] = make_unique<EnemyHitState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::DEAD] = make_unique<EnemyDeadState>(m_EnemyData);
-        
-        m_mapStatus[ENEMY_COMMON_STATE::PATROL] = make_unique<EnemyPatrolState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::CHASE] = make_unique<EnemyChaseState>(m_EnemyData);
+        m_mapStatus[ENEMY_STATE::IDLE]   = std::make_pair(make_unique<EnemyIdleState>(m_EnemyData),   FLIPBOOK::DEMON::IDLE);
+        m_mapStatus[ENEMY_STATE::MOVE]   = std::make_pair(make_unique<EnemyMoveState>(m_EnemyData),   FLIPBOOK::DEMON::MOVE);
+        m_mapStatus[ENEMY_STATE::JUMP]   = std::make_pair(make_unique<EnemyJumpState>(m_EnemyData),   FLIPBOOK::DEMON::JUMP);
+        m_mapStatus[ENEMY_STATE::ATTACK] = std::make_pair(make_unique<EnemyAttackState>(m_EnemyData), FLIPBOOK::DEMON::ATTACK);
+        m_mapStatus[ENEMY_STATE::HIT]    = std::make_pair(make_unique<EnemyHitState>(m_EnemyData),    FLIPBOOK::DEMON::HIT);
+        m_mapStatus[ENEMY_STATE::DEAD]   = std::make_pair(make_unique<EnemyDeadState>(m_EnemyData),   FLIPBOOK::DEMON::DEAD);
+        m_mapStatus[ENEMY_STATE::PATROL] = std::make_pair(make_unique<EnemyPatrolState>(m_EnemyData), FLIPBOOK::DEMON::MOVE);
+        m_mapStatus[ENEMY_STATE::CHASE]  = std::make_pair(make_unique<EnemyChaseState>(m_EnemyData),  FLIPBOOK::DEMON::MOVE);
     }
         break;
     case ENEMY_TYPE::SKULL:
     {
-        m_mapStatus[ENEMY_COMMON_STATE::IDLE] = make_unique<EnemyIdleState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::MOVE] = make_unique<EnemyMoveState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::JUMP] = make_unique<EnemyJumpState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::ATTACK] = make_unique<EnemyAttackState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::HIT] = make_unique<EnemyHitState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::DEAD] = make_unique<EnemyDeadState>(m_EnemyData);
-        
-        m_mapStatus[ENEMY_COMMON_STATE::PATROL] = make_unique<EnemyPatrolState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::CHASE] = make_unique<EnemyChaseState>(m_EnemyData);
+        m_mapStatus[ENEMY_STATE::IDLE]   = std::make_pair(make_unique<EnemyIdleState>(m_EnemyData),   FLIPBOOK::SKULL::IDLE);
+        m_mapStatus[ENEMY_STATE::MOVE]   = std::make_pair(make_unique<EnemyMoveState>(m_EnemyData),   FLIPBOOK::SKULL::MOVE);
+        m_mapStatus[ENEMY_STATE::ATTACK] = std::make_pair(make_unique<EnemyAttackState>(m_EnemyData), FLIPBOOK::SKULL::ATTACK);
+        m_mapStatus[ENEMY_STATE::HIT]    = std::make_pair(make_unique<EnemyHitState>(m_EnemyData),    FLIPBOOK::SKULL::HIT);
+        m_mapStatus[ENEMY_STATE::DEAD]   = std::make_pair(make_unique<EnemyDeadState>(m_EnemyData),   FLIPBOOK::SKULL::DEAD);
+        m_mapStatus[ENEMY_STATE::PATROL] = std::make_pair(make_unique<EnemyPatrolState>(m_EnemyData), FLIPBOOK::SKULL::MOVE);
+        m_mapStatus[ENEMY_STATE::CHASE]  = std::make_pair(make_unique<EnemyChaseState>(m_EnemyData),  FLIPBOOK::SKULL::MOVE);
     }
         break;
     case ENEMY_TYPE::FLYING:
         // FLYING의 IDLE과 MOVE는 동일한 Flipbook 사용, JUMP 사용 X
-        m_mapStatus[ENEMY_COMMON_STATE::IDLE] = make_unique<EnemyIdleState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::MOVE] = make_unique<EnemyMoveState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::ATTACK] = make_unique<EnemyAttackState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::HIT] = make_unique<EnemyHitState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::DEAD] = make_unique<EnemyDeadState>(m_EnemyData);
 
-        m_mapStatus[ENEMY_COMMON_STATE::PATROL] = make_unique<EnemyPatrolState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::CHASE] = make_unique<EnemyChaseState>(m_EnemyData);
         break;
     case ENEMY_TYPE::FLOWER:
         // FLOWER는 MOVE 사용 X, JUMP는 필수사용 X
-        m_mapStatus[ENEMY_COMMON_STATE::IDLE] = make_unique<EnemyIdleState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::JUMP] = make_unique<EnemyJumpState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::ATTACK] = make_unique<EnemyAttackState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::HIT] = make_unique<EnemyHitState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::DEAD] = make_unique<EnemyDeadState>(m_EnemyData);
 
-        m_mapStatus[ENEMY_COMMON_STATE::PATROL] = make_unique<EnemyPatrolState>(m_EnemyData);
-        m_mapStatus[ENEMY_COMMON_STATE::CHASE] = make_unique<EnemyChaseState>(m_EnemyData);
         break;
     case ENEMY_TYPE::BOSS:
 
@@ -151,10 +134,10 @@ void CEnemyStateManager::SetUp()
     }
 
     // 현재 상태를 Idle로 등록 (map에서 안전하게 조회)
-    auto it = m_mapStatus.find(ENEMY_COMMON_STATE::IDLE);
+    auto it = m_mapStatus.find(ENEMY_STATE::IDLE);
     if (it != m_mapStatus.end())
     {
-        m_CurStatus = it->second.get();
+        m_CurStatus = it->second.first.get();
     }
     else
     {
@@ -179,30 +162,42 @@ bool CEnemyStateManager::IsChange()
     return IsTemp;
 }
 
-EnemyState* CEnemyStateManager::GetStatusByCommonState(ENEMY_COMMON_STATE _State)
+EnemyState* CEnemyStateManager::GetStatusByCommonState(ENEMY_STATE _State)
 {
     auto it = m_mapStatus.find(_State);
-    return (it != m_mapStatus.end()) ? it->second.get() : nullptr;
+    return (it != m_mapStatus.end()) ? it->second.first.get() : nullptr;
 }
 
 EnemyState* CEnemyStateManager::GetStatusByIndex(int _Idx)
 {
     // ENEMY_STATE는 각 타입별로 0..5 값을 사용하므로 공통 상태로 캐스트 가능
-    ENEMY_COMMON_STATE common = static_cast<ENEMY_COMMON_STATE>(_Idx);
+    ENEMY_STATE common = static_cast<ENEMY_STATE>(_Idx);
     return GetStatusByCommonState(common);
 }
 
-ENEMY_COMMON_STATE CEnemyStateManager::GetCurCommonState()
+ENEMY_STATE CEnemyStateManager::GetCurCommonState()
 {
-    // map에 저장된 정보로 현재 상태에 맞는 ENEMY_COMMON_STATE 반환
+    // map에 저장된 정보로 현재 상태에 맞는 ENEMY_STATE 반환
     for (const auto& pair : m_mapStatus)
     {
-        if (pair.second.get() == m_CurStatus)
+        if (pair.second.first.get() == m_CurStatus)
             return pair.first;
     }
 
     assert(false && "Current state not found in m_mapStatus");
-    return ENEMY_COMMON_STATE::IDLE; // assert 이후 도달하지 않지만, 컴파일 경고 방지용
+    return ENEMY_STATE::IDLE; // assert 이후 도달하지 않지만, 컴파일 경고 방지용
+}
+
+int CEnemyStateManager::GetFlipBookIndex()
+{
+    for (const auto& pair : m_mapStatus)
+    {
+        if (pair.second.first.get() == m_CurStatus)
+            return pair.second.second;
+    }
+
+    assert(false && "Current state not found in m_mapStatus");
+    return 0;
 }
 
 void CEnemyStateManager::ChangeState()

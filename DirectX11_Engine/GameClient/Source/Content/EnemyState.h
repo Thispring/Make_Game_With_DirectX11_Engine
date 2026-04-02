@@ -16,7 +16,7 @@ class EnemyState
 
 protected:
     // 상태 enum에 순서에 맞게 인덱스를 반환, 파생 클래스에서 알맞은 동작에 맞는 enum을 생성자에서 초기화
-    ENEMY_STATE             m_FlipbookIndex;
+    //ENEMY_STATE             m_FlipbookIndex;
 
     // Enemy의 정보가 담겨져있는 클래스 입니다.
     // 생성 시점에 오브젝트 이름을 받아, 해당 오브젝트에 설정된 Data 정보를 가져옵니다.
@@ -56,7 +56,7 @@ public:
     //=============
     // 상속 멤버 함수
     //=============
-    virtual ENEMY_STATE GetFlipbookIndex() = 0;
+    //virtual ENEMY_STATE GetFlipbookIndex() = 0;
 
     virtual void SaveToLevelFile(FILE* _File) = 0;
     virtual void LoadFromLevelFile(FILE* _File) = 0;

@@ -156,8 +156,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     * 메모리 누수가 의심되는 구간에서 프로그램을 종료합니다.
     * 4 byte만 누수가 발생하는지 확인합니다.
     *************************************************/
-    //int* p = DEBUG_NEW int;
-    //int* p = debug_new int;
+    //int* p = NEW int;
     //long long* p2 = new long long;
     
     // NOTE(26-04-02): 아래 함수를 main 이 부분에 넣으면
