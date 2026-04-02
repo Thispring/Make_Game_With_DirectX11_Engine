@@ -220,6 +220,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="ETileRenderUI.h" />
     <ClInclude Include="extern.h" />
     <ClInclude Include="FlipbookMaker.h" />
+    <ClInclude Include="GameMgr.h" />
     <ClInclude Include="GameObjectMaker.h" />
     <ClInclude Include="imguiFunc.h" />
     <ClInclude Include="imgui\imgui_stdlib.h" />
@@ -355,6 +356,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="ETileMapUI.cpp" />
     <ClCompile Include="ETileRenderUI.cpp" />
     <ClCompile Include="FlipbookMaker.cpp" />
+    <ClCompile Include="GameMgr.cpp" />
     <ClCompile Include="GameObjectMaker.cpp" />
     <ClCompile Include="GameObjectMaker_Init.cpp" />
     <ClCompile Include="imguiFunc.cpp" />

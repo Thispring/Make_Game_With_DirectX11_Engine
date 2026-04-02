@@ -192,8 +192,25 @@ EnemyState* CEnemyStateManager::GetStatusByIndex(int _Idx)
     return GetStatusByCommonState(common);
 }
 
+ENEMY_COMMON_STATE CEnemyStateManager::GetCurCommonState()
+{
+    // map에 저장된 정보로 현재 상태에 맞는 ENEMY_COMMON_STATE 반환
+    for (const auto& pair : m_mapStatus)
+    {
+        if (pair.second.get() == m_CurStatus)
+            return pair.first;
+    }
+
+    assert(false && "Current state not found in m_mapStatus");
+    return ENEMY_COMMON_STATE::IDLE; // assert 이후 도달하지 않지만, 컴파일 경고 방지용
+}
+
 void CEnemyStateManager::ChangeState()
 {
+    // 이미 같은 상태라면 Begin() 재호출 방지
+    //if (m_PrevStatus == m_CurStatus)
+    //    return;
+
     // 상태를 변경할때 마다 호출
     // 이전 상태 클래스의 FinalTick을 호출하고
     // 바뀐 상태의 Begin을 호출

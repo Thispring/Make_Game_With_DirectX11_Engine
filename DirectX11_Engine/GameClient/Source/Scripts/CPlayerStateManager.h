@@ -24,6 +24,7 @@ private:
 
 public:
     void ChangeState();
+    void TakeDamage(float _Damage);
 
 
     //=============

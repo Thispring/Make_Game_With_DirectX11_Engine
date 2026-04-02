@@ -97,11 +97,16 @@ void TreeNode::Tick()
 	// 노드 그리기 (1열)
 	// ---------------------------------------------------------
 	// NodeName 생성 (Key는 ID 구별용으로 숨겨서 붙입니다)
-	string NodeName = Str + Key;
+	//string NodeName = Str + Key;
+
+	char buffer[255]; // 충분한 크기의 배열 준비
+	snprintf(buffer, sizeof(buffer), "%s%s", Str.c_str(), Key.c_str());
+	const char* NodeName = buffer;
 
 	// 자식 여부에 따라 TreeNodeEx 호출
 	// 중요: TreeNodeEx는 화면에 아이템을 그리고, 열림 여부(bool)를 반환합니다.
-	bool isOpen = ImGui::TreeNodeEx(NodeName.c_str(), Flags);
+	//bool isOpen = ImGui::TreeNodeEx(NodeName.c_str(), Flags);
+	bool isOpen = ImGui::TreeNodeEx(NodeName, Flags);
 
 	// ---------------------------------------------------------
 	// 상호작용 (Click, Drag, Drop) - TreeNodeEx 직후에 한 번만 호출!
@@ -115,8 +120,13 @@ void TreeNode::Tick()
 	// ---------------------------------------------------------
 	// 추가 정보 그리기 (2열 - Key값 혹은 데이터 정보 보여주기)
 	// ---------------------------------------------------------
+	char KeyBuf[255]; // 충분한 크기의 배열 준비
+	snprintf(KeyBuf, sizeof(KeyBuf), "%s%s", Str.c_str(), Key.c_str());
+	const char* KeyName = KeyBuf;
+
 	ImGui::TableNextColumn();
-	ImGui::TextDisabled("%s", Key.c_str()); // 예시: 2번째 칸에 Key값(ID)을 흐리게 출력
+	//ImGui::TextDisabled("%s", Key.c_str()); // 예시: 2번째 칸에 Key값(ID)을 흐리게 출력
+	ImGui::TextDisabled("%s", KeyName); // 예시: 2번째 칸에 Key값(ID)을 흐리게 출력
 
 	// ---------------------------------------------------------
 	// 자식 노드 순회

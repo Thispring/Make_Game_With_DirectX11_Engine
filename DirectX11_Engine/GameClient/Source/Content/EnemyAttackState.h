@@ -5,6 +5,9 @@ class EnemyAttackState
     : public EnemyState
 {
 
+private:
+
+
 public:
     //=============
     // 상속 멤버 함수 (훅)

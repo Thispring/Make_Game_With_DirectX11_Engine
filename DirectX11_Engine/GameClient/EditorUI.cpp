@@ -32,12 +32,16 @@ void EditorUI::Tick()
 	// (26-02-23) Modal 여부에 따라 조건 분기
 	if (m_IsModal)
 	{
-		string StrKey = m_UIName + m_UIKey;
-		ImGui::OpenPopup(StrKey.c_str());
+		char StrKeyBuf[255]; // 충분한 크기의 배열 준비
+		snprintf(StrKeyBuf, sizeof(StrKeyBuf), "%s%s", m_UIName.c_str(), m_UIKey.c_str());
+		const char* StrKey = StrKeyBuf;
+
+		//string StrKey = m_UIName + m_UIKey;
+		ImGui::OpenPopup(StrKey);
 
 		bool Active = m_Active;
 
-		if (ImGui::BeginPopupModal(StrKey.c_str(), &Active, ImGuiWindowFlags_AlwaysAutoResize))
+		if (ImGui::BeginPopupModal(StrKey, &Active, ImGuiWindowFlags_AlwaysAutoResize))
 		{
 			CheckFocus();
 
@@ -62,11 +66,15 @@ void EditorUI::Tick()
 	else if (m_Parent == nullptr)
 	{
 		bool Active = m_Active;
+		
+		char StrKeyBuf[255]; // 충분한 크기의 배열 준비
+		snprintf(StrKeyBuf, sizeof(StrKeyBuf), "%s%s", m_UIName.c_str(), m_UIKey.c_str());
+		const char* StrKey = StrKeyBuf;
 
-		string StrKey = m_UIName + m_UIKey;
+		//string StrKey = m_UIName + m_UIKey;
 
 		// ImGui Begin에 string 매개변수는, 어떤 창인지 이름을 표시
-		ImGui::Begin(StrKey.c_str(), &Active);
+		ImGui::Begin(StrKey, &Active);
 
 		if (m_Active != Active)
 		{
@@ -91,9 +99,13 @@ void EditorUI::Tick()
 	}
 	else
 	{
-		string StrKey = m_UIName + m_UIKey;
+		char StrKeyBuf[255]; // 충분한 크기의 배열 준비
+		snprintf(StrKeyBuf, sizeof(StrKeyBuf), "%s%s", m_UIName.c_str(), m_UIKey.c_str());
+		const char* StrKey = StrKeyBuf;
 
-		ImGui::BeginChild(StrKey.c_str(), m_SizeAsChild);
+		//string StrKey = m_UIName + m_UIKey;
+
+		ImGui::BeginChild(StrKey, m_SizeAsChild);
 
 		// Begin과 End사이에서 어떤 윈도우가
 		// 선택되었는지 확인

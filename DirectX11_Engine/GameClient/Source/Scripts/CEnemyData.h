@@ -29,8 +29,8 @@ private:
     float               m_VelocityY;        // Y축 수직 속도
     float               m_Offset;
     
-    float               m_timeSinceSpawn;
-    float               m_timeInState;
+    float               m_TimeSinceSpawn;
+    float               m_TimeInState;
 
     int                 m_Direction;        // 이동방향
 
@@ -38,12 +38,16 @@ private:
     bool                m_IsFalling;        // true일 때만 Tick에서 y축으로 DT 만큼 음수 이동
     bool                m_IsAttack;     
 
+    //=================
+    // private 멤버 함수
+    //=================
+    void ChangeState(ENEMY_COMMON_STATE _State);
 
 public:
     //=========
     // 멤버 함수
     //=========
-    void ApplyDamage(float _Damage);
+    void TakeDamage(float _Damage);
 
     void BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
     void Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
@@ -71,8 +75,8 @@ public:
     GET_SET(float, Speed);
     GET_SET(float, JumpVelocity);
     GET_SET(float, VelocityY);
-    GET_SET(float, timeSinceSpawn);
-    GET_SET(float, timeInState);
+    GET_SET(float, TimeSinceSpawn);
+    GET_SET(float, TimeInState);
     GET_SET(float, Offset);
 
     GET_SET(int, Direction);

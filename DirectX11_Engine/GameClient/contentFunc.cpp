@@ -4,6 +4,7 @@ ENEMY_STATE GetEnemyStateToParam(ENEMY_TYPE _Type, ENEMY_COMMON_STATE _Common)
 {
     // 범위 검증 (컴파일 타임 보장 불가한 경우 런타임 검사)
     int idx = static_cast<int>(_Common);
+
     assert(idx >= 0 && idx <= 5 && "ENEMY_COMMON_STATE out of range (0..5)");
 
     switch (_Type)

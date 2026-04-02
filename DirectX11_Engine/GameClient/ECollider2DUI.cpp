@@ -57,6 +57,13 @@ void ECollider2DUI::Tick_UI()
 
 		// Matrix의 경우 ImGui에서 충돌할 Layer 대상을 선택하도록 구현하기
 
+		// 충돌 되었는지 카운트
+		ImGui::Text("OverlapCount");
+		ImGui::SameLine(150);
+		int overlap = GetTarget()->Collider2D()->GetOverlapCount();
+		ImGui::DragInt("##OVERLAPCOUNT", &overlap);
+
+
 		ImGui::Text("Scale");
 		ImGui::SameLine(150);
 		if (ImGui::DragFloat2("##SCALE", vScale))

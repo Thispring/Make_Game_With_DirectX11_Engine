@@ -21,7 +21,7 @@ void CPlayerMeleeTrigger::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _
 	{
 		// 여기에서 _OtherCollider한테 데미지값을 전달해야함
 		float dmg = m_PlayerData->GetDamage();
-		_OtherCollider->GetOwner()->GetScript<CEnemyData>()->ApplyDamage(dmg);
+		_OtherCollider->GetOwner()->GetScript<CEnemyData>()->TakeDamage(dmg);
 	}
 }
 

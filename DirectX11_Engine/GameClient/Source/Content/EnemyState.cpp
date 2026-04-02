@@ -54,14 +54,14 @@ void EnemyState::ApplyGravity()
 
 void EnemyState::CalTimeInState()
 {
-	float time = m_EnemyData->GettimeInState();
+	float time = m_EnemyData->GetTimeInState();
 	time += DT;
-	m_EnemyData->SettimeInState(time);
+	m_EnemyData->SetTimeInState(time);
 }
 
 void EnemyState::ClearTimeInState()
 {
-	m_EnemyData->SettimeInState(0.f);
+	m_EnemyData->SetTimeInState(0.f);
 }
 
 // 템플릿 메서드 구현: 공통 로직 실행 후 자식 훅 호출

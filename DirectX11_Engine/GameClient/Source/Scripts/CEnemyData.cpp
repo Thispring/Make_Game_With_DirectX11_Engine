@@ -21,8 +21,8 @@ CEnemyData::CEnemyData()
 	, m_JumpVelocity(300.f)
 	, m_VelocityY(0.f)
 	, m_Offset(0.f)
-	, m_timeSinceSpawn(0.f)
-	, m_timeInState(0.f)
+	, m_TimeSinceSpawn(0.f)
+	, m_TimeInState(0.f)
 
 	, m_Direction(1)		// 이동방향 1로 초기화
 
@@ -56,8 +56,8 @@ void CEnemyData::Init()
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_JumpVelocity, L"JumpVelocity", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_VelocityY, L"VelocityY", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_Offset, L"Offset", true, 0.f);
-	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_timeSinceSpawn, L"timeSinceSpawn", true, 0.f);
-	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_timeInState, L"timeInState", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_TimeSinceSpawn, L"TimeSinceSpawn", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_TimeInState, L"TimeInState", true, 0.f);
 	
 	AddScriptParam(SCRIPT_PARAM::INT, &m_Direction, L"Direction", true, 0.f);
 
@@ -91,6 +91,13 @@ void CEnemyData::Begin()
 	m_OriginPos = Vec3(0.f, 0.f, 0.f);
 	m_CurPos = m_OriginPos;
 
+	// 스케일 x축값을 읽어와 음수인지 양수인지 판단하여 이동방향을 미리 결정합니다.
+	Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
+	if (vScale.x > 0)
+		m_Direction = 1;
+	else
+		m_Direction = -1;
+
 	ADD_DYNAMIC_BEGIN_OVERLAP(CEnemyData::BeginOverlap);
 	ADD_DYNAMIC_OVERLAP(CEnemyData::Overlap);
 	ADD_DYNAMIC_END_OVERLAP(CEnemyData::EndOverlap);
@@ -102,7 +109,7 @@ void CEnemyData::Begin()
 	m_TargetObject->GetScript<CEnemyStateManager>()->SetUp();
 }
 
-void CEnemyData::ApplyDamage(float _Damage)
+void CEnemyData::TakeDamage(float _Damage)
 {
 	// 해당 함수를 Player쪽 공격 스크립트에서 호출하고 있기 때문에
 	// HIT 상태 변경을 이쪽에서 처리합니다.
@@ -117,22 +124,28 @@ void CEnemyData::ApplyDamage(float _Damage)
 	hp -= _Damage;
 	SetCurHP(hp);
 
-	// Type에 따라 구별되는 ENEMY_STATE를 반환
-	int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::HIT);
-	// 현재 상태를 얻어오고, 해당 상태를 세팅
-	Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
-	pMgr->ChangeState();
+	ChangeState(ENEMY_COMMON_STATE::HIT);
 
 	if (hp <= 0.f)
 	{
 		// Dead 상태 호출
 		m_IsDead = true;
-		int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::DEAD);
-		Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
-		pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
-		pMgr->ChangeState();
+		ChangeState(ENEMY_COMMON_STATE::DEAD);
 	}
+}
+
+void CEnemyData::ChangeState(ENEMY_COMMON_STATE _State)
+{
+	//=========================================
+	// CEnemyData 클래스에서만 사용할 상태 변경 함수
+	//=========================================
+
+	// Type에 따라 구별되는 ENEMY_STATE를 반환
+	int state = (int)GetEnemyStateToParam(m_EnemyType, _State);
+	// 현재 상태를 얻어오고, 해당 상태를 세팅
+	Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+	pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
+	pMgr->ChangeState();
 }
 
 void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
@@ -142,24 +155,50 @@ void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherColl
 
 void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
+	if (m_IsDead == true)
+	{
+		// NOTE(26-04-02):
+		// IsDead 리턴 처리를 해야, 겹쳐있을 때 enemy가 Dead 상태가 되어도
+		// 다시 부활하는 것 같은 현상 방지할 수 있음, 단 짧은 시간내에
+		// Overlap 판정으로 인한 Attack 상태 활성화로, Player가 데미지를 입는 현상이
+		// 발견되었으므로, 필요하다면 데미지 처리를 막는 로직 작성
+		return;
+	}
+
 	m_IsFalling = false;
+
+	// Player와 충돌 시
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == 3)
+	{
+		ChangeState(ENEMY_COMMON_STATE::ATTACK);
+	}
 }
 
 void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
+	//if (m_IsDead == true)
+	//	return;
+
 	m_IsFalling = true;
 
-	// 중단이 걸렸으므로 여기에서 Idle로 상태변경
-	int state = (int)GetEnemyStateToParam(m_EnemyType, ENEMY_COMMON_STATE::IDLE);
+	// HIT, DEAD 상태에서는 IDLE로 강제 전환하지 않음
+	// 해당 상태들은 Flipbook 재생 완료 후 자체적으로 전이합니다.
 	Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusByIndex(state));
-	pMgr->ChangeState();
+	ENEMY_COMMON_STATE curState = pMgr->GetCurCommonState();
+
+	if (curState == ENEMY_COMMON_STATE::HIT || curState == ENEMY_COMMON_STATE::DEAD)
+		return;
+
+	ChangeState(ENEMY_COMMON_STATE::IDLE);
 }
 
 void CEnemyData::Tick()
 {
+	if (m_IsDead == true)
+		return;
+
 	// 소환 후 흐른 시간 계산
-	m_timeSinceSpawn += DT;
+	m_TimeSinceSpawn += DT;
 }
 
 void CEnemyData::SaveToLevelFile(FILE* _File)

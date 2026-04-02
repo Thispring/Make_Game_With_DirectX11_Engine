@@ -56,6 +56,9 @@ public:
     // 그대로 호출 가능한 멤버를 유지합니다.
     EnemyState* GetStatusByIndex(int _Idx);
 
+    // 현재 상태의 ENEMY_COMMON_STATE 키를 반환
+    ENEMY_COMMON_STATE GetCurCommonState();
+
 
     //============
     // 생성, 소멸자
@@ -65,4 +68,5 @@ public:
     // 복사 생성자 따로 구현
     CEnemyStateManager(const CEnemyStateManager& _Origin);
     virtual ~CEnemyStateManager();
+
 };

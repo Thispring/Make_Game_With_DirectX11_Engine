@@ -93,6 +93,23 @@ void CPlayerStateManager::ChangeState()
     }
 }
 
+void CPlayerStateManager::TakeDamage(float _Damage)
+{
+    if (m_PlayerData->GetIsDead() == true)
+        return;
+
+    float curHP = m_PlayerData->GetCurHP();
+    curHP -= _Damage;
+
+    if (curHP <= 0)
+    {
+        m_PlayerData->SetIsDead(true);
+        return;
+    }
+
+    m_PlayerData->SetCurHP(curHP);
+}
+
 void CPlayerStateManager::Init()
 {
 

@@ -44,6 +44,11 @@ void PlayerMoveState::Tick()
 
 		m_PlayerData->GetTargetObject()->Transform()->SetRelativePos(vPos);
 		m_PlayerData->GetTargetObject()->Transform()->SetRelativeScale(vScale);
+
+		// Test
+		//float CurHp = m_PlayerData->GetCurHP();
+		//CurHp -= DT + 2.f;
+		//m_PlayerData->SetCurHP(CurHp);
 	}
 	
 	if (KEY_PRESSED(KEY::RIGHT))

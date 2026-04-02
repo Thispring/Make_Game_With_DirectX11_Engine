@@ -412,6 +412,7 @@
     <ClInclude Include="Source\Scripts\CEnemyEyes.h">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="GameMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -801,6 +802,7 @@
     <ClCompile Include="Source\Scripts\CEnemyEyes.cpp">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="GameMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">

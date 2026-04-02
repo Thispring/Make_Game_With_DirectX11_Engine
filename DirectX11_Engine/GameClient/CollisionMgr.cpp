@@ -263,8 +263,8 @@ bool CollisionMgr::IsCollisionLargeBaseConeVsAny(Ptr<CCollider2D> _LBC, Ptr<CCol
 		fTargetRadius = vRadTest.Length();
 	}
 
-	const float fLbcRadiusX = 1.0f;
-	const float fLbcRadiusY = 3.0f;
+	constexpr float fLbcRadiusX = LargeBaseConeConst::RadiusX;
+	constexpr float fLbcRadiusY = LargeBaseConeConst::RadiusY;
 	float fLbcHalfAngle = _LBC->GetHalfAngle();
 
 	float x = vLocalCenter.x;

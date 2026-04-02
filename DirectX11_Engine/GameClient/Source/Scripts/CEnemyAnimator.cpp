@@ -32,7 +32,7 @@ void CEnemyAnimator::Play()
 		break;
 	case ENEMY_STATE::DEMON_JUMP: fps = 10; repCount = 1;
 		break;
-	case ENEMY_STATE::DEMON_ATTACK: fps = 10; repCount = 1;
+	case ENEMY_STATE::DEMON_ATTACK: fps = 10; repCount = -1;
 		break;
 	case ENEMY_STATE::DEMON_HIT: fps = 10; repCount = 1;
 		break;

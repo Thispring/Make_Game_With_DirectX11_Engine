@@ -58,7 +58,7 @@ void CEnergyBlast::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCo
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == 6)
 	{
 		// 여기에서 _OtherCollider한테 데미지값을 전달해야함
-		_OtherCollider->GetOwner()->GetScript<CEnemyData>()->ApplyDamage(GetDamage());
+		_OtherCollider->GetOwner()->GetScript<CEnemyData>()->TakeDamage(GetDamage());
 	}
 }
 

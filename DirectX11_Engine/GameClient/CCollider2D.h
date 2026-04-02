@@ -13,6 +13,15 @@ struct COLLISION_DELEGATE
 };
 
 
+// LARGE_BASE_CONE 관련 메쉬, 충돌, 디버그 드로잉 공유 상수
+namespace LargeBaseConeConst
+{
+    constexpr float HalfAngle = 20.0f * XM_PI / 180.0f;
+    constexpr float RadiusX   = 1.0f;
+    constexpr float RadiusY   = 3.0f;
+    constexpr int   Slice     = 20;
+}
+
 class CCollider2D :
     public Component
 {
@@ -71,6 +80,8 @@ public:
     //=========
     GET_SET(Vec2, Scale);
     GET_SET(Vec2, Offset);
+    // ImGui 디버깅용
+    GET_SET(int, OverlapCount);
     const Matrix& GetWorldMat() { return m_matWorld; }
 
     COLLIDER2D_SHAPE GetShape() const { return m_Shape; }

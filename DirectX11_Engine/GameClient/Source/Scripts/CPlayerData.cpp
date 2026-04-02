@@ -64,6 +64,10 @@ void CPlayerData::Begin()
 	// 문자열 방식으로 찾는 방법은 최대한 줄이기
 	m_TargetObject = GetOwner();
 	m_AnchorObject = GetOwner()->GetChild(PLAYER_PROJECTILE_ANCHOR);
+	// NOTE(26-04-02):
+	// PLAYER_PROJECTILE_ANCHOR도 3번 Layer여서 Enemy 충돌판정에 사용
+	// 중복을 막기 위해 인덱스번호 5번으로 고정
+	m_AnchorObject->SetLayerIdx(5);
 
 	// NOTE(26-03-32):
 	// 자식 오브젝트 1, 2는 근거리 용, Collider를 가지고 있는 자식 오브젝트입니다.

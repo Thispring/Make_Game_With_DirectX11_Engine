@@ -38,7 +38,8 @@ EnemyPatrolState::~EnemyPatrolState()
 
 void EnemyPatrolState::OnBegin()
 {
-
+	// Chase에서 누적된 offSet를 초기화하여 Patrol 왕복 기준을 현재 위치로 재설정
+	m_EnemyData->SetOffset(0.f);
 }
 
 void EnemyPatrolState::OnTick()

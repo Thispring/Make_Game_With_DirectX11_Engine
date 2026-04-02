@@ -136,13 +136,17 @@ void CCollider2D::FinalTick()
 	break;
 	case COLLIDER2D_SHAPE::LARGE_BASE_CONE:
 	{
-		m_HalfAngle = 20.f * XM_PI / 180.f;
+		m_HalfAngle = LargeBaseConeConst::HalfAngle;
 		Vec3 vUp = Vec3(0.f, 1.f, 0.f);
 		m_WorldDir = XMVector3TransformNormal(vUp, m_matWorld);
 		m_WorldDir.Normalize();
 		m_WorldRadius = Vec3(m_matWorld._21, m_matWorld._22, m_matWorld._23).Length() * 0.5f;
 
-		DrawDebugLargeBaseCone(m_WorldCenter, m_WorldDir, m_WorldRadius, vDbgColor, 0.f);
+		//DrawDebugLargeBaseCone(m_WorldCenter, m_WorldDir, m_WorldRadius, vDbgColor, 0.f);
+		// m_matWorld를 직접 전달 → LargeBaseConeMesh 로컬 공간 = 충돌 판정 공간
+		// 비균일 스케일(m_Scale.x ≠ m_Scale.y) 또는 오브젝트 스케일이 있어도 정확히 일치
+		DrawDebugLargeBaseCone(m_matWorld, vDbgColor, 0.f);
+
 	}
 	break;
 	}

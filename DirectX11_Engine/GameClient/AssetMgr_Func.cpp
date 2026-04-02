@@ -248,10 +248,10 @@ void AssetMgr::CreateEngineMesh()
 	vecVtx.clear();
 	vecIdx.clear();
 
-	const float fLbcHalfAngle = 20.0f * XM_PI / 180.0f;
-	const float fLbcRadiusX = 1.0f; // 반지름(밑면 반경)을 더 길게
-	const float fLbcRadiusY = 3.0f; // 높이는 더 낮게
-	const int   nLbcSlice = 20;
+	constexpr float fLbcHalfAngle = LargeBaseConeConst::HalfAngle;
+	constexpr float fLbcRadiusX   = LargeBaseConeConst::RadiusX;  // 반지름(밑면 반경)
+	constexpr float fLbcRadiusY   = LargeBaseConeConst::RadiusY;  // 높이
+	constexpr int   nLbcSlice     = LargeBaseConeConst::Slice;
 
 	// 꼭짓점 (tip)
 	v.vPos   = Vec3(0.f, 0.f, 0.f);
@@ -689,13 +689,13 @@ void AssetMgr::CreateEngineTileMap(vector<Ptr<ASprite>>& _vecSprite, wstring _Ti
 	pTileMap->SetRowCol(_Row, _Col);
 	pTileMap->SetTileSize(_TileSize);
 
-	int Count = 0;
+	UINT Count = 0;
 	// Col = 세로
 	// Row = 가로
 	// 반복문 작성 전에 꼭 확인하기
-	for (int j = 0; j < _Row; ++j)
+	for (UINT j = 0; j < _Row; ++j)
 	{
-		for (int i = 0; i < _Col; ++i)
+		for (UINT i = 0; i < _Col; ++i)
 		{
 			// NOTE(26-03-20): SetSprite 인자를 잘못 전달하고 있는것 확인
 			// SetSprite(row, col,... )

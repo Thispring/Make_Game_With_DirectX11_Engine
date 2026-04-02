@@ -154,20 +154,37 @@ void DrawDebugSector(Vec3 _WorldTip, Vec3 _WorldDir, float _WorldRadius, Vec4 _C
 	RenderMgr::GetInst()->AddDebugInfo(info);
 }
 
-void DrawDebugLargeBaseCone(Vec3 _WorldTip, Vec3 _WorldDir, float _WorldRadius, Vec4 _Color, float _Duration, bool _DepthTest)
-{
-	float fAngle = atan2f(-_WorldDir.x, _WorldDir.y);
-	Matrix matScale = XMMatrixScaling(_WorldRadius * 2.f, _WorldRadius * 2.f, 1.f);
-	Matrix matRot   = XMMatrixRotationZ(fAngle);
-	Matrix matTrans = XMMatrixTranslation(_WorldTip.x, _WorldTip.y, _WorldTip.z);
+//void DrawDebugLargeBaseCone(Vec3 _WorldTip, Vec3 _WorldDir, float _WorldRadius, Vec4 _Color, float _Duration, bool _DepthTest)
+//{
+//	float fAngle = atan2f(-_WorldDir.x, _WorldDir.y);
+//
+//	Matrix matScale = XMMatrixScaling(_WorldRadius * 2.f, _WorldRadius * 2.f, 1.f);
+//	Matrix matRot   = XMMatrixRotationZ(fAngle);
+//	Matrix matTrans = XMMatrixTranslation(_WorldTip.x, _WorldTip.y, _WorldTip.z);
+//
+//	DbgInfo info    = {};
+//	info.Shape      = DBG_SHAPE::LARGE_BASE_CONE;
+//	info.matWorld   = matScale * matRot * matTrans;
+//	info.Color      = _Color;
+//	info.Age        = 0.f;
+//	info.Life       = _Duration;
+//	info.DepthTest  = _DepthTest;
+//
+//	RenderMgr::GetInst()->AddDebugInfo(info);
+//}
 
-	DbgInfo info    = {};
-	info.Shape      = DBG_SHAPE::LARGE_BASE_CONE;
-	info.matWorld   = matScale * matRot * matTrans;
-	info.Color      = _Color;
-	info.Age        = 0.f;
-	info.Life       = _Duration;
-	info.DepthTest  = _DepthTest;
+// m_matWorld를 직접 전달받는 오버로드
+// LargeBaseConeMesh 로컬 공간(RadiusX=1, RadiusY=3)이 충돌 판정 공간과 동일하므로
+// m_matWorld를 그대로 사용하면 디버그 = 충돌 범위가 정확히 일치
+void DrawDebugLargeBaseCone(const Matrix& _matWorld, Vec4 _Color, float _Duration, bool _DepthTest)
+{
+	DbgInfo info = {};
+	info.Shape = DBG_SHAPE::LARGE_BASE_CONE;
+	info.matWorld = _matWorld;
+	info.Color = _Color;
+	info.Age = 0.f;
+	info.Life = _Duration;
+	info.DepthTest = _DepthTest;
 
 	RenderMgr::GetInst()->AddDebugInfo(info);
 }

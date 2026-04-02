@@ -45,7 +45,7 @@ void EnemyIdleState::OnTick()
 {
     // 첫 스폰 이후 2초가 지났다면 Patrol 상태로 변경
     // 2.5f보다 작아야한다는 조건문을 추가해, 최초 소환만 보장
-    float spawnTime = m_EnemyData->GettimeSinceSpawn();
+    float spawnTime = m_EnemyData->GetTimeSinceSpawn();
     if (spawnTime >= 2.f && spawnTime <= 2.5f)
     {
         Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetTargetObject()->GetScript<CEnemyStateManager>();
@@ -56,7 +56,7 @@ void EnemyIdleState::OnTick()
 
 
     // 다시 Idle로 돌아왔을 때, 1초 후 Patrol 상태로 변경
-    if (m_EnemyData->GettimeInState() >= 1.f)
+    if (m_EnemyData->GetTimeInState() >= 1.f)
     {
         Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetTargetObject()->GetScript<CEnemyStateManager>();
         pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_COMMON_STATE::PATROL));

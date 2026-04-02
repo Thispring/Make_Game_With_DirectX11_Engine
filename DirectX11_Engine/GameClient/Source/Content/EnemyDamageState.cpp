@@ -54,6 +54,13 @@ void EnemyHitState::OnBegin()
 
 void EnemyHitState::OnTick()
 {
+	// HIT Flipbook 재생이 끝나면 IDLE로 복귀
+	if (m_EnemyData->GetTargetObject()->FlipbookRender()->GetFinish() == true)
+	{
+		Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetTargetObject()->GetScript<CEnemyStateManager>();
+		pMgr->SetCurStatus(pMgr->GetStatusByCommonState(ENEMY_COMMON_STATE::IDLE));
+		pMgr->ChangeState();
+	}
 }
 
 void EnemyHitState::OnFinalTick()
@@ -122,6 +129,12 @@ void EnemyDeadState::OnBegin()
 
 void EnemyDeadState::OnTick()
 {
+    // Dead Flipbook 재생이 끝나면 비활성화
+    if (m_EnemyData->GetTargetObject()->FlipbookRender()->GetFinish() == true)
+    {
+        //m_EnemyData->GetTargetObject()->GetChild(ENEMY_EYES)->SetIsActive(false);
+        m_EnemyData->GetTargetObject()->SetIsActive(false);
+    }
 }
 
 void EnemyDeadState::OnFinalTick()

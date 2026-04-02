@@ -1,8 +1,13 @@
 #pragma once
 #include "CScript.h"
+#include "CEnemyData.h"
+
 class CEnemyEyes :
     public CScript
 {
+
+private:
+    Ptr<CEnemyData>         m_EnemyData;
 
 public:
     //=========

@@ -6,6 +6,7 @@
 #include "AssetMgr.h"
 #include "TimeMgr.h"
 #include "CollisionMgr.h"
+#include "GameMgr.h"
 
 #include "Source/Scripts/CCamMoveScript.h"
 
@@ -67,6 +68,13 @@ void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 	{
 		m_CurLevel = m_ShardLevel;
 		m_CurLevel->SetChanged();
+	}
+
+	// 다음 시작할 Level이 Play 상태라면 GameMgr 초기화
+	if (_NextState == LEVEL_STATE::PLAY)
+	{
+		// 콘텐츠 관리 매니저 초기화
+		GameMgr::GetInst()->Init();
 	}
 
 	m_LevelState = _NextState;

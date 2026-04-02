@@ -1,10 +1,5 @@
 #pragma once
-// 자주 사용되는 함수를 전방선언 합니다.
-// 기능은 func.cpp에서 구현
 
-//========
-// TeskMgr
-//========
 void CreateObject(class GameObject* _Object, int LayerIdx);
 void ChangeLevel(const wstring& _NextLevelName);
 void ChangeLevelState(LEVEL_STATE _NextState);
@@ -22,7 +17,10 @@ void DrawDebugSquare(const Matrix& _matWorld, Vec4 _Color, float _Duration, bool
 void DrawDebugCircle(Vec3 _Pos, float _Radius, Vec4 _Color, float _Duration, bool _DepthTest = false);
 // 부채꼴 Render (월드 공간 꼭짓점, 방향, 반지름)
 void DrawDebugSector(Vec3 _WorldTip, Vec3 _WorldDir, float _WorldRadius, Vec4 _Color, float _Duration, bool _DepthTest = false);
-void DrawDebugLargeBaseCone(Vec3 _WorldTip, Vec3 _WorldDir, float _WorldRadius, Vec4 _Color, float _Duration, bool _DepthTest = false);
+//void DrawDebugLargeBaseCone(Vec3 _WorldTip, Vec3 _WorldDir, float _WorldRadius, Vec4 _Color, float _Duration, bool _DepthTest = false);
+// World 행렬을 직접 받는 오버로드 (충돌 판정과 정확히 일치)
+void DrawDebugLargeBaseCone(const Matrix& _matWorld, Vec4 _Color, float _Duration, bool _DepthTest = false);
+
 
 // 0 ~ 1로 제한하는 함수
 float Saturate(float _Data);	

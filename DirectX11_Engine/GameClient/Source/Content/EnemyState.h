@@ -38,7 +38,7 @@ public:
     // 멤버 함수
     //=========
     void ApplyGravity();
-    // 상태 진입 시, EnemyData 멤버인 timeInState를 초기화, 계산하는 함수
+    // 상태 진입 시, EnemyData 멤버인 TimeInState를 초기화, 계산하는 함수
     // 파생클래스의 Begin에서 초기화 함수 호출, Tick에서 계산하는 함수 호출
     void CalTimeInState();
     void ClearTimeInState();

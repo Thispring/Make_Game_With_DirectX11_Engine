@@ -10,6 +10,8 @@ TimeMgr::TimeMgr()
 	, m_DeltaTime(0.f)
 	, m_Time(0.f)
 	, m_FPS(0)
+	, m_TargetFPS(0)
+	, m_TargetFrameTime(0.0)
 {
 
 }
@@ -27,6 +29,33 @@ void TimeMgr::Init()
 	// 초기 카운트
 	QueryPerformanceCounter(&m_Current);
 	QueryPerformanceCounter(&m_Prev);
+}
+
+void TimeMgr::SetTargetFPS(UINT _FPS)
+{
+	m_TargetFPS = _FPS;
+	if (_FPS > 0)
+		m_TargetFrameTime = 1.0 / (double)_FPS;
+	else
+		m_TargetFrameTime = 0.0;
+}
+
+bool TimeMgr::WaitForTargetFrame()
+{
+	// 프레임 제한이 설정되지 않았으면 바로 통과
+	if (m_TargetFPS == 0)
+		return false;
+
+	// 현재까지 경과한 시간을 계산
+	LARGE_INTEGER now;
+	QueryPerformanceCounter(&now);
+	double elapsed = (double)(now.QuadPart - m_Prev.QuadPart) / (double)m_Frequency.QuadPart;
+
+	// 목표 프레임 시간에 도달하지 못했으면 스킵
+	if (elapsed < m_TargetFrameTime)
+		return true;
+
+	return false;
 }
 
 void TimeMgr::Tick()

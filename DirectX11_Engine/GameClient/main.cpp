@@ -10,6 +10,7 @@
 #include "Asset.h"
 #include "AMesh.h"
 #include "KeyMgr.h"
+#include "TimeMgr.h"
 
 // 전역 변수:
 HINSTANCE hInst;                                    // 현재 인스턴스입니다.
@@ -115,6 +116,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     ************************************************************************************/
     while (true)
     {
+        //===============================================================================
+        // NOTE(26-04-02):
+        // ImGui 쪽 지역 함수에 string 객체 생성 시
+        // 누수 발생 확인, 다른 함수에서도 string 객체 생성 때 누수 발생 가능성 있음
+        //===============================================================================
+        //_CrtSetBreakAlloc(101411);
         // 메세지 큐에서 메세지를 꺼낸게 있다.
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {
@@ -133,6 +140,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         // 메세지 큐에 메세지가 없었다.
         else
         {
+            // 목표 FPS에 도달하지 못했으면 이번 루프는 건너뜀
+            if (TimeMgr::GetInst()->WaitForTargetFrame())
+                continue;
+
             // Game 실행
             // 메시지가 없는 시간동안 계속 실행
             if (FAILED(Engine::GetInst()->Progress()))
@@ -146,6 +157,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     * 4 byte만 누수가 발생하는지 확인합니다.
     *************************************************/
     //int* p = new int;
+    //long long* p2 = new long long;
     _CrtDumpMemoryLeaks();
     // 창이 꺼지면 while 루프가 나가지면서 프로그램 종료
     return (int) msg.wParam;

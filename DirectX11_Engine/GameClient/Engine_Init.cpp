@@ -10,6 +10,7 @@
 #include "LevelMgr.h"
 #include "RenderMgr.h"
 #include "EditorMgr.h"
+#include "GameMgr.h"
 
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -127,6 +128,9 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
     // 1프레임 동안 동작하는데 걸리는 시간(Delta Time) 계산
     TimeMgr::GetInst()->Init();
 
+    // 고정 프레임 설정
+    TimeMgr::GetInst()->SetTargetFPS(240);
+
     // 키보드 동작 상태 계산
     KeyMgr::GetInst()->Init();
     
@@ -145,7 +149,6 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
     // Editor 초기화(imgui)
     if (m_EditorMode)
         EditorMgr::GetInst()->Init();
-
 
     return S_OK;
 }
