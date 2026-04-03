@@ -29,6 +29,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
+    // ↓ 프로그램 시작 시점 기록
+    auto t_ProgramStart = std::chrono::steady_clock::now();
+
+
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);   // 메모리 누수 추적
     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
     
@@ -150,6 +154,31 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 break;
         }
     }
+
+    // ↓ while 루프 탈출 직후 종료 시점 기록
+    auto t_ProgramEnd = std::chrono::steady_clock::now();
+
+    auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(t_ProgramEnd - t_ProgramStart).count();
+    double elapsed_s = elapsed_ms / 1000.0;
+
+    char logBuf[256];
+    snprintf(logBuf, sizeof(logBuf),
+        "\n"
+        "===============================================================\n"
+        "[Runtime] Total Elapsed Time : %lld ms (%.2f seconds)\n"
+        "===============================================================\n",
+        elapsed_ms, elapsed_s);
+
+    // VS Output 창 출력
+    OutputDebugStringA(logBuf);
+
+    // PowerShell / 터미널에서 실행한 경우, 부모 콘솔에 출력
+    //if (AttachConsole(ATTACH_PARENT_PROCESS))
+    //{
+    //    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    //    DWORD written = 0;
+    //    WriteConsoleA(hOut, logBuf, static_cast<DWORD>(strlen(logBuf)), &written, nullptr);
+    //}
 
     /*************************************************
     * 실제 누수가 있는지 확인하려면, 아래 주석을 해제하고

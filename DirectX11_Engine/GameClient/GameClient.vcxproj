@@ -258,6 +258,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="EPrefabUI.h" />
     <ClInclude Include="PrefabMaker.h" />
     <ClInclude Include="Ptr.h" />
+    <ClInclude Include="RandomMgr.h" />
     <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SimpleMath.h" />
@@ -293,6 +294,9 @@ call CodeGen.exe</Command>
     <ClInclude Include="Source\Scripts\CPlayerData.h" />
     <ClInclude Include="Source\Scripts\CPlayerMeleeTrigger.h" />
     <ClInclude Include="Source\Scripts\CPlayerStateManager.h" />
+    <ClInclude Include="Source\Scripts\CSavePoint.h" />
+    <ClInclude Include="Source\Scripts\CUICamMoveScript.h" />
+    <ClInclude Include="Source\Scripts\CUIOverlayController.h" />
     <ClInclude Include="SpriteMaker.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="StructuredBuffer.h" />
@@ -395,6 +399,7 @@ call CodeGen.exe</Command>
     </ClCompile>
     <ClCompile Include="EPrefabUI.cpp" />
     <ClCompile Include="PrefabMaker.cpp" />
+    <ClCompile Include="RandomMgr.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
     <ClCompile Include="Source\Content\EnemyAttackState.cpp" />
     <ClCompile Include="Source\Content\EnemyChaseState.cpp" />
@@ -427,6 +432,9 @@ call CodeGen.exe</Command>
     <ClCompile Include="Source\Scripts\CPlayerData.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerMeleeTrigger.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerStateManager.cpp" />
+    <ClCompile Include="Source\Scripts\CSavePoint.cpp" />
+    <ClCompile Include="Source\Scripts\CUICamMoveScript.cpp" />
+    <ClCompile Include="Source\Scripts\CUIOverlayController.cpp" />
     <ClCompile Include="SpriteMaker.cpp" />
     <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="TaskMgr.cpp" />
@@ -476,6 +484,12 @@ call CodeGen.exe</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="func.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="savePoint.fx">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>

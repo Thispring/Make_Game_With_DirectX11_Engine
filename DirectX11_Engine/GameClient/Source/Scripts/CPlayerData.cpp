@@ -76,11 +76,14 @@ void CPlayerData::Begin()
 	GetOwner()->GetChild(PLAYER_PUNCH_ANCHOR)->SetLayerIdx(4);
 	
 	// 기존 위치는 Begin에서 초기화
-	m_OriginPos = Vec3(0.f, 0.f, 0.f);
+	m_OriginPos = Vec3(-4600.f, 250.f, 100.f);	// NOTE(26-04-03): 고정 위치 등록
 	m_CurPos = m_OriginPos;
 
+	// OriginPos로 위치 초기화
+	GetOwner()->Transform()->SetRelativePos(m_OriginPos);
+
 	// Scale을 받아와서 초기 방향 정보 초기화
-	Vec3 vScale = m_TargetObject->Transform()->GetRelativeScale();
+	Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
 	if (vScale.x < 0)
 		m_DirNum = -1;
 	else
@@ -93,9 +96,9 @@ void CPlayerData::Begin()
 
 void CPlayerData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == 2)
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
-		// Layer 2번과 충돌했을 때만 m_IsFalling 상태를 변경
+		// Layer 16번과 충돌했을 때만 m_IsFalling 상태를 변경
 		m_IsFalling = false;
 	}
 }
@@ -107,16 +110,17 @@ void CPlayerData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider
 
 void CPlayerData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == 2)
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
-		// Layer 2번과 충돌했을 때만 m_IsFalling 상태를 변경
+		// Layer 16번과 충돌했을 때만 m_IsFalling 상태를 변경
 		m_IsFalling = true;
 	}
 }
 
 void CPlayerData::Tick()
 {
-
+	// Player 위치 갱신
+	m_CurPos = GetOwner()->Transform()->GetRelativePos();
 }
 
 void CPlayerData::SaveToLevelFile(FILE* _File)

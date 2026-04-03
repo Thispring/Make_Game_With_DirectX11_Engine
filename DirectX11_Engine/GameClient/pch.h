@@ -14,6 +14,8 @@
 #include <algorithm>
 #include <chrono>
 #include <memory>		// C++ 스타일
+#include <random>
+#include <numeric>
 
 // 파일 입출력
 #include <iostream>

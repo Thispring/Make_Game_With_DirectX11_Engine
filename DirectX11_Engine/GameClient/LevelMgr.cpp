@@ -54,6 +54,14 @@ void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 	if (m_LevelState == _NextState)
 		return;
 
+	//// 다음 시작할 Level이 Play 상태라면 GameMgr 초기화
+	//if (_NextState == LEVEL_STATE::PLAY)
+	//{
+	//	// 콘텐츠 관리 매니저 초기화
+	//	GameMgr::GetInst()->LevelPlayInit();
+	//}
+	// Clone 함수 호출전에 위 로직이 호출되면 복사 되기전 Player가 GameMgr에 등록
+
 	// Stop -> Play 전환
 	if (m_LevelState == LEVEL_STATE::STOP && _NextState == LEVEL_STATE::PLAY)
 	{

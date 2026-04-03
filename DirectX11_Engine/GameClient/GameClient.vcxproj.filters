@@ -277,9 +277,6 @@
     <ClInclude Include="Source\Scripts\CEnemySpawner.h">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ScriptMgr.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Scripts\CEnemyStateManager.h">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
@@ -412,7 +409,22 @@
     <ClInclude Include="Source\Scripts\CEnemyEyes.h">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="GameMgr.h" />
+    <ClInclude Include="Source\Scripts\CSavePoint.h">
+      <Filter>Source\ContentScript\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ScriptMgr.h">
+      <Filter>Source\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMgr.h">
+      <Filter>Source\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CUIOverlayController.h">
+      <Filter>Source\ContentScript\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CUICamMoveScript.h">
+      <Filter>Source\ContentScript\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -667,9 +679,6 @@
     <ClCompile Include="Source\Scripts\CEnemySpawner.cpp">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ScriptMgr.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scripts\CEnemyAnimator.cpp">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
@@ -802,7 +811,22 @@
     <ClCompile Include="Source\Scripts\CEnemyEyes.cpp">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="GameMgr.cpp" />
+    <ClCompile Include="Source\Scripts\CSavePoint.cpp">
+      <Filter>Source\ContentScript\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMgr.cpp">
+      <Filter>Source\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ScriptMgr.cpp">
+      <Filter>Source\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CUICamMoveScript.cpp">
+      <Filter>Source\ContentScript\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CUIOverlayController.cpp">
+      <Filter>Source\ContentScript\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="RandomMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -1126,6 +1150,18 @@
     <Filter Include="Source\GameContent\EnemyStatus\Chase">
       <UniqueIdentifier>{acb4a77e-3e28-492e-ac9e-8d6fca977e95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\ContentScript\Object">
+      <UniqueIdentifier>{226c6af6-be5c-45d1-af2a-cb4f452b64fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Manager">
+      <UniqueIdentifier>{b3a74370-ba9e-4fe8-a4e6-5413046585a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Content">
+      <UniqueIdentifier>{154feddf-bc9a-479a-8844-af0ac6589aa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ContentScript\UI">
+      <UniqueIdentifier>{94ef597b-5ade-4b8e-a2ef-24818c5ec124}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameClient.rc">
@@ -1159,6 +1195,9 @@
     </FxCompile>
     <FxCompile Include="func.fx">
       <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="savePoint.fx">
+      <Filter>HLSL\Content</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

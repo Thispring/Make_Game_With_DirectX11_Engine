@@ -9,6 +9,8 @@
 CEditorCamMoveScript::CEditorCamMoveScript()
 	: CScript(-1)	// Engine 용 Script이기 때문에 따로 처리
 	, m_isMoving(false)
+	, m_pPlayer(nullptr)
+	, m_bFollowPlayer(false)
 	
 	// 매 프레임 저장할 현재 Transform 정보는 생성 시점에 초기화
 	, m_CurPos{}
@@ -22,9 +24,14 @@ CEditorCamMoveScript::~CEditorCamMoveScript()
 
 void CEditorCamMoveScript::Begin()
 {
-	// 처음 위치, 회전 저장
-	m_OriginPos = Transform()->GetRelativePos();
-	m_OriginRot = Transform()->GetRelativeRot();
+	// 에디터 카메라 초기 위치를 (0, 0, -350)으로 고정 등록
+	m_OriginPos = Vec3(0.f, 0.f, -350.f);
+	m_OriginRot = Vec3(0.f, 0.f, 0.f);
+	Transform()->SetRelativePos(m_OriginPos);
+	Transform()->SetRelativeRot(m_OriginRot);
+
+	// 레벨에 등록된 플레이어 오브젝트 초기 탐색
+	m_pPlayer = LevelMgr::GetInst()->FindObjectByName(L"Player");
 }
 
 void CEditorCamMoveScript::Tick()
@@ -40,6 +47,16 @@ void CEditorCamMoveScript::Tick()
 		m_CurRot = Transform()->GetRelativeRot();
 	}
 
+	// F6: 플레이어 XY 위치 추적 토글
+	if (KEY_TAP(KEY::F6))
+	{
+		m_bFollowPlayer = !m_bFollowPlayer;
+
+		// 토글 ON 시 플레이어 재탐색 (레벨 전환 대응)
+		if (m_bFollowPlayer)
+			m_pPlayer = LevelMgr::GetInst()->FindObjectByName(L"Player");
+	}
+
 	// 원경 투영
 	if (Camera()->GetProjType() == PROJ_TYPE::PERSPECTIVE)
 	{
@@ -53,6 +70,15 @@ void CEditorCamMoveScript::Tick()
 	else if (Camera()->GetProjType() == PROJ_TYPE::ORTHOGRAPHIC)
 		OrthoCamMove();
 
+	// 플레이어 추적 ON: WASD 이동 이후 X, Y를 플레이어 위치로 덮어씌움
+	if (m_bFollowPlayer && m_pPlayer != nullptr)
+	{
+		Vec3 vPos       = Transform()->GetRelativePos();
+		Vec3 vPlayerPos = m_pPlayer->Transform()->GetRelativePos();
+		vPos.x = vPlayerPos.x;
+		vPos.y = vPlayerPos.y;
+		Transform()->SetRelativePos(vPos);
+	}
 
 	// SPACE KEY를 누르면 위치, 회전 상태 초기화
 	// Resets the position and rotation when the SPACE KEY is pressed.
@@ -117,18 +143,18 @@ void CEditorCamMoveScript::PrespecCamMove()
 
     // Use WASD for editor perspective camera movement
 	if (KEY_PRESSED(KEY::W))
-		vPos.y += E_DT * 250.f;
+		vPos.y += E_DT * 1600.f;
 	if (KEY_PRESSED(KEY::S))
-		vPos.y -= E_DT * 250.0f;
+		vPos.y -= E_DT * 1600.f;
 	if (KEY_PRESSED(KEY::A))
-		vPos.x -= E_DT * 250.0f;
+		vPos.x -= E_DT * 1600.f;
 	if (KEY_PRESSED(KEY::D))
-		vPos.x += E_DT * 250.0f;
+		vPos.x += E_DT * 1600.f;
 
 	if (KEY_PRESSED(KEY::Q))
-		vPos.z += E_DT * 250.0f;
+		vPos.z += E_DT * 500.f;
 	if (KEY_PRESSED(KEY::E))
-		vPos.z -= E_DT * 250.0f;
+		vPos.z -= E_DT * 500.f;
 
 
 	Transform()->SetRelativePos(vPos);

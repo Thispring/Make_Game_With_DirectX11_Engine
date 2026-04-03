@@ -2,7 +2,6 @@
 #include "CScript.h"
 #include "CPlayerData.h"
 #include "Source\Content\PlayerState.h"
-#include <map>
 // CPlayerStatus의 주소를 받아, 상태를 관리하는 클래스입니다.
 
 class CPlayerStateManager :
@@ -10,21 +9,25 @@ class CPlayerStateManager :
 {
 
 private:
-    Ptr<CPlayerData>                        m_PlayerData;   // 관리자 클래스에서 동일한 CPlayerData를 가리키고 있어야 합니다.
+    Ptr<CPlayerData>                                m_PlayerData;   // 관리자 클래스에서 동일한 CPlayerData를 가리키고 있어야 합니다.
 
     /**************************************************************************
     * PlayerState에 스마트 포인터를 사용한다면, 엔진에 구현된 Ptr.h가 아닌
     * std unique_ptr를 사용합니다. (콘텐츠용도로 만들었기에 엔진 차원 Entity 상속 X)
     **************************************************************************/
-    PlayerState*                            m_CurStatus;
-    PlayerState*                            m_PrevStatus;
-    map<PLAYER_STATE, unique_ptr<PlayerState>> m_mapStatus;
+    PlayerState*                                    m_CurStatus;
+    PlayerState*                                    m_PrevStatus;
 
-    bool                                    m_IsChange;
+    // NOTE(26-04-03):
+    // enemy와 동일하게 map 자료형을 변경하기
+    map<PLAYER_STATE, unique_ptr<PlayerState>>      m_mapStatus;
+
+    bool                                            m_IsChange;
 
 public:
     void ChangeState();
     void TakeDamage(float _Damage);
+    void Respawn();
 
 
     //=============
@@ -58,6 +61,17 @@ public:
     }
     void SetChange() { m_IsChange = true; }
     bool IsChange();
+    bool IsInputLocked() const
+    {
+        if (!m_CurStatus) return false;
+        PLAYER_STATE cur = m_CurStatus->GetFlipbookIndex();
+        return (cur == PLAYER_STATE::PUNCH          ||
+                cur == PLAYER_STATE::MIDDLE_KICK    ||
+                cur == PLAYER_STATE::HIGH_KICK      ||
+                cur == PLAYER_STATE::LOW_KICK       ||
+                //cur == PLAYER_STATE::JUMP           ||
+                cur == PLAYER_STATE::ENERGYBLAST_SHOT);
+    }
 
 
     //============

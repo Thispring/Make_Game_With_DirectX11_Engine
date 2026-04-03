@@ -1,3 +1,8 @@
+Comment: F6: 플레이어 XY 위치 추적 토글
+KEY: F6
+KEY_STATE: TAP
+Source File: CEditorCamMoveScript.cpp
+
 Comment: Resets the position and rotation when the SPACE KEY is pressed.
 KEY: O
 KEY_STATE: PRESSED
@@ -198,17 +203,17 @@ KEY: LEFT
 KEY_STATE: PRESSED
 Source File: CPlayerController.cpp
 
-Comment: 점프는 TAP으로 트리거 (원샷)
+Comment: No Comment
 KEY: SPACE
 KEY_STATE: TAP
 Source File: CPlayerController.cpp
 
-Comment: 펀치도 TAP으로 트리거 (원샷)
+Comment: No Comment
 KEY: Z
 KEY_STATE: TAP
 Source File: CPlayerController.cpp
 
-Comment: Key 조합에 따라 다른 Kick 동작 나타나게 구현
+Comment: No Comment
 KEY: X
 KEY_STATE: TAP
 Source File: CPlayerController.cpp
@@ -217,4 +222,9 @@ Comment: No Comment
 KEY: C
 KEY_STATE: TAP
 Source File: CPlayerController.cpp
+
+Comment: Player Respawn Test
+KEY: ALPHA1
+KEY_STATE: PRESSED
+Source File: CPlayerStateManager.cpp
 

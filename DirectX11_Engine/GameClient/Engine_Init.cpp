@@ -150,5 +150,8 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
     if (m_EditorMode)
         EditorMgr::GetInst()->Init();
 
+    // GameMgr 초기화
+    //GameMgr::GetInst()->Init();
+
     return S_OK;
 }

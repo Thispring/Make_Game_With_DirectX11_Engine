@@ -3,6 +3,7 @@
 #include "TaskMgr.h"
 #include "LevelMgr.h"
 #include "AssetMgr.h"
+#include "GameMgr.h"
 
 #include "GameObject.h"
 

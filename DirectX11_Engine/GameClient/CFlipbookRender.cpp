@@ -83,6 +83,19 @@ void CFlipbookRender::Play(int _FlipbookIdx, float _FPS, int _RepeatCount)
 	// 만약 강제 초기화가 필요하면(옵션) 여기서 처리
 }
 
+void CFlipbookRender::EditorPlay(int _FlipbookIdx, float _FPS, int _RepeatCount)
+{
+	// ImGui 전용 Play 함수,
+	// 새로 들어온 유뮤와 상관없이 값을 초기화합니다.
+
+	m_AccTime = 0.f;
+	m_CurSprite = 0;
+	// 현재, 이전 상태 Flipbook 인덱스 저장
+	m_CurFlipbook = m_PrevFlipbook = _FlipbookIdx;
+	m_RepeatCount = _RepeatCount;
+	m_FPS = _FPS;
+}
+
 void CFlipbookRender::FinalTick()
 {
 	// Editor Mode에서 재생을 원하면 DT를  
@@ -127,6 +140,9 @@ void CFlipbookRender::Render()
 	GetMaterial()->SetScalar(VEC2_1, pCurSprite->GetSliceUV());
 	GetMaterial()->SetScalar(VEC2_2, pCurSprite->GetBackgroundUV());
 	GetMaterial()->SetScalar(VEC2_3, pCurSprite->GetOffsetUV());
+
+	// SavePoint int값 전달
+	GetMaterial()->SetScalar(INT_0, 1);
 
 	GetMaterial()->Binding();
 	GetMesh()->Render();

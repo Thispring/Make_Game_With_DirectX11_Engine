@@ -61,7 +61,7 @@ void EFlipbookRenderUI::Tick_UI()
 	if (ImGui::DragFloat("##FPS", &fps, 1.f, 0, FLT_MAX))
 	{
 		pFlipbookRender->SetFPS(fps);
-		pFlipbookRender->Play(curIndex, fps, repeatCount);
+		pFlipbookRender->EditorPlay(curIndex, fps, repeatCount);
 	}
 	SPACING_UI(5);
 
@@ -72,7 +72,7 @@ void EFlipbookRenderUI::Tick_UI()
 	if (ImGui::DragInt("##REPEATCOUNT", &repeatCount, 1.f, -1, INT_MAX))
 	{
 		pFlipbookRender->SetRepeatCount(repeatCount);
-		pFlipbookRender->Play(curIndex, fps, repeatCount);
+		pFlipbookRender->EditorPlay(curIndex, fps, repeatCount);
 	}
 	ImGui::Spacing();
 	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
@@ -94,7 +94,7 @@ void EFlipbookRenderUI::Tick_UI()
 			* 이전에 재생중인 Flipbook의 Sprite 재생 인덱스와 
 			* 이 시점에서 바뀐 Flipbook의 Sprite 재생 인덱스가 다를 수 있음
 			**********************************************************/
-			pFlipbookRender->Play(curIndex, fps, repeatCount);
+			pFlipbookRender->EditorPlay(curIndex, fps, repeatCount);
 		}
 
 

@@ -11,7 +11,7 @@ class CPlayerData :
 {
 
 private:
-    Ptr<GameObject>     m_TargetObject;
+    GameObject*         m_TargetObject;
     Ptr<GameObject>     m_AnchorObject;
     Ptr<APrefab>        m_EnergyBlast;      // Player가 발사하는 에너지파 프리팹
     
@@ -82,7 +82,7 @@ public:
     GET_SET(Vec3, OriginPos);
     GET_SET(Vec3, CurPos);
 
-    GET_SET(Ptr<GameObject>, TargetObject);
+    GET_SET(GameObject*, TargetObject);
     GET_SET(Ptr<GameObject>, AnchorObject);
     GET_SET(Ptr<APrefab>, EnergyBlast);
 

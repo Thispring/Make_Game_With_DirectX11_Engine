@@ -42,12 +42,8 @@ void PlayerJumpState::Tick()
 
 void PlayerJumpState::FinalTick()
 {
-    // 착지로 상태 전환되는 경우 FinalTick이 호출된다면 IsFalling을 false로 정리합니다.
-    // (무조건 Idle로 전환하는 로직이 적절한지 여부는 호출 시점에 따라 달라질 수 있으므로,
-    //  실제 착지 판정이 완료된 상황에서만 호출되도록 StateManager에서 보장되어야 합니다.)
+    // 정리(cleanup)만 담당 — Idle 전환은 CPlayerAnimator::Tick()에서 처리
     m_PlayerData->SetIsJumping(false);
-    Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-    pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerJumpState::GetFlipbookIndex()

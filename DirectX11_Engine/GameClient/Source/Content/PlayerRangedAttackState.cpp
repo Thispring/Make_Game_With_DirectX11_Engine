@@ -109,15 +109,13 @@ void PlayerEnergyBlastShotState::Begin()
 
 void PlayerEnergyBlastShotState::Tick()
 {
+	PlayerState::ApplyGravity();
 }
 
 void PlayerEnergyBlastShotState::FinalTick()
 {
+	// 정리(cleanup)만 담당 — Idle 전환은 CPlayerAnimator::Tick()에서 처리
 	m_PlayerData->OffIsAttack();
-
-	// Idle 상태로 변경
-    Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerEnergyBlastShotState::GetFlipbookIndex()

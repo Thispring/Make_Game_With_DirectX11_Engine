@@ -1,6 +1,13 @@
 #pragma once
 // 자주 사용하는 매크로 부분을 모아서 관리합니다.
 
+// 디버그 누수 추적용 new 키워드 재정의
+#ifdef _DEBUG
+#define NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#else
+#define NEW new
+#endif
+
 // 싱글턴 매크로
 #define SINGLE(Type) private:\
 						Type();\
@@ -33,13 +40,3 @@
 // ImGui Text로 필수인지 선택인지를 표시하는 매크로
 #define IMGUI_REQUIRED() ImGui::TextColored(ImVec4(1.f, 0.2f, 0.2f, 1.0f), "(Required)");
 #define IMGUI_OPTIONAL() ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "(Optional)");
-
-
-//#define NEW new(THIS_FILE, __LINE__)
-//#define NEW new( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-
-#ifdef _DEBUG
-#define NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#else
-#define NEW new
-#endif

@@ -15,8 +15,10 @@ private:
 
     EnemyState*                                         m_CurStatus;
     EnemyState*                                         m_PrevStatus;
+    
     // 상태 컨테이너를 인덱스 기반 vector에서 키 기반 map으로 변경
-    //map<ENEMY_STATE, unique_ptr<EnemyState>>     m_mapStatus;
+    // int 자료형은 flipbook 인덱스에 맞게 contentEnum의 namespace에 정의된 
+    // constexpr int 값을 사용합니다.
     map<ENEMY_STATE, pair<unique_ptr<EnemyState>, int>> m_mapStatus;
 
     bool                                                m_IsChange;

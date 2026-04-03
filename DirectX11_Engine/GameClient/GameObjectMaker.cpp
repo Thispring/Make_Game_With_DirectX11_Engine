@@ -13,6 +13,7 @@ GameObjectMaker::GameObjectMaker()
 	: EditorUI("GameObjectMaker")
 	, m_pObject(nullptr)
 	, m_CloneObject(nullptr)
+	, m_LayerIdx(0)
 {
 	CreateChildUI();
 	m_pObject = NEW GameObject;

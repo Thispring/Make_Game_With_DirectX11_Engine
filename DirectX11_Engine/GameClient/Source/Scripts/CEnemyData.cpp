@@ -81,7 +81,7 @@ void CEnemyData::Begin()
 	// 조건문으로 타입을 정하는것이 아닌, 인스펙터에서
 	// 타입을 지정하고, 이를 저장 및 불러오는 방식으로 변경하기
 	m_TargetObject = GetOwner();
-	m_EyeObject = GetOwner()->GetChild(ENEMY_EYES);
+	m_EyeObject = GetOwner()->GetChild(ENEMY_EYES).Get();
 	m_EyeObject->SetLayerIdx(9);
 
 	// assert는 조건이 false일 때만 실행(중단)됩니다.
@@ -173,8 +173,9 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 
 	m_IsFalling = false;
 
+
 	// Player와 충돌 시
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == 3)
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
 	{
 		ChangeState(ENEMY_STATE::ATTACK);
 	}

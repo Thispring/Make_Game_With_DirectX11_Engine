@@ -390,6 +390,20 @@ void AssetMgr::CreateEngineShader()
 	AssetMgr::GetInst()->AddAsset(pShader->GetName(), pShader.Get());
 
 
+	// ==========================
+	// SavePoint (FlipbookShader) 
+	// ==========================
+	pShader = NEW AGraphicShader;
+	pShader->SetName(L"SavePointShader");
+	pShader->CreateVertexShader(L"Shader\\savePoint.fx", "VS_Flipbook");
+	pShader->CreatePixelShader(L"Shader\\savePoint.fx", "PS_Flipbook");
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->AddShaderParam(SHADER_PARAM::VEC4, 0, L"TintColor");
+	pShader->AddShaderParam(SHADER_PARAM::TEX, 0, L"OutColor");
+	AssetMgr::GetInst()->AddAsset(pShader->GetName(), pShader.Get());
+
+
 	// =============
 	// TileMapShader
 	// =============
@@ -434,12 +448,25 @@ void AssetMgr::CreateEngineTexture()
 	Load<ATexture>(L"groundImg", L"Texture\\BackGround\\far-grounds.png");
 
 	Load<ATexture>(L"fullBGImg", L"Texture\\BackGround\\magic-cliffs.png");
+	Load<ATexture>(L"emptyfullBGImg", L"Texture\\BackGround\\empty_magic-cliffs.png");
+
+	//=====================
+	// NOTE(26-04-03): 추가
+	//=====================
+	Load<ATexture>(L"platformOnlyImg", L"Texture\\BackGround\\platformOnly.png");
+	Load<ATexture>(L"fullSeaImg", L"Texture\\BackGround\\fullSea.png");
+	Load<ATexture>(L"fullSkyImg", L"Texture\\BackGround\\fullSky.png");
+	Load<ATexture>(L"fullCloudImg", L"Texture\\BackGround\\fullCloud.png");
 
 	// TileMap Atlas
 	Load<ATexture>(L"tile_Atlas", L"Texture\\BackGround\\tileset.png");
 	Load<ATexture>(L"remapTile_Atlas", L"Texture\\BackGround\\remapTileSet.png");
 
 	// UI
+
+	
+	// SavePoint
+	Load<ATexture>(L"savePoint_Atlas", L"Texture\\Object\\meteor_spritesheet.png");
 
 }
 

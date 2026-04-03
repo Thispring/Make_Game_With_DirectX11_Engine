@@ -12,7 +12,6 @@ PlayerMeleeAttackState::PlayerMeleeAttackState(Ptr<CPlayerData> _Data)
 PlayerMeleeAttackState::~PlayerMeleeAttackState()
 {
 }
-
 #pragma endregion
 
 
@@ -30,21 +29,20 @@ PlayerPunchState::~PlayerPunchState()
 void PlayerPunchState::Begin()
 {
 	m_PlayerData->SetIsAttack();
+	// 콜라이더 활성화 — CPlayerController 대신 Begin에서 처리하여 재시작 시에도 동작
+	m_PlayerData->GetTargetObject()->GetChild(PLAYER_PUNCH_ANCHOR)->Collider2D()->SetEnabled(true);
 }
 
 void PlayerPunchState::Tick()
 {
-
+	PlayerState::ApplyGravity();
 }
 
 void PlayerPunchState::FinalTick()
 {
+	// 정리(cleanup)만 담당 — Idle 전환은 CPlayerAnimator::Tick()에서 처리
 	m_PlayerData->OffIsAttack();
 	m_PlayerData->GetTargetObject()->GetChild(PLAYER_PUNCH_ANCHOR)->Collider2D()->SetEnabled(false);
-
-	// Idle 상태로 변경
-    Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerPunchState::GetFlipbookIndex()
@@ -64,7 +62,6 @@ unique_ptr<PlayerState> PlayerPunchState::Clone() const
 {
 	return unique_ptr<PlayerState>();
 }
-
 #pragma endregion
 
 
@@ -82,20 +79,20 @@ PlayerMiddleKickState::~PlayerMiddleKickState()
 void PlayerMiddleKickState::Begin()
 {
 	m_PlayerData->SetIsAttack();
+	// 콜라이더 활성화 — 재시작 시에도 동작하도록 Begin에서 처리
+	m_PlayerData->GetTargetObject()->GetChild(PLAYER_KICK_ANCHOR)->Collider2D()->SetEnabled(true);
 }
 
 void PlayerMiddleKickState::Tick()
 {
+	PlayerState::ApplyGravity();
 }
 
 void PlayerMiddleKickState::FinalTick()
 {
+	// 정리(cleanup)만 담당 — Idle 전환은 CPlayerAnimator::Tick()에서 처리
 	m_PlayerData->OffIsAttack();
 	m_PlayerData->GetTargetObject()->GetChild(PLAYER_KICK_ANCHOR)->Collider2D()->SetEnabled(false);
-
-	// Idle 상태로 변경
-    Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-	pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerMiddleKickState::GetFlipbookIndex()
@@ -140,11 +137,8 @@ void PlayerHighKickState::Tick()
 
 void PlayerHighKickState::FinalTick()
 {
+	// 정리(cleanup)만 담당 — Idle 전환은 CPlayerAnimator::Tick()에서 처리
 	m_PlayerData->OffIsAttack();
-
-	// Idle 상태로 변경
-	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-    pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerHighKickState::GetFlipbookIndex()
@@ -189,11 +183,8 @@ void PlayerLowKickState::Tick()
 
 void PlayerLowKickState::FinalTick()
 {
+	// 정리(cleanup)만 담당 — Idle 전환은 CPlayerAnimator::Tick()에서 처리
 	m_PlayerData->OffIsAttack();
-
-	// Idle 상태로 변경
-	Ptr<CPlayerStateManager> pMgr = m_PlayerData->GetOwner()->GetScript<CPlayerStateManager>();
-    pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::IDLE));
 }
 
 PLAYER_STATE PlayerLowKickState::GetFlipbookIndex()

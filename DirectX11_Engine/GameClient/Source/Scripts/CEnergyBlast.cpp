@@ -33,6 +33,11 @@ void CEnergyBlast::SetUp(Vec3 _Dir)
 		vScale.x *= -1.f;
 		GetOwner()->Transform()->SetRelativeScale(vScale);
 	}
+
+	// 시점 문제를 해결하기 위해 z축을 100으로 고정
+	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+	vPos.z = 100.f;
+	GetOwner()->Transform()->SetRelativePos(vPos);
 }
 
 bool CEnergyBlast::DestroyBlast()
@@ -65,7 +70,7 @@ void CEnergyBlast::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCo
 void CEnergyBlast::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 	// Enemy Layer에서만 작동하게 조건문 실행
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == 6)
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::ENEMY)
 	{
 		DestroyBlast();
 	}

@@ -17,6 +17,9 @@
 #include "Scripts/CPlayerData.h"
 #include "Scripts/CPlayerMeleeTrigger.h"
 #include "Scripts/CPlayerStateManager.h"
+#include "Scripts/CSavePoint.h"
+#include "Scripts/CUICamMoveScript.h"
+#include "Scripts/CUIOverlayController.h"
 
 void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
@@ -35,6 +38,9 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CPlayerData");
 	_vec.push_back(L"CPlayerMeleeTrigger");
 	_vec.push_back(L"CPlayerStateManager");
+	_vec.push_back(L"CSavePoint");
+	_vec.push_back(L"CUICamMoveScript");
+	_vec.push_back(L"CUIOverlayController");
 }
 
 CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
@@ -69,6 +75,12 @@ CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CPlayerMeleeTrigger;
 	if (L"CPlayerStateManager" == _strScriptName)
 		return new CPlayerStateManager;
+	if (L"CSavePoint" == _strScriptName)
+		return new CSavePoint;
+	if (L"CUICamMoveScript" == _strScriptName)
+		return new CUICamMoveScript;
+	if (L"CUIOverlayController" == _strScriptName)
+		return new CUIOverlayController;
 	return nullptr;
 }
 
@@ -120,6 +132,15 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERSTATEMANAGER:
 		return new CPlayerStateManager;
+		break;
+	case (UINT)SCRIPT_TYPE::SAVEPOINT:
+		return new CSavePoint;
+		break;
+	case (UINT)SCRIPT_TYPE::UICAMMOVESCRIPT:
+		return new CUICamMoveScript;
+		break;
+	case (UINT)SCRIPT_TYPE::UIOVERLAYCONTROLLER:
+		return new CUIOverlayController;
 		break;
 	}
 	return nullptr;
@@ -189,6 +210,18 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CPlayerStateManager";
 		break;
 
+	case SCRIPT_TYPE::SAVEPOINT:
+		return L"CSavePoint";
+		break;
+
+	case SCRIPT_TYPE::UICAMMOVESCRIPT:
+		return L"CUICamMoveScript";
+		break;
+
+	case SCRIPT_TYPE::UIOVERLAYCONTROLLER:
+		return L"CUIOverlayController";
+		break;
+
 	}
 	return nullptr;
 }
@@ -242,6 +275,15 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	case PLAYERSTATEMANAGER: return "CPlayerStateManager";
 		break;
 
+	case SAVEPOINT: return "CSavePoint";
+		break;
+
+	case UICAMMOVESCRIPT: return "CUICamMoveScript";
+		break;
+
+	case UIOVERLAYCONTROLLER: return "CUIOverlayController";
+		break;
+
 	case SCRIPT_TYPE_END: return "End";
 		break;
 
@@ -285,6 +327,12 @@ CScript * ScriptMgr::GetScript(const char* _strScriptName)
 		return new CPlayerMeleeTrigger;
 	if (0 == strcmp(_strScriptName, "CPlayerStateManager"))
 		return new CPlayerStateManager;
+	if (0 == strcmp(_strScriptName, "CSavePoint"))
+		return new CSavePoint;
+	if (0 == strcmp(_strScriptName, "CUICamMoveScript"))
+		return new CUICamMoveScript;
+	if (0 == strcmp(_strScriptName, "CUIOverlayController"))
+		return new CUIOverlayController;
 	return nullptr;
 }
 
@@ -321,6 +369,12 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 		return PLAYERMELEETRIGGER;
 	if (L"CPlayerStateManager" == _strScriptName)
 		return PLAYERSTATEMANAGER;
+	if (L"CSavePoint" == _strScriptName)
+		return SAVEPOINT;
+	if (L"CUICamMoveScript" == _strScriptName)
+		return UICAMMOVESCRIPT;
+	if (L"CUIOverlayController" == _strScriptName)
+		return UIOVERLAYCONTROLLER;
 	return SCRIPT_TYPE_END;
 }
 
@@ -357,6 +411,12 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 		return PLAYERMELEETRIGGER;
 	if (0 == strcmp(_strScriptName, "CPlayerStateManager"))
 		return PLAYERSTATEMANAGER;
+	if (0 == strcmp(_strScriptName, "CSavePoint"))
+		return SAVEPOINT;
+	if (0 == strcmp(_strScriptName, "CUICamMoveScript"))
+		return UICAMMOVESCRIPT;
+	if (0 == strcmp(_strScriptName, "CUIOverlayController"))
+		return UIOVERLAYCONTROLLER;
 	return SCRIPT_TYPE_END;
 }
 

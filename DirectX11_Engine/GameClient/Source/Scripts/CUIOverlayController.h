@@ -1,0 +1,34 @@
+#pragma once
+#include "CScript.h"
+
+// UI 카메라에 렌더 대상인 게임 오브젝트들의 위치를
+// 조절하는 스크립트 입니다.
+
+class CUIOverlayController :
+    public CScript
+{
+
+private:
+    vector<Ptr<GameObject>>     m_vecUIObject;
+    vector<Vec3>                m_vecUIOffset;  // 카메라 기준 초기 화면 오프셋 (X, Y)
+
+public:
+    //=============
+    // 상속 멤버 함수
+    //=============
+    virtual void Begin() override;
+    // Script를 상속 받았다면 Tick을 필수로 선언해야 함
+    virtual void Tick() override;
+    CLONE(CUIOverlayController);
+
+    virtual void SaveToLevelFile(FILE* _File) override;
+    virtual void LoadFromLevelFile(FILE* _File) override;
+
+
+    //============
+    // 생성, 소멸자
+    //============
+    CUIOverlayController();
+    virtual ~CUIOverlayController();
+};
+

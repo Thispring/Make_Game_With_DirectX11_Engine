@@ -48,9 +48,9 @@ void CEnemyAnimator::Play()
 		break;
 
 	case ENEMY_STATE::ATTACK:
-		if (enemyType == ENEMY_TYPE::DEMON) { fps = 15; repCount = 1; }
-		else if (enemyType == ENEMY_TYPE::SKULL) { fps = 12; repCount = 1; }
-		else { fps = 10; repCount = 1; }
+		if (enemyType == ENEMY_TYPE::DEMON) { fps = 15; repCount = -1; }
+		else if (enemyType == ENEMY_TYPE::SKULL) { fps = 12; repCount = -1; }
+		else { fps = 10; repCount = -1; }
 		break;
 
 	case ENEMY_STATE::HIT:

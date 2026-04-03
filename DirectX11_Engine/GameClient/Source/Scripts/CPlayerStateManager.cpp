@@ -4,6 +4,7 @@
 #include "CPlayerAnimator.h"
 
 #include "LevelMgr.h"
+#include "KeyMgr.h"
 
 #include "Source\Content\PlayerIdleState.h"
 #include "Source\Content\PlayerMoveState.h"
@@ -22,8 +23,8 @@ bool CPlayerStateManager::IsChange()
 CPlayerStateManager::CPlayerStateManager()
 	: CScript(SCRIPT_TYPE::PLAYERSTATEMANAGER)
 	, m_CurStatus(nullptr)
-    , m_PrevStatus(nullptr)
-
+	, m_PrevStatus(nullptr)
+	//, m_bInputLocked(false)
 {
 
 }
@@ -91,6 +92,17 @@ void CPlayerStateManager::ChangeState()
         // PlayerAnimator를 불러와 Play 함수 호출
         GetOwner()->GetScript<CPlayerAnimator>()->Play();
     }
+
+    // 진입 상태에 따라 입력 잠금 자동 설정
+    // — 잠금 상태: Controller 전체 입력 차단
+    // — 해제 상태(Idle, Walk 등): Animator가 ChangeState(Idle) 호출 시 자동 해제
+    PLAYER_STATE newState = m_CurStatus->GetFlipbookIndex();
+    //m_bInputLocked = (newState == PLAYER_STATE::PUNCH          ||
+    //                  newState == PLAYER_STATE::MIDDLE_KICK    ||
+    //                  newState == PLAYER_STATE::HIGH_KICK      ||
+    //                  newState == PLAYER_STATE::LOW_KICK       ||
+    //                  newState == PLAYER_STATE::JUMP           ||
+    //                  newState == PLAYER_STATE::ENERGYBLAST_SHOT);
 }
 
 void CPlayerStateManager::TakeDamage(float _Damage)
@@ -108,6 +120,20 @@ void CPlayerStateManager::TakeDamage(float _Damage)
     }
 
     m_PlayerData->SetCurHP(curHP);
+}
+
+void CPlayerStateManager::Respawn()
+{
+    //======================================
+    // 초기 스탯으로 초기화 + Origin 위치로 이동
+    //======================================
+    
+    // 체력
+    m_PlayerData->SetCurHP(m_PlayerData->GetFullHP());
+
+    // 위치
+    GetOwner()->Transform()->SetRelativePos(m_PlayerData->GetOriginPos());
+
 }
 
 void CPlayerStateManager::Init()
@@ -145,6 +171,10 @@ void CPlayerStateManager::Begin()
 
 void CPlayerStateManager::Tick()
 {
+    // Player Respawn Test
+    if (KEY_PRESSED(KEY::ALPHA1))
+        Respawn();
+
 	// 필요에 따라 Tick에서 m_Status의 함수를 실행합니다.
     // 이전의 상태가 다르지 않을때만 Tick 수행
 	if (m_PrevStatus == m_CurStatus)

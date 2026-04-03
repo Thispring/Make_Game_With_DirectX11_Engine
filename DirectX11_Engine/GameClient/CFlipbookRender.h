@@ -33,6 +33,7 @@ public:
     void AddFlipbook(Ptr<AFlipbook> _Flipbook) { m_vecFlipbook.push_back(_Flipbook); }
     void DeleteFlipbook(int _Idx);
     void Play(int _FlipbookIdx, float _FPS, int _RepeatCount);
+    void EditorPlay(int _FlipbookIdx, float _FPS, int _RepeatCount);
 
 
     //=============

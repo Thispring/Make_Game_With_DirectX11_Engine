@@ -1,0 +1,98 @@
+#ifndef _SAVEPOINT
+#define _SAVEPOINT
+
+#include "value.fx"
+
+#define Color           g_int_0
+
+#define AtlasTex        g_tex_0
+#define LeftTopUV       g_vec2_0
+#define SliceUV         g_vec2_1
+#define BackgroundUV    g_vec2_2
+#define OffsetUV        g_vec2_3
+
+struct VS_IN
+{
+    float3 vPos : POSITION;
+    float2 vUV : TEXCOORD;
+};
+
+struct VS_OUT
+{
+    float4 vPosition : SV_Position;
+    float2 vUV : TEXCOORD;
+    float3 vWorldPos : POSITION;
+};
+
+VS_OUT VS_Flipbook(VS_IN _input)
+{
+    VS_OUT output = (VS_OUT) 0.f;
+             
+    float4 vWorld = mul(float4(_input.vPos, 1.f), g_matWorld);
+    float4 vView = mul(vWorld, g_matView);
+    float4 vProj = mul(vView, g_matProj);
+     
+    output.vPosition = vProj;
+    output.vWorldPos = vWorld;
+    output.vUV = _input.vUV;
+    
+    return output;
+}
+
+// 입력된 텍스쳐를 사용해서 픽셀쉐이더의 출력 색상으로 지정한다.
+float4 PS_Flipbook(VS_OUT _input) : SV_Target
+{
+    //float2 vSpriteUV = _input.vUV * SliceUV + LeftTopUV;
+    //float4 vColor = AtlasTex.Sample(g_sam_1, vSpriteUV);
+    
+    //if (vColor.a == 0.f)
+    //    discard;
+    float4 vColor = float4(1.f, 0.f, 1.f, 1.f);
+    
+    // Atlas 텍스쳐가 바인딩이 되었으면
+    if (g_btex_0)
+    {
+        float2 LeftTop = (LeftTopUV + SliceUV * 0.5f - BackgroundUV * 0.5f);
+        float2 SampleUV = LeftTop + BackgroundUV * _input.vUV - OffsetUV;
+        
+        if (LeftTopUV.x <= SampleUV.x && SampleUV.x <= LeftTopUV.x + SliceUV.x
+           && LeftTopUV.y <= SampleUV.y && SampleUV.y <= LeftTopUV.y + SliceUV.y)
+        {
+            vColor = AtlasTex.Sample(g_sam_1, SampleUV);
+        }
+        else
+        {
+            // 노란색으로 표시
+            //vColor = float4(1.f, 1.f, 0.f, 1.f);
+            // BackGround 부분 버리기
+            discard;
+        }
+        
+        if (vColor.a == 0.f)
+            discard;
+    }
+    
+    if (Color == 1)
+    {
+        // 노란색으로 변경
+        vColor = float4(1.f, 1.f, 0.f, 1.f);
+    }
+    
+    // 광원 적용        
+    // 물체가 받는 빛의 총량
+    float3 LightColor = float3(0.f, 0.f, 0.f);
+    
+    // 반복문 돌면서, 모든 광원으로부터 어느정도의 빛을 받는지 합산
+    for (int i = 0; i < Light2DCount; ++i)
+    {
+        LightColor += CalcLight2D(i, _input.vWorldPos);
+    }
+    
+    // 물체의 색상에, 자신이 받는 최종빛 총량을 곱한다.
+    vColor.rgb *= LightColor;
+
+    return vColor;
+}
+
+
+#endif

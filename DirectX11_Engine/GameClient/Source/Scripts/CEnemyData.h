@@ -12,8 +12,8 @@ class CEnemyData :
 {
 
 private:
-    Ptr<GameObject>     m_TargetObject;
-    Ptr<GameObject>     m_EyeObject;
+    GameObject*         m_TargetObject;
+    GameObject*         m_EyeObject;
 
     ENEMY_TYPE          m_EnemyType;
 
@@ -88,7 +88,7 @@ public:
     GET_SET(Vec3, OriginPos);
     GET_SET(Vec3, CurPos);
 
-    GET_SET(Ptr<GameObject>, TargetObject);
+    GET_SET(GameObject*, TargetObject);
     GET_SET(ENEMY_TYPE, EnemyType);
 
 

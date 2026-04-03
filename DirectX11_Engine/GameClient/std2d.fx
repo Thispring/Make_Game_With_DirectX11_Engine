@@ -100,6 +100,12 @@ float4 PS_Std2D(VS_OUT _input) : SV_Target
         discard;
     }
     
+    // 투명 배경 제거
+    if (vColor.a == 0.f)
+    {
+        discard;
+    }
+    
     // 이 코드가 실행되었을 때, 색상이 검은색으로 출력되는지 확인
     //vColor *= TintColor;
     
