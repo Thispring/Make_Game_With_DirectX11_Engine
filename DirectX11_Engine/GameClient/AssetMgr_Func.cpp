@@ -441,25 +441,27 @@ void AssetMgr::CreateEngineTexture()
 
 	Load<ATexture>(L"bomb_Atlas", L"Texture\\Enemy\\pirate_bomb_image_sequence.png");
 
+
+	//============
 	// BackGround
-	Load<ATexture>(L"cloudImg", L"Texture\\BackGround\\clouds.png");
-	Load<ATexture>(L"seaImg", L"Texture\\BackGround\\sea.png");
-	Load<ATexture>(L"skyImg", L"Texture\\BackGround\\sky.png");
+	//============
 	Load<ATexture>(L"groundImg", L"Texture\\BackGround\\far-grounds.png");
 
-	Load<ATexture>(L"fullBGImg", L"Texture\\BackGround\\magic-cliffs.png");
-	Load<ATexture>(L"emptyfullBGImg", L"Texture\\BackGround\\empty_magic-cliffs.png");
-
-	//=====================
-	// NOTE(26-04-03): 추가
-	//=====================
-	Load<ATexture>(L"platformOnlyImg", L"Texture\\BackGround\\platformOnly.png");
 	Load<ATexture>(L"fullSeaImg", L"Texture\\BackGround\\fullSea.png");
 	Load<ATexture>(L"fullSkyImg", L"Texture\\BackGround\\fullSky.png");
 	Load<ATexture>(L"fullCloudImg", L"Texture\\BackGround\\fullCloud.png");
 
+	Load<ATexture>(L"tile_00_Img", L"Texture\\BackGround\\tile_00.png");
+	Load<ATexture>(L"backWallsImg", L"Texture\\BackGround\\backWalls.png");
+	Load<ATexture>(L"foregroundImg", L"Texture\\BackGround\\foreground.png");
+	Load<ATexture>(L"underSeaImg", L"Texture\\BackGround\\underSea.png");
+	
+	Load<ATexture>(L"LargeGround_00_Img", L"Texture\\BackGround\\LargeGround_00.png");
+	Load<ATexture>(L"LargeGround_01_Img", L"Texture\\BackGround\\LargeGround_01.png");
+	Load<ATexture>(L"LargeStoneGround_00_Img", L"Texture\\BackGround\\LargeStoneGround_00.png");
+
+
 	// TileMap Atlas
-	Load<ATexture>(L"tile_Atlas", L"Texture\\BackGround\\tileset.png");
 	Load<ATexture>(L"remapTile_Atlas", L"Texture\\BackGround\\remapTileSet.png");
 
 	// UI
