@@ -8,3 +8,9 @@
 #define PLAYER_PUNCH_ANCHOR 2
 
 #define ENEMY_EYES 0
+
+
+// Player Attack Key Number
+#define PUNCH_KEY 0
+#define KICK_KEY 1
+#define BLAST_SHOT_KEY 2

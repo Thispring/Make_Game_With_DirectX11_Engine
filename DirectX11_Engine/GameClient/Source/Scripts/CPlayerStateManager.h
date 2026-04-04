@@ -18,9 +18,7 @@ private:
     PlayerState*                                    m_CurStatus;
     PlayerState*                                    m_PrevStatus;
 
-    // NOTE(26-04-03):
-    // enemy와 동일하게 map 자료형을 변경하기
-    map<PLAYER_STATE, unique_ptr<PlayerState>>      m_mapStatus;
+    map<PLAYER_STATE, pair<unique_ptr<PlayerState>, int>>  m_mapStatus;
 
     bool                                            m_IsChange;
 
@@ -50,7 +48,7 @@ public:
     PlayerState* GetStatusByPlayerState(PLAYER_STATE _State)
     {
         auto it = m_mapStatus.find(_State);
-        return (it != m_mapStatus.end()) ? it->second.get() : nullptr;
+        return (it != m_mapStatus.end()) ? it->second.first.get() : nullptr;
     }
 
     // 호환성: 기존 인덱스 기반 접근을 사용하는 코드 지원
@@ -58,6 +56,17 @@ public:
     {
         PLAYER_STATE st = static_cast<PLAYER_STATE>(_Idx);
         return GetStatusByPlayerState(st);
+    }
+
+    int GetFlipBookIndex()
+    {
+        for (const auto& pair : m_mapStatus)
+        {
+            if (pair.second.first.get() == m_CurStatus)
+                return pair.second.second;
+        }
+        assert(false && "Current state not found in m_mapStatus");
+        return 0;
     }
     void SetChange() { m_IsChange = true; }
     bool IsChange();

@@ -2,9 +2,11 @@
 #include "CPlayerStateManager.h"
 
 #include "CPlayerAnimator.h"
+#include "CPlayerController.h"
 
 #include "LevelMgr.h"
 #include "KeyMgr.h"
+#include "RandomMgr.h"
 
 #include "Source\Content\PlayerIdleState.h"
 #include "Source\Content\PlayerMoveState.h"
@@ -40,9 +42,9 @@ CPlayerStateManager::CPlayerStateManager(const CPlayerStateManager& _Origin)
     // 원본 map의 각 상태를 Clone하여 새로운 map에 복제
     for (const auto& pair : _Origin.m_mapStatus)
     {
-        if (pair.second)
+        if (pair.second.first)
         {
-            m_mapStatus[pair.first] = pair.second->Clone();
+            m_mapStatus[pair.first] = std::make_pair(pair.second.first->Clone(), pair.second.second);
         }
     }
 
@@ -51,12 +53,12 @@ CPlayerStateManager::CPlayerStateManager(const CPlayerStateManager& _Origin)
     {
         for (const auto& pair : _Origin.m_mapStatus)
         {
-            if (pair.second.get() == _Origin.m_CurStatus)
+            if (pair.second.first.get() == _Origin.m_CurStatus)
             {
                 auto it = m_mapStatus.find(pair.first);
                 if (it != m_mapStatus.end())
                 {
-                    m_CurStatus = it->second.get();
+                    m_CurStatus = it->second.first.get();
                 }
                 break;
             }
@@ -134,6 +136,24 @@ void CPlayerStateManager::Respawn()
     // 위치
     GetOwner()->Transform()->SetRelativePos(m_PlayerData->GetOriginPos());
 
+
+    //================
+    // 공격 키 난수 로직
+    //================
+    Ptr<CPlayerController> pController = m_PlayerData->GetTargetObject()->GetScript<CPlayerController>();
+    KEY arryKey[3] = {};
+
+    RandomMgr::GetInst()->ShuffleKeyNum();
+
+    for (UINT i = 0; i < 3; ++i)
+    {
+        arryKey[i] = RandomMgr::GetInst()->GetRandomKey(3);
+    }
+
+    pController->SetPunchKey(arryKey[PUNCH_KEY]);
+    pController->SetKickKey(arryKey[KICK_KEY]);
+    pController->SetBlastShotKey(arryKey[BLAST_SHOT_KEY]);
+
 }
 
 void CPlayerStateManager::Init()
@@ -145,22 +165,22 @@ void CPlayerStateManager::Begin()
 {
 	// Player의 공유 데이터 클래스 등록
 	m_PlayerData = GetOwner()->GetScript<CPlayerData>();
-    // 상태 클래스 등록 (map 기반)
-    m_mapStatus[PLAYER_STATE::IDLE] = make_unique<PlayerIdleState>(m_PlayerData);
-    m_mapStatus[PLAYER_STATE::WALK] = make_unique<PlayerMoveState>(m_PlayerData);
-    m_mapStatus[PLAYER_STATE::JUMP] = make_unique<PlayerJumpState>(m_PlayerData);
-    m_mapStatus[PLAYER_STATE::PUNCH] = make_unique<PlayerPunchState>(m_PlayerData);
-    m_mapStatus[PLAYER_STATE::HIGH_KICK] = make_unique<PlayerHighKickState>(m_PlayerData);
-    m_mapStatus[PLAYER_STATE::MIDDLE_KICK] = make_unique<PlayerMiddleKickState>(m_PlayerData);
-    m_mapStatus[PLAYER_STATE::LOW_KICK] = make_unique<PlayerLowKickState>(m_PlayerData);
-    m_mapStatus[PLAYER_STATE::ENERGYBLAST_SHOT] = make_unique<PlayerEnergyBlastShotState>(m_PlayerData);
+	// 상태 클래스 등록 (map 기반 — FLIPBOOK::PLAYER 인덱스 쌍으로 저장)
+	m_mapStatus[PLAYER_STATE::IDLE]             = std::make_pair(make_unique<PlayerIdleState>(m_PlayerData),            FLIPBOOK::PLAYER::IDLE);
+	m_mapStatus[PLAYER_STATE::WALK]             = std::make_pair(make_unique<PlayerMoveState>(m_PlayerData),            FLIPBOOK::PLAYER::WALK);
+	m_mapStatus[PLAYER_STATE::JUMP]             = std::make_pair(make_unique<PlayerJumpState>(m_PlayerData),            FLIPBOOK::PLAYER::JUMP);
+	m_mapStatus[PLAYER_STATE::PUNCH]            = std::make_pair(make_unique<PlayerPunchState>(m_PlayerData),           FLIPBOOK::PLAYER::PUNCH);
+	m_mapStatus[PLAYER_STATE::HIGH_KICK]        = std::make_pair(make_unique<PlayerHighKickState>(m_PlayerData),        FLIPBOOK::PLAYER::HIGH_KICK);
+	m_mapStatus[PLAYER_STATE::MIDDLE_KICK]      = std::make_pair(make_unique<PlayerMiddleKickState>(m_PlayerData),      FLIPBOOK::PLAYER::MIDDLE_KICK);
+	m_mapStatus[PLAYER_STATE::LOW_KICK]         = std::make_pair(make_unique<PlayerLowKickState>(m_PlayerData),         FLIPBOOK::PLAYER::LOW_KICK);
+	m_mapStatus[PLAYER_STATE::ENERGYBLAST_SHOT] = std::make_pair(make_unique<PlayerEnergyBlastShotState>(m_PlayerData), FLIPBOOK::PLAYER::ENERGYBLAST_SHOT);
 
-    // 현재 상태를 Idle로 등록 (map에서 안전하게 조회)
-    auto it = m_mapStatus.find(PLAYER_STATE::IDLE);
-    if (it != m_mapStatus.end())
-        m_CurStatus = it->second.get();
-    else
-        m_CurStatus = nullptr;
+	// 현재 상태를 Idle로 등록 (map에서 안전하게 조회)
+	auto it = m_mapStatus.find(PLAYER_STATE::IDLE);
+	if (it != m_mapStatus.end())
+		m_CurStatus = it->second.first.get();
+	else
+		m_CurStatus = nullptr;
     // 이전 상태 등록
     m_PrevStatus = m_CurStatus;
 	m_CurStatus->Begin();

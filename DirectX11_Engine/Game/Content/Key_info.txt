@@ -208,21 +208,6 @@ KEY: SPACE
 KEY_STATE: TAP
 Source File: CPlayerController.cpp
 
-Comment: No Comment
-KEY: Z
-KEY_STATE: TAP
-Source File: CPlayerController.cpp
-
-Comment: No Comment
-KEY: X
-KEY_STATE: TAP
-Source File: CPlayerController.cpp
-
-Comment: No Comment
-KEY: C
-KEY_STATE: TAP
-Source File: CPlayerController.cpp
-
 Comment: Player Respawn Test
 KEY: ALPHA1
 KEY_STATE: PRESSED

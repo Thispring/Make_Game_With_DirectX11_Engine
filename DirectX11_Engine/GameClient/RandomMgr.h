@@ -10,11 +10,14 @@ class RandomMgr
 {
 	SINGLE(RandomMgr)
 private:
+	static int		m_GetterCount;	// 몇 번 반환되는지를 기록하는 멤버
 	vector<int>		m_vecKeyNum;
 
 public:
 	void Init();
 
+	// vector를 셔플
+	void ShuffleKeyNum();
 	// 무작위 KEY를 반환하는 함수
-	KEY GetRandomKey();
+	KEY GetRandomKey(int _LoopCount);
 };

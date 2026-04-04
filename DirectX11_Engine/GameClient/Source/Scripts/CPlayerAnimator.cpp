@@ -41,7 +41,7 @@ void CPlayerAnimator::Play()
 		break;
 	}
 
-	GetOwner()->FlipbookRender()->Play((int)Idx, fps, repCount);
+	GetOwner()->FlipbookRender()->Play(m_StatusMgr->GetFlipBookIndex(), fps, repCount);
 }
 
 void CPlayerAnimator::Begin()

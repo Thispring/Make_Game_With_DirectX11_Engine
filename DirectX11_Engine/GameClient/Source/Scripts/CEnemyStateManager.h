@@ -2,7 +2,6 @@
 #include "CScript.h"
 #include "CEnemyData.h"
 #include "Source\Content\EnemyState.h"
-#include <map>
 
 // Enemy의 상태를 정의합니다.
 // Animator에서 상태를 읽어와 알맞은 Flipbook을 재생하는데 사용

@@ -64,6 +64,18 @@ namespace FLIPBOOK
         constexpr int HIT = 4;
         constexpr int DEAD = 5;
     }
+
+    namespace PLAYER
+    {
+        constexpr int IDLE             = 0;
+        constexpr int WALK             = 1;
+        constexpr int JUMP             = 2;
+        constexpr int PUNCH            = 3;
+        constexpr int HIGH_KICK        = 4;
+        constexpr int MIDDLE_KICK      = 5;
+        constexpr int LOW_KICK         = 6;
+        constexpr int ENERGYBLAST_SHOT = 7;
+    }
 }
 
 

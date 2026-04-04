@@ -10,6 +10,11 @@
 CPlayerController::CPlayerController()
 	: CScript(SCRIPT_TYPE::PLAYERCONTROLLER)
 	, m_TempDir(1)
+
+	// 초기화는 Z, X, C로 고정
+	, m_PunchKey(KEY::Z)
+	, m_KickKey(KEY::X)
+	, m_BlastShotKey(KEY::C)
 {
 }
 
@@ -62,9 +67,9 @@ void CPlayerController::Jump()
 	}
 }
 
-void CPlayerController::Punch()
+void CPlayerController::Punch(KEY _key)
 {
-	if (KEY_TAP(KEY::Z))
+	if (KEY_TAP(_key))
 	{
 		// 콜라이더 활성화 및 IsAttack 설정은 PlayerPunchState::Begin()에서 처리
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::PUNCH));
@@ -72,9 +77,9 @@ void CPlayerController::Punch()
 	}
 }
 
-void CPlayerController::Kick()
+void CPlayerController::Kick(KEY _key)
 {
-	if (KEY_TAP(KEY::X))
+	if (KEY_TAP(_key))
 	{
 		// 콜라이더 활성화 및 IsAttack 설정은 PlayerMiddleKickState::Begin()에서 처리
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::MIDDLE_KICK));
@@ -82,9 +87,9 @@ void CPlayerController::Kick()
 	}
 }
 
-void CPlayerController::EnergyBlastShot()
+void CPlayerController::EnergyBlastShot(KEY _key)
 {
-	if (KEY_TAP(KEY::C))
+	if (KEY_TAP(_key))
 	{
 		Ptr<APrefab> pBlast = m_PlayerData->GetEnergyBlast();
 
@@ -117,9 +122,9 @@ void CPlayerController::Tick()
 
 	Move();
 	Jump();
-	Punch();
-	Kick();
-	EnergyBlastShot();
+	Punch(m_PunchKey);
+	Kick(m_KickKey);
+	EnergyBlastShot(m_BlastShotKey);
 }
 
 void CPlayerController::SaveToLevelFile(FILE* _File)

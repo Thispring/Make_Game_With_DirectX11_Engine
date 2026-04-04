@@ -7,6 +7,7 @@
 #include "TimeMgr.h"
 #include "CollisionMgr.h"
 #include "GameMgr.h"
+#include "RandomMgr.h"
 
 #include "Source/Scripts/CCamMoveScript.h"
 
@@ -83,6 +84,8 @@ void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 	{
 		// 콘텐츠 관리 매니저 초기화
 		GameMgr::GetInst()->Init();
+		// 콘텐츠에 사용할 난수 초기화
+		RandomMgr::GetInst()->Init();
 	}
 
 	m_LevelState = _NextState;
