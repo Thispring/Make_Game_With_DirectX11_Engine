@@ -6,6 +6,7 @@
 
 #include "LevelMgr.h"
 #include "KeyMgr.h"
+#include "TimeMgr.h"
 #include "RandomMgr.h"
 
 #include "Source\Content\PlayerIdleState.h"
@@ -26,6 +27,8 @@ CPlayerStateManager::CPlayerStateManager()
 	: CScript(SCRIPT_TYPE::PLAYERSTATEMANAGER)
 	, m_CurStatus(nullptr)
 	, m_PrevStatus(nullptr)
+    , m_bPendingRevive(false)
+    , m_fReviveDelay(-1.f)
 	//, m_bInputLocked(false)
 {
 
@@ -38,6 +41,8 @@ CPlayerStateManager::CPlayerStateManager(const CPlayerStateManager& _Origin)
     , m_PlayerData(_Origin.m_PlayerData) // Ptr 타입이 복사 가능하다고 가정
     , m_CurStatus(nullptr)
     , m_PrevStatus(nullptr)
+    , m_bPendingRevive(_Origin.m_bPendingRevive)
+    , m_fReviveDelay(_Origin.m_fReviveDelay)
 {
     // 원본 map의 각 상태를 Clone하여 새로운 map에 복제
     for (const auto& pair : _Origin.m_mapStatus)
@@ -118,6 +123,11 @@ void CPlayerStateManager::TakeDamage(float _Damage)
     if (curHP <= 0)
     {
         m_PlayerData->SetIsDead(true);
+
+        // 사망 시 키 발견 상태 초기화
+        Ptr<CPlayerController> pController = GetOwner()->GetScript<CPlayerController>();
+        pController->SetHasDied(true);
+        pController->ResetKeyRevealed();
         return;
     }
 
@@ -154,6 +164,19 @@ void CPlayerStateManager::Respawn()
     pController->SetKickKey(arryKey[KICK_KEY]);
     pController->SetBlastShotKey(arryKey[BLAST_SHOT_KEY]);
 
+    assert(arryKey[0] != arryKey[1] && "Respawn: PunchKey == KickKey");
+    assert(arryKey[1] != arryKey[2] && "Respawn: KickKey == BlastShotKey");
+    assert(arryKey[0] != arryKey[2] && "Respawn: PunchKey == BlastShotKey");
+
+    // 키 발견 초기화
+    pController->ResetKeyRevealed();
+
+    //============================================================
+    // IsDead 해제를 즉시 처리하지 않고 Tick으로 위임
+    // 0.f → 다음 프레임, N.f → N초 후
+    //============================================================
+    m_bPendingRevive = true;
+    m_fReviveDelay   = 0.f;
 }
 
 void CPlayerStateManager::Init()
@@ -191,9 +214,28 @@ void CPlayerStateManager::Begin()
 
 void CPlayerStateManager::Tick()
 {
+    //================================================
+    // 지연 부활 처리 — Tick 최상단에서 수행
+    // Respawn()이 같은 프레임에서 호출되더라도
+    // 이 블록은 이미 지나쳤으므로 다음 프레임부터 카운트
+    //================================================
+    if (m_bPendingRevive)
+    {
+        m_fReviveDelay -= DT;
+        if (m_fReviveDelay <= 0.f)
+        {
+            m_bPendingRevive = false;
+            m_fReviveDelay   = -1.f;
+            m_PlayerData->SetIsDead(false);
+        }
+    }
+
     // Player Respawn Test
     if (KEY_PRESSED(KEY::ALPHA1))
+    {
+        m_PlayerData->SetIsDead(true);
         Respawn();
+    }
 
 	// 필요에 따라 Tick에서 m_Status의 함수를 실행합니다.
     // 이전의 상태가 다르지 않을때만 Tick 수행

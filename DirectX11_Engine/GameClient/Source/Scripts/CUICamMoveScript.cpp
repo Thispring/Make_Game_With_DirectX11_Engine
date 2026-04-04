@@ -14,17 +14,8 @@ CUICamMoveScript::~CUICamMoveScript()
 
 void CUICamMoveScript::Begin()
 {
-	//m_Target = GameMgr::GetInst()->GetPlayer();
-	//Vec3 vPos = m_Target->Transform()->GetRelativePos();
-	//vPos.z = -350.f;
-
-	//Transform()->SetRelativePos(vPos);
-	//Transform()->SetRelativeRot(m_Target->Transform()->GetRelativeRot());
-
-	m_Target = LevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"Player");
-
 	// Player 게임 오브젝트를 찾아서 등록
-	//m_Target = LevelMgr::GetInst()->FindObjectByName(L"Player");
+	m_Target = LevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"Player");
 }
 
 void CUICamMoveScript::Tick()

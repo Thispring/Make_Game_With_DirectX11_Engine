@@ -19,6 +19,9 @@ private:
     KEY                         m_KickKey;
     KEY                         m_BlastShotKey;
 
+    bool                        m_bHasDied;         // 최초 사망 이후 랜덤 키 모드 진입
+    bool                        m_bKeyRevealed[3];  // 각 공격 키 발견 여부 (0=Punch, 1=Kick, 2=BlastShot)
+
 public:
     //=========
     // 멤버 함수
@@ -51,6 +54,11 @@ public:
     GET_SET(KEY, PunchKey);
     GET_SET(KEY, KickKey);
     GET_SET(KEY, BlastShotKey);
+
+    bool HasDied() const { return m_bHasDied; }
+    void SetHasDied(bool _b) { m_bHasDied = _b; }
+    bool IsKeyRevealed(int _idx) const { return m_bKeyRevealed[_idx]; }
+    void ResetKeyRevealed();
 
 
     //============

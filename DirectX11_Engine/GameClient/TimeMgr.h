@@ -19,12 +19,15 @@ private:
 	UINT			m_TargetFPS;		// 목표 FPS (0이면 제한 없음)
 	double			m_TargetFrameTime;	// 1프레임 목표 시간 (초)
 
+	wstring			m_strFPS;
+
 public:
 	//=========
 	// 멤버 함수
 	//=========
 	void Init();
 	void Tick();
+	void Render();
 
 	/// @brief 프레임이 목표 시간에 도달할 때까지 대기합니다.
 	/// @return 목표 시간 미달이면 true(스킵), 도달했으면 false

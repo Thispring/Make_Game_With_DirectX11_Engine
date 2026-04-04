@@ -22,6 +22,12 @@ private:
 
     bool                                            m_IsChange;
 
+    // 지연 부활 처리
+    // m_fReviveDelay >= 0 : 카운트다운 중 (0.f = 다음 프레임, N.f = N초 후)
+    // m_fReviveDelay  < 0 : 비활성
+    bool                                            m_bPendingRevive;
+    float                                           m_fReviveDelay;
+
 public:
     void ChangeState();
     void TakeDamage(float _Damage);

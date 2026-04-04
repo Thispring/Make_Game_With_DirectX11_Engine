@@ -9,10 +9,15 @@ class CUIOverlayController :
 {
 
 private:
+    bool                        m_bInit;
+
     vector<Ptr<GameObject>>     m_vecUIObject;
     vector<Vec3>                m_vecUIOffset;  // 카메라 기준 초기 화면 오프셋 (X, Y)
 
 public:
+    void ChangeKeyUI();
+    void UpdateMoveKeyUI();
+
     //=============
     // 상속 멤버 함수
     //=============
@@ -23,6 +28,12 @@ public:
 
     virtual void SaveToLevelFile(FILE* _File) override;
     virtual void LoadFromLevelFile(FILE* _File) override;
+
+
+    //=========
+    // Get, Set
+    //=========
+    void SetInit() { m_bInit = true; }
 
 
     //============

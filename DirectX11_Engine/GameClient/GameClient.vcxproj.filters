@@ -424,7 +424,12 @@
     <ClInclude Include="Source\Scripts\CUICamMoveScript.h">
       <Filter>Source\ContentScript\UI</Filter>
     </ClInclude>
-    <ClInclude Include="RandomMgr.h" />
+    <ClInclude Include="RandomMgr.h">
+      <Filter>Source\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="FontMgr.h">
+      <Filter>GameEngine\Manager\Font</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -826,7 +831,12 @@
     <ClCompile Include="Source\Scripts\CUIOverlayController.cpp">
       <Filter>Source\ContentScript\UI</Filter>
     </ClCompile>
-    <ClCompile Include="RandomMgr.cpp" />
+    <ClCompile Include="RandomMgr.cpp">
+      <Filter>Source\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="FontMgr.cpp">
+      <Filter>GameEngine\Manager\Font</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -1161,6 +1171,9 @@
     </Filter>
     <Filter Include="Source\ContentScript\UI">
       <UniqueIdentifier>{94ef597b-5ade-4b8e-a2ef-24818c5ec124}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Manager\Font">
+      <UniqueIdentifier>{c5320978-3157-48a1-8f68-9b268dffb796}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

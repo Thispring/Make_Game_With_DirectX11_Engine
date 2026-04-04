@@ -15,6 +15,9 @@ CPlayerController::CPlayerController()
 	, m_PunchKey(KEY::Z)
 	, m_KickKey(KEY::X)
 	, m_BlastShotKey(KEY::C)
+
+	, m_bHasDied(false)
+	, m_bKeyRevealed{ false, false, false }
 {
 }
 
@@ -71,6 +74,8 @@ void CPlayerController::Punch(KEY _key)
 {
 	if (KEY_TAP(_key))
 	{
+		m_bKeyRevealed[PUNCH_KEY] = true;
+
 		// 콜라이더 활성화 및 IsAttack 설정은 PlayerPunchState::Begin()에서 처리
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::PUNCH));
 		m_StatusMgr->ChangeState();
@@ -81,6 +86,8 @@ void CPlayerController::Kick(KEY _key)
 {
 	if (KEY_TAP(_key))
 	{
+		m_bKeyRevealed[KICK_KEY] = true;
+
 		// 콜라이더 활성화 및 IsAttack 설정은 PlayerMiddleKickState::Begin()에서 처리
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::MIDDLE_KICK));
 		m_StatusMgr->ChangeState();
@@ -91,6 +98,8 @@ void CPlayerController::EnergyBlastShot(KEY _key)
 {
 	if (KEY_TAP(_key))
 	{
+		m_bKeyRevealed[BLAST_SHOT_KEY] = true;
+
 		Ptr<APrefab> pBlast = m_PlayerData->GetEnergyBlast();
 
 		Vec3 vAnchorPos   = GetOwner()->GetChild(PLAYER_PROJECTILE_ANCHOR)->Transform()->GetWorldPos();
@@ -133,5 +142,11 @@ void CPlayerController::SaveToLevelFile(FILE* _File)
 
 void CPlayerController::LoadFromLevelFile(FILE* _File)
 {
+}
+
+void CPlayerController::ResetKeyRevealed()
+{
+	for (int i = 0; i < 3; ++i)
+		m_bKeyRevealed[i] = false;
 }
 

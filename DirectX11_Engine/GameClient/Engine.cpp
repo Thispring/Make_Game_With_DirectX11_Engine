@@ -36,6 +36,9 @@ int Engine::Progress()
 	// 렌더링
 	RenderMgr::GetInst()->Progress();
 
+	// FPS Render
+	TimeMgr::GetInst()->Render();
+
 	// imgui Editor 관리
 	if (m_EditorMode)
 		EditorMgr::GetInst()->Progress();

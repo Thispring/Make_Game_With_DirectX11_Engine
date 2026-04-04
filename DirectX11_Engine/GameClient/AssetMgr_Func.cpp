@@ -465,10 +465,25 @@ void AssetMgr::CreateEngineTexture()
 	Load<ATexture>(L"remapTile_Atlas", L"Texture\\BackGround\\remapTileSet.png");
 
 	// UI
+	Load<ATexture>(L"z_in_Img", L"Texture\\UI\\Key\\z_in.png");
+	Load<ATexture>(L"x_in_Img", L"Texture\\UI\\Key\\x_in.png");
+	Load<ATexture>(L"c_in_Img", L"Texture\\UI\\Key\\c_in.png");
 
+	Load<ATexture>(L"z_out_Img", L"Texture\\UI\\Key\\z_out.png");
+	Load<ATexture>(L"x_out_Img", L"Texture\\UI\\Key\\x_out.png");
+	Load<ATexture>(L"c_out_Img", L"Texture\\UI\\Key\\c_out.png");
+
+	Load<ATexture>(L"key_pressed_Img", L"Texture\\UI\\Key\\key_pressed_sheet.png");
+	Load<ATexture>(L"key_released_Img", L"Texture\\UI\\Key\\key_released_sheet.png");
+	Load<ATexture>(L"key_input_Img", L"Texture\\UI\\Key\\key_input_sheet.png");
 	
+	Load<ATexture>(L"move_key_Img", L"Texture\\UI\\Key\\move_key_sheet.png");
+	Load<ATexture>(L"space_key_Img", L"Texture\\UI\\Key\\space_key_sheet.png");
+	Load<ATexture>(L"arrow_key_Img", L"Texture\\UI\\Key\\arrow_key_sheet.png");
+
 	// SavePoint
 	Load<ATexture>(L"savePoint_Atlas", L"Texture\\Object\\meteor_spritesheet.png");
+	Load<ATexture>(L"yellowSavePoint_Atlas", L"Texture\\Object\\yellow_meteor_spritesheet.png");
 
 }
 

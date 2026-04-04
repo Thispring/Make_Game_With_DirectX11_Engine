@@ -38,6 +38,9 @@ void CEnergyBlast::SetUp(Vec3 _Dir)
 	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
 	vPos.z = 100.f;
 	GetOwner()->Transform()->SetRelativePos(vPos);
+
+	// Flipbook 재생
+	GetOwner()->FlipbookRender()->Play(0, 10, -1);
 }
 
 bool CEnergyBlast::DestroyBlast()

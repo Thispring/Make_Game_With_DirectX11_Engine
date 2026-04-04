@@ -10,7 +10,7 @@
 #include "LevelMgr.h"
 #include "RenderMgr.h"
 #include "EditorMgr.h"
-#include "GameMgr.h"
+#include "FontMgr.h"
 
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -145,6 +145,9 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
 
     // Render 초기화
     RenderMgr::GetInst()->Init();
+
+    // Font 매니저 초기화
+    FontMgr::GetInst()->Init();
 
     // Editor 초기화(imgui)
     if (m_EditorMode)

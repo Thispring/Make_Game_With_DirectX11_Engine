@@ -231,8 +231,21 @@ void CFlipbookRender::LoadFromLevelFile(FILE* _File)
 		m_vecFlipbook.push_back(LoadAssetRef<AFlipbook>(_File));
 	}
 
+	/***********************************************************************
+	* NOTE(26-04-04):
+	* 한 오브젝트가 여러 Flipbook을 가지고 있을 때,
+	* 아래 멤버를 저장 및 불러올 시, 불러오는 과정에서 
+	* 다른 Flipbook의 인덱스 참조 오류가 발생할 수 있습니다.
+	* Flipbook 재생은 각자 오브젝트 Begin 시점에서 필요한 값으로 초기화합니다.
+	***********************************************************************/
 	fread(&m_CurFlipbook, sizeof(int), 1, _File);
 	fread(&m_CurSprite, sizeof(int), 1, _File);
 	fread(&m_FPS, sizeof(float), 1, _File);
 	fread(&m_RepeatCount, sizeof(int), 1, _File);
+
+	// 불러온 뒤 0으로 초기화
+	m_CurFlipbook = 0;
+	m_CurSprite = 0;
+	m_FPS = 0;
+	m_RepeatCount = 0;
 }
