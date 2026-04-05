@@ -88,6 +88,11 @@ KEY: ENTER
 KEY_STATE: TAP
 Source File: EditorMgr.cpp
 
+Comment: F5 전체화면 토글
+KEY: F5
+KEY_STATE: TAP
+Source File: Engine.cpp
+
 Comment: No Comment
 KEY: F9
 KEY_STATE: TAP

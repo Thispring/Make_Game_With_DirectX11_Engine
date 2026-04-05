@@ -128,6 +128,45 @@ int Device::Init(HWND _hwnd, Vec2 _Resolution)
 	return S_OK;
 }
 
+int Device::ResizeSwapChain(Vec2 _Resolution)
+{
+	// 바인딩된 렌더타겟 해제
+	m_Context->OMSetRenderTargets(0, nullptr, nullptr);
+
+	// 뷰 및 텍스처 버퍼 해제
+	m_RTV.Reset();
+	m_DSV.Reset();
+	m_RenderTarget.Reset();
+	m_DepthStencilTarget.Reset();
+
+	// 해상도 갱신
+	m_RenderResol = _Resolution;
+	g_Global.Resolution = m_RenderResol;
+
+	// SwapChain 버퍼 크기 변경 (포맷은 기존 유지)
+	if (FAILED(m_SwapChain->ResizeBuffers(0, (UINT)_Resolution.x, (UINT)_Resolution.y, DXGI_FORMAT_UNKNOWN, 0)))
+		return E_FAIL;
+
+	// RTV, DSV 재생성
+	if (FAILED(CreateBuffer()))
+		return E_FAIL;
+
+	// 뷰포트 재설정
+	D3D11_VIEWPORT vp = {};
+	vp.TopLeftX = 0.f;
+	vp.TopLeftY = 0.f;
+	vp.Width    = _Resolution.x;
+	vp.Height   = _Resolution.y;
+	vp.MinDepth = 0.f;
+	vp.MaxDepth = 1.f;
+	m_Context->RSSetViewports(1, &vp);
+
+	// 렌더타겟 재설정
+	OMSetTarget();
+
+	return S_OK;
+}
+
 void Device::ClearTarget() 
 {
 	Vec4 vColor = Vec4(0.f, 0.f, 0.f, 0.f);

@@ -22,6 +22,7 @@ private:
 	HWND		m_hWnd;
 	Vec2		m_Resolution;
 	bool		m_EditorMode;	// Engine을 Editor로 실행할지 여부
+	bool		m_FullScreen;	// 전체화면(창모드 1920x1080) 여부
 
 public:
 	//=========
@@ -29,6 +30,7 @@ public:
 	//=========
 	int Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode);
 	int Progress();
+	void ToggleFullScreen();
 
 
 	//=========
@@ -37,5 +39,6 @@ public:
 	HINSTANCE GetInstance() { return m_hInst; }
 	HWND GetMainWndHwnd() { return m_hWnd; }
 	Vec2 GetResolution() { return m_Resolution; }
+	bool IsFullScreen() const { return m_FullScreen; }
 
 };

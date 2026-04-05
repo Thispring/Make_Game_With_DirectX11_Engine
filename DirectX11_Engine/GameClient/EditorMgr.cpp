@@ -34,6 +34,7 @@
 
 EditorMgr::EditorMgr()
     : m_ShowDemo(false)     // ImGui Demo UI 활성/비활성
+    , m_UIVisible(true)     // 기본값: UI 표시
 {
 }
 
@@ -71,6 +72,10 @@ void EditorMgr::Tick()
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+
+    // 전체화면 모드 시 UI 창을 그리지 않음 (ImGui 프레임은 유지)
+    if (!m_UIVisible)
+        return;
 
     m_FocusedUI = nullptr;
     

@@ -95,7 +95,10 @@ public:
 	//=========
 	// GPU를 이용해, 윈도우 창 생성 및 초기화
 	int Init(HWND _hwnd, Vec2 _Resolution);
-	
+
+	// SwapChain 및 버퍼를 새 해상도로 재생성
+	int ResizeSwapChain(Vec2 _Resolution);
+
 	// 만들어진 윈도우 창을 출력하는 함수
 	void Present() { m_SwapChain->Present(0, 0); }
 	

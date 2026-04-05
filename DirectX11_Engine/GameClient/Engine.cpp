@@ -10,11 +10,12 @@
 #include "EditorMgr.h"
 
 Engine::Engine()
-    : // 명시되어 있지 않지만, 상속받은 부모의 생성자가 숨어있음
+	: // 명시되어 있지 않지만, 상속받은 부모의 생성자가 숨어있음
 	m_hInst(nullptr)
-    , m_hWnd(nullptr)
-    , m_Resolution{}
+	, m_hWnd(nullptr)
+	, m_Resolution{}
 	, m_EditorMode(true)
+	, m_FullScreen(false)
 {
 }
 
@@ -29,6 +30,10 @@ int Engine::Progress()
 
 	// Key 상태 계산
 	KeyMgr::GetInst()->Tick();
+
+	// F5 전체화면 토글
+	if (KEY_TAP(KEY::F5))
+		ToggleFullScreen();
 
 	// Level 업데이트
 	LevelMgr::GetInst()->Progress();
@@ -67,4 +72,34 @@ int Engine::Progress()
 	TaskMgr::GetInst()->Progress();
 
 	return S_OK;
+}
+
+void Engine::ToggleFullScreen()
+{
+	m_FullScreen = !m_FullScreen;
+
+	if (m_FullScreen)
+	{
+		// 타이틀 창 제거(WS_POPUP), 1920x1080 창모드 전체화면
+		SetWindowLongPtr(m_hWnd, GWL_STYLE, WS_POPUP);
+		SetWindowPos(m_hWnd, HWND_TOP, 0, 0, 1920, 1080, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+		Device::GetInst()->ResizeSwapChain(Vec2(1920.f, 1080.f));
+
+		if (m_EditorMode)
+			EditorMgr::GetInst()->SetUIVisible(false);
+	}
+	else
+	{
+		// 타이틀 창 복원, 기본 해상도(1600x900)로 복귀
+		UINT uStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
+		SetWindowLongPtr(m_hWnd, GWL_STYLE, uStyle);
+
+		RECT rt = { 0, 0, (LONG)m_Resolution.x, (LONG)m_Resolution.y };
+		AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, !!GetMenu(m_hWnd));
+		SetWindowPos(m_hWnd, nullptr, 0, 0, rt.right - rt.left, rt.bottom - rt.top, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+		Device::GetInst()->ResizeSwapChain(m_Resolution);
+
+		if (m_EditorMode)
+			EditorMgr::GetInst()->SetUIVisible(true);
+	}
 }
