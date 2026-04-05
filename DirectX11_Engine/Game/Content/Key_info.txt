@@ -3,6 +3,11 @@ KEY: NUMPAD_MUL
 KEY_STATE: TAP
 Source File: CEditorCamMoveScript.cpp
 
+Comment: Numpad /를 누르면, 현재 Level의 메인카메라 위치로 본인 Transform 변경
+KEY: NUMPAD_DIV
+KEY_STATE: PRESSED
+Source File: CEditorCamMoveScript.cpp
+
 Comment: Resets the position and rotation when the SPACE KEY is pressed.
 KEY: NUMPAD0
 KEY_STATE: PRESSED

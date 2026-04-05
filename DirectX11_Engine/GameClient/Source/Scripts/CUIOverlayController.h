@@ -17,6 +17,7 @@ private:
 public:
     void ChangeKeyUI();
     void UpdateMoveKeyUI();
+    void UpdateHPBarUI();   // 자식 8, 9번 MeshRender 재질의 FILL 값을 HP 비율로 갱신
 
     //=============
     // 상속 멤버 함수

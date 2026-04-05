@@ -481,9 +481,18 @@ void AssetMgr::CreateEngineTexture()
 	Load<ATexture>(L"space_key_Img", L"Texture\\UI\\Key\\space_key_sheet.png");
 	Load<ATexture>(L"arrow_key_Img", L"Texture\\UI\\Key\\arrow_key_sheet.png");
 
+	Load<ATexture>(L"HP_Fill_Img", L"Texture\\UI\\HP\\hpFill.png");
+	Load<ATexture>(L"HP_Background_Img", L"Texture\\UI\\HP\\hpBackground.png");
+
+
 	// SavePoint
 	Load<ATexture>(L"savePoint_Atlas", L"Texture\\Object\\meteor_spritesheet.png");
 	Load<ATexture>(L"yellowSavePoint_Atlas", L"Texture\\Object\\yellow_meteor_spritesheet.png");
+
+	// Title
+	Load<ATexture>(L"title0Img", L"Texture\\UI\\Title\\title0.png");
+	Load<ATexture>(L"title1Img", L"Texture\\UI\\Title\\title1.png");
+
 
 }
 

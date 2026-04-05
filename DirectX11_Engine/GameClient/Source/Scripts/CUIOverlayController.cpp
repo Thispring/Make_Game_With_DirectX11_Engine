@@ -8,6 +8,8 @@
 #include "KeyMgr.h"
 #include "CPlayerController.h"
 #include "CPlayerData.h"
+#include "CMeshRender.h"
+#include "AMaterial.h"
 
 CUIOverlayController::CUIOverlayController()
 	: CScript(SCRIPT_TYPE::UIOVERLAYCONTROLLER)
@@ -170,6 +172,15 @@ void CUIOverlayController::Begin()
 			m_vecUIOffset[i] = Vec3(vUIPos.x - vCamPos.x, vUIPos.y - vCamPos.y, 0.f);
 		}
 	}
+
+	// 자식 8, 9번은 HP 바 MeshRender — 공유 재질 오염을 막기 위해 동적 재질 생성
+	for (int i = 8; i <= 9; ++i)
+	{
+		if ((int)m_vecUIObject.size() <= i) break;
+		Ptr<CMeshRender> pMesh = m_vecUIObject[i]->MeshRender();
+		if (pMesh != nullptr)
+			pMesh->CreateDynamicMaterial();
+	}
 }
 
 void CUIOverlayController::Tick()
@@ -191,6 +202,43 @@ void CUIOverlayController::Tick()
 
 	// 이동키 UI 스프라이트 업데이트
 	UpdateMoveKeyUI();
+
+	// HP 바 Fill 갱신
+	UpdateHPBarUI();
+}
+
+void CUIOverlayController::UpdateHPBarUI()
+{
+	// 자식 오브젝트가 인덱스 9번까지 없으면 처리 불필요
+	if ((int)m_vecUIObject.size() < 10)
+		return;
+
+	Ptr<GameObject> pPlayer = GameMgr::GetInst()->GetPlayer();
+	if (pPlayer == nullptr) return;
+
+	Ptr<CPlayerData> pData = pPlayer->GetScript<CPlayerData>();
+	if (pData == nullptr) return;
+
+	float fFullHP = pData->GetFullHP();
+	if (fFullHP <= 0.f) return;
+
+	// HP 비율 [0, 1] 범위로 고정
+	// 1.0 = 풀 HP (전체 표시), 0.0 = HP 없음 (전체 discard)
+	float fFill = pData->GetCurHP() / fFullHP;
+	if (fFill < 0.f) fFill = 0.f;
+	if (fFill > 1.f) fFill = 1.f;
+
+	for (int i = 8; i < 9; ++i)
+	{
+		Ptr<CMeshRender> pMeshRender = m_vecUIObject[i]->MeshRender();
+		if (pMeshRender == nullptr) continue;
+
+		Ptr<AMaterial> pMtrl = pMeshRender->GetMaterial();
+		if (pMtrl == nullptr) continue;
+
+		// g_float_0 (FILL) 에 HP 비율 전달 → std2d.fx 에서 오른쪽부터 discard
+		pMtrl->SetScalar(FLOAT_0, fFill);
+	}
 }
 
 void CUIOverlayController::SaveToLevelFile(FILE* _File)

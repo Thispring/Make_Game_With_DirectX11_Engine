@@ -80,6 +80,17 @@ void CEditorCamMoveScript::Tick()
 		Transform()->SetRelativePos(vPos);
 	}
 
+	// Numpad /를 누르면, 현재 Level의 메인카메라 위치로 본인 Transform 변경
+	if (KEY_PRESSED(KEY::NUMPAD_DIV))
+	{
+		Ptr<GameObject> pCam = LevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MainCamera");
+		//pCam->Transform()->GetRelativePos();
+		//pCam->Transform()->GetRelativeRot();
+
+		Transform()->SetRelativePos(pCam->Transform()->GetRelativePos());
+		Transform()->SetRelativeRot(pCam->Transform()->GetRelativeRot());
+	}
+
 	// SPACE KEY를 누르면 위치, 회전 상태 초기화
 	// Resets the position and rotation when the SPACE KEY is pressed.
 	if (KEY_PRESSED(KEY::NUMPAD0))

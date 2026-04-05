@@ -220,6 +220,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     case WM_COMMAND:
         {
+            //if (HIWORD(wParam) == BN_CLICKED)
+            //{
+            //    switch (LOWORD(wParam))   // 버튼 ID
+            //    {
+            //    case 2001:
+            //        //Engine::GetInst()->ToggleFullScreen();
+            //        break;
+            //    }
+            //}
+            //break;
 
             int wmId = LOWORD(wParam);
             // 메뉴 선택을 구문 분석합니다:

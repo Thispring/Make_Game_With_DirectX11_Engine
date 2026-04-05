@@ -4,6 +4,7 @@
 
 #include "value.fx"
 
+#define FILL g_float_0
 #define TintColor g_vec4_0
 
 struct VS_IN
@@ -105,7 +106,15 @@ float4 PS_Std2D(VS_OUT _input) : SV_Target
     {
         discard;
     }
-    
+
+    // HP 프로그레스 바 Fill:
+    // FILL(g_float_0) > 0 일 때만 적용 — 일반 오브젝트(FILL == 0)는 영향 없음
+    // UV.x 가 FILL 비율을 초과하는 픽셀(오른쪽)을 잘라내어 HP 만큼만 표시
+    if (FILL > 0.f && _input.vUV.x > FILL)
+    {
+        discard;
+    }
+
     // 이 코드가 실행되었을 때, 색상이 검은색으로 출력되는지 확인
     //vColor *= TintColor;
     

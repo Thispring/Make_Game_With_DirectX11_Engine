@@ -306,6 +306,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="TileMapMaker.h" />
     <ClInclude Include="TimeMgr.h" />
     <ClInclude Include="TreeUI.h" />
+    <ClInclude Include="UIMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AFlipbook.cpp" />
@@ -443,6 +444,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="TileMapMaker.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
     <ClCompile Include="TreeUI.cpp" />
+    <ClCompile Include="UIMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameClient.rc" />

@@ -430,6 +430,7 @@
     <ClInclude Include="FontMgr.h">
       <Filter>GameEngine\Manager\Font</Filter>
     </ClInclude>
+    <ClInclude Include="UIMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -837,6 +838,7 @@
     <ClCompile Include="FontMgr.cpp">
       <Filter>GameEngine\Manager\Font</Filter>
     </ClCompile>
+    <ClCompile Include="UIMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">

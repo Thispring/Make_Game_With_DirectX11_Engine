@@ -30,6 +30,15 @@ void GameMgr::Init()
 
 	//m_Player = pLevel->FindObjectByName(L"Player");
 	//m_PlayerData = m_Player->GetScript<CPlayerData>();
+	
+	// 현재 Level 이 두 Level 이면 불러오기 X
+	//  L"Level\\Ending.lv"
+	//  L"Level\\MainMenu.lv"
+	if (LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\MainMenu.lv"
+		|| LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\Ending.lv")
+		return;
+
+
 	m_Player = LevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"Player");
 	m_PlayerData = m_Player->GetScript<CPlayerData>();
 

@@ -11,6 +11,7 @@
 #include "RenderMgr.h"
 #include "EditorMgr.h"
 #include "FontMgr.h"
+#include "UIMgr.h"
 
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -148,7 +149,7 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
 
     // Font 매니저 초기화
     FontMgr::GetInst()->Init();
-
+    
     // Editor 초기화(imgui)
     if (m_EditorMode)
         EditorMgr::GetInst()->Init();

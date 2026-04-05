@@ -66,6 +66,10 @@ void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 	// Stop -> Play 전환
 	if (m_LevelState == LEVEL_STATE::STOP && _NextState == LEVEL_STATE::PLAY)
 	{
+		// Begin() 내부에서 PLAY 상태를 전제하는 코드가 있으므로
+		// Clone/Begin 이전에 먼저 상태를 설정한다.
+		m_LevelState = _NextState;
+
 		// 원본 Level의 복제본을 만들고 현재 Level로 가리키게 한다.
 		m_CurLevel = m_ShardLevel->Clone();
 		m_CurLevel->SetChanged();
