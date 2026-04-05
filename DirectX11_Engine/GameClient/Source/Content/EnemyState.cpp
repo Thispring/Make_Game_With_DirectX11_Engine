@@ -18,6 +18,10 @@ EnemyState::~EnemyState()
 static bool isTest = false;
 void EnemyState::ApplyGravity()
 {
+	// FLYING 추락 적용 X
+	if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLYING)
+		return;
+
 	// 임시 비활성화 Key 코드 추가하기
 	if (KEY_TAP(KEY::ALPHA8))
 	{

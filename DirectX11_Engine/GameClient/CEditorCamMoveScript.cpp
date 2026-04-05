@@ -47,8 +47,8 @@ void CEditorCamMoveScript::Tick()
 		m_CurRot = Transform()->GetRelativeRot();
 	}
 
-	// F6: 플레이어 XY 위치 추적 토글
-	if (KEY_TAP(KEY::F6))
+	// *: 플레이어 XY 위치 추적 토글
+	if (KEY_TAP(KEY::NUMPAD_MUL))
 	{
 		m_bFollowPlayer = !m_bFollowPlayer;
 
@@ -82,12 +82,12 @@ void CEditorCamMoveScript::Tick()
 
 	// SPACE KEY를 누르면 위치, 회전 상태 초기화
 	// Resets the position and rotation when the SPACE KEY is pressed.
-	if (KEY_PRESSED(KEY::O))
+	if (KEY_PRESSED(KEY::NUMPAD0))
 		MoveOrigin();
 
 	// LSHIFT KEY를 누르면 카메라의 투영방식 스위칭
 	// Switches the camera's projection method when the LSHIFT KEY is pressed.
-	if (KEY_TAP(KEY::F2))
+	if (KEY_TAP(KEY::NUMPAD_SUB))
 		SwitchingType(Camera()->GetTypeRef());
 }
 
@@ -118,19 +118,19 @@ void CEditorCamMoveScript::OrthoCamMove()
 	Vec3 vPos = Transform()->GetRelativePos();
 
     // Use WASD for editor ortho camera movement
-	if (KEY_PRESSED(KEY::W))
-		vPos.y += E_DT * 500.f;
-	if (KEY_PRESSED(KEY::S))
-		vPos.y -= E_DT * 500.f;
-	if (KEY_PRESSED(KEY::A))
-		vPos.x -= E_DT * 500.f;
-	if (KEY_PRESSED(KEY::D))
-		vPos.x += E_DT * 500.f;
+	if (KEY_PRESSED(KEY::NUMPAD8))
+		vPos.y += E_DT * 1600.f;
+	if (KEY_PRESSED(KEY::NUMPAD5))
+		vPos.y -= E_DT * 1600.f;
+	if (KEY_PRESSED(KEY::NUMPAD4))
+		vPos.x -= E_DT * 1600.f;
+	if (KEY_PRESSED(KEY::NUMPAD6))
+		vPos.x += E_DT * 1600.f;
 
-	if (KEY_PRESSED(KEY::Q))
-		vPos.z += E_DT * 250.0f;
-	if (KEY_PRESSED(KEY::E))
-		vPos.z -= E_DT * 250.0f;
+	if (KEY_PRESSED(KEY::NUMPAD7))
+		vPos.z += E_DT * 500.f;
+	if (KEY_PRESSED(KEY::NUMPAD9))
+		vPos.z -= E_DT * 500.f;
 
 	Transform()->SetRelativePos(vPos);
 	Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
@@ -142,18 +142,18 @@ void CEditorCamMoveScript::PrespecCamMove()
 	Vec3 vRot = Transform()->GetRelativeRot();
 
     // Use WASD for editor perspective camera movement
-	if (KEY_PRESSED(KEY::W))
+	if (KEY_PRESSED(KEY::NUMPAD8))
 		vPos.y += E_DT * 1600.f;
-	if (KEY_PRESSED(KEY::S))
+	if (KEY_PRESSED(KEY::NUMPAD5))
 		vPos.y -= E_DT * 1600.f;
-	if (KEY_PRESSED(KEY::A))
+	if (KEY_PRESSED(KEY::NUMPAD4))
 		vPos.x -= E_DT * 1600.f;
-	if (KEY_PRESSED(KEY::D))
+	if (KEY_PRESSED(KEY::NUMPAD6))
 		vPos.x += E_DT * 1600.f;
 
-	if (KEY_PRESSED(KEY::Q))
+	if (KEY_PRESSED(KEY::NUMPAD7))
 		vPos.z += E_DT * 500.f;
-	if (KEY_PRESSED(KEY::E))
+	if (KEY_PRESSED(KEY::NUMPAD9))
 		vPos.z -= E_DT * 500.f;
 
 

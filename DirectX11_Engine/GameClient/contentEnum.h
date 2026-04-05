@@ -38,19 +38,17 @@ namespace FLIPBOOK
     namespace FLYING
     {
         constexpr int IDLE = 0;
-        constexpr int MOVE = 1;
-        constexpr int JUMP = 2;
-        constexpr int ATTACK = 3;
-        constexpr int HIT = 4;
-        constexpr int DEAD = 5;
+        constexpr int ATTACK = 1;
+        constexpr int HIT = 2;
+        constexpr int DEAD = 3;
     }
 
     namespace FLOWER
     {
         constexpr int IDLE = 0;
-        constexpr int MOVE = 1;
-        constexpr int JUMP = 2;
-        constexpr int ATTACK = 3;
+        constexpr int JUMP = 1;
+        constexpr int MELEE_ATTACK = 2;
+        constexpr int RANGED_ATTACK = 3;
         constexpr int HIT = 4;
         constexpr int DEAD = 5;
     }
@@ -116,6 +114,8 @@ enum class ENEMY_TYPE
 
     BOSS,
 
+    TEST,   // 테스트용도
+
     END,
 };
 
@@ -155,6 +155,7 @@ enum class LEVEL_0_LAYER
 
     SAVE_POINT = 15,
     BACK_GROUND_COLLIDER = 16,
+    MOVEMENT_BOUNDARY = 17,         // 추락 방지용 콜라이더 Layer
 
     DISABLE = 30,
     UI = 31,

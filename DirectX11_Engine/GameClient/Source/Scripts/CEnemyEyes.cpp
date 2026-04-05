@@ -78,7 +78,6 @@ void CEnemyEyes::Tick()
 	if (m_EnemyData->GetIsDead() == true)
 	{
 		GetOwner()->SetIsActive(false);
-		return;
 	}
 }
 

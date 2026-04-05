@@ -32,6 +32,8 @@ CEnemyData::CEnemyData()
 
 	, m_OriginPos{}
 	, m_CurPos{}
+	, m_OriginRot{}
+	, m_CurRot{}
 
 	// EnemyType은 기본으로 END입니다.
 	// ImGui에서 지정해야 하며, 하지 않을경우 크래시
@@ -68,7 +70,7 @@ void CEnemyData::Init()
 	// enum class ENEMY_TYPE을 ImGui에서 편집할 수 있도록 전달
 	// Level Play 전에 m_EnemyType을 미리 받을 수 있게 보장합니다.
 	AddScriptParam(SCRIPT_PARAM::ENUM_CLASS, &m_EnemyType, L"EnemyType", true, 0.f,
-		vector<wstring>{ L"DEMON", L"SKULL", L"FLYING", L"FLOWER", L"BOSS", L"END" });
+		vector<wstring>{ L"DEMON", L"SKULL", L"FLYING", L"FLOWER", L"BOSS", L"TEST", L"END" });
 }
 
 void CEnemyData::Begin()
@@ -88,8 +90,12 @@ void CEnemyData::Begin()
 	assert(m_EnemyType != ENEMY_TYPE::END && "EnemyType is End");
 
 	// 기존 위치는 Begin에서 초기화
-	m_OriginPos = Vec3(0.f, 0.f, 0.f);
-	m_CurPos = m_OriginPos;
+	m_OriginPos = GetOwner()->Transform()->GetRelativePos();
+	m_CurPos    = m_OriginPos;
+
+	m_OriginRot = GetOwner()->Transform()->GetRelativeRot();
+	m_CurRot    = m_OriginRot;
+
 
 	// 스케일 x축값을 읽어와 음수인지 양수인지 판단하여 이동방향을 미리 결정합니다.
 	Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
@@ -183,9 +189,6 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 
 void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	//if (m_IsDead == true)
-	//	return;
-
 	m_IsFalling = true;
 
 	// HIT, DEAD 상태에서는 IDLE로 강제 전환하지 않음

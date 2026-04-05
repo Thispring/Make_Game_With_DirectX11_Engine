@@ -36,7 +36,7 @@ void CCamMoveScript::Begin()
 void CCamMoveScript::Tick()
 {
 	// Change Cam Move Mode
-	if (KEY_PRESSED(KEY::F1))
+	if (KEY_PRESSED(KEY::NUMPAD_DIV))
 	{
 		// F1 키로 카메라 모드 스위칭
 		if (m_MoveMode == CAM_MOVE_MODE::DEBUG)
@@ -87,12 +87,12 @@ void CCamMoveScript::Tick()
 
 	// I KEY를 누르면 위치, 회전 상태 초기화
 	// Resets the position and rotation when the I KEY is pressed.
-	if (KEY_PRESSED(KEY::O))
+	if (KEY_PRESSED(KEY::NUMPAD0))
 		MoveOrigin();
 
 	// F4 KEY를 누르면 카메라의 투영방식 스위칭
 	// Switches the camera's projection method when the F4 KEY is pressed.
-	if (KEY_TAP(KEY::F2))
+	if (KEY_TAP(KEY::NUMPAD_SUB))
 		SwitchingType(Camera()->GetTypeRef());
 }
 
@@ -133,19 +133,19 @@ void CCamMoveScript::OrthoCamMove()
 	Vec3 vPos = Transform()->GetRelativePos();
 
     // Move using WASD instead of arrow keys
-	if (KEY_PRESSED(KEY::W))
-		vPos.y += DT * 500.f;
-	if (KEY_PRESSED(KEY::S))
-		vPos.y -= DT * 500.f;
-	if (KEY_PRESSED(KEY::A))
-		vPos.x -= DT * 500.f;
-	if (KEY_PRESSED(KEY::D))
-		vPos.x += DT * 500.f;
+	if (KEY_PRESSED(KEY::NUMPAD8))
+		vPos.y += DT * 1600.f;
+	if (KEY_PRESSED(KEY::NUMPAD5))
+		vPos.y -= DT * 1600.f;
+	if (KEY_PRESSED(KEY::NUMPAD4))
+		vPos.x -= DT * 1600.f;
+	if (KEY_PRESSED(KEY::NUMPAD6))
+		vPos.x += DT * 1600.f;
 
-	if (KEY_PRESSED(KEY::Q))
-		vPos.z += DT * 250.0f;
-	if (KEY_PRESSED(KEY::E))
-		vPos.z -= DT * 250.0f;
+	if (KEY_PRESSED(KEY::NUMPAD7))
+		vPos.z += E_DT * 500.f;
+	if (KEY_PRESSED(KEY::NUMPAD9))
+		vPos.z -= E_DT * 500.f;
 
 	Transform()->SetRelativePos(vPos);
 	Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
@@ -157,19 +157,19 @@ void CCamMoveScript::PrespecCamMove()
 	Vec3 vRot = Transform()->GetRelativeRot();
 
     // Use WASD for in-game camera movement as well
-	if (KEY_PRESSED(KEY::W))
-		vPos.y += DT * 250.f;
-	if (KEY_PRESSED(KEY::S))
-		vPos.y -= DT * 250.0f;
-	if (KEY_PRESSED(KEY::A))
-		vPos.x -= DT * 250.0f;
-	if (KEY_PRESSED(KEY::D))
-		vPos.x += DT * 250.0f;
+	if (KEY_PRESSED(KEY::NUMPAD8))
+		vPos.y += E_DT * 1600.f;
+	if (KEY_PRESSED(KEY::NUMPAD5))
+		vPos.y -= E_DT * 1600.f;
+	if (KEY_PRESSED(KEY::NUMPAD4))
+		vPos.x -= E_DT * 1600.f;
+	if (KEY_PRESSED(KEY::NUMPAD6))
+		vPos.x += E_DT * 1600.f;
 
-	if (KEY_PRESSED(KEY::Q))
-		vPos.z += DT * 250.0f;
-	if (KEY_PRESSED(KEY::E))
-		vPos.z -= DT * 250.0f;
+	if (KEY_PRESSED(KEY::NUMPAD7))
+		vPos.z += E_DT * 500.f;
+	if (KEY_PRESSED(KEY::NUMPAD9))
+		vPos.z -= E_DT * 500.f;
 
 	Transform()->SetRelativePos(vPos);
 	Transform()->SetRelativeRot(vRot);

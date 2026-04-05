@@ -121,17 +121,34 @@ void CEnemyStateManager::SetUp()
     }
         break;
     case ENEMY_TYPE::FLYING:
-        // FLYING의 IDLE과 MOVE는 동일한 Flipbook 사용, JUMP 사용 X
-
+        // FLYING의 IDLE과 MOVE는 동일한 Flipbook 사용(IDLE로 인덱스 사용), JUMP 사용 X
+        m_mapStatus[ENEMY_STATE::IDLE] = std::make_pair(make_unique<EnemyIdleState>(m_EnemyData), FLIPBOOK::FLYING::IDLE);
+        m_mapStatus[ENEMY_STATE::MOVE] = std::make_pair(make_unique<EnemyMoveState>(m_EnemyData), FLIPBOOK::FLYING::IDLE);
+        m_mapStatus[ENEMY_STATE::ATTACK] = std::make_pair(make_unique<EnemyAttackState>(m_EnemyData), FLIPBOOK::FLYING::ATTACK);
+        m_mapStatus[ENEMY_STATE::HIT] = std::make_pair(make_unique<EnemyHitState>(m_EnemyData), FLIPBOOK::FLYING::HIT);
+        m_mapStatus[ENEMY_STATE::DEAD] = std::make_pair(make_unique<EnemyDeadState>(m_EnemyData), FLIPBOOK::FLYING::DEAD);
+        m_mapStatus[ENEMY_STATE::PATROL] = std::make_pair(make_unique<EnemyPatrolState>(m_EnemyData), FLIPBOOK::FLYING::IDLE);
+        m_mapStatus[ENEMY_STATE::CHASE] = std::make_pair(make_unique<EnemyChaseState>(m_EnemyData), FLIPBOOK::FLYING::IDLE);
         break;
     case ENEMY_TYPE::FLOWER:
         // FLOWER는 MOVE 사용 X, JUMP는 필수사용 X
+        //m_mapStatus[ENEMY_STATE::IDLE] = std::make_pair(make_unique<EnemyIdleState>(m_EnemyData), FLIPBOOK::FLOWER::IDLE);
+        //m_mapStatus[ENEMY_STATE::JUMP] = std::make_pair(make_unique<EnemyMoveState>(m_EnemyData), FLIPBOOK::FLOWER::JUMP);
+        //m_mapStatus[ENEMY_STATE::ATTACK] = std::make_pair(make_unique<EnemyAttackState>(m_EnemyData), FLIPBOOK::FLOWER::MELEE_ATTACK);
+        //m_mapStatus[ENEMY_STATE::ATTACK] = std::make_pair(make_unique<EnemyHitState>(m_EnemyData), FLIPBOOK::FLOWER::RANGED_ATTACK);
+        //m_mapStatus[ENEMY_STATE::HIT] = std::make_pair(make_unique<EnemyDeadState>(m_EnemyData), FLIPBOOK::FLYING::HIT);
+        //m_mapStatus[ENEMY_STATE::DEAD] = std::make_pair(make_unique<EnemyPatrolState>(m_EnemyData), FLIPBOOK::FLYING::DEAD);
+        //m_mapStatus[ENEMY_STATE::PATROL] = std::make_pair(make_unique<EnemyChaseState>(m_EnemyData), FLIPBOOK::FLYING::IDLE);
 
         break;
     case ENEMY_TYPE::BOSS:
-
+        //m_mapStatus[ENEMY_STATE::IDLE] = std::make_pair(make_unique<EnemyIdleState>(m_EnemyData), FLIPBOOK::BOSS::IDLE);
+        //m_mapStatus[ENEMY_STATE::MOVE] = std::make_pair(make_unique<EnemyMoveState>(m_EnemyData), FLIPBOOK::BOSS::MOVE);
         break;
     }
+
+    if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::TEST)
+        return;
 
     // 현재 상태를 Idle로 등록 (map에서 안전하게 조회)
     auto it = m_mapStatus.find(ENEMY_STATE::IDLE);
@@ -228,10 +245,15 @@ void CEnemyStateManager::ChangeState()
 
 void CEnemyStateManager::Begin()
 {
+    if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::TEST)
+        return;
 }
 
 void CEnemyStateManager::Tick()
 {
+    if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::TEST)
+        return;
+
     // 필요에 따라 Tick에서 m_Status의 함수를 실행합니다.
     // 이전의 상태가 다르지 않을때만 Tick 수행
     if (m_PrevStatus == m_CurStatus)

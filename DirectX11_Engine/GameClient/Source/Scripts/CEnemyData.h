@@ -20,6 +20,9 @@ private:
     Vec3                m_OriginPos;
     Vec3                m_CurPos;
 
+    Vec3                m_OriginRot;
+    Vec3                m_CurRot;
+
     float               m_FullHP;
     float               m_CurHP;
     float               m_Damage;
@@ -87,6 +90,8 @@ public:
 
     GET_SET(Vec3, OriginPos);
     GET_SET(Vec3, CurPos);
+    GET_SET(Vec3, OriginRot);
+    GET_SET(Vec3, CurRot);
 
     GET_SET(GameObject*, TargetObject);
     GET_SET(ENEMY_TYPE, EnemyType);

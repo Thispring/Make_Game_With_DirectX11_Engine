@@ -64,7 +64,7 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
     // 핸들        - 커널 오브젝트의 ID 개념
     m_hWnd = CreateWindowW(L"MyGame",       // lpClassName
         L"MyGame",                          // lpWindowName
-        Style,                              // dwStyle => 타이틀 창, WS_POP으로 하면 타이틀 창이 않보임
+        Style,                              // dwStyle => 타이틀 창, WS_POP으로 하면 타이틀 창이 안보임
         CW_USEDEFAULT,                      // x
         0,                                  // y
         CW_USEDEFAULT,                      // nWidth   => 모니터 해상도에 맞춤, 만약 1920을 Width로 가진모니터에서 

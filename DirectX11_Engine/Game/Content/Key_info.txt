@@ -1,75 +1,75 @@
-Comment: F6: 플레이어 XY 위치 추적 토글
-KEY: F6
+Comment: *: 플레이어 XY 위치 추적 토글
+KEY: NUMPAD_MUL
 KEY_STATE: TAP
 Source File: CEditorCamMoveScript.cpp
 
 Comment: Resets the position and rotation when the SPACE KEY is pressed.
-KEY: O
+KEY: NUMPAD0
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: Switches the camera's projection method when the LSHIFT KEY is pressed.
-KEY: F2
+KEY: NUMPAD_SUB
 KEY_STATE: TAP
 Source File: CEditorCamMoveScript.cpp
 
 Comment: Use WASD for editor ortho camera movement
-KEY: W
+KEY: NUMPAD8
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: S
+KEY: NUMPAD5
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: A
+KEY: NUMPAD4
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: D
+KEY: NUMPAD6
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: Q
+KEY: NUMPAD7
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: E
+KEY: NUMPAD9
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: Use WASD for editor perspective camera movement
-KEY: W
+KEY: NUMPAD8
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: S
+KEY: NUMPAD5
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: A
+KEY: NUMPAD4
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: D
+KEY: NUMPAD6
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: Q
+KEY: NUMPAD7
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
 Comment: No Comment
-KEY: E
+KEY: NUMPAD9
 KEY_STATE: PRESSED
 Source File: CEditorCamMoveScript.cpp
 
@@ -114,77 +114,77 @@ KEY_STATE: TAP
 Source File: PlayerState.cpp
 
 Comment: Change Cam Move Mode
-KEY: F1
+KEY: NUMPAD_DIV
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: Resets the position and rotation when the I KEY is pressed.
-KEY: O
+KEY: NUMPAD0
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: Switches the camera's projection method when the F4 KEY is pressed.
-KEY: F2
+KEY: NUMPAD_SUB
 KEY_STATE: TAP
 Source File: CCamMoveScript.cpp
 
 Comment: Move using WASD instead of arrow keys
-KEY: W
+KEY: NUMPAD8
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: S
+KEY: NUMPAD5
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: A
+KEY: NUMPAD4
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: D
+KEY: NUMPAD6
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: Q
+KEY: NUMPAD7
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: E
+KEY: NUMPAD9
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: Use WASD for in-game camera movement as well
-KEY: W
+KEY: NUMPAD8
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: S
+KEY: NUMPAD5
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: A
+KEY: NUMPAD4
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: D
+KEY: NUMPAD6
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: Q
+KEY: NUMPAD7
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
 Comment: No Comment
-KEY: E
+KEY: NUMPAD9
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 

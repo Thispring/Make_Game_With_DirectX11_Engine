@@ -22,10 +22,10 @@ void EnemyPatrolState::OnBegin()
 void EnemyPatrolState::OnTick()
 {
 	// 현재 위치 가져오기
-	Vec3 pos = m_EnemyData->GetTargetObject()->Transform()->GetRelativePos();
-	Vec3 scale = m_EnemyData->GetTargetObject()->Transform()->GetRelativeScale();
-	int dir = m_EnemyData->GetDirection();
-	float speed = m_EnemyData->GetSpeed();
+	Vec3  pos    = m_EnemyData->GetTargetObject()->Transform()->GetRelativePos();
+	Vec3  scale  = m_EnemyData->GetTargetObject()->Transform()->GetRelativeScale();
+	int   dir    = m_EnemyData->GetDirection();
+	float speed  = m_EnemyData->GetSpeed();
 	float offSet = m_EnemyData->GetOffset();
 
 	// 이동량 계산
