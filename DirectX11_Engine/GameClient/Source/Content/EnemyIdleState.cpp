@@ -73,8 +73,16 @@ void EnemyIdleState::OnTick()
     }
     else
     {
+        // FLOWER 타입은 IDLE 유지
+        if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLOWER)
+        {
+            Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetTargetObject()->GetScript<CEnemyStateManager>();
+            pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::IDLE));
+            pMgr->ChangeState();
+        }
+
         // 다시 Idle로 돌아왔을 때, 1초 후 Patrol 상태로 변경
-        if (m_EnemyData->GetTimeInState() >= 1.f)
+        if (m_EnemyData->GetTimeInState() >= 0.25f)
         {
             Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetTargetObject()->GetScript<CEnemyStateManager>();
             pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::PATROL));

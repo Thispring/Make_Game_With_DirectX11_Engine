@@ -494,6 +494,13 @@ void AssetMgr::CreateEngineTexture()
 	Load<ATexture>(L"title1Img", L"Texture\\UI\\Title\\title1.png");
 
 
+	// MainMenu
+	Load<ATexture>(L"startBtnImg", L"Texture\\UI\\MainMenu\\startBtn.png");
+	Load<ATexture>(L"optionBtnImg", L"Texture\\UI\\MainMenu\\optionBtn.png");
+	Load<ATexture>(L"creditBtnImg", L"Texture\\UI\\MainMenu\\creditBtn.png");
+
+
+
 }
 
 void AssetMgr::CreateEngineMaterial()

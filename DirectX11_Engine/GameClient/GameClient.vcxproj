@@ -288,7 +288,9 @@ call CodeGen.exe</Command>
     <ClInclude Include="Source\Scripts\CEnemySpawner.h" />
     <ClInclude Include="Source\Scripts\CEnemyStateManager.h" />
     <ClInclude Include="Source\Scripts\CEnergyBlast.h" />
+    <ClInclude Include="Source\Scripts\CFlowerProjectile.h" />
     <ClInclude Include="Source\Scripts\CLightObjectMove.h" />
+    <ClInclude Include="Source\Scripts\CMainMenuController.h" />
     <ClInclude Include="Source\Scripts\CParallaxLayer.h" />
     <ClInclude Include="Source\Scripts\CPlayerController.h" />
     <ClInclude Include="Source\Scripts\CPlayerAnimator.h" />
@@ -428,7 +430,9 @@ call CodeGen.exe</Command>
     <ClCompile Include="Source\Scripts\CEnemySpawner.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyStateManager.cpp" />
     <ClCompile Include="Source\Scripts\CEnergyBlast.cpp" />
+    <ClCompile Include="Source\Scripts\CFlowerProjectile.cpp" />
     <ClCompile Include="Source\Scripts\CLightObjectMove.cpp" />
+    <ClCompile Include="Source\Scripts\CMainMenuController.cpp" />
     <ClCompile Include="Source\Scripts\CParallaxLayer.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerController.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerAnimator.cpp" />

@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "EnemyDamageState.h"
 #include "Source\Scripts\CEnemyStateManager.h"
+#include "Source\Scripts\CPlayerStateManager.h"
+
+#include "GameMgr.h"
+#include "TimeMgr.h"
 
 #pragma region EnemyDamageState
 EnemyDamageState::EnemyDamageState(Ptr<CEnemyData> _Data)
@@ -36,6 +40,9 @@ void EnemyHitState::OnTick()
 	// HIT Flipbook 재생이 끝나면 IDLE로 복귀
 	if (m_EnemyData->GetTargetObject()->FlipbookRender()->GetFinish() == true)
 	{
+        // SKULL 타입 분기 처리
+        // SKULL 타입이 EnergyBlast와 충돌 시, 무적 상태로 전환
+
 		Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetTargetObject()->GetScript<CEnemyStateManager>();
 		pMgr->SetCurStatus(pMgr->GetStatusByCommonState(ENEMY_STATE::IDLE));
 		pMgr->ChangeState();
@@ -105,6 +112,138 @@ void EnemyDeadState::LoadFromLevelFile(FILE* _File)
 }
 
 unique_ptr<EnemyState> EnemyDeadState::Clone() const
+{
+    return unique_ptr<EnemyState>();
+}
+
+#pragma endregion
+
+
+#pragma region EnemyGhostSkullState
+EnemyGhostSkullState::EnemyGhostSkullState(Ptr<CEnemyData> _Data)
+    : EnemyDamageState(_Data)
+{
+
+}
+
+EnemyGhostSkullState::~EnemyGhostSkullState()
+{
+}
+
+void EnemyGhostSkullState::OnBegin()
+{
+}
+
+void EnemyGhostSkullState::OnTick()
+{
+    // Flipbook 재생이 끝나면 GhostSkullMoveState로 전환
+    if (m_EnemyData->GetTargetObject()->FlipbookRender()->GetFinish() == true)
+    {
+        Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetTargetObject()->GetScript<CEnemyStateManager>();
+        pMgr->SetCurStatus(pMgr->GetStatusByCommonState(ENEMY_STATE::GHOST_SKULL_MOVE));
+        pMgr->ChangeState();
+    }
+}
+
+void EnemyGhostSkullState::OnFinalTick()
+{
+}
+
+
+void EnemyGhostSkullState::SaveToLevelFile(FILE* _File)
+{
+}
+
+void EnemyGhostSkullState::LoadFromLevelFile(FILE* _File)
+{
+}
+
+unique_ptr<EnemyState> EnemyGhostSkullState::Clone() const
+{
+    return unique_ptr<EnemyState>();
+}
+
+#pragma endregion
+
+
+#pragma region EnemyGhostSkullMoveState
+EnemyGhostSkullMoveState::EnemyGhostSkullMoveState(Ptr<CEnemyData> _Data)
+    : EnemyDamageState(_Data)
+{
+
+}
+
+EnemyGhostSkullMoveState::~EnemyGhostSkullMoveState()
+{
+}
+
+void EnemyGhostSkullMoveState::OnBegin()
+{
+    int a = 0;
+}
+
+void EnemyGhostSkullMoveState::OnTick()
+{
+    // 플레이어 nullptr 방어
+    Ptr<GameObject> pPlayer = GameMgr::GetInst()->GetPlayer();
+    if (pPlayer == nullptr)
+        return;
+
+    Vec3  pos = m_EnemyData->GetTargetObject()->Transform()->GetRelativePos();
+    Vec3  scale = m_EnemyData->GetTargetObject()->Transform()->GetRelativeScale();
+    float speed = m_EnemyData->GetSpeed() * 2.f;
+    int   dir = m_EnemyData->GetDirection();
+
+    Vec3 vPlayerPos = pPlayer->Transform()->GetRelativePos();
+
+    // 거리 계산 (단일 계산, 이후 이동에도 재사용)
+    float dx = vPlayerPos.x - pos.x;
+    float dy = vPlayerPos.y - pos.y;
+    float len = sqrtf(dx * dx + dy * dy);
+
+    // 거의 겹치는 상태: 적 스케일 절반 이내일 때 데미지 적용
+    float attackRange = fabsf(scale.x) * 0.5f;
+    if (len <= attackRange)
+    {
+        float frameDamage = m_EnemyData->GetDamage() * 2.f * DT;
+        pPlayer->GetScript<CPlayerStateManager>()->TakeDamage(frameDamage);
+    }
+
+    // X축 방향에 따른 스프라이트 좌우 반전
+    int newDir = (vPlayerPos.x > pos.x) ? 1 : -1;
+    if (newDir != dir)
+    {
+        scale.x *= -1.f;
+        dir = newDir;
+    }
+
+    // X, Y 양 축 방향 벡터로 이동 (근접하지 않은 경우만)
+    if (len > 1.f)
+    {
+        pos.x += (dx / len) * speed * DT;
+        pos.y += (dy / len) * speed * DT;
+    }
+
+    // 적용
+    m_EnemyData->GetTargetObject()->Transform()->SetRelativePos(pos);
+    m_EnemyData->GetTargetObject()->Transform()->SetRelativeScale(scale);
+    m_EnemyData->SetDirection(dir);
+}
+
+void EnemyGhostSkullMoveState::OnFinalTick()
+{
+}
+
+
+void EnemyGhostSkullMoveState::SaveToLevelFile(FILE* _File)
+{
+}
+
+void EnemyGhostSkullMoveState::LoadFromLevelFile(FILE* _File)
+{
+}
+
+unique_ptr<EnemyState> EnemyGhostSkullMoveState::Clone() const
 {
     return unique_ptr<EnemyState>();
 }

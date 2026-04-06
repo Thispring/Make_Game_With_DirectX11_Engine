@@ -86,3 +86,61 @@ public:
     virtual ~EnemyDeadState();
 };
 #pragma endregion
+
+
+#pragma region EnemyGhostSkullState
+// SKULL 타입만 사용하는 상태 클래스입니다.
+// EnergyBlast를 맞을 경우 전환됩니다.
+class EnemyGhostSkullState :
+    public EnemyDamageState
+{
+
+public:
+    //=============
+    // 상속 멤버 함수 (훅)
+    //=============
+    virtual void OnBegin() override;
+    virtual void OnTick() override;
+    virtual void OnFinalTick() override;
+
+    virtual void SaveToLevelFile(FILE* _File) override;
+    virtual void LoadFromLevelFile(FILE* _File) override;
+    virtual unique_ptr<EnemyState> Clone() const override;
+
+
+    //============
+    // 생성, 소멸자
+    //============
+    EnemyGhostSkullState(Ptr<CEnemyData> _Data);
+    virtual ~EnemyGhostSkullState();
+};
+#pragma endregion
+
+
+#pragma region EnemyGhostSkullMoveState
+// SKULL 타입만 사용하는 상태 클래스입니다.
+// EnergyBlast를 맞을 경우 전환됩니다.
+class EnemyGhostSkullMoveState :
+    public EnemyDamageState
+{
+
+public:
+    //=============
+    // 상속 멤버 함수 (훅)
+    //=============
+    virtual void OnBegin() override;
+    virtual void OnTick() override;
+    virtual void OnFinalTick() override;
+
+    virtual void SaveToLevelFile(FILE* _File) override;
+    virtual void LoadFromLevelFile(FILE* _File) override;
+    virtual unique_ptr<EnemyState> Clone() const override;
+
+
+    //============
+    // 생성, 소멸자
+    //============
+    EnemyGhostSkullMoveState(Ptr<CEnemyData> _Data);
+    virtual ~EnemyGhostSkullMoveState();
+};
+#pragma endregion

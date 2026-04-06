@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CSpriteRender.h"
 #include "AssetMgr.h"
+#include "LevelMgr.h"
 #include "GameObject.h"
 
 CSpriteRender::CSpriteRender()
@@ -91,4 +92,21 @@ void CSpriteRender::LoadFromLevelFile(FILE* _File)
 {
 	CRenderComponent::LoadFromLevelFile(_File);
 	m_Sprite = LoadAssetRef<ASprite>(_File);
+}
+
+Ptr<ASprite> CSpriteRender::CreateDynamicSprite()
+{
+	// 동적 스프라이트 생성은 Level이 Play 상태일 때만 사용
+	assert(LEVEL_STATE::PLAY == LevelMgr::GetInst()->GetLevelState());
+
+	if (m_DynamicSprite != nullptr)
+	{
+		m_Sprite = m_DynamicSprite;
+		return m_DynamicSprite;
+	}
+	else
+	{
+		m_Sprite = m_DynamicSprite = (ASprite*)m_Sprite->Clone();
+		return m_DynamicSprite;
+	}
 }

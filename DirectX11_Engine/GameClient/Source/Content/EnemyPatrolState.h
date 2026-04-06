@@ -5,6 +5,9 @@ class EnemyPatrolState :
     public EnemyState
 {
 
+private:
+    float       m_flowerPatrolTime;
+
 public:
     //============= 
     // 상속 멤버 함수

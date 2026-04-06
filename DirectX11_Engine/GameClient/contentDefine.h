@@ -1,6 +1,8 @@
 #pragma once
 
 #define PLAYER_PROJECTILE_ANCHOR 0
+#define ENEMY_PROJECTILE_ANCHOR 1
+
 // NOTE(26-04-01):
 // KICK과 PUNCH 자식 등록 순서에 의해 변경될 수 있음
 // 순서를 보장하는 장치 필요

@@ -33,6 +33,9 @@ namespace FLIPBOOK
         constexpr int ATTACK = 2;
         constexpr int HIT = 3;   // 기존 4 → 3으로 수정
         constexpr int DEAD = 4;   // 기존 5 → 4로 수정
+
+        constexpr int GHOST_SKULL = 5; 
+        constexpr int GHOST_SKULL_MOVE = 6; 
     }
 
     namespace FLYING
@@ -134,6 +137,11 @@ enum class ENEMY_STATE
     // 사용 시, 인덱스 번호 주의
     PATROL = 6,
     CHASE = 7,
+
+    GHOST_SKULL = 8,
+    GHOST_SKULL_MOVE = 9,
+
+    RANGED_ATTACK = 10,
 };
 
 

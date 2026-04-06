@@ -124,10 +124,10 @@ void CPlayerStateManager::TakeDamage(float _Damage)
     {
         m_PlayerData->SetIsDead(true);
 
-        // 사망 시 키 발견 상태 초기화
-        Ptr<CPlayerController> pController = GetOwner()->GetScript<CPlayerController>();
-        pController->SetHasDied(true);
-        pController->ResetKeyRevealed();
+        //// 사망 시 키 발견 상태 초기화
+        //Ptr<CPlayerController> pController = GetOwner()->GetScript<CPlayerController>();
+        //pController->SetHasDied(true);
+        //pController->ResetKeyRevealed();
         return;
     }
 

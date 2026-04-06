@@ -430,7 +430,15 @@
     <ClInclude Include="FontMgr.h">
       <Filter>GameEngine\Manager\Font</Filter>
     </ClInclude>
-    <ClInclude Include="UIMgr.h" />
+    <ClInclude Include="Source\Scripts\CFlowerProjectile.h">
+      <Filter>Source\ContentScript\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="UIMgr.h">
+      <Filter>Source\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CMainMenuController.h">
+      <Filter>Source\ContentScript\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -838,7 +846,15 @@
     <ClCompile Include="FontMgr.cpp">
       <Filter>GameEngine\Manager\Font</Filter>
     </ClCompile>
-    <ClCompile Include="UIMgr.cpp" />
+    <ClCompile Include="Source\Scripts\CFlowerProjectile.cpp">
+      <Filter>Source\ContentScript\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="UIMgr.cpp">
+      <Filter>Source\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CMainMenuController.cpp">
+      <Filter>Source\ContentScript\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">

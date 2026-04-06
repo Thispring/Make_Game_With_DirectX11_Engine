@@ -22,8 +22,12 @@ UINT g_KeyIndex[(UINT)KEY::KEY_END] =
 	VK_RSHIFT,
 	VK_SPACE,
 	VK_ESCAPE,
-	VK_HOME,
-	VK_END,
+	VK_INSERT,  // INS
+	VK_HOME,    // HOME
+	VK_PRIOR,   // PAGE_UP
+	VK_DELETE,  // DEL
+	VK_END,     // END
+	VK_NEXT,    // PAGE_DOWN
 
 	// 상단 숫자 키
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',

@@ -4,6 +4,7 @@
 #include "LevelMgr.h"
 #include "AssetMgr.h"
 #include "GameMgr.h"
+#include "TimeMgr.h"
 
 #include "GameObject.h"
 
@@ -97,7 +98,8 @@ void TaskMgr::Progress()
 				const wchar_t* pLevelName = (const wchar_t*)m_vecTask[i].Param_0;
 				Ptr<ALevel> pLevel = AssetMgr::GetInst()->Find<ALevel>(pLevelName);
 				LevelMgr::GetInst()->ChangeLevel(pLevel);
-
+				TimeMgr::GetInst()->InitPlayTime();
+				TimeMgr::GetInst()->InitGoalTime();
 			}
 				break;
 
@@ -105,6 +107,8 @@ void TaskMgr::Progress()
 			{
 				LEVEL_STATE NextState = (LEVEL_STATE)m_vecTask[i].Param_0;
 				LevelMgr::GetInst()->ChangeLevelState(NextState);
+				TimeMgr::GetInst()->InitPlayTime();
+				TimeMgr::GetInst()->InitGoalTime();
 			}
 				break;
 

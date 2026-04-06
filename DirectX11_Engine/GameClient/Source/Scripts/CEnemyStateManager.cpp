@@ -118,6 +118,9 @@ void CEnemyStateManager::SetUp()
         m_mapStatus[ENEMY_STATE::DEAD]   = std::make_pair(make_unique<EnemyDeadState>(m_EnemyData),   FLIPBOOK::SKULL::DEAD);
         m_mapStatus[ENEMY_STATE::PATROL] = std::make_pair(make_unique<EnemyPatrolState>(m_EnemyData), FLIPBOOK::SKULL::MOVE);
         m_mapStatus[ENEMY_STATE::CHASE]  = std::make_pair(make_unique<EnemyChaseState>(m_EnemyData),  FLIPBOOK::SKULL::MOVE);
+
+        m_mapStatus[ENEMY_STATE::GHOST_SKULL]  = std::make_pair(make_unique<EnemyGhostSkullState>(m_EnemyData),  FLIPBOOK::SKULL::GHOST_SKULL);
+        m_mapStatus[ENEMY_STATE::GHOST_SKULL_MOVE]  = std::make_pair(make_unique<EnemyGhostSkullMoveState>(m_EnemyData),  FLIPBOOK::SKULL::GHOST_SKULL_MOVE);
     }
         break;
     case ENEMY_TYPE::FLYING:
@@ -132,14 +135,15 @@ void CEnemyStateManager::SetUp()
         break;
     case ENEMY_TYPE::FLOWER:
         // FLOWER는 MOVE 사용 X, JUMP는 필수사용 X
-        //m_mapStatus[ENEMY_STATE::IDLE] = std::make_pair(make_unique<EnemyIdleState>(m_EnemyData), FLIPBOOK::FLOWER::IDLE);
-        //m_mapStatus[ENEMY_STATE::JUMP] = std::make_pair(make_unique<EnemyMoveState>(m_EnemyData), FLIPBOOK::FLOWER::JUMP);
-        //m_mapStatus[ENEMY_STATE::ATTACK] = std::make_pair(make_unique<EnemyAttackState>(m_EnemyData), FLIPBOOK::FLOWER::MELEE_ATTACK);
-        //m_mapStatus[ENEMY_STATE::ATTACK] = std::make_pair(make_unique<EnemyHitState>(m_EnemyData), FLIPBOOK::FLOWER::RANGED_ATTACK);
-        //m_mapStatus[ENEMY_STATE::HIT] = std::make_pair(make_unique<EnemyDeadState>(m_EnemyData), FLIPBOOK::FLYING::HIT);
-        //m_mapStatus[ENEMY_STATE::DEAD] = std::make_pair(make_unique<EnemyPatrolState>(m_EnemyData), FLIPBOOK::FLYING::DEAD);
-        //m_mapStatus[ENEMY_STATE::PATROL] = std::make_pair(make_unique<EnemyChaseState>(m_EnemyData), FLIPBOOK::FLYING::IDLE);
+        m_mapStatus[ENEMY_STATE::IDLE] = std::make_pair(make_unique<EnemyIdleState>(m_EnemyData), FLIPBOOK::FLOWER::IDLE);
+        m_mapStatus[ENEMY_STATE::JUMP] = std::make_pair(make_unique<EnemyMoveState>(m_EnemyData), FLIPBOOK::FLOWER::JUMP);
+        m_mapStatus[ENEMY_STATE::ATTACK] = std::make_pair(make_unique<EnemyAttackState>(m_EnemyData), FLIPBOOK::FLOWER::MELEE_ATTACK);
+        // FLOWER 타입은 EnemyEyes에 분기처리를 하여, Patrol 상태가 아닌 원거리 공격 상태로 전환
+        m_mapStatus[ENEMY_STATE::RANGED_ATTACK] = std::make_pair(make_unique<EnemyRangedAttackState>(m_EnemyData), FLIPBOOK::FLOWER::RANGED_ATTACK);
 
+        m_mapStatus[ENEMY_STATE::HIT] = std::make_pair(make_unique<EnemyHitState>(m_EnemyData), FLIPBOOK::FLOWER::HIT);
+        m_mapStatus[ENEMY_STATE::DEAD] = std::make_pair(make_unique<EnemyDeadState>(m_EnemyData), FLIPBOOK::FLOWER::DEAD);
+        m_mapStatus[ENEMY_STATE::PATROL] = std::make_pair(make_unique<EnemyPatrolState>(m_EnemyData), FLIPBOOK::FLOWER::IDLE);
         break;
     case ENEMY_TYPE::BOSS:
         //m_mapStatus[ENEMY_STATE::IDLE] = std::make_pair(make_unique<EnemyIdleState>(m_EnemyData), FLIPBOOK::BOSS::IDLE);

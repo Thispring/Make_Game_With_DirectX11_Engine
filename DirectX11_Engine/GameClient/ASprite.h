@@ -30,6 +30,7 @@ public:
     //=============
     // 상속 멤버 함수
     //=============
+    CLONE(ASprite);
     virtual int Save(const wstring& _FilePath) override;
     virtual int Load(const wstring& _FilePath) override;
 

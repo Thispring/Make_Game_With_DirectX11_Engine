@@ -193,7 +193,7 @@ int main()
 
 		if (!bIsAbstract)
 		{
-			fwprintf_s(pFile, L"\t\treturn new ");
+			fwprintf_s(pFile, L"\t\treturn NEW ");
 			fwprintf_s(pFile, g_vecName[i].c_str());
 			fwprintf_s(pFile, L";\n");
 		}
@@ -235,7 +235,7 @@ int main()
 
 		if (!bIsAbstractCase)
 		{
-			fwprintf_s(pFile, L"\t\treturn new ");
+			fwprintf_s(pFile, L"\t\treturn NEW ");
 			fwprintf_s(pFile, g_vecName[i].c_str());
 			fwprintf_s(pFile, L";\n");
 		}
@@ -347,9 +347,9 @@ int main()
 
 		if (!bIsAbstractNarrow)
 		{
-			// 3) return new ClassName; 은 기존 wide 출력 방식 유지 (클래스명은 ASCII일 가능성이 큼)
+			// 3) return NEW ClassName; 은 기존 wide 출력 방식 유지 (클래스명은 ASCII일 가능성이 큼)
 			//    클래스 이름은 g_vecName[i] (예: "CCamMoveScript")이므로 wide로 안전하게 출력
-			fwprintf_s(pFile, L"\t\treturn new %ls;\n", g_vecName[i].c_str());
+			fwprintf_s(pFile, L"\t\treturn NEW %ls;\n", g_vecName[i].c_str());
 		}
 		else
 		{

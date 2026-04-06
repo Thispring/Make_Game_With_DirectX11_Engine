@@ -7,6 +7,8 @@
 #include "CCollider2D.h"
 
 #include "Source\Content\EnemyDamageState.h"
+
+#include "CFlowerProjectile.h"
 #include "CEnemyStateManager.h"
 #include "CPlayerData.h"
 #include "CPlayerMeleeTrigger.h"
@@ -38,6 +40,7 @@ CEnemyData::CEnemyData()
 	// EnemyType은 기본으로 END입니다.
 	// ImGui에서 지정해야 하며, 하지 않을경우 크래시
 	, m_EnemyType(ENEMY_TYPE::END)
+	, m_FlowerProjectile(nullptr)
 {
 }
 
@@ -115,7 +118,7 @@ void CEnemyData::Begin()
 	m_TargetObject->GetScript<CEnemyStateManager>()->SetUp();
 }
 
-void CEnemyData::TakeDamage(float _Damage)
+void CEnemyData::TakeDamage(float _Damage, bool _hitSkull)
 {
 	// 해당 함수를 Player쪽 공격 스크립트에서 호출하고 있기 때문에
 	// HIT 상태 변경을 이쪽에서 처리합니다.
@@ -123,6 +126,23 @@ void CEnemyData::TakeDamage(float _Damage)
 	// 죽은 상태에서 함수가 또 호출되면, HIT 상태로 되돌리기 X
 	if (m_IsDead)
 		return;
+
+	// 이미 GHOST_SKULL 상태라면 전환 X
+	Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+	ENEMY_STATE curState = pMgr->GetCurCommonState();
+	if (curState == ENEMY_STATE::GHOST_SKULL || curState == ENEMY_STATE::GHOST_SKULL_MOVE)
+		return;
+
+	// 구독자(AttackState 등)에게 피격 사실을 즉시 알림
+	if (m_OnTakeDamageEvent)
+		m_OnTakeDamageEvent();
+
+	if (m_EnemyType == ENEMY_TYPE::SKULL && _hitSkull == true)
+	{
+		// SKULL타입만 무적상태로 진입
+		ChangeState(ENEMY_STATE::GHOST_SKULL);
+		return;
+	}
 
 	// 실제 데미지 처리는 CEnemyData에서 진행
 	// FSM 설계상 여기에서 진행하면 안됨
@@ -180,9 +200,18 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 	m_IsFalling = false;
 
 
-	// Player와 충돌 시
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
 	{
+		Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+		ENEMY_STATE curState = pMgr->GetCurCommonState();
+
+		// HIT / DEAD / GHOST 상태에서는 ATTACK으로 강제 전환하지 않음
+		if (curState == ENEMY_STATE::HIT
+			|| curState == ENEMY_STATE::DEAD
+			|| curState == ENEMY_STATE::GHOST_SKULL
+			|| curState == ENEMY_STATE::GHOST_SKULL_MOVE)
+			return;
+
 		ChangeState(ENEMY_STATE::ATTACK);
 	}
 }
@@ -199,7 +228,25 @@ void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 	if (curState == ENEMY_STATE::HIT || curState == ENEMY_STATE::DEAD)
 		return;
 
-	ChangeState(ENEMY_STATE::IDLE);
+	// GHOST_SKULL이면 IDLE 전환 X
+	if (curState != ENEMY_STATE::GHOST_SKULL && curState != ENEMY_STATE::GHOST_SKULL_MOVE)
+		ChangeState(ENEMY_STATE::IDLE);
+}
+
+void CEnemyData::CreateProjectile()
+{
+	Ptr<APrefab> pProjectile = GetFlowerProjectile();
+
+	// FLOWER 에게만 2번째 자식으로 Anchor 추가
+	// Anchor의 Pos, Scale을 가져와서 Prefab 시작점으로 설정
+	Vec3 vAnchorPos = GetTargetObject()->GetChild(ENEMY_PROJECTILE_ANCHOR)->Transform()->GetWorldPos();
+	Vec3 vAnchorScale = GetTargetObject()->GetChild(ENEMY_PROJECTILE_ANCHOR)->Transform()->GetWorldScale();
+
+	Vec3 vDir = GetTargetObject()->Transform()->GetDir(DIR::RIGHT);
+	vDir *= GetDirection();
+
+	GameObject* pObj = InstantiateObject(pProjectile.Get(), 5, vAnchorPos + vAnchorScale * vDir);
+	pObj->GetScript<CFlowerProjectile>()->SetUp(vDir);
 }
 
 void CEnemyData::Tick()

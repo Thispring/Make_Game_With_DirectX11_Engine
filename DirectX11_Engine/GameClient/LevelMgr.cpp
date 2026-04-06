@@ -8,6 +8,7 @@
 #include "CollisionMgr.h"
 #include "GameMgr.h"
 #include "RandomMgr.h"
+#include "KeyMgr.h"
 
 #include "Source/Scripts/CCamMoveScript.h"
 
@@ -108,9 +109,7 @@ void LevelMgr::ChangeLevel(Ptr<ALevel> _NextLevel)
 
 void LevelMgr::Init()
 {
-	// 파일로 저장된 Level 불러오기
-	//Ptr<ALevel> pLevel = LOAD(ALevel, L"Level\\Normal_Stage_0.lv");
-	//ChangeLevel(pLevel);
+
 }
 
 void LevelMgr::Progress()
@@ -133,4 +132,48 @@ void LevelMgr::Progress()
 	// 게임 오브젝트들의 충돌 판정
 	if (m_LevelState == LEVEL_STATE::PLAY)
 		CollisionMgr::GetInst()->Progress(m_CurLevel);
+
+
+	// 호출 순서상 맨 아래에 배치해야
+	// 검은색으로 렌더가 되는 현상 방지할 수 있음
+
+	// Level 전환 테스트 KEY
+	// 조건문 안으로 들어오면 TaskMgr을 통해
+	// 다음 Level을 불러옴
+	if (KEY_PRESSED(KEY::INS))	// KET -> Ins
+	{
+		// MainMenu가 아니면 실행 X
+		// 이미 Normal_Stage 여도 실행 X
+		if (m_CurLevel->GetKey() != L"Level\\MainMenu.lv" ||
+			m_CurLevel->GetKey() == L"Level\\Normal_Stage_0.lv")
+			return;
+
+		// func.cpp의 ChangeLevel 함수를 호출하려면 스코프연산자::를 앞에 붙입니다.
+		::ChangeLevel(L"Level\\Normal_Stage_0.lv");
+		::ChangeLevelState(LEVEL_STATE::PLAY);
+	}
+
+	// Ending Level
+	if (KEY_PRESSED(KEY::DEL))
+	{
+		// Main에서는 전환 X
+		if (m_CurLevel->GetKey() != L"Level\\Normal_Stage_0.lv" ||
+			m_CurLevel->GetKey() == L"Level\\MainMenu.lv" ||
+			m_CurLevel->GetKey() == L"Level\\Ending.lv")
+			return;
+
+		::ChangeLevel(L"Level\\Ending.lv");
+		::ChangeLevelState(LEVEL_STATE::PLAY);
+	}
+
+	// Main Level
+	if (KEY_PRESSED(KEY::HOME))
+	{
+		// Main만 아니면 됨
+		if (m_CurLevel->GetKey() == L"Level\\MainMenu.lv")
+			return;
+
+		::ChangeLevel(L"Level\\MainMenu.lv");
+		::ChangeLevelState(LEVEL_STATE::PLAY);
+	}
 }

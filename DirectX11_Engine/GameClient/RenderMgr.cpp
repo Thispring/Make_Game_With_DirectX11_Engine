@@ -1,9 +1,12 @@
 #include "pch.h"
+
 #include "RenderMgr.h"
 #include "AssetMgr.h"
 #include "LevelMgr.h"
 #include "TimeMgr.h"
 #include "KeyMgr.h"
+#include "FontMgr.h"
+
 #include "Device.h"
 
 RenderMgr::RenderMgr()
@@ -44,11 +47,12 @@ void RenderMgr::Progress()
 	// Level이 Play 상태라면 MainCam으로 렌더링
 	if (LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
 	{
-		if (m_UICam == nullptr)
-			return;
-
-		m_UICam->SortObejct();
-		m_UICam->Render();
+		// UI 카메라는 없을 수도 있으므로 조건부 렌더
+		if (m_UICam != nullptr)
+		{
+			m_UICam->SortObejct();
+			m_UICam->Render();
+		}
 
 		if (m_MainCam == nullptr)
 			return;

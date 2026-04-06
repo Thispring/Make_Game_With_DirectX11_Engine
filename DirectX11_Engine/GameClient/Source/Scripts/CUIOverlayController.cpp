@@ -145,11 +145,11 @@ void CUIOverlayController::Begin()
 			 //이동키 UI 슬롯(3~7): 위치·스케일은 직접 수정 후 주석 해제
 			 Vec3 vMoveKeyPos[5] =
 			 {
-			     Vec3(-4300.f, -130.f, 100.f),  // [3] Jump (Space)
-			     Vec3(-4070.f, -65.f, 100.f),  // [4] Up
-			     Vec3(-4130.f, -130.f, 100.f),  // [5] Left
-			     Vec3(-4070.f, -130.f, 100.f),  // [6] Down
-			     Vec3(-4010.f, -130.f, 100.f),  // [7] Right
+			     Vec3(-4300.f, -85.f, 100.f),  // [3] Jump (Space)
+			     Vec3(-4070.f, -20.f, 100.f),  // [4] Up
+			     Vec3(-4130.f, -85.f, 100.f),  // [5] Left
+			     Vec3(-4070.f, -85.f, 100.f),  // [6] Down
+			     Vec3(-4010.f, -85.f, 100.f),  // [7] Right
 			 };
 			 Vec3 vSpaceScale = Vec3(224.f, 64.f, 1.f);
 			 Vec3 vArrowScale = Vec3(64.f, 64.f, 1.f);
@@ -160,6 +160,18 @@ void CUIOverlayController::Begin()
 			 m_vecUIObject[6]->Transform()->SetRelativeScale(vArrowScale);
 			 m_vecUIObject[7]->Transform()->SetRelativeScale(vArrowScale);
 			 m_vecUIOffset[i] = Vec3(vMoveKeyPos[i - 3].x - vCamPos.x, vMoveKeyPos[i - 3].y - vCamPos.y, 0.f);
+
+			// 주석 해제 전 — 오브젝트 현재 위치 기준 오프셋 유지
+			//Vec3 vUIPos = m_vecUIObject[i]->Transform()->GetRelativePos();
+			//m_vecUIOffset[i] = Vec3(vUIPos.x - vCamPos.x, vUIPos.y - vCamPos.y, 0.f);
+		}
+		else if (i >= 8 && i <= 9)
+		{
+			Vec3 vHPPos = Vec3(-4600.f, 20.f, 100.f);
+			Vec3 vHPScale = Vec3(70.f, 70.f, 1.f);
+			m_vecUIObject[i]->Transform()->SetRelativePos(vHPPos);
+			m_vecUIObject[i]->Transform()->SetRelativeScale(vHPScale);
+			//m_vecUIOffset[i] = Vec3(vHPPos.x - vCamPos.x, vHPPos.y - vCamPos.y, 0.f);
 
 			// 주석 해제 전 — 오브젝트 현재 위치 기준 오프셋 유지
 			Vec3 vUIPos = m_vecUIObject[i]->Transform()->GetRelativePos();
@@ -174,7 +186,7 @@ void CUIOverlayController::Begin()
 	}
 
 	// 자식 8, 9번은 HP 바 MeshRender — 공유 재질 오염을 막기 위해 동적 재질 생성
-	for (int i = 8; i <= 9; ++i)
+	for (int i = 8; i < 9; ++i)
 	{
 		if ((int)m_vecUIObject.size() <= i) break;
 		Ptr<CMeshRender> pMesh = m_vecUIObject[i]->MeshRender();

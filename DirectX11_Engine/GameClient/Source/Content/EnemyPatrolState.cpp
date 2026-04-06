@@ -5,6 +5,7 @@
 
 EnemyPatrolState::EnemyPatrolState(Ptr<CEnemyData> _Data)
 	: EnemyState(_Data)
+	, m_flowerPatrolTime(0.f)
 {
 
 }
@@ -17,10 +18,34 @@ void EnemyPatrolState::OnBegin()
 {
 	// Chase에서 누적된 offSet를 초기화하여 Patrol 왕복 기준을 현재 위치로 재설정
 	m_EnemyData->SetOffset(0.f);
+	m_flowerPatrolTime = 0;
 }
 
 void EnemyPatrolState::OnTick()
 {
+	// Flower 타입은 일정 시간 마다
+	// 좌우를 바라보는 방법으로 구현
+	if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLOWER)
+	{
+		m_flowerPatrolTime += DT;
+
+		if (m_flowerPatrolTime >= 2.f)
+		{
+			// 스케일에 따라 방향 변경
+			Vec3 scale = m_EnemyData->GetTargetObject()->Transform()->GetRelativeScale();
+			if (scale.x > 0)
+				scale.x *= -1.f;
+			else
+				scale.x *= -1.f;
+
+			m_EnemyData->GetTargetObject()->Transform()->SetRelativeScale(scale);
+
+			m_flowerPatrolTime = 0.f;
+		}
+
+		return;
+	}
+
 	// 현재 위치 가져오기
 	Vec3  pos    = m_EnemyData->GetTargetObject()->Transform()->GetRelativePos();
 	Vec3  scale  = m_EnemyData->GetTargetObject()->Transform()->GetRelativeScale();

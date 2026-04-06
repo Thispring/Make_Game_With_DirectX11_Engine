@@ -25,7 +25,7 @@ private:
     float               m_JumpVelocity;
 
     int                 m_DeathCount;
-    int                 m_DirNum;
+    int                 m_Direction;
 
     bool                m_IsDead;
     bool                m_IsFalling;        // true일 때만 Tick에서 y축으로 DT 만큼 음수 이동
@@ -70,7 +70,7 @@ public:
     GET_SET(float, JumpVelocity);
 
     GET_SET(int, DeathCount);
-    GET_SET(int, DirNum);
+    GET_SET(int, Direction);
 
     GET_SET(bool, IsDead);
     GET_SET(bool, IsFalling);

@@ -12,7 +12,7 @@ CPlayerData::CPlayerData()
 	, m_Speed(250.f)
 
 	, m_DeathCount(0)
-	, m_DirNum(1)
+	, m_Direction(1)
 
 	, m_IsDead(false)
 	, m_IsFalling(true)
@@ -85,9 +85,9 @@ void CPlayerData::Begin()
 	// Scale을 받아와서 초기 방향 정보 초기화
 	Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
 	if (vScale.x < 0)
-		m_DirNum = -1;
+		m_Direction = -1;
 	else
-		m_DirNum = 1;
+		m_Direction = 1;
 
 	ADD_DYNAMIC_BEGIN_OVERLAP(CPlayerData::BeginOverlap);
 	ADD_DYNAMIC_OVERLAP(CPlayerData::Overlap);

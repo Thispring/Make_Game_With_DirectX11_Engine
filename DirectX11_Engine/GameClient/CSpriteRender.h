@@ -8,6 +8,7 @@ class CSpriteRender :
 
 private:
     Ptr<ASprite>    m_Sprite;
+    Ptr<ASprite>    m_DynamicSprite;  // 동적 스프라이트(쓰고 버리는 용도)
 
 public:
     //=============
@@ -27,6 +28,7 @@ public:
     //=========
     void SetSprite(Ptr<ASprite> _Sprite) { m_Sprite = _Sprite; }
     Ptr<ASprite> GetSprite() { return m_Sprite; }
+    Ptr<ASprite> CreateDynamicSprite();
 
 
     //============

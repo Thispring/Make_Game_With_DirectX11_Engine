@@ -1,13 +1,14 @@
 #include "pch.h"
-#include "CEnergyBlast.h"
-#include "LevelMgr.h"
+#include "CFlowerProjectile.h"
+
+#include "GameObject.h"
+
+#include "CPlayerStateManager.h"
 #include "TimeMgr.h"
 
-#include "CEnemyData.h"
-
-CEnergyBlast::CEnergyBlast()
-	: CScript(SCRIPT_TYPE::ENERGYBLAST)
-	, m_Dir {}
+CFlowerProjectile::CFlowerProjectile()
+	: CScript(SCRIPT_TYPE::FLOWERPROJECTILE)
+	, m_Dir{}
 	, m_TravelTime(0.f)
 	, m_Speed(100.f)
 	, m_Damage(5.f)
@@ -18,11 +19,11 @@ CEnergyBlast::CEnergyBlast()
 {
 }
 
-CEnergyBlast::~CEnergyBlast()
+CFlowerProjectile::~CFlowerProjectile()
 {
 }
 
-void CEnergyBlast::SetUp(Vec3 _Dir)
+void CFlowerProjectile::SetUp(Vec3 _Dir)
 {
 	// 매개변수로 받은 방향정보로 세팅
 	m_Dir = _Dir;
@@ -43,14 +44,8 @@ void CEnergyBlast::SetUp(Vec3 _Dir)
 	GetOwner()->FlipbookRender()->Play(0, 10, -1);
 }
 
-bool CEnergyBlast::DestroyBlast()
+bool CFlowerProjectile::DestroyProjectile()
 {
-	// 충돌했거나, 일정시간이 지나서 삭제 요청하는 경우
-	// 이 함수를 호출하여, Dead Flipbook을 실행하고, Flipbook이 정지되면
-	// TaskMgr에게 삭제 요청,
-	// 사라지는 Flipbook이 재생될때는 로직활성화를 막기 위해
-	// bool 변수를 추가합니다.
-	
 	// 함수에서 사라지는 Flipbook만 Play 요청하고
 	// Tick에서 재생이 멈추었는지 검사
 	if (m_IsDestroy)
@@ -58,40 +53,41 @@ bool CEnergyBlast::DestroyBlast()
 
 	m_IsDestroy = true;
 	GetOwner()->FlipbookRender()->Play(1, 10, 1);
+
 	return false;
 }
 
-void CEnergyBlast::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
+void CFlowerProjectile::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::ENEMY)
+	// void CPlayerStateManager::TakeDamage(float _Damage) 호출
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
 	{
 		// 여기에서 _OtherCollider한테 데미지값을 전달해야함
-		_OtherCollider->GetOwner()->GetScript<CEnemyData>()->TakeDamage(GetDamage(), true);
+		_OtherCollider->GetOwner()->GetScript<CPlayerStateManager>()->TakeDamage(GetDamage());
 	}
 }
 
-void CEnergyBlast::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
+void CFlowerProjectile::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	// Enemy Layer에서만 작동하게 조건문 실행
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::ENEMY)
+	// Player Layer에서만 작동하게 조건문 실행
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
 	{
-		DestroyBlast();
+		DestroyProjectile();
 	}
 }
 
-void CEnergyBlast::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
+void CFlowerProjectile::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-
 }
 
-void CEnergyBlast::Begin()
+void CFlowerProjectile::Begin()
 {
-	ADD_DYNAMIC_BEGIN_OVERLAP(CEnergyBlast::BeginOverlap);
-	ADD_DYNAMIC_OVERLAP(CEnergyBlast::Overlap);
-	ADD_DYNAMIC_END_OVERLAP(CEnergyBlast::EndOverlap);
+	ADD_DYNAMIC_BEGIN_OVERLAP(CFlowerProjectile::BeginOverlap);
+	ADD_DYNAMIC_OVERLAP(CFlowerProjectile::Overlap);
+	ADD_DYNAMIC_END_OVERLAP(CFlowerProjectile::EndOverlap);
 }
 
-void CEnergyBlast::Tick()
+void CFlowerProjectile::Tick()
 {
 	if (m_IsDestroy)
 	{
@@ -116,18 +112,19 @@ void CEnergyBlast::Tick()
 
 	m_TravelTime += DT;
 
-	// 3초이상 지났다면 삭제요청
-	if (m_TravelTime >= 3.f)
+	// 2초이상 지났다면 삭제요청
+	if (m_TravelTime >= 2.f)
 	{
-		DestroyBlast();
+		DestroyProjectile();
 		return;
 	}
 }
 
-void CEnergyBlast::SaveToLevelFile(FILE* _File)
+void CFlowerProjectile::SaveToLevelFile(FILE* _File)
 {
 }
 
-void CEnergyBlast::LoadFromLevelFile(FILE* _File)
+void CFlowerProjectile::LoadFromLevelFile(FILE* _File)
 {
 }
+

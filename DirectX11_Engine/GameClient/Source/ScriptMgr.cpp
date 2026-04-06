@@ -10,7 +10,9 @@
 #include "Scripts/CEnemySpawner.h"
 #include "Scripts/CEnemyStateManager.h"
 #include "Scripts/CEnergyBlast.h"
+#include "Scripts/CFlowerProjectile.h"
 #include "Scripts/CLightObjectMove.h"
+#include "Scripts/CMainMenuController.h"
 #include "Scripts/CParallaxLayer.h"
 #include "Scripts/CPlayerAnimator.h"
 #include "Scripts/CPlayerController.h"
@@ -31,7 +33,9 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CEnemySpawner");
 	_vec.push_back(L"CEnemyStateManager");
 	_vec.push_back(L"CEnergyBlast");
+	_vec.push_back(L"CFlowerProjectile");
 	_vec.push_back(L"CLightObjectMove");
+	_vec.push_back(L"CMainMenuController");
 	_vec.push_back(L"CParallaxLayer");
 	_vec.push_back(L"CPlayerAnimator");
 	_vec.push_back(L"CPlayerController");
@@ -46,41 +50,45 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 {
 	if (L"CCamMoveScript" == _strScriptName)
-		return new CCamMoveScript;
+		return NEW CCamMoveScript;
 	if (L"CEnemyAnimator" == _strScriptName)
-		return new CEnemyAnimator;
+		return NEW CEnemyAnimator;
 	if (L"CEnemyBehavior" == _strScriptName)
-		return new CEnemyBehavior;
+		return NEW CEnemyBehavior;
 	if (L"CEnemyData" == _strScriptName)
-		return new CEnemyData;
+		return NEW CEnemyData;
 	if (L"CEnemyEyes" == _strScriptName)
-		return new CEnemyEyes;
+		return NEW CEnemyEyes;
 	if (L"CEnemySpawner" == _strScriptName)
-		return new CEnemySpawner;
+		return NEW CEnemySpawner;
 	if (L"CEnemyStateManager" == _strScriptName)
-		return new CEnemyStateManager;
+		return NEW CEnemyStateManager;
 	if (L"CEnergyBlast" == _strScriptName)
-		return new CEnergyBlast;
+		return NEW CEnergyBlast;
+	if (L"CFlowerProjectile" == _strScriptName)
+		return NEW CFlowerProjectile;
 	if (L"CLightObjectMove" == _strScriptName)
-		return new CLightObjectMove;
+		return NEW CLightObjectMove;
+	if (L"CMainMenuController" == _strScriptName)
+		return NEW CMainMenuController;
 	if (L"CParallaxLayer" == _strScriptName)
-		return new CParallaxLayer;
+		return NEW CParallaxLayer;
 	if (L"CPlayerAnimator" == _strScriptName)
-		return new CPlayerAnimator;
+		return NEW CPlayerAnimator;
 	if (L"CPlayerController" == _strScriptName)
-		return new CPlayerController;
+		return NEW CPlayerController;
 	if (L"CPlayerData" == _strScriptName)
-		return new CPlayerData;
+		return NEW CPlayerData;
 	if (L"CPlayerMeleeTrigger" == _strScriptName)
-		return new CPlayerMeleeTrigger;
+		return NEW CPlayerMeleeTrigger;
 	if (L"CPlayerStateManager" == _strScriptName)
-		return new CPlayerStateManager;
+		return NEW CPlayerStateManager;
 	if (L"CSavePoint" == _strScriptName)
-		return new CSavePoint;
+		return NEW CSavePoint;
 	if (L"CUICamMoveScript" == _strScriptName)
-		return new CUICamMoveScript;
+		return NEW CUICamMoveScript;
 	if (L"CUIOverlayController" == _strScriptName)
-		return new CUIOverlayController;
+		return NEW CUIOverlayController;
 	return nullptr;
 }
 
@@ -89,58 +97,64 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 	switch (_iScriptType)
 	{
 	case (UINT)SCRIPT_TYPE::CAMMOVESCRIPT:
-		return new CCamMoveScript;
+		return NEW CCamMoveScript;
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYANIMATOR:
-		return new CEnemyAnimator;
+		return NEW CEnemyAnimator;
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYBEHAVIOR:
-		return new CEnemyBehavior;
+		return NEW CEnemyBehavior;
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYDATA:
-		return new CEnemyData;
+		return NEW CEnemyData;
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYEYES:
-		return new CEnemyEyes;
+		return NEW CEnemyEyes;
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYSPAWNER:
-		return new CEnemySpawner;
+		return NEW CEnemySpawner;
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYSTATEMANAGER:
-		return new CEnemyStateManager;
+		return NEW CEnemyStateManager;
 		break;
 	case (UINT)SCRIPT_TYPE::ENERGYBLAST:
-		return new CEnergyBlast;
+		return NEW CEnergyBlast;
+		break;
+	case (UINT)SCRIPT_TYPE::FLOWERPROJECTILE:
+		return NEW CFlowerProjectile;
 		break;
 	case (UINT)SCRIPT_TYPE::LIGHTOBJECTMOVE:
-		return new CLightObjectMove;
+		return NEW CLightObjectMove;
+		break;
+	case (UINT)SCRIPT_TYPE::MAINMENUCONTROLLER:
+		return NEW CMainMenuController;
 		break;
 	case (UINT)SCRIPT_TYPE::PARALLAXLAYER:
-		return new CParallaxLayer;
+		return NEW CParallaxLayer;
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERANIMATOR:
-		return new CPlayerAnimator;
+		return NEW CPlayerAnimator;
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERCONTROLLER:
-		return new CPlayerController;
+		return NEW CPlayerController;
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERDATA:
-		return new CPlayerData;
+		return NEW CPlayerData;
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERMELEETRIGGER:
-		return new CPlayerMeleeTrigger;
+		return NEW CPlayerMeleeTrigger;
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERSTATEMANAGER:
-		return new CPlayerStateManager;
+		return NEW CPlayerStateManager;
 		break;
 	case (UINT)SCRIPT_TYPE::SAVEPOINT:
-		return new CSavePoint;
+		return NEW CSavePoint;
 		break;
 	case (UINT)SCRIPT_TYPE::UICAMMOVESCRIPT:
-		return new CUICamMoveScript;
+		return NEW CUICamMoveScript;
 		break;
 	case (UINT)SCRIPT_TYPE::UIOVERLAYCONTROLLER:
-		return new CUIOverlayController;
+		return NEW CUIOverlayController;
 		break;
 	}
 	return nullptr;
@@ -182,8 +196,16 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CEnergyBlast";
 		break;
 
+	case SCRIPT_TYPE::FLOWERPROJECTILE:
+		return L"CFlowerProjectile";
+		break;
+
 	case SCRIPT_TYPE::LIGHTOBJECTMOVE:
 		return L"CLightObjectMove";
+		break;
+
+	case SCRIPT_TYPE::MAINMENUCONTROLLER:
+		return L"CMainMenuController";
 		break;
 
 	case SCRIPT_TYPE::PARALLAXLAYER:
@@ -254,7 +276,13 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	case ENERGYBLAST: return "CEnergyBlast";
 		break;
 
+	case FLOWERPROJECTILE: return "CFlowerProjectile";
+		break;
+
 	case LIGHTOBJECTMOVE: return "CLightObjectMove";
+		break;
+
+	case MAINMENUCONTROLLER: return "CMainMenuController";
 		break;
 
 	case PARALLAXLAYER: return "CParallaxLayer";
@@ -298,41 +326,45 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 CScript * ScriptMgr::GetScript(const char* _strScriptName)
 {
 	if (0 == strcmp(_strScriptName, "CCamMoveScript"))
-		return new CCamMoveScript;
+		return NEW CCamMoveScript;
 	if (0 == strcmp(_strScriptName, "CEnemyAnimator"))
-		return new CEnemyAnimator;
+		return NEW CEnemyAnimator;
 	if (0 == strcmp(_strScriptName, "CEnemyBehavior"))
-		return new CEnemyBehavior;
+		return NEW CEnemyBehavior;
 	if (0 == strcmp(_strScriptName, "CEnemyData"))
-		return new CEnemyData;
+		return NEW CEnemyData;
 	if (0 == strcmp(_strScriptName, "CEnemyEyes"))
-		return new CEnemyEyes;
+		return NEW CEnemyEyes;
 	if (0 == strcmp(_strScriptName, "CEnemySpawner"))
-		return new CEnemySpawner;
+		return NEW CEnemySpawner;
 	if (0 == strcmp(_strScriptName, "CEnemyStateManager"))
-		return new CEnemyStateManager;
+		return NEW CEnemyStateManager;
 	if (0 == strcmp(_strScriptName, "CEnergyBlast"))
-		return new CEnergyBlast;
+		return NEW CEnergyBlast;
+	if (0 == strcmp(_strScriptName, "CFlowerProjectile"))
+		return NEW CFlowerProjectile;
 	if (0 == strcmp(_strScriptName, "CLightObjectMove"))
-		return new CLightObjectMove;
+		return NEW CLightObjectMove;
+	if (0 == strcmp(_strScriptName, "CMainMenuController"))
+		return NEW CMainMenuController;
 	if (0 == strcmp(_strScriptName, "CParallaxLayer"))
-		return new CParallaxLayer;
+		return NEW CParallaxLayer;
 	if (0 == strcmp(_strScriptName, "CPlayerAnimator"))
-		return new CPlayerAnimator;
+		return NEW CPlayerAnimator;
 	if (0 == strcmp(_strScriptName, "CPlayerController"))
-		return new CPlayerController;
+		return NEW CPlayerController;
 	if (0 == strcmp(_strScriptName, "CPlayerData"))
-		return new CPlayerData;
+		return NEW CPlayerData;
 	if (0 == strcmp(_strScriptName, "CPlayerMeleeTrigger"))
-		return new CPlayerMeleeTrigger;
+		return NEW CPlayerMeleeTrigger;
 	if (0 == strcmp(_strScriptName, "CPlayerStateManager"))
-		return new CPlayerStateManager;
+		return NEW CPlayerStateManager;
 	if (0 == strcmp(_strScriptName, "CSavePoint"))
-		return new CSavePoint;
+		return NEW CSavePoint;
 	if (0 == strcmp(_strScriptName, "CUICamMoveScript"))
-		return new CUICamMoveScript;
+		return NEW CUICamMoveScript;
 	if (0 == strcmp(_strScriptName, "CUIOverlayController"))
-		return new CUIOverlayController;
+		return NEW CUIOverlayController;
 	return nullptr;
 }
 
@@ -355,8 +387,12 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 		return ENEMYSTATEMANAGER;
 	if (L"CEnergyBlast" == _strScriptName)
 		return ENERGYBLAST;
+	if (L"CFlowerProjectile" == _strScriptName)
+		return FLOWERPROJECTILE;
 	if (L"CLightObjectMove" == _strScriptName)
 		return LIGHTOBJECTMOVE;
+	if (L"CMainMenuController" == _strScriptName)
+		return MAINMENUCONTROLLER;
 	if (L"CParallaxLayer" == _strScriptName)
 		return PARALLAXLAYER;
 	if (L"CPlayerAnimator" == _strScriptName)
@@ -397,8 +433,12 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 		return ENEMYSTATEMANAGER;
 	if (0 == strcmp(_strScriptName, "CEnergyBlast"))
 		return ENERGYBLAST;
+	if (0 == strcmp(_strScriptName, "CFlowerProjectile"))
+		return FLOWERPROJECTILE;
 	if (0 == strcmp(_strScriptName, "CLightObjectMove"))
 		return LIGHTOBJECTMOVE;
+	if (0 == strcmp(_strScriptName, "CMainMenuController"))
+		return MAINMENUCONTROLLER;
 	if (0 == strcmp(_strScriptName, "CParallaxLayer"))
 		return PARALLAXLAYER;
 	if (0 == strcmp(_strScriptName, "CPlayerAnimator"))

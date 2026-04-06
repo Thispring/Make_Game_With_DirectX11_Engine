@@ -7,6 +7,10 @@
 * Enemy의 타입별로 멤버를 다르게 설정할 수 있도록 설계합니다.
 * 멤버는 GET_SET 함수로만 접근을 허용합니다.
 *******************************************************************************/
+
+// TakeDamage 이벤트 타입 정의
+using EnemyDamageEvent = function<void()>;
+
 class CEnemyData :
     public CScript
 {
@@ -14,6 +18,7 @@ class CEnemyData :
 private:
     GameObject*         m_TargetObject;
     GameObject*         m_EyeObject;
+    Ptr<APrefab>        m_FlowerProjectile;     // FLOWER 타입만 보유하도록 설계
 
     ENEMY_TYPE          m_EnemyType;
 
@@ -39,7 +44,9 @@ private:
 
     bool                m_IsDead;
     bool                m_IsFalling;        // true일 때만 Tick에서 y축으로 DT 만큼 음수 이동
-    bool                m_IsAttack;     
+    bool                m_IsAttack; 
+
+    EnemyDamageEvent    m_OnTakeDamageEvent;
 
     //=================
     // private 멤버 함수
@@ -50,12 +57,13 @@ public:
     //=========
     // 멤버 함수
     //=========
-    void TakeDamage(float _Damage);
+    void TakeDamage(float _Damage, bool _hitSkull = false);
 
     void BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
     void Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
     void EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
 
+    void CreateProjectile();
 
     //=============
     // 상속 멤버 함수
@@ -95,7 +103,12 @@ public:
 
     GET_SET(GameObject*, TargetObject);
     GET_SET(ENEMY_TYPE, EnemyType);
+    GET_SET(Ptr<APrefab>, FlowerProjectile);
 
+
+    // 이벤트 구독 / 해제
+    void SubscribeOnTakeDamage(EnemyDamageEvent _Event) { m_OnTakeDamageEvent = _Event; }
+    void UnsubscribeOnTakeDamage()                      { m_OnTakeDamageEvent = nullptr; }
 
     //============
     // 생성, 소멸자

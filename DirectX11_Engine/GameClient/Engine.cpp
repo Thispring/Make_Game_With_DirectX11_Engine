@@ -8,6 +8,7 @@
 #include "RenderMgr.h"
 #include "TaskMgr.h"
 #include "EditorMgr.h"
+#include "FontMgr.h"
 
 Engine::Engine()
 	: // 명시되어 있지 않지만, 상속받은 부모의 생성자가 숨어있음
@@ -42,7 +43,10 @@ int Engine::Progress()
 	RenderMgr::GetInst()->Progress();
 
 	// FPS Render
-	TimeMgr::GetInst()->Render();
+	//TimeMgr::GetInst()->Render();
+
+	// Ending Level 용 Render
+	FontMgr::GetInst()->PrintEnding();
 
 	// imgui Editor 관리
 	if (m_EditorMode)

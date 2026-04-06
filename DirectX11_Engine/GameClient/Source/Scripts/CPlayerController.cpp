@@ -31,7 +31,7 @@ void CPlayerController::Move()
 	if (KEY_PRESSED(KEY::RIGHT))
 	{
 		m_TempDir = 1;
-		m_PlayerData->SetDirNum(m_TempDir);
+		m_PlayerData->SetDirection(m_TempDir);
         if (m_StatusMgr->GetCurStatus() != m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::WALK))
 		{
 			m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::WALK));
@@ -41,7 +41,7 @@ void CPlayerController::Move()
 	else if (KEY_PRESSED(KEY::LEFT))
 	{
 		m_TempDir = -1;
-		m_PlayerData->SetDirNum(m_TempDir);
+		m_PlayerData->SetDirection(m_TempDir);
         if (m_StatusMgr->GetCurStatus() != m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::WALK))
 		{
 			m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::WALK));
@@ -106,7 +106,7 @@ void CPlayerController::EnergyBlastShot(KEY _key)
 		Vec3 vAnchorScale = GetOwner()->GetChild(PLAYER_PROJECTILE_ANCHOR)->Transform()->GetWorldScale();
 
 		Vec3 vDir = Transform()->GetDir(DIR::RIGHT);
-		vDir *= m_PlayerData->GetDirNum();
+		vDir *= m_PlayerData->GetDirection();
 
 		GameObject* pBlastObj = InstantiateObject(pBlast.Get(), 5, vAnchorPos + vAnchorScale * vDir);
 		pBlastObj->GetScript<CEnergyBlast>()->SetUp(vDir);

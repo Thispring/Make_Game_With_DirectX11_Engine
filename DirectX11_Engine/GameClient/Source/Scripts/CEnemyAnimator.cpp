@@ -65,6 +65,14 @@ void CEnemyAnimator::Play()
 		else { fps = 10; repCount = 0; }
 		break;
         
+	case ENEMY_STATE::GHOST_SKULL:
+		fps = 10; repCount = 0;
+		break;
+
+	case ENEMY_STATE::GHOST_SKULL_MOVE:
+		fps = 10; repCount = -1;
+		break;
+
 	default:
 		fps = 10; repCount = -1;
 		break;

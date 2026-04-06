@@ -98,6 +98,21 @@ KEY: F5
 KEY_STATE: TAP
 Source File: Engine.cpp
 
+Comment: 다음 Level을 불러옴
+KEY: INS
+KEY_STATE: PRESSED
+Source File: LevelMgr.cpp
+
+Comment: Ending Level
+KEY: DEL
+KEY_STATE: PRESSED
+Source File: LevelMgr.cpp
+
+Comment: Main Level
+KEY: HOME
+KEY_STATE: PRESSED
+Source File: LevelMgr.cpp
+
 Comment: No Comment
 KEY: F9
 KEY_STATE: TAP
