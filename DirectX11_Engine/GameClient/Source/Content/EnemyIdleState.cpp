@@ -37,10 +37,12 @@ void EnemyIdleState::OnTick()
     {
         // FLYING: Origin으로 서서히 복귀 후 offset 초기화 -> PATROL 전환
         Vec3  pos       = m_EnemyData->GetTargetObject()->Transform()->GetRelativePos();
-        Vec3  rot       = m_EnemyData->GetTargetObject()->Transform()->GetRelativeRot();
+        Vec3  scale     = m_EnemyData->GetTargetObject()->Transform()->GetRelativeScale();
+
         Vec3  originPos = m_EnemyData->GetOriginPos();
         Vec3  originRot = m_EnemyData->GetOriginRot();
         float speed     = m_EnemyData->GetSpeed();
+        int   dir = m_EnemyData->GetDirection();
 
         float dx   = originPos.x - pos.x;
         float dy   = originPos.y - pos.y;
@@ -48,21 +50,27 @@ void EnemyIdleState::OnTick()
 
         if (dist > 2.f)
         {
+            // 복귀 방향(dx 부호)에 따라 스프라이트 좌우 반전
+            int newDir = (dx > 0) ? 1 : -1;
+            if (newDir != dir)
+            {
+                scale.x *= -1.f;
+                dir = newDir;
+            }
+
             float invDist = 1.f / dist;
             pos.x += dx * invDist * speed * DT;
             pos.y += dy * invDist * speed * DT;
-            rot.z  = atan2f(dy, dx);
 
             m_EnemyData->GetTargetObject()->Transform()->SetRelativePos(pos);
-            m_EnemyData->GetTargetObject()->Transform()->SetRelativeRot(rot);
+            m_EnemyData->GetTargetObject()->Transform()->SetRelativeScale(scale);
+            m_EnemyData->SetDirection(dir);
         }
         else
         {
             // Origin 도달: 스냅, offset 초기화, PATROL 전환
             pos   = originPos;
-            rot.z = originRot.z;
             m_EnemyData->GetTargetObject()->Transform()->SetRelativePos(pos);
-            m_EnemyData->GetTargetObject()->Transform()->SetRelativeRot(rot);
 
             m_EnemyData->SetOffset(0.f);
 
@@ -73,15 +81,7 @@ void EnemyIdleState::OnTick()
     }
     else
     {
-        // FLOWER 타입은 IDLE 유지
-        if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLOWER)
-        {
-            Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetTargetObject()->GetScript<CEnemyStateManager>();
-            pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::IDLE));
-            pMgr->ChangeState();
-        }
-
-        // 다시 Idle로 돌아왔을 때, 1초 후 Patrol 상태로 변경
+        // 다시 Idle로 돌아왔을 때, 0.25초 후 Patrol 상태로 변경
         if (m_EnemyData->GetTimeInState() >= 0.25f)
         {
             Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetTargetObject()->GetScript<CEnemyStateManager>();

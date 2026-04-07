@@ -26,6 +26,8 @@ public:
 	void LevelPlayInit();
 	void RegisterPlayerSave(Vec3 _SavePos);
 
+	void ClearLevelPlay();
+
 
 	//=========
 	// Get, Set

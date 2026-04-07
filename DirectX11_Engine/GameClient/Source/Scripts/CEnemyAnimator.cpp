@@ -53,6 +53,10 @@ void CEnemyAnimator::Play()
 		else { fps = 10; repCount = -1; }
 		break;
 
+	case ENEMY_STATE::RANGED_ATTACK:
+		fps = 15; repCount = -1;
+		break;
+
 	case ENEMY_STATE::HIT:
 		if (enemyType == ENEMY_TYPE::DEMON) { fps = 10; repCount = 1; }
 		else if (enemyType == ENEMY_TYPE::SKULL) { fps = 10; repCount = 1; }

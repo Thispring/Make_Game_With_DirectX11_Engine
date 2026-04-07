@@ -39,6 +39,7 @@ enum class KEY
 
 	F1, F2, F3, F4, F5,
 	F6, F7, F8, F9,
+	// F10 ~ F12는 Visual Studio 관련 디버그 KEY라 등록 X
 
 	TILDE,        // ~  (VK_OEM_3)
 	LBRACKET,     // [  (VK_OEM_4)

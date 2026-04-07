@@ -153,6 +153,21 @@ void EScriptUI::Tick_UI()
 			AddItemHeight();
 		}
 			break;
+		case SCRIPT_PARAM::VEC3:
+		{
+			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
+
+			string Key = "##Vec3";
+			Key += ID;
+
+			if (vecParam[i].IsInput)
+				ImGui::InputFloat3(Key.c_str(), (float*)vecParam[i].Data);
+			else
+				ImGui::DragFloat3(Key.c_str(), (float*)vecParam[i].Data);
+
+			AddItemHeight();
+		}
+			break;
 		case SCRIPT_PARAM::VEC4:
 		{
 			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());

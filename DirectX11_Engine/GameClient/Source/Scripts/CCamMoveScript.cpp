@@ -13,10 +13,16 @@ CCamMoveScript::CCamMoveScript()
 	, m_MoveMode(CAM_MOVE_MODE::INGAME)
 	, m_Target(nullptr)
 {
+	
 }
 
 CCamMoveScript::~CCamMoveScript()
 {
+}
+
+void CCamMoveScript::Init()
+{
+
 }
 
 void CCamMoveScript::Begin()
@@ -31,6 +37,12 @@ void CCamMoveScript::Begin()
 
 	// Player 게임 오브젝트를 찾아서 등록
 	m_Target = LevelMgr::GetInst()->FindObjectByName(L"Player");
+
+	// 현재 Level이 Normal_Stage_0.lv 라면 아래 고정 Position을 적용
+	if (LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\Normal_Stage_0.lv")
+	{
+		GetOwner()->Transform()->SetRelativePos(Vec3(-4600.f, 800.f, -350.f));
+	}
 }
 
 void CCamMoveScript::Tick()

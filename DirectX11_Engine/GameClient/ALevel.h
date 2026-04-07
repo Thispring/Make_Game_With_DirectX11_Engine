@@ -38,6 +38,7 @@ public:
     void FinalTick();
 
     Ptr<GameObject> FindObjectByName(const wstring& _Name);
+    void DestroyAllObjectsInLayer(int _LayerIndex);
 
     // Level을 복사하는 함수, 호출자 자신의 주소를 전달하여 동적할당
     //ALevel* Clone() { return NEW ALevel(*this); }

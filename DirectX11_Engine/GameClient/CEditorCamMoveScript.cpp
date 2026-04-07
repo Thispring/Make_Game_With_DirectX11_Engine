@@ -25,7 +25,7 @@ CEditorCamMoveScript::~CEditorCamMoveScript()
 void CEditorCamMoveScript::Begin()
 {
 	// 에디터 카메라 초기 위치를 (0, 0, -350)으로 고정 등록
-	m_OriginPos = Vec3(0.f, 0.f, -350.f);
+	m_OriginPos = Vec3(0.f, 900.f, -350.f);
 	m_OriginRot = Vec3(0.f, 0.f, 0.f);
 	Transform()->SetRelativePos(m_OriginPos);
 	Transform()->SetRelativeRot(m_OriginRot);

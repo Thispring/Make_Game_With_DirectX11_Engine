@@ -2,6 +2,7 @@
 #include "CPlayerData.h"
 #include "LevelMgr.h"
 #include "AssetMgr.h"
+#include "TimeMgr.h"
 
 CPlayerData::CPlayerData()
 	: CScript(SCRIPT_TYPE::PLAYERDATA)
@@ -27,6 +28,8 @@ CPlayerData::CPlayerData()
 	, m_EnergyBlast(nullptr)
 
 	, m_VelocityY(0.f)
+	, m_GroundNormal(0.f, 1.f, 0.f)
+	, m_fCoyoteTimer(0.f)
 {
 }
 
@@ -98,27 +101,79 @@ void CPlayerData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCol
 {
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
-		// Layer 16번과 충돌했을 때만 m_IsFalling 상태를 변경
 		m_IsFalling = false;
+		m_fCoyoteTimer = 0.f;
+
+		// 월드 행렬 2행(row 1) = local Y축의 월드 방향 = 접지면 법선
+		Matrix slopeMat = _OtherCollider->GetWorldMat();
+		Vec3 normal = Vec3(slopeMat._21, slopeMat._22, slopeMat._23);
+		normal.Normalize();
+
+		// 평지에 가까운 경우 부동소수점 오차 제거
+		m_GroundNormal = (fabsf(normal.y) > 0.99f) ? Vec3(0.f, 1.f, 0.f) : normal;
 	}
 }
 
 void CPlayerData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
+	if (_OtherCollider->GetOwner()->GetLayerIdx() != (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
+		return;
 
+	// 자신 콜라이더의 월드 Y축 (= 월드 공간 반높이 방향, 스케일 포함)
+	Matrix ownMat  = _OwnCollider->GetWorldMat();
+	Vec3 ownYAxis  = Vec3(ownMat._21, ownMat._22, ownMat._23);
+
+	// 발 위치 = 콜라이더 중심 - Y축 * 0.5f (하단 모서리)
+	// 중심 기준 보정은 절반 높이만큼 부족하므로 발 기준으로 계산
+	Vec3 footWorld = _OwnCollider->GetWorldCenter();
+	footWorld.x   -= ownYAxis.x * 0.5f;
+	footWorld.y   -= ownYAxis.y * 0.5f;
+	footWorld.z   -= ownYAxis.z * 0.5f;
+
+	// 발 위치를 경사면 로컬 공간으로 변환
+	Matrix invSlope = _OtherCollider->GetWorldMat().Invert();
+	Vec3 localFoot  = XMVector3TransformCoord(footWorld, invSlope);
+
+	// 경사면 상단(y = +0.5f) 기준 침투량
+	float localPenetration = 0.5f - localFoot.y;
+	if (localPenetration <= 0.f)
+		return;
+
+	// 로컬 침투량 → 월드 보정 벡터
+	// localPenetration * row1 = 경사면 법선 방향으로 정확한 밀어내기
+	Matrix slopeMat = _OtherCollider->GetWorldMat();
+	Vec3 pos        = GetOwner()->Transform()->GetRelativePos();
+	pos.x += localPenetration * slopeMat._21;
+	pos.y += localPenetration * slopeMat._22;
+	GetOwner()->Transform()->SetRelativePos(pos);
 }
 
 void CPlayerData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
-		// Layer 16번과 충돌했을 때만 m_IsFalling 상태를 변경
-		m_IsFalling = true;
+		// 즉시 낙하 대신 코요테 타임으로 유예 (내리막 엣지 및 슬로프 간 간격 대응)
+		m_fCoyoteTimer = 0.08f;
+		m_GroundNormal = Vec3(0.f, 1.f, 0.f);
 	}
 }
 
 void CPlayerData::Tick()
 {
+	if (m_IsDead)
+		return;
+
+	// 코요테 타임 처리: 타이머 만료 시 낙하 시작
+	if (m_fCoyoteTimer > 0.f)
+	{
+		m_fCoyoteTimer -= DT;
+		if (m_fCoyoteTimer <= 0.f)
+		{
+			m_fCoyoteTimer = 0.f;
+			m_IsFalling = true;
+		}
+	}
+
 	// Player 위치 갱신
 	m_CurPos = GetOwner()->Transform()->GetRelativePos();
 }

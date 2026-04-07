@@ -1,11 +1,21 @@
 #include "pch.h"
 #include "CEnemySpawner.h"
+
 #include "GameObject.h"
+
 #include "TimeMgr.h"
 #include "AssetMgr.h"
 
 CEnemySpawner::CEnemySpawner()
 	: CScript(SCRIPT_TYPE::ENEMYSPAWNER)
+	, m_Demon(nullptr)
+	, m_Skull(nullptr)
+	, m_Flying(nullptr)
+	, m_Flower(nullptr)
+	, m_Boss(nullptr)
+	
+	, m_vecSpawnEnemy{}
+
 	, m_spawnCount(0)
 	, m_spawnTime(0)
 {
@@ -18,64 +28,29 @@ CEnemySpawner::~CEnemySpawner()
 
 void CEnemySpawner::SpawnEnemy()
 {
-	GameObject* pObject = NEW GameObject;
+	// Prefab 멤버를 이용하여 소환
 
-	pObject->SetName(L"Enemy");
-
-	pObject->AddComponent(NEW CTransform);
-	pObject->AddComponent(NEW CFlipbookRender);
-	pObject->AddComponent(NEW CCollider2D);
-
-	Vec3 vMyPos = GetOwner()->Transform()->GetRelativePos();
-	Vec3 vMyRot = GetOwner()->Transform()->GetRelativeRot();
-	Vec3 vMyScale = GetOwner()->Transform()->GetRelativeScale();
-
-	// 0 ~ 30 사이의 난수를 생성하여
-	// Enemy Pos를 다르게 설정
-
-	float ranX = rand() % 100;
-	float ranY = rand() % 50;
-
-	vMyPos.x += ranX;
-	vMyPos.y += ranY;
-
-	// Transform 정보는 Spawner의 Transform으로 설정
-	pObject->Transform()->SetRelativePos(vMyPos);
-	pObject->Transform()->SetRelativeScale(vMyScale * 25.f);
-	pObject->Transform()->SetRelativeRot(vMyRot);
-
-	pObject->FlipbookRender()->AddFlipbook(FIND(AFlipbook, L"BotMove_Fb"));
-	pObject->FlipbookRender()->AddFlipbook(FIND(AFlipbook, L"BotIdle_Fb"));
-	pObject->FlipbookRender()->AddFlipbook(FIND(AFlipbook, L"BotAttack_Fb"));
-
-	pObject->FlipbookRender()->Play(1, 8.f, -1);
-
-	m_spawnCount++;
-
-	// Enemy Layer 인덱스는 5
-	CreateObject(pObject, 5);
-
-	// 스폰 시간을 0으로 초기화
-	m_spawnTime = 0;
 }
 
-void CEnemySpawner::Tick()
+void CEnemySpawner::Init()
 {
-	// 2초 마다 생성
-	if (m_spawnTime >= 2)
-	{
-		//SpawnEnemy();
-	}
-	else
-	{
-		m_spawnTime += 1 * DT;
-	}
+	AddScriptParam(SCRIPT_PARAM::PREFAB, &m_Demon, L"DemonPrefab", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::PREFAB, &m_Skull, L"SkullPrefab", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::PREFAB, &m_Flying, L"FlyingPrefab", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::PREFAB, &m_Flower, L"FlowerPrefab", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::PREFAB, &m_Boss, L"BossPrefab", true, 0.f);
 }
 
 void CEnemySpawner::Begin()
 {
-	srand(time(NULL));
+	
 }
+
+void CEnemySpawner::Tick()
+{
+
+}
+
 
 void CEnemySpawner::SaveToLevelFile(FILE* _File)
 {

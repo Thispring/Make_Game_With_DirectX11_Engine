@@ -22,6 +22,12 @@ private:
 
     ENEMY_TYPE          m_EnemyType;
 
+    //==========================================
+    // NOTE(26-04-07): 
+    // 파일로 저장하여 초기 위치를 지정하는 멤버 추가
+    //==========================================
+    Vec3                m_InitialPos;
+
     Vec3                m_OriginPos;
     Vec3                m_CurPos;
 
@@ -35,6 +41,8 @@ private:
     float               m_Speed;
     float               m_JumpVelocity;
     float               m_VelocityY;        // Y축 수직 속도
+    Vec3                m_GroundNormal;      // 현재 접지면 법선 (기본값: 평지 = 0,1,0)
+    float               m_fCoyoteTimer;     // 코요테 타임 카운터 (내리막 이탈 유예)
     float               m_Offset;
     
     float               m_TimeSinceSpawn;
@@ -86,6 +94,7 @@ public:
     GET_SET(float, Speed);
     GET_SET(float, JumpVelocity);
     GET_SET(float, VelocityY);
+    GET_SET(Vec3, GroundNormal);
     GET_SET(float, TimeSinceSpawn);
     GET_SET(float, TimeInState);
     GET_SET(float, Offset);
@@ -96,6 +105,7 @@ public:
     GET_SET(bool, IsFalling);
     GET_SET(bool, IsAttack);
 
+    GET_SET(Vec3, InitialPos);
     GET_SET(Vec3, OriginPos);
     GET_SET(Vec3, CurPos);
     GET_SET(Vec3, OriginRot);

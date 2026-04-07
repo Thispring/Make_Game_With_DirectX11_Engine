@@ -3,6 +3,7 @@
 #include <cstring>
 
 #include "Scripts/CCamMoveScript.h"
+#include "Scripts/CEndingLevelController.h"
 #include "Scripts/CEnemyAnimator.h"
 #include "Scripts/CEnemyBehavior.h"
 #include "Scripts/CEnemyData.h"
@@ -19,6 +20,7 @@
 #include "Scripts/CPlayerData.h"
 #include "Scripts/CPlayerMeleeTrigger.h"
 #include "Scripts/CPlayerStateManager.h"
+#include "Scripts/CPortal.h"
 #include "Scripts/CSavePoint.h"
 #include "Scripts/CUICamMoveScript.h"
 #include "Scripts/CUIOverlayController.h"
@@ -26,6 +28,7 @@
 void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CCamMoveScript");
+	_vec.push_back(L"CEndingLevelController");
 	_vec.push_back(L"CEnemyAnimator");
 	_vec.push_back(L"CEnemyBehavior");
 	_vec.push_back(L"CEnemyData");
@@ -42,6 +45,7 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CPlayerData");
 	_vec.push_back(L"CPlayerMeleeTrigger");
 	_vec.push_back(L"CPlayerStateManager");
+	_vec.push_back(L"CPortal");
 	_vec.push_back(L"CSavePoint");
 	_vec.push_back(L"CUICamMoveScript");
 	_vec.push_back(L"CUIOverlayController");
@@ -51,6 +55,8 @@ CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 {
 	if (L"CCamMoveScript" == _strScriptName)
 		return NEW CCamMoveScript;
+	if (L"CEndingLevelController" == _strScriptName)
+		return NEW CEndingLevelController;
 	if (L"CEnemyAnimator" == _strScriptName)
 		return NEW CEnemyAnimator;
 	if (L"CEnemyBehavior" == _strScriptName)
@@ -83,6 +89,8 @@ CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 		return NEW CPlayerMeleeTrigger;
 	if (L"CPlayerStateManager" == _strScriptName)
 		return NEW CPlayerStateManager;
+	if (L"CPortal" == _strScriptName)
+		return NEW CPortal;
 	if (L"CSavePoint" == _strScriptName)
 		return NEW CSavePoint;
 	if (L"CUICamMoveScript" == _strScriptName)
@@ -98,6 +106,9 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 	{
 	case (UINT)SCRIPT_TYPE::CAMMOVESCRIPT:
 		return NEW CCamMoveScript;
+		break;
+	case (UINT)SCRIPT_TYPE::ENDINGLEVELCONTROLLER:
+		return NEW CEndingLevelController;
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYANIMATOR:
 		return NEW CEnemyAnimator;
@@ -147,6 +158,9 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::PLAYERSTATEMANAGER:
 		return NEW CPlayerStateManager;
 		break;
+	case (UINT)SCRIPT_TYPE::PORTAL:
+		return NEW CPortal;
+		break;
 	case (UINT)SCRIPT_TYPE::SAVEPOINT:
 		return NEW CSavePoint;
 		break;
@@ -166,6 +180,10 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 	{
 	case SCRIPT_TYPE::CAMMOVESCRIPT:
 		return L"CCamMoveScript";
+		break;
+
+	case SCRIPT_TYPE::ENDINGLEVELCONTROLLER:
+		return L"CEndingLevelController";
 		break;
 
 	case SCRIPT_TYPE::ENEMYANIMATOR:
@@ -232,6 +250,10 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CPlayerStateManager";
 		break;
 
+	case SCRIPT_TYPE::PORTAL:
+		return L"CPortal";
+		break;
+
 	case SCRIPT_TYPE::SAVEPOINT:
 		return L"CSavePoint";
 		break;
@@ -253,6 +275,9 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	switch (_Type)
 	{
 	case CAMMOVESCRIPT: return "CCamMoveScript";
+		break;
+
+	case ENDINGLEVELCONTROLLER: return "CEndingLevelController";
 		break;
 
 	case ENEMYANIMATOR: return "CEnemyAnimator";
@@ -303,6 +328,9 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	case PLAYERSTATEMANAGER: return "CPlayerStateManager";
 		break;
 
+	case PORTAL: return "CPortal";
+		break;
+
 	case SAVEPOINT: return "CSavePoint";
 		break;
 
@@ -327,6 +355,8 @@ CScript * ScriptMgr::GetScript(const char* _strScriptName)
 {
 	if (0 == strcmp(_strScriptName, "CCamMoveScript"))
 		return NEW CCamMoveScript;
+	if (0 == strcmp(_strScriptName, "CEndingLevelController"))
+		return NEW CEndingLevelController;
 	if (0 == strcmp(_strScriptName, "CEnemyAnimator"))
 		return NEW CEnemyAnimator;
 	if (0 == strcmp(_strScriptName, "CEnemyBehavior"))
@@ -359,6 +389,8 @@ CScript * ScriptMgr::GetScript(const char* _strScriptName)
 		return NEW CPlayerMeleeTrigger;
 	if (0 == strcmp(_strScriptName, "CPlayerStateManager"))
 		return NEW CPlayerStateManager;
+	if (0 == strcmp(_strScriptName, "CPortal"))
+		return NEW CPortal;
 	if (0 == strcmp(_strScriptName, "CSavePoint"))
 		return NEW CSavePoint;
 	if (0 == strcmp(_strScriptName, "CUICamMoveScript"))
@@ -373,6 +405,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 {
 	if (L"CCamMoveScript" == _strScriptName)
 		return CAMMOVESCRIPT;
+	if (L"CEndingLevelController" == _strScriptName)
+		return ENDINGLEVELCONTROLLER;
 	if (L"CEnemyAnimator" == _strScriptName)
 		return ENEMYANIMATOR;
 	if (L"CEnemyBehavior" == _strScriptName)
@@ -405,6 +439,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 		return PLAYERMELEETRIGGER;
 	if (L"CPlayerStateManager" == _strScriptName)
 		return PLAYERSTATEMANAGER;
+	if (L"CPortal" == _strScriptName)
+		return PORTAL;
 	if (L"CSavePoint" == _strScriptName)
 		return SAVEPOINT;
 	if (L"CUICamMoveScript" == _strScriptName)
@@ -419,6 +455,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 {
 	if (0 == strcmp(_strScriptName, "CCamMoveScript"))
 		return CAMMOVESCRIPT;
+	if (0 == strcmp(_strScriptName, "CEndingLevelController"))
+		return ENDINGLEVELCONTROLLER;
 	if (0 == strcmp(_strScriptName, "CEnemyAnimator"))
 		return ENEMYANIMATOR;
 	if (0 == strcmp(_strScriptName, "CEnemyBehavior"))
@@ -451,6 +489,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 		return PLAYERMELEETRIGGER;
 	if (0 == strcmp(_strScriptName, "CPlayerStateManager"))
 		return PLAYERSTATEMANAGER;
+	if (0 == strcmp(_strScriptName, "CPortal"))
+		return PORTAL;
 	if (0 == strcmp(_strScriptName, "CSavePoint"))
 		return SAVEPOINT;
 	if (0 == strcmp(_strScriptName, "CUICamMoveScript"))

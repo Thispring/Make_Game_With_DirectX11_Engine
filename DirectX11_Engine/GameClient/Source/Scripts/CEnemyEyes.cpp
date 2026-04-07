@@ -50,7 +50,6 @@ void CEnemyEyes::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 
 	if (m_EnemyData->GetIsDead() == true)
 	{
-		int a = 0;
 		return;
 	}
 }
@@ -60,14 +59,18 @@ void CEnemyEyes::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 	if (m_EnemyData->GetIsDead() == true)
 		return;
 
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == 3)
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
 	{
 		Ptr<CEnemyStateManager> pMgr = GetOwner()->GetParent()->GetScript<CEnemyStateManager>();
 
 		if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLOWER)
 		{
-			// FLOWER 타입은 추적모드 전환 X
-
+			// FLOWER 타입은 추적모드에서 전환 X
+			if (pMgr->GetCurStatus() == pMgr->GetStatusByIndex((int)ENEMY_STATE::RANGED_ATTACK))
+			{
+				pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::IDLE));
+				pMgr->ChangeState();
+			}
 			return;
 		}
 

@@ -23,7 +23,10 @@ void DrawDebugLargeBaseCone(const Matrix& _matWorld, Vec4 _Color, float _Duratio
 
 
 // 0 ~ 1로 제한하는 함수
-float Saturate(float _Data);	
+float Saturate(float _Data);
+
+// 다음 프레임에 오브젝트의 활성화 상태를 변경하도록 예약
+void SetActiveDeferred(class GameObject* _Object, bool _IsActive);
 
 #include "CCamera.h"
 // PROJ_TYPE을 스위칭하는 함수

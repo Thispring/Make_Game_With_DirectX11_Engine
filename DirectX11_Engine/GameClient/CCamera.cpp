@@ -5,6 +5,7 @@
 
 #include "LevelMgr.h"
 #include "RenderMgr.h"
+#include "CinematicMgr.h"
 
 #include "ALevel.h"
 #include "Layer.h"
@@ -130,6 +131,11 @@ void CCamera::SortObejct()
 	}
 }
 
+void CCamera::Init()
+{
+	CinematicMgr::GetInst()->RegisterCamera(this);
+}
+
 void CCamera::Begin()
 {
 	// 레벨이 시작될때 호출됨
@@ -139,6 +145,12 @@ void CCamera::Begin()
 	// 조건분기
 	if (m_IsUICam == true)
 		RenderMgr::GetInst()->RegisterUICamera(this);
+
+	// CINEMATIC 연출용 카메라 등록
+	// Clone된 레벨의 Begin() 시점에 호출되므로, 항상 현재 레벨의 카메라가 등록됨
+	// UI 카메라는 연출 대상에서 제외
+	if (!m_IsUICam)
+		CinematicMgr::GetInst()->RegisterCamera(this);
 }
 
 void CCamera::FinalTick()

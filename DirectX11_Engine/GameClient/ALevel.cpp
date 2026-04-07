@@ -116,6 +116,13 @@ Ptr<GameObject> ALevel::FindObjectByName(const wstring& _Name)
 	return nullptr;
 }
 
+void ALevel::DestroyAllObjectsInLayer(int _LayerIndex)
+{
+	// m_vecParents와 m_vecAllObjects 모두 제거
+	// (DeregisterObject는 m_vecAllObjects만 클리어하므로 Clone 전 클린업에 사용 불가)
+	m_arrLayer[_LayerIndex].ClearAllObjects();
+}
+
 int ALevel::Save(const wstring& _FilePath)
 {
 	// 파일 스트림 생성

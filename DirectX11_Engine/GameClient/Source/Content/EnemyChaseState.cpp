@@ -43,29 +43,29 @@ void EnemyChaseState::OnTick()
 
 		Vec3  scale = m_EnemyData->GetTargetObject()->Transform()->GetRelativeScale();
 		int   dir = m_EnemyData->GetDirection();
-		float offSet = m_EnemyData->GetOffset();
 
-		// 1. 플레이어가 오른쪽이면 +1, 왼쪽이면 -1
+		// 거리 계산 (단일 계산, 이후 이동에도 재사용)
+		float dx = vPlayerPos.x - pos.x;
+		float dy = vPlayerPos.y - pos.y;
+		float len = sqrtf(dx * dx + dy * dy);
+
+		// X축 방향에 따른 스프라이트 좌우 반전
 		int newDir = (vPlayerPos.x > pos.x) ? 1 : -1;
-
-		// 2. 방향이 바뀌면 스프라이트 좌우 반전
 		if (newDir != dir)
 		{
 			scale.x *= -1.f;
 			dir = newDir;
 		}
 
-		// 3. 이동량 계산 (X축, 프레임 독립적)
-		// 추격 시 더 빠른 스피드 적용
-		float delta = dir * speed * DT * 2.f;
-		pos.x += delta;
-		offSet += delta;
+		pos.x += (dx / len) * speed * DT * 2.f;
+		pos.y += (dy / len) * speed * DT * 2.f;
+
 
 		// 적용
 		m_EnemyData->GetTargetObject()->Transform()->SetRelativePos(pos);
 		m_EnemyData->GetTargetObject()->Transform()->SetRelativeScale(scale);
 		m_EnemyData->SetDirection(dir);
-		m_EnemyData->SetOffset(offSet);
+		//m_EnemyData->SetOffset(offSet);
 	}
 	else
 	{

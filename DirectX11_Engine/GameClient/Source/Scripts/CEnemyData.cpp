@@ -3,6 +3,7 @@
 
 #include "LevelMgr.h"
 #include "TimeMgr.h"
+#include "AssetMgr.h"
 
 #include "CCollider2D.h"
 
@@ -22,6 +23,8 @@ CEnemyData::CEnemyData()
 	, m_Speed(100.f)
 	, m_JumpVelocity(300.f)
 	, m_VelocityY(0.f)
+	, m_GroundNormal(0.f, 1.f, 0.f)
+	, m_fCoyoteTimer(0.f)
 	, m_Offset(0.f)
 	, m_TimeSinceSpawn(0.f)
 	, m_TimeInState(0.f)
@@ -32,6 +35,7 @@ CEnemyData::CEnemyData()
 	, m_IsFalling(true)
 	, m_IsAttack(false)
 
+	, m_InitialPos{}
 	, m_OriginPos{}
 	, m_CurPos{}
 	, m_OriginRot{}
@@ -40,6 +44,9 @@ CEnemyData::CEnemyData()
 	// EnemyType은 기본으로 END입니다.
 	// ImGui에서 지정해야 하며, 하지 않을경우 크래시
 	, m_EnemyType(ENEMY_TYPE::END)
+
+	, m_TargetObject(nullptr)
+	, m_EyeObject(nullptr)
 	, m_FlowerProjectile(nullptr)
 {
 }
@@ -64,11 +71,19 @@ void CEnemyData::Init()
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_TimeSinceSpawn, L"TimeSinceSpawn", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_TimeInState, L"TimeInState", true, 0.f);
 	
+	// Spawn 위치가 잘 되었는지 확인용
+	AddScriptParam(SCRIPT_PARAM::VEC3, &m_InitialPos, L"InitialPos", true, 0.f);
+
 	AddScriptParam(SCRIPT_PARAM::INT, &m_Direction, L"Direction", true, 0.f);
 
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsDead, L"IsDead", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsFalling, L"IsFalling", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsAttack, L"IsAttack", true, 0.f);
+
+	AddScriptParam(SCRIPT_PARAM::PREFAB, &m_FlowerProjectile, L"FlowerProjectile", true, 0.f);
+
+	AddScriptParam(SCRIPT_PARAM::PTR, &m_TargetObject, L"TargetObject", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::PTR, &m_EyeObject, L"EyeObject", true, 0.f);
 
 	// enum class ENEMY_TYPE을 ImGui에서 편집할 수 있도록 전달
 	// Level Play 전에 m_EnemyType을 미리 받을 수 있게 보장합니다.
@@ -91,6 +106,13 @@ void CEnemyData::Begin()
 
 	// assert는 조건이 false일 때만 실행(중단)됩니다.
 	assert(m_EnemyType != ENEMY_TYPE::END && "EnemyType is End");
+
+	// FLOWER 타입의 경우, ENEMY_PROJECTILE_ANCHOR 자식을 다른 Layer로 설정
+	// Player 공격범위에서 제외하기 위함
+	if (m_EnemyType == ENEMY_TYPE::FLOWER)
+	{
+		GetOwner()->GetChild(ENEMY_PROJECTILE_ANCHOR)->SetLayerIdx((int)LEVEL_0_LAYER::ENEMY_PROJECT_ANCHOR);
+	}
 
 	// 기존 위치는 Begin에서 초기화
 	m_OriginPos = GetOwner()->Transform()->GetRelativePos();
@@ -182,7 +204,17 @@ void CEnemyData::ChangeState(ENEMY_STATE _State)
 
 void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
+	{
+		m_fCoyoteTimer = 0.f;
+
+		// 월드 행렬 2행(row 1) = local Y축의 월드 방향 = 접지면 법선
+		Matrix slopeMat = _OtherCollider->GetWorldMat();
+		Vec3 normal = Vec3(slopeMat._21, slopeMat._22, slopeMat._23);
+		normal.Normalize();
+
+		m_GroundNormal = (fabsf(normal.y) > 0.99f) ? Vec3(0.f, 1.f, 0.f) : normal;
+	}
 }
 
 void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
@@ -199,9 +231,42 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 
 	m_IsFalling = false;
 
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
+	{
+		// 자신 콜라이더의 월드 Y축 (스케일 포함)
+		Matrix ownMat  = _OwnCollider->GetWorldMat();
+		Vec3 ownYAxis  = Vec3(ownMat._21, ownMat._22, ownMat._23);
+
+		// 발 위치 = 콜라이더 중심 - Y축 * 0.5f
+		Vec3 footWorld = _OwnCollider->GetWorldCenter();
+		footWorld.x   -= ownYAxis.x * 0.5f;
+		footWorld.y   -= ownYAxis.y * 0.5f;
+		footWorld.z   -= ownYAxis.z * 0.5f;
+
+		// 발 위치를 경사면 로컬 공간으로 변환
+		Matrix invSlope       = _OtherCollider->GetWorldMat().Invert();
+		Vec3   localFoot      = XMVector3TransformCoord(footWorld, invSlope);
+		float  localPenetration = 0.5f - localFoot.y;
+
+		if (localPenetration > 0.f)
+		{
+			Matrix slopeMat = _OtherCollider->GetWorldMat();
+			Vec3   pos      = GetOwner()->Transform()->GetRelativePos();
+			pos.x += localPenetration * slopeMat._21;
+			pos.y += localPenetration * slopeMat._22;
+			GetOwner()->Transform()->SetRelativePos(pos);
+		}
+	}
 
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
 	{
+		// FLOWER 타입이면 return
+		if (m_EnemyType == ENEMY_TYPE::FLOWER)
+		{
+			ChangeState(ENEMY_STATE::ATTACK);
+			return;
+		}
+
 		Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
 		ENEMY_STATE curState = pMgr->GetCurCommonState();
 
@@ -218,7 +283,23 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 
 void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	m_IsFalling = true;
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
+	{
+		// 지면 이탈: 코요테 타임으로 유예
+		m_fCoyoteTimer = 0.08f;
+		m_GroundNormal = Vec3(0.f, 1.f, 0.f);
+	}
+	else
+	{
+		m_IsFalling = true;
+	}
+
+	// FLOWER 타입이면 return
+	if (m_EnemyType == ENEMY_TYPE::FLOWER)
+	{
+		ChangeState(ENEMY_STATE::IDLE);
+		return;
+	}
 
 	// HIT, DEAD 상태에서는 IDLE로 강제 전환하지 않음
 	// 해당 상태들은 Flipbook 재생 완료 후 자체적으로 전이합니다.
@@ -245,7 +326,7 @@ void CEnemyData::CreateProjectile()
 	Vec3 vDir = GetTargetObject()->Transform()->GetDir(DIR::RIGHT);
 	vDir *= GetDirection();
 
-	GameObject* pObj = InstantiateObject(pProjectile.Get(), 5, vAnchorPos + vAnchorScale * vDir);
+	GameObject* pObj = InstantiateObject(pProjectile.Get(), (int)LEVEL_0_LAYER::ENEMY_PROJECTILE, vAnchorPos + vAnchorScale * vDir);
 	pObj->GetScript<CFlowerProjectile>()->SetUp(vDir);
 }
 
@@ -254,6 +335,17 @@ void CEnemyData::Tick()
 	if (m_IsDead == true)
 		return;
 
+	// 코요테 타임 처리: 타이머 만료 시 낙하 시작
+	if (m_fCoyoteTimer > 0.f)
+	{
+		m_fCoyoteTimer -= DT;
+		if (m_fCoyoteTimer <= 0.f)
+		{
+			m_fCoyoteTimer = 0.f;
+			m_IsFalling = true;
+		}
+	}
+
 	// 소환 후 흐른 시간 계산
 	m_TimeSinceSpawn += DT;
 }
@@ -261,9 +353,11 @@ void CEnemyData::Tick()
 void CEnemyData::SaveToLevelFile(FILE* _File)
 {
 	fwrite(&m_EnemyType, sizeof(ENEMY_TYPE), 1, _File);
+	SaveAssetRef(_File, m_FlowerProjectile.Get());
 }
 
 void CEnemyData::LoadFromLevelFile(FILE* _File)
 {
 	fread(&m_EnemyType, sizeof(ENEMY_TYPE), 1, _File);
+	m_FlowerProjectile = LoadAssetRef<APrefab>(_File);
 }

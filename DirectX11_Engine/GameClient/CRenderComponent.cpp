@@ -70,7 +70,8 @@ Ptr<AMaterial> CRenderComponent::GetSharedMaterial()
 Ptr<AMaterial> CRenderComponent::CreateDynamicMaterial()
 {
 	// 동적 재질 생성은 반드시 Level이 Play 상태일 때만 사용이 가능하도록 예외처리
-	assert(LEVEL_STATE::PLAY == LevelMgr::GetInst()->GetLevelState());
+	//assert(LEVEL_STATE::PLAY == LevelMgr::GetInst()->GetLevelState());
+	assert(LEVEL_STATE::CINEMATIC == LevelMgr::GetInst()->GetLevelState() || LEVEL_STATE::PLAY == LevelMgr::GetInst()->GetLevelState());
 
 	if (nullptr != m_DynamicMtrl)
 	{

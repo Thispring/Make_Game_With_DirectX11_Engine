@@ -198,4 +198,5 @@ enum class LEVEL_STATE
 	PLAY,
 	PAUSE,
 	STOP,
+	CINEMATIC,
 };

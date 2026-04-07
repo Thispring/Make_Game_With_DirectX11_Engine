@@ -36,6 +36,7 @@ void CPlayerAnimator::Play()
 	case PLAYER_STATE::MIDDLE_KICK:      fps = 15; repCount =  0; break;
 	case PLAYER_STATE::LOW_KICK:         fps = 15; repCount =  0; break;
 	case PLAYER_STATE::ENERGYBLAST_SHOT: fps = 15; repCount =  0; break;
+	case PLAYER_STATE::DEATH:			 fps = 15; repCount =  0; break;
 	case PLAYER_STATE::END:
 	default:
 		break;

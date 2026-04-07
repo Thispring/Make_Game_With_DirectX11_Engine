@@ -82,7 +82,7 @@ EnemyRangedAttackState::~EnemyRangedAttackState()
 void EnemyRangedAttackState::OnBegin()
 {
 	// 첫 공격 보장
-	m_fireTime += 3.f;
+	m_fireTime += 1.f;
 }
 
 void EnemyRangedAttackState::OnTick()
@@ -91,7 +91,7 @@ void EnemyRangedAttackState::OnTick()
 	// 3초마다 함수 실행
 	m_fireTime += DT;
 
-	if (m_fireTime >= 3.f)
+	if (m_fireTime >= 1.f)
 	{
 		m_EnemyData->CreateProjectile();
 		m_fireTime = 0;

@@ -9,6 +9,8 @@
 #include "TaskMgr.h"
 #include "EditorMgr.h"
 #include "FontMgr.h"
+#include "CinematicMgr.h"
+#include "UIMgr.h"
 
 Engine::Engine()
 	: // 명시되어 있지 않지만, 상속받은 부모의 생성자가 숨어있음
@@ -33,8 +35,8 @@ int Engine::Progress()
 	KeyMgr::GetInst()->Tick();
 
 	// F5 전체화면 토글
-	if (KEY_TAP(KEY::F5))
-		ToggleFullScreen();
+	//if (KEY_TAP(KEY::F5))
+	//	ToggleFullScreen();
 
 	// Level 업데이트
 	LevelMgr::GetInst()->Progress();
@@ -43,7 +45,10 @@ int Engine::Progress()
 	RenderMgr::GetInst()->Progress();
 
 	// FPS Render
-	//TimeMgr::GetInst()->Render();
+	TimeMgr::GetInst()->Render();
+
+	// CinematicMgr 업데이트
+	CinematicMgr::GetInst()->Progress();
 
 	// Ending Level 용 Render
 	FontMgr::GetInst()->PrintEnding();

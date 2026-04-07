@@ -124,6 +124,9 @@ void CPlayerController::Begin()
 
 void CPlayerController::Tick()
 {
+	if (m_PlayerData->GetIsDead())
+		return;
+
 	// Animator가 ChangeState(Idle/Walk)를 호출할 때까지 모든 입력 차단
 	// 잠금 대상: Jump, Punch, Kick, EnergyBlast 애니메이션 재생 중
 	if (m_StatusMgr->IsInputLocked())

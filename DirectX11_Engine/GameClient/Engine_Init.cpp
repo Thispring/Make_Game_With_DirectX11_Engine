@@ -12,6 +12,7 @@
 #include "EditorMgr.h"
 #include "FontMgr.h"
 #include "UIMgr.h"
+#include "CinematicMgr.h"
 
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -147,12 +148,18 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
     // Render 초기화
     RenderMgr::GetInst()->Init();
 
+    // CinematicMgr 초기화
+    CinematicMgr::GetInst()->Init();
+
     // Font 매니저 초기화
     FontMgr::GetInst()->Init();
     
     // Editor 초기화(imgui)
     if (m_EditorMode)
         EditorMgr::GetInst()->Init();
+
+    // UI 매니저 초기화
+    UIMgr::GetInst()->Init();
 
     return S_OK;
 }

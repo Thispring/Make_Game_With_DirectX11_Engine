@@ -174,6 +174,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="AssetMgr.h" />
     <ClInclude Include="assets.h" />
     <ClInclude Include="CEditorCamMoveScript.h" />
+    <ClInclude Include="CinematicMgr.h" />
     <ClInclude Include="contentDefine.h" />
     <ClInclude Include="contentEnum.h" />
     <ClInclude Include="contentFunc.h" />
@@ -272,6 +273,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="Source\Content\EnemyPatrolState.h" />
     <ClInclude Include="Source\Content\EnemyState.h" />
     <ClInclude Include="Source\Content\EnemyMoveState.h" />
+    <ClInclude Include="Source\Content\PlayerDeathState.h" />
     <ClInclude Include="Source\Content\PlayerIdleState.h" />
     <ClInclude Include="Source\Content\PlayerJumpState.h" />
     <ClInclude Include="Source\Content\PlayerMeleeAttackState.h" />
@@ -281,6 +283,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="Source\Content\PlayerState.h" />
     <ClInclude Include="Source\ScriptMgr.h" />
     <ClInclude Include="Source\Scripts\CCamMoveScript.h" />
+    <ClInclude Include="Source\Scripts\CEndingLevelController.h" />
     <ClInclude Include="Source\Scripts\CEnemyAnimator.h" />
     <ClInclude Include="Source\Scripts\CEnemyBehavior.h" />
     <ClInclude Include="Source\Scripts\CEnemyData.h" />
@@ -297,6 +300,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="Source\Scripts\CPlayerData.h" />
     <ClInclude Include="Source\Scripts\CPlayerMeleeTrigger.h" />
     <ClInclude Include="Source\Scripts\CPlayerStateManager.h" />
+    <ClInclude Include="Source\Scripts\CPortal.h" />
     <ClInclude Include="Source\Scripts\CSavePoint.h" />
     <ClInclude Include="Source\Scripts\CUICamMoveScript.h" />
     <ClInclude Include="Source\Scripts\CUIOverlayController.h" />
@@ -323,6 +327,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="AssetMgr_Func.cpp" />
     <ClCompile Include="AssetMgr_Init.cpp" />
     <ClCompile Include="CEditorCamMoveScript.cpp" />
+    <ClCompile Include="CinematicMgr.cpp" />
     <ClCompile Include="contentFunc.cpp" />
     <ClCompile Include="EAssetUI.cpp" />
     <ClCompile Include="ATexture.cpp" />
@@ -414,6 +419,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="Source\Content\EnemyPatrolState.cpp" />
     <ClCompile Include="Source\Content\EnemyState.cpp" />
     <ClCompile Include="Source\Content\EnemyMoveState.cpp" />
+    <ClCompile Include="Source\Content\PlayerDeathState.cpp" />
     <ClCompile Include="Source\Content\PlayerIdleState.cpp" />
     <ClCompile Include="Source\Content\PlayerJumpState.cpp" />
     <ClCompile Include="Source\Content\PlayerMeleeAttackState.cpp" />
@@ -423,6 +429,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="Source\Content\PlayerState.cpp" />
     <ClCompile Include="Source\ScriptMgr.cpp" />
     <ClCompile Include="Source\Scripts\CCamMoveScript.cpp" />
+    <ClCompile Include="Source\Scripts\CEndingLevelController.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyAnimator.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyBehavior.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyData.cpp" />
@@ -439,6 +446,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="Source\Scripts\CPlayerData.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerMeleeTrigger.cpp" />
     <ClCompile Include="Source\Scripts\CPlayerStateManager.cpp" />
+    <ClCompile Include="Source\Scripts\CPortal.cpp" />
     <ClCompile Include="Source\Scripts\CSavePoint.cpp" />
     <ClCompile Include="Source\Scripts\CUICamMoveScript.cpp" />
     <ClCompile Include="Source\Scripts\CUIOverlayController.cpp" />

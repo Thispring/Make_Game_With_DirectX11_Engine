@@ -7,9 +7,26 @@ class UIMgr
 {
 	SINGLE(UIMgr)
 private:
+	bool		m_ShowOptions;
+	bool		m_ShowCredit;
+	bool		m_isFullScreen;
+	bool		m_ShowExitConfirm;  // ← 추가: Exit? 팝업 유지 플래그
+
+	float		BGMvolume;
+	float		SFXvolume;
+
 
 public:
 	void Init();
-	void Tick();    // EditorMgr::Tick() 안 ImGui 프레임에서 호출
+	void Progress();    // EditorMgr::Tick() 안 ImGui 프레임에서 호출
 
+	void RenderOptionsWindow();
+	void RenderCreditWindow();
+
+
+
+	//=========
+	// Get, Set
+	//=========
+	bool IsFullScreen() { return m_isFullScreen; }
 };

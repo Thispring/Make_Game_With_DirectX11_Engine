@@ -14,6 +14,7 @@
 #include "Source\Content\PlayerJumpState.h"
 #include "Source\Content\PlayerMeleeAttackState.h"
 #include "Source\Content\PlayerRangedAttackState.h"
+#include "Source\Content\PlayerDeathState.h"
 
 bool CPlayerStateManager::IsChange()
 {
@@ -29,6 +30,7 @@ CPlayerStateManager::CPlayerStateManager()
 	, m_PrevStatus(nullptr)
     , m_bPendingRevive(false)
     , m_fReviveDelay(-1.f)
+    , m_isDebugMode(false)
 	//, m_bInputLocked(false)
 {
 
@@ -43,6 +45,7 @@ CPlayerStateManager::CPlayerStateManager(const CPlayerStateManager& _Origin)
     , m_PrevStatus(nullptr)
     , m_bPendingRevive(_Origin.m_bPendingRevive)
     , m_fReviveDelay(_Origin.m_fReviveDelay)
+    , m_isDebugMode(false)
 {
     // 원본 map의 각 상태를 Clone하여 새로운 map에 복제
     for (const auto& pair : _Origin.m_mapStatus)
@@ -114,20 +117,24 @@ void CPlayerStateManager::ChangeState()
 
 void CPlayerStateManager::TakeDamage(float _Damage)
 {
+    if (m_isDebugMode)
+        return;
+
     if (m_PlayerData->GetIsDead() == true)
         return;
 
     float curHP = m_PlayerData->GetCurHP();
     curHP -= _Damage;
 
-    if (curHP <= 0)
+    if (curHP <= 0.f)
     {
+        // 초과분이 들어 올 경우 대비
+        curHP = 0.f;
+        m_PlayerData->SetCurHP(curHP);
         m_PlayerData->SetIsDead(true);
 
-        //// 사망 시 키 발견 상태 초기화
-        //Ptr<CPlayerController> pController = GetOwner()->GetScript<CPlayerController>();
-        //pController->SetHasDied(true);
-        //pController->ResetKeyRevealed();
+        SetCurStatus(GetStatusByIndex((int)PLAYER_STATE::DEATH));
+        ChangeState();
         return;
     }
 
@@ -171,12 +178,28 @@ void CPlayerStateManager::Respawn()
     // 키 발견 초기화
     pController->ResetKeyRevealed();
 
+    // Idle로 상태변경
+    auto it = m_mapStatus.find(PLAYER_STATE::IDLE);
+    m_CurStatus = it->second.first.get();
+
+    ChangeState();
+    m_PrevStatus = m_CurStatus;
+    m_CurStatus->Begin();
+
     //============================================================
     // IsDead 해제를 즉시 처리하지 않고 Tick으로 위임
     // 0.f → 다음 프레임, N.f → N초 후
     //============================================================
     m_bPendingRevive = true;
     m_fReviveDelay   = 0.f;
+}
+
+void CPlayerStateManager::ChangeDebugMode()
+{
+    m_isDebugMode = !m_isDebugMode;
+    // 이속 빠르게
+    m_PlayerData->SetSpeed(500.f);
+    m_PlayerData->SetJumpVelocity(700.f);
 }
 
 void CPlayerStateManager::Init()
@@ -197,6 +220,7 @@ void CPlayerStateManager::Begin()
 	m_mapStatus[PLAYER_STATE::MIDDLE_KICK]      = std::make_pair(make_unique<PlayerMiddleKickState>(m_PlayerData),      FLIPBOOK::PLAYER::MIDDLE_KICK);
 	m_mapStatus[PLAYER_STATE::LOW_KICK]         = std::make_pair(make_unique<PlayerLowKickState>(m_PlayerData),         FLIPBOOK::PLAYER::LOW_KICK);
 	m_mapStatus[PLAYER_STATE::ENERGYBLAST_SHOT] = std::make_pair(make_unique<PlayerEnergyBlastShotState>(m_PlayerData), FLIPBOOK::PLAYER::ENERGYBLAST_SHOT);
+	m_mapStatus[PLAYER_STATE::DEATH]            = std::make_pair(make_unique<PlayerDeathState>(m_PlayerData),           FLIPBOOK::PLAYER::DEATH);
 
 	// 현재 상태를 Idle로 등록 (map에서 안전하게 조회)
 	auto it = m_mapStatus.find(PLAYER_STATE::IDLE);
@@ -235,6 +259,12 @@ void CPlayerStateManager::Tick()
     {
         m_PlayerData->SetIsDead(true);
         Respawn();
+    }
+
+    // F9는 디버그 렌더 On/Off
+    if (KEY_TAP(KEY::F6))
+    {
+        ChangeDebugMode();
     }
 
 	// 필요에 따라 Tick에서 m_Status의 함수를 실행합니다.

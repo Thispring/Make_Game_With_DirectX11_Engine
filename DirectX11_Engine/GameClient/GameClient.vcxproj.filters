@@ -439,6 +439,18 @@
     <ClInclude Include="Source\Scripts\CMainMenuController.h">
       <Filter>Source\ContentScript\UI</Filter>
     </ClInclude>
+    <ClInclude Include="CinematicMgr.h">
+      <Filter>Source\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Content\PlayerDeathState.h">
+      <Filter>Source\GameContent\PlayerStatus\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CPortal.h">
+      <Filter>Source\ContentScript\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CEndingLevelController.h">
+      <Filter>Source\ContentScript\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -855,6 +867,18 @@
     <ClCompile Include="Source\Scripts\CMainMenuController.cpp">
       <Filter>Source\ContentScript\UI</Filter>
     </ClCompile>
+    <ClCompile Include="CinematicMgr.cpp">
+      <Filter>Source\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Content\PlayerDeathState.cpp">
+      <Filter>Source\GameContent\PlayerStatus\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CPortal.cpp">
+      <Filter>Source\ContentScript\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CEndingLevelController.cpp">
+      <Filter>Source\ContentScript\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -1192,6 +1216,9 @@
     </Filter>
     <Filter Include="GameEngine\Manager\Font">
       <UniqueIdentifier>{c5320978-3157-48a1-8f68-9b268dffb796}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameContent\PlayerStatus\Death">
+      <UniqueIdentifier>{2274f227-30a0-4c5e-b8f6-c65bed65fc45}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

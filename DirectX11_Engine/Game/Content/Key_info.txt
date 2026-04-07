@@ -238,3 +238,18 @@ KEY: ALPHA1
 KEY_STATE: PRESSED
 Source File: CPlayerStateManager.cpp
 
+Comment: F9는 디버그 렌더 On/Off
+KEY: F6
+KEY_STATE: TAP
+Source File: CPlayerStateManager.cpp
+
+Comment: Exit? 확인창이 열려 있을 때는 ESC 토글 무시
+KEY: ESC
+KEY_STATE: TAP
+Source File: UIMgr.cpp
+
+Comment: 둘다 열리지 않게 방지
+KEY: CTRL
+KEY_STATE: TAP
+Source File: UIMgr.cpp
+

@@ -3,8 +3,10 @@
 
 #include "GameObject.h"
 #include "CSpriteRender.h"
+
 #include "TimeMgr.h"
 #include "RandomMgr.h"
+#include "LevelMgr.h"
 
 CMainMenuController::CMainMenuController()
 	: CScript(SCRIPT_TYPE::MAINMENUCONTROLLER)
@@ -24,6 +26,7 @@ void CMainMenuController::Start(KEY _Key)
 	if (KEY_PRESSED(_Key))
 	{
 		// Level 변경 및 시작
+		LevelMgr::GetInst()->GameStart();
 	}
 }
 
@@ -117,11 +120,11 @@ void CMainMenuController::Tick()
 
 	ChangeKeyUI();
 
-	// 게임 시작 후, 3초가 마다 KEY를 RandMgr을 통해
+	// 게임 시작 후, 5초마다 KEY를 RandMgr을 통해
 	// 무작위로 반환
 	m_Time += DT;
 
-	if (m_Time >= 8.f)
+	if (m_Time >= 5.f)
 	{
 		ShuffleKey();
 		m_Time = 0;

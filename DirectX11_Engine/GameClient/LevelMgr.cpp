@@ -9,6 +9,7 @@
 #include "GameMgr.h"
 #include "RandomMgr.h"
 #include "KeyMgr.h"
+#include "CinematicMgr.h"
 
 #include "Source/Scripts/CCamMoveScript.h"
 
@@ -50,6 +51,41 @@ void LevelMgr::AddNewObject(Ptr<GameObject> _Object, Ptr<ALevel> _Level, int _La
 	//_Level->Save(CONTENT_PATH + _Level->GetKey());
 }
 
+void LevelMgr::ChangeMainMenu()
+{
+	// Main만 아니면 됨
+	if (m_CurLevel->GetKey() == L"Level\\MainMenu.lv")
+		return;
+
+	::ChangeLevel(L"Level\\MainMenu.lv");
+	::ChangeLevelState(LEVEL_STATE::PLAY);
+}
+
+void LevelMgr::GameStart()
+{
+	// MainMenu가 아니면 실행 X
+	// 이미 Normal_Stage 여도 실행 X
+	if (m_CurLevel->GetKey() != L"Level\\MainMenu.lv" ||
+		m_CurLevel->GetKey() == L"Level\\Normal_Stage_0.lv")
+		return;
+
+	// func.cpp의 ChangeLevel 함수를 호출하려면 스코프연산자::를 앞에 붙입니다.
+	::ChangeLevel(L"Level\\Normal_Stage_0.lv");
+	::ChangeLevelState(LEVEL_STATE::CINEMATIC);
+}
+
+void LevelMgr::ChangeEnding()
+{
+	// Main에서는 전환 X
+	if (m_CurLevel->GetKey() != L"Level\\Normal_Stage_0.lv" ||
+		m_CurLevel->GetKey() == L"Level\\MainMenu.lv" ||
+		m_CurLevel->GetKey() == L"Level\\Ending.lv")
+		return;
+
+	::ChangeLevel(L"Level\\Ending.lv");
+	::ChangeLevelState(LEVEL_STATE::PLAY);
+}
+
 void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 {
 	// 이미 같은 상태였다면 함수 실행 X
@@ -64,12 +100,33 @@ void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 	//}
 	// Clone 함수 호출전에 위 로직이 호출되면 복사 되기전 Player가 GameMgr에 등록
 
+	// MainMenu Level이 PLAY 상태에서 전환됨
+	// PLAY -> CINEMATIC 전환
+	if (m_LevelState == LEVEL_STATE::STOP && _NextState == LEVEL_STATE::CINEMATIC)
+	{
+		// 상태를 먼저 설정한 뒤 Clone/Begin 수행
+		m_LevelState = _NextState;
+
+		GameMgr::GetInst()->ClearLevelPlay();
+
+		m_CurLevel = m_ShardLevel->Clone();
+		m_CurLevel->SetChanged();
+		m_CurLevel->Begin();
+
+		// 레벨 오브젝트 준비 완료 후 카메라 탐색 및 원점 기록
+		CinematicMgr::GetInst()->Init();
+		return;
+	}
+
 	// Stop -> Play 전환
 	if (m_LevelState == LEVEL_STATE::STOP && _NextState == LEVEL_STATE::PLAY)
 	{
 		// Begin() 내부에서 PLAY 상태를 전제하는 코드가 있으므로
 		// Clone/Begin 이전에 먼저 상태를 설정한다.
 		m_LevelState = _NextState;
+
+		// 복사하기전 Level에 있는 발사체 오브젝트 삭제
+		GameMgr::GetInst()->ClearLevelPlay();
 
 		// 원본 Level의 복제본을 만들고 현재 Level로 가리키게 한다.
 		m_CurLevel = m_ShardLevel->Clone();
@@ -124,6 +181,13 @@ void LevelMgr::Progress()
 	// (26-03-03): 레벨의 상태가 Play일 때만 Level의 Tick을 수행합니다.
 	if (m_LevelState == LEVEL_STATE::PLAY)
 		m_CurLevel->Tick();
+
+	// 카메라 연출 진행 중: 목표 위치 도달 시 Play 전환
+	if (m_LevelState == LEVEL_STATE::CINEMATIC)
+	{
+		if (CinematicMgr::GetInst()->CameraMove())
+			::ChangeLevelState(LEVEL_STATE::PLAY);
+	}
 	
 	// Object의 Component가 호출하는 것이므로(Render 관련 연산을 FinalTick에서 진행), 
 	// FinalTick은 계속 호출합니다.
@@ -142,38 +206,18 @@ void LevelMgr::Progress()
 	// 다음 Level을 불러옴
 	if (KEY_PRESSED(KEY::INS))	// KET -> Ins
 	{
-		// MainMenu가 아니면 실행 X
-		// 이미 Normal_Stage 여도 실행 X
-		if (m_CurLevel->GetKey() != L"Level\\MainMenu.lv" ||
-			m_CurLevel->GetKey() == L"Level\\Normal_Stage_0.lv")
-			return;
-
-		// func.cpp의 ChangeLevel 함수를 호출하려면 스코프연산자::를 앞에 붙입니다.
-		::ChangeLevel(L"Level\\Normal_Stage_0.lv");
-		::ChangeLevelState(LEVEL_STATE::PLAY);
+		GameStart();
 	}
 
 	// Ending Level
 	if (KEY_PRESSED(KEY::DEL))
 	{
-		// Main에서는 전환 X
-		if (m_CurLevel->GetKey() != L"Level\\Normal_Stage_0.lv" ||
-			m_CurLevel->GetKey() == L"Level\\MainMenu.lv" ||
-			m_CurLevel->GetKey() == L"Level\\Ending.lv")
-			return;
-
-		::ChangeLevel(L"Level\\Ending.lv");
-		::ChangeLevelState(LEVEL_STATE::PLAY);
+		ChangeEnding();
 	}
 
 	// Main Level
 	if (KEY_PRESSED(KEY::HOME))
 	{
-		// Main만 아니면 됨
-		if (m_CurLevel->GetKey() == L"Level\\MainMenu.lv")
-			return;
-
-		::ChangeLevel(L"Level\\MainMenu.lv");
-		::ChangeLevelState(LEVEL_STATE::PLAY);
+		ChangeMainMenu();
 	}
 }

@@ -44,8 +44,19 @@ void RenderMgr::Progress()
 	// 카메라 기반 렌더링
 	// Level의 상태에 따라 렌더링 카메라를 선택
 
+	// CINEMATIC 상태를 먼저 체크
+	if (LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::CINEMATIC)
+	{
+		if (m_MainCam == nullptr)
+			return;
+
+		// 카메라가 렌더링 하기 전에, Render Domain을 정렬
+		m_MainCam->SortObejct();
+		// 카메라를 이용해서 레벨안에 있는 물체들을 렌더링
+		m_MainCam->Render();
+	}
 	// Level이 Play 상태라면 MainCam으로 렌더링
-	if (LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
+	else if (LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
 	{
 		// UI 카메라는 없을 수도 있으므로 조건부 렌더
 		if (m_UICam != nullptr)

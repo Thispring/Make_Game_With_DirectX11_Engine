@@ -51,6 +51,7 @@ public:
     //=============
     // 상속 멤버 함수
     //=============
+    virtual void Init() override;
     virtual void Begin() override;
     // Script를 상속 받았다면 Tick을 필수로 선언해야 함
     virtual void Tick() override;   

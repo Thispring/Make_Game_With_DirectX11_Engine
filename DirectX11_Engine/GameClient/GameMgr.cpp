@@ -70,3 +70,25 @@ void GameMgr::RegisterPlayerSave(Vec3 _SavePos)
    	m_PlayerData->SetOriginPos(_SavePos);
 
 }
+
+void GameMgr::ClearLevelPlay()
+{
+	// 현재 Level이 Play -> Stop 상태로 전환되었을 때
+	// Level에 남아있는 소환된 Prefab을 제거하거나, 
+	// enemy 각자의 위치를 초기화 하는 로직을 실행합니다.
+	// 투사체는 겹치지 않는 Layer 번호를 가지고 있기에
+	// Level에 해당 Layer에 오브젝트를 모두 삭제요청
+
+	Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
+
+	if (pLevel->GetKey() == L"Level\\Normal_Stage_0.lv")
+	{
+		// assert는 조건이 false일 때만 실행(중단)됩니다.
+		// L"Level\\Normal_Stage_0.lv"가 아닌곳에서 호출되면 크래시
+		//assert(pLevel->GetKey() != L"Level\\Normal_Stage_0.lv");
+
+		pLevel->DestroyAllObjectsInLayer((int)LEVEL_0_LAYER::PLAYER_PROJECTILE);
+		pLevel->DestroyAllObjectsInLayer((int)LEVEL_0_LAYER::ENEMY_PROJECTILE);
+	}
+
+}

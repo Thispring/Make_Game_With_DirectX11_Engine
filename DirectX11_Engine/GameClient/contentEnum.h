@@ -76,6 +76,7 @@ namespace FLIPBOOK
         constexpr int MIDDLE_KICK      = 5;
         constexpr int LOW_KICK         = 6;
         constexpr int ENERGYBLAST_SHOT = 7;
+        constexpr int DEATH            = 8;
     }
 }
 
@@ -99,6 +100,8 @@ enum class PLAYER_STATE
     LOW_KICK,
 
     ENERGYBLAST_SHOT,
+
+    DEATH,
 
     END,
 };
@@ -160,7 +163,9 @@ enum class LEVEL_0_LAYER
     ENEMY_MELEE_TRIGGER,
     ENEMY_PROJECTILE,
     ENEMY_EYES,
+    ENEMY_PROJECT_ANCHOR,
 
+    PORTAL = 14,
     SAVE_POINT = 15,
     BACK_GROUND_COLLIDER = 16,
     MOVEMENT_BOUNDARY = 17,         // 추락 방지용 콜라이더 Layer

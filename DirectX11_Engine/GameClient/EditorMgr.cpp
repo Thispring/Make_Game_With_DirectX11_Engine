@@ -19,6 +19,7 @@
 #include "ListUI.h"
 #include "ContentUI.h"
 #include "TreeUI.h"
+#include "UIMgr.h"
 
 #include "SpriteMaker.h"
 #include "FlipbookMaker.h"
@@ -72,6 +73,10 @@ void EditorMgr::Tick()
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+
+    // UI 매니저 업데이트
+    // 전체화면 모드 사용과 상관없이 인게임에서 사용될 UI
+    UIMgr::GetInst()->Progress();
 
     // 전체화면 모드 시 UI 창을 그리지 않음 (ImGui 프레임은 유지)
     if (!m_UIVisible)

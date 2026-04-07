@@ -28,6 +28,10 @@ public:
 	Ptr<GameObject> FindObjectByName(const wstring& _Name);
 	void AddNewObject(Ptr<GameObject> _Object, Ptr<ALevel> _Level, int _Layer);
 
+	void ChangeMainMenu();
+	void GameStart();
+	void ChangeEnding();
+
 
 	//=========
 	// Get, Set

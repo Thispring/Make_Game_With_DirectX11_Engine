@@ -179,7 +179,7 @@ EnemyGhostSkullMoveState::~EnemyGhostSkullMoveState()
 
 void EnemyGhostSkullMoveState::OnBegin()
 {
-    int a = 0;
+
 }
 
 void EnemyGhostSkullMoveState::OnTick()

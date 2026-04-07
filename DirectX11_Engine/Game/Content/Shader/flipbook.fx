@@ -3,6 +3,8 @@
 
 #include "value.fx"
 
+#define TintColor   g_vec4_0
+
 #define AtlasTex    g_tex_0
 #define LeftTopUV   g_vec2_0
 #define SliceUV     g_vec2_1
@@ -68,6 +70,15 @@ float4 PS_Flipbook(VS_OUT _input) : SV_Target
         
         if (vColor.a == 0.f)
             discard;
+    }
+    
+    // TintColor 적용
+    // any()로 float4의 모든 채널을 검사 (R 채널만 검사하는 오류 방지)
+    if (any(TintColor > float4(0.f, 0.f, 0.f, 0.f)))
+    {
+        // 텍스쳐 색상에 TintColor를 곱해 색조(tint) 적용
+        // 단색 대체가 아닌 텍스쳐 원본 색감을 유지하면서 색조 반영
+        vColor.rgb *= TintColor.rgb;
     }
     
     // 광원 적용        

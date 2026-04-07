@@ -26,6 +26,7 @@ public:
     void RegisterObject(Ptr<GameObject> _Object) { m_vecAllObjects.push_back(_Object); }
     void DeregisterObject() { m_vecAllObjects.clear(); }
     void DeregisterAsParent(Ptr<GameObject> _Object);
+    void ClearAllObjects() { m_vecParents.clear(); m_vecAllObjects.clear(); }
 
     void AddObject(Ptr<GameObject> _Object);
 

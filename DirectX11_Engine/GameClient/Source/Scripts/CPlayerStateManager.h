@@ -21,6 +21,7 @@ private:
     map<PLAYER_STATE, pair<unique_ptr<PlayerState>, int>>  m_mapStatus;
 
     bool                                            m_IsChange;
+    bool                                            m_isDebugMode;
 
     // 지연 부활 처리
     // m_fReviveDelay >= 0 : 카운트다운 중 (0.f = 다음 프레임, N.f = N초 후)
@@ -32,6 +33,8 @@ public:
     void ChangeState();
     void TakeDamage(float _Damage);
     void Respawn();
+
+    void ChangeDebugMode();
 
 
     //=============
