@@ -39,6 +39,11 @@ private:
     float               m_VelocityY;        // Y축 수직 속도
     Vec3                m_GroundNormal;      // 현재 접지면 법선 (기본값: 평지 = 0,1,0)
     float               m_fCoyoteTimer;     // 코요테 타임 카운터 (내리막 이탈 유예)
+    int                 m_GroundContactCount;
+
+    // ─── 벽 접촉 관련 ───
+    int                 m_WallContactLeft;   // 왼쪽 벽 접촉 카운트
+    int                 m_WallContactRight;  // 오른쪽 벽 접촉 카운트
 
 public:
     //=========
@@ -90,6 +95,10 @@ public:
 
     GET_SET(float, VelocityY);
     GET_SET(Vec3, GroundNormal);
+
+    // ─── 벽 접촉 조회 ───
+    bool GetIsBlockedLeft()  const { return m_WallContactLeft > 0; }
+    bool GetIsBlockedRight() const { return m_WallContactRight > 0; }
 
     //============
     // 생성, 소멸자

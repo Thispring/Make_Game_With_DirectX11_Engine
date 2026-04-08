@@ -11,6 +11,7 @@
 #include "FontMgr.h"
 #include "CinematicMgr.h"
 #include "UIMgr.h"
+#include "ScoreMgr.h"
 
 Engine::Engine()
 	: // 명시되어 있지 않지만, 상속받은 부모의 생성자가 숨어있음
@@ -47,11 +48,21 @@ int Engine::Progress()
 	// FPS Render
 	TimeMgr::GetInst()->Render();
 
+	// 점수 렌더링
+	if (LevelMgr::GetInst()->GetCurLevel() != nullptr
+		&& LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\MainMenu.lv"
+		&& LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
+	{
+		ScoreMgr::GetInst()->Progress();
+	}
+
 	// CinematicMgr 업데이트
 	CinematicMgr::GetInst()->Progress();
 
 	// Ending Level 용 Render
 	FontMgr::GetInst()->PrintEnding();
+	// GameOver
+	FontMgr::GetInst()->PrintGameOver();
 
 	// imgui Editor 관리
 	if (m_EditorMode)

@@ -51,6 +51,8 @@ public:
 	float GetEngineDT() { return g_Global.EngineDT; }
 	float GetEngineTime() { return g_Global.EngineTime; }
 
+	float GetTotalPlayTime() { return m_TotalPlayTime; }
+
 	/// @brief 목표 FPS를 설정합니다. 0을 넣으면 제한 없음.
 	void SetTargetFPS(UINT _FPS);
 };

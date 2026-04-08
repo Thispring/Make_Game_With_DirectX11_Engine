@@ -158,22 +158,24 @@ void CPlayerStateManager::Respawn()
     // 공격 키 난수 로직
     //================
     Ptr<CPlayerController> pController = m_PlayerData->GetTargetObject()->GetScript<CPlayerController>();
-    KEY arryKey[3] = {};
+    //KEY arryKey[3] = {};
 
-    RandomMgr::GetInst()->ShuffleKeyNum();
+    //RandomMgr::GetInst()->ShuffleKeyNum();
 
-    for (UINT i = 0; i < 3; ++i)
-    {
-        arryKey[i] = RandomMgr::GetInst()->GetRandomKey(3);
-    }
+    //for (UINT i = 0; i < 3; ++i)
+    //{
+    //    arryKey[i] = RandomMgr::GetInst()->GetRandomKey(3);
+    //}
 
-    pController->SetPunchKey(arryKey[PUNCH_KEY]);
-    pController->SetKickKey(arryKey[KICK_KEY]);
-    pController->SetBlastShotKey(arryKey[BLAST_SHOT_KEY]);
+    //pController->SetPunchKey(arryKey[PUNCH_KEY]);
+    //pController->SetKickKey(arryKey[KICK_KEY]);
+    //pController->SetBlastShotKey(arryKey[BLAST_SHOT_KEY]);
 
-    assert(arryKey[0] != arryKey[1] && "Respawn: PunchKey == KickKey");
-    assert(arryKey[1] != arryKey[2] && "Respawn: KickKey == BlastShotKey");
-    assert(arryKey[0] != arryKey[2] && "Respawn: PunchKey == BlastShotKey");
+    //assert(arryKey[0] != arryKey[1] && "Respawn: PunchKey == KickKey");
+    //assert(arryKey[1] != arryKey[2] && "Respawn: KickKey == BlastShotKey");
+    //assert(arryKey[0] != arryKey[2] && "Respawn: PunchKey == BlastShotKey");
+
+    RandomMgr::GetInst()->GetRandomKeyArray(pController->GetPunchKey(), pController->GetKickKey(), pController->GetBlastShotKey());
 
     // 키 발견 초기화
     pController->ResetKeyRevealed();
@@ -198,8 +200,8 @@ void CPlayerStateManager::ChangeDebugMode()
 {
     m_isDebugMode = !m_isDebugMode;
     // 이속 빠르게
-    m_PlayerData->SetSpeed(500.f);
-    m_PlayerData->SetJumpVelocity(700.f);
+    //m_PlayerData->SetSpeed(500.f);
+    //m_PlayerData->SetJumpVelocity(700.f);
 }
 
 void CPlayerStateManager::Init()

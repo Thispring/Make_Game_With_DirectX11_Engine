@@ -2,6 +2,9 @@
 #include "CPortal.h"
 
 #include "LevelMgr.h"
+#include "TimeMgr.h"
+#include "ScoreMgr.h"
+#include "GameMgr.h"
 
 CPortal::CPortal()
 	: CScript(SCRIPT_TYPE::PORTAL)
@@ -16,6 +19,10 @@ void CPortal::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollide
 {
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
 	{
+		// Level 전환 전에 점수 계산
+		ScoreMgr::GetInst()->SaveScore(TimeMgr::GetInst()->GetTotalPlayTime(), 
+			GameMgr::GetInst()->GetPlayer()->GetScript<CPlayerData>()->GetDeathCount());
+
 		// Ending Level로 전환
 		LevelMgr::GetInst()->ChangeEnding();
 	}

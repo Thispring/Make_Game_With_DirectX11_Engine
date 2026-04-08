@@ -448,6 +448,9 @@
     <ClInclude Include="Source\Scripts\CEndingLevelController.h">
       <Filter>Source\ContentScript\UI</Filter>
     </ClInclude>
+    <ClInclude Include="ScoreMgr.h">
+      <Filter>Source\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -872,6 +875,9 @@
     </ClCompile>
     <ClCompile Include="Source\Scripts\CEndingLevelController.cpp">
       <Filter>Source\ContentScript\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreMgr.cpp">
+      <Filter>Source\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

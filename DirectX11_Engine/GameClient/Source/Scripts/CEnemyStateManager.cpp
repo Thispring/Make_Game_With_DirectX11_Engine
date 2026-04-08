@@ -95,6 +95,10 @@ void CEnemyStateManager::SetUp()
     // clear any existing registrations
     m_mapStatus.clear();
 
+    // GHOST_SKULL 상태가 저장되었다면, SKULL 상태로 초기화
+    if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::GHOST_SKULL)
+        m_EnemyData->SetEnemyType(ENEMY_TYPE::SKULL);
+
     switch (m_EnemyData->GetEnemyType())
     {
     case ENEMY_TYPE::DEMON:

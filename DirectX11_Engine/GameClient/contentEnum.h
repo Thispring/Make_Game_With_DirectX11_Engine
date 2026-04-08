@@ -121,7 +121,9 @@ enum class ENEMY_TYPE
 
     BOSS,
 
-    TEST,   // 테스트용도
+    GHOST_SKULL,
+
+    TEST,   // 테스트용
 
     END,
 };
@@ -157,19 +159,24 @@ enum class LEVEL_0_LAYER
     DEFAULT,
     BACKGROUND,
     TILE,
+
     PLAYER,
     PLAYER_MELEE_TRIGGER,
     PLAYER_PROJECTILE,
+
     ENEMY,
     ENEMY_MELEE_TRIGGER,
     ENEMY_PROJECTILE,
     ENEMY_EYES,
     ENEMY_PROJECT_ANCHOR,
+    ENEMY_SPAWNER,
+    ENEMY_WALL_COLLIDER,
 
     PORTAL = 14,
     SAVE_POINT = 15,
     BACK_GROUND_COLLIDER = 16,
-    MOVEMENT_BOUNDARY = 17,         // 추락 방지용 콜라이더 Layer
+    WALL_COLLIDER = 17,         
+    OUT_OF_BOUNDS = 18,         // 추락 방지용 콜라이더 Layer
 
     DISABLE = 30,
     UI = 31,

@@ -13,6 +13,7 @@
 #include "FontMgr.h"
 #include "UIMgr.h"
 #include "CinematicMgr.h"
+#include "ScoreMgr.h"
 
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -150,6 +151,9 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
 
     // CinematicMgr 초기화
     CinematicMgr::GetInst()->Init();
+
+    // 콘텐츠 점수 매니저 초기화
+    ScoreMgr::GetInst()->Init();
 
     // Font 매니저 초기화
     FontMgr::GetInst()->Init();

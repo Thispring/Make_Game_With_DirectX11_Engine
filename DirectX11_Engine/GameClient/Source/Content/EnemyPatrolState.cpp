@@ -79,6 +79,18 @@ void EnemyPatrolState::OnTick()
 
 	// 이동량 계산
 	float delta = dir * speed * DT;
+
+	// 벽 차단: 이동 방향에 벽이 있으면 이동하지 않음
+	if ((dir > 0 && m_EnemyData->GetIsBlockedRight())
+		|| (dir < 0 && m_EnemyData->GetIsBlockedLeft()))
+	{
+		// 벽에 닿으면 방향 반전
+		dir *= -1;
+		scale.x *= -1.f;
+		offSet = 0.f;
+		delta = 0.f;
+	}
+
 	pos.x += vTangent.x * delta;	// 경사면 접선 방향으로 이동
 	pos.y += vTangent.y * delta;
 	offSet += delta;				// 왕복 거리는 이동량 기준 유지

@@ -263,6 +263,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="RandomMgr.h" />
     <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ScoreMgr.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Source\Content\EnemyAttackState.h" />
@@ -410,6 +411,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="PrefabMaker.cpp" />
     <ClCompile Include="RandomMgr.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
+    <ClCompile Include="ScoreMgr.cpp" />
     <ClCompile Include="Source\Content\EnemyAttackState.cpp" />
     <ClCompile Include="Source\Content\EnemyChaseState.cpp" />
     <ClCompile Include="Source\Content\EnemyDamageState.cpp" />

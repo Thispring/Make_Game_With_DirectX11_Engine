@@ -20,6 +20,7 @@ private:
 public:
     void Init();
     void PrintEnding();
+    void PrintGameOver();
 
     // _Color : FONT_RGBA 매크로
     void DrawFont(const wchar_t* _pStr, float _fPosX, float _fPosY, float _fFontSize, UINT _Color);

@@ -52,3 +52,24 @@ KEY RandomMgr::GetRandomKey(int _LoopCount)
     // 반복이 필요한 경우 외부 호출자에서 반복 설정
     return key;
 }
+
+void RandomMgr::GetRandomKeyArray(KEY& _First, KEY& _Second, KEY& _Third)
+{
+    // 1. 시드값을 얻기 위한 random_device 생성
+    random_device rd;
+
+    // 2. random_device를 통해 난수 생성 엔진(Mersenne Twister) 초기화
+    mt19937 gen(rd());
+
+    // 3. 0부터 20까지 균등하게 정수를 뽑기 위한 분포 설정 (닫힌 구간 [0, 20])
+    uniform_int_distribution<int> dis(0, 19);
+
+    // 4. 난수 생성 및 출력
+    int randomNumber = dis(gen);
+
+    assert(randomNumber <= 20 && "GetRandomKeyArray: 인덱스 범위 초과");
+
+    _First  = KeyArray[randomNumber][0];
+    _Second = KeyArray[randomNumber][1];
+    _Third = KeyArray[randomNumber][2];
+}

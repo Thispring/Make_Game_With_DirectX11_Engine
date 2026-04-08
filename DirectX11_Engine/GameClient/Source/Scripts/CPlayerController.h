@@ -51,9 +51,13 @@ public:
     //=========
     // Get, Set
     //=========
-    GET_SET(KEY, PunchKey);
-    GET_SET(KEY, KickKey);
-    GET_SET(KEY, BlastShotKey);
+    // GetRandomKeyArray 함수 사용을 위해 레퍼런스로 반환
+    KEY& GetPunchKey() { return m_PunchKey; }
+    KEY& GetKickKey() { return m_KickKey; }
+    KEY& GetBlastShotKey() { return m_BlastShotKey; }
+    //GET_SET(KEY, PunchKey);
+    //GET_SET(KEY, KickKey);
+    //GET_SET(KEY, BlastShotKey);
 
     bool HasDied() const { return m_bHasDied; }
     void SetHasDied(bool _b) { m_bHasDied = _b; }

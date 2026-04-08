@@ -42,6 +42,7 @@ void EnemyIdleState::OnTick()
         Vec3  originPos = m_EnemyData->GetOriginPos();
         Vec3  originRot = m_EnemyData->GetOriginRot();
         float speed     = m_EnemyData->GetSpeed();
+        speed *= 1.5f;
         int   dir = m_EnemyData->GetDirection();
 
         float dx   = originPos.x - pos.x;

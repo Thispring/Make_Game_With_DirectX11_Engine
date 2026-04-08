@@ -67,6 +67,34 @@ void FontMgr::PrintEnding()
 	}
 }
 
+void FontMgr::PrintGameOver()
+{
+	// 등록된 이후 호출하도록 변경
+	if (LevelMgr::GetInst()->GetCurLevel() != nullptr)
+	{
+		// Level이 L"Level\\GameOver.lv" 이고, PLAY 상태일때만 실행
+		if (LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\GameOver.lv"
+			&& LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
+		{
+			// 현재 렌더 해상도 기준 X축 중앙 정렬 (창모드·전체화면 자동 대응)
+			Vec2 vRenderResol = Device::GetInst()->GetRenderResolution();
+			Vec2 vGoalTextSize = FontMgr::GetInst()->MeasureText(L"GameOver", 96.f);
+
+			// 빈 문자열이거나 MeasureText가 유효하지 않은 값을 반환한 경우 폴백
+			float fGoalPosX = 0.f;
+			if (vGoalTextSize.x > 0.f && vGoalTextSize.x < vRenderResol.x)
+				fGoalPosX = (vRenderResol.x - vGoalTextSize.x) / 2.f;
+			else
+				fGoalPosX = vRenderResol.x / 2.f;
+
+			FontMgr::GetInst()->DrawFontOutline(L"GameOver", fGoalPosX, 150, 96,
+				FONT_RGBA(255, 255, 255, 255),
+				FONT_RGBA(0, 0, 0, 255),
+				1.5f);
+		}
+	}
+}
+
 void FontMgr::DrawFont(const wchar_t* _pStr, float _fPosX, float _fPosY, float _fFontSize, UINT _Color)
 {
 	m_FontWrapper->DrawString(

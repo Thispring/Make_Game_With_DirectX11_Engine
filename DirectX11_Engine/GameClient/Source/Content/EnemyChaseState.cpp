@@ -29,11 +29,27 @@ void EnemyChaseState::OnBegin()
 
 void EnemyChaseState::OnTick()
 {
+	// Enemy 본인 위치
 	Vec3  pos   = m_EnemyData->GetTargetObject()->Transform()->GetRelativePos();
-	float speed = m_EnemyData->GetSpeed();
 
 	// 플레이어 위치 가져오기
 	Vec3 vPlayerPos = GameMgr::GetInst()->GetPlayer()->Transform()->GetRelativePos();
+
+	float speed = m_EnemyData->GetSpeed();
+
+	// 타입별로 속도 지정
+	switch (m_EnemyData->GetEnemyType())
+	{
+	case ENEMY_TYPE::DEMON: speed *= 2.f;
+		break;
+	case ENEMY_TYPE::SKULL: speed *= 3.f;
+		break;
+	case ENEMY_TYPE::FLYING: speed *= 3.f;
+		break;
+	case ENEMY_TYPE::BOSS: speed *= 6.f;
+		break;
+
+	}
 
 	if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLYING)
 	{
@@ -57,8 +73,8 @@ void EnemyChaseState::OnTick()
 			dir = newDir;
 		}
 
-		pos.x += (dx / len) * speed * DT * 2.f;
-		pos.y += (dy / len) * speed * DT * 2.f;
+		pos.x += (dx / len) * speed * DT;
+		pos.y += (dy / len) * speed * DT;
 
 
 		// 적용
@@ -82,14 +98,23 @@ void EnemyChaseState::OnTick()
 			dir = newDir;
 		}
 
-		// Boss 타입 추적 speed 증가
-		if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::BOSS)
-			speed *= 4.f;
+		// 3. 법선에서 접선 계산: 법선을 시계방향 90도 회전 → 오른쪽 이동 방향
+		// tangent = (normal.y, -normal.x) — 평지: (0,1)→(1,0), 경사: (-sinθ,cosθ)→(cosθ,sinθ)
+		Vec3 vNormal  = m_EnemyData->GetGroundNormal();
+		Vec3 vTangent = Vec3(vNormal.y, -vNormal.x, 0.f);
 
-		// 3. 이동량 계산 (X축, 프레임 독립적)
 		// 추격 시 더 빠른 스피드 적용
-		float delta = dir * speed * DT * 2.f;
-		pos.x += delta;
+		float delta = dir * speed * DT;
+
+		// 벽 차단: 이동 방향에 벽이 있으면 이동하지 않음
+		if ((dir > 0 && m_EnemyData->GetIsBlockedRight())
+			|| (dir < 0 && m_EnemyData->GetIsBlockedLeft()))
+		{
+			delta = 0.f;
+		}
+
+		pos.x += vTangent.x * delta;
+		pos.y += vTangent.y * delta;
 		offSet += delta;
 
 		// 적용

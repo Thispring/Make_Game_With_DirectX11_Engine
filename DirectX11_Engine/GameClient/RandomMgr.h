@@ -1,6 +1,15 @@
 #pragma once
 #include "KeyMgr.h"
 
+//// 연속된 KEY 배열 정리:
+//enum class KEY_ARRAY 
+//{
+//	QWE, WER, ERT, RTY, TYU, YUI, UIO, IOP,
+//	ASD, SDF, DFG, FGH, GHJ, HJK, JKL,
+//	ZXC, XCV, CVB, VBN, BNM,
+//};
+
+
 //=============================================
 // 게임 콘텐츠로 사용될 난수들을 관리합니다.
 // ex) Player 부활 시, 공격 KEY 값 랜덤으로 전달
@@ -20,4 +29,7 @@ public:
 	void ShuffleKeyNum();
 	// 무작위 KEY를 반환하는 함수
 	KEY GetRandomKey(int _LoopCount);
+
+
+	void GetRandomKeyArray(KEY& _First, KEY& _Second, KEY& _Third);
 };

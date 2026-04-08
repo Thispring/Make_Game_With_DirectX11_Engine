@@ -280,3 +280,22 @@ Vec3 CCamera::ScreenToWorldPos(const Vec2& _ScreenPos, float _ZNormalized /*= 0.
 
 	return out;
 }
+
+Vec2 CCamera::WorldToScreenPos(const Vec3& _WorldPos)
+{
+    Vec2 res = Engine::GetInst()->GetResolution();
+
+    XMVECTOR worldVec = XMVectorSet(_WorldPos.x, _WorldPos.y, _WorldPos.z, 1.f);
+
+    // XMVector3Project: 월드 → 클립 → NDC → 뷰포트(픽셀) 변환
+    XMVECTOR screenVec = XMVector3Project(
+        worldVec,
+        0.f, 0.f, res.x, res.y,    // 뷰포트 (x, y, w, h)
+        0.f, 1.f,                   // 깊이 min/max
+        m_matProj,
+        m_matView,
+        XMMatrixIdentity()
+    );
+
+    return Vec2(XMVectorGetX(screenVec), XMVectorGetY(screenVec));
+}

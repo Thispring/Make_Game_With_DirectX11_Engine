@@ -132,6 +132,8 @@ EnemyGhostSkullState::~EnemyGhostSkullState()
 
 void EnemyGhostSkullState::OnBegin()
 {
+    // 타입을 GHOST_SKULL로 변경 -> 부모 클래스 중력 적용 제외하기 위함
+    m_EnemyData->SetEnemyType(ENEMY_TYPE::GHOST_SKULL);
 }
 
 void EnemyGhostSkullState::OnTick()
@@ -232,6 +234,7 @@ void EnemyGhostSkullMoveState::OnTick()
 
 void EnemyGhostSkullMoveState::OnFinalTick()
 {
+    m_EnemyData->SetEnemyType(ENEMY_TYPE::SKULL);
 }
 
 

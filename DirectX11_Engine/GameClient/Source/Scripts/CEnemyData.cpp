@@ -25,6 +25,9 @@ CEnemyData::CEnemyData()
 	, m_VelocityY(0.f)
 	, m_GroundNormal(0.f, 1.f, 0.f)
 	, m_fCoyoteTimer(0.f)
+	, m_GroundContactCount(0)
+	, m_WallContactLeft(0)
+	, m_WallContactRight(0)
 	, m_Offset(0.f)
 	, m_TimeSinceSpawn(0.f)
 	, m_TimeInState(0.f)
@@ -221,16 +224,50 @@ void CEnemyData::ChangeState(ENEMY_STATE _State)
 
 void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
+	// 추락 시, 사망 처리
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::OUT_OF_BOUNDS)
+	{
+		// Dead 상태 호출
+		m_IsDead = true;
+		ChangeState(ENEMY_STATE::DEAD);
+		return;
+	}
+
+	// ─── 바닥 / 천장 (Layer 16) ───
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
-		m_fCoyoteTimer = 0.f;
+		Matrix invSlope  = _OtherCollider->GetWorldMat().Invert();
+		Vec3 localCenter = XMVector3TransformCoord(_OwnCollider->GetWorldCenter(), invSlope);
 
-		// 월드 행렬 2행(row 1) = local Y축의 월드 방향 = 접지면 법선
-		Matrix slopeMat = _OtherCollider->GetWorldMat();
-		Vec3 normal = Vec3(slopeMat._21, slopeMat._22, slopeMat._23);
-		normal.Normalize();
+		if (localCenter.y >= 0.f)
+		{
+			++m_GroundContactCount;
+			m_IsFalling = false;
+			m_fCoyoteTimer = 0.f;
 
-		m_GroundNormal = (fabsf(normal.y) > 0.99f) ? Vec3(0.f, 1.f, 0.f) : normal;
+			Matrix slopeMat = _OtherCollider->GetWorldMat();
+			Vec3 normal = Vec3(slopeMat._21, slopeMat._22, slopeMat._23);
+			normal.Normalize();
+			m_GroundNormal = (fabsf(normal.y) > 0.99f) ? Vec3(0.f, 1.f, 0.f) : normal;
+		}
+		else
+		{
+			if (m_VelocityY > 0.f)
+				m_VelocityY = 0.f;
+		}
+	}
+
+	// ─── 벽 (Layer 17, 12) ───
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::WALL_COLLIDER ||
+		_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::ENEMY_WALL_COLLIDER)
+	{
+		float ownX  = _OwnCollider->GetWorldCenter().x;
+		float wallX = _OtherCollider->GetWorldCenter().x;
+
+		if (ownX >= wallX)
+			++m_WallContactLeft;
+		else
+			++m_WallContactRight;
 	}
 }
 
@@ -246,33 +283,90 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 		return;
 	}
 
-	m_IsFalling = false;
-
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
 		// 자신 콜라이더의 월드 Y축 (스케일 포함)
 		Matrix ownMat  = _OwnCollider->GetWorldMat();
 		Vec3 ownYAxis  = Vec3(ownMat._21, ownMat._22, ownMat._23);
 
-		// 발 위치 = 콜라이더 중심 - Y축 * 0.5f
-		Vec3 footWorld = _OwnCollider->GetWorldCenter();
-		footWorld.x   -= ownYAxis.x * 0.5f;
-		footWorld.y   -= ownYAxis.y * 0.5f;
-		footWorld.z   -= ownYAxis.z * 0.5f;
+		Vec3 centerWorld = _OwnCollider->GetWorldCenter();
+		Matrix invSlope  = _OtherCollider->GetWorldMat().Invert();
+		Vec3 localCenter = XMVector3TransformCoord(centerWorld, invSlope);
 
-		// 발 위치를 경사면 로컬 공간으로 변환
-		Matrix invSlope       = _OtherCollider->GetWorldMat().Invert();
-		Vec3   localFoot      = XMVector3TransformCoord(footWorld, invSlope);
-		float  localPenetration = 0.5f - localFoot.y;
-
-		if (localPenetration > 0.f)
+		if (localCenter.y >= 0.f)
 		{
-			Matrix slopeMat = _OtherCollider->GetWorldMat();
-			Vec3   pos      = GetOwner()->Transform()->GetRelativePos();
-			pos.x += localPenetration * slopeMat._21;
-			pos.y += localPenetration * slopeMat._22;
-			GetOwner()->Transform()->SetRelativePos(pos);
+			// ─── 바닥 ───
+			Vec3 footWorld = centerWorld;
+			footWorld.x   -= ownYAxis.x * 0.5f;
+			footWorld.y   -= ownYAxis.y * 0.5f;
+			footWorld.z   -= ownYAxis.z * 0.5f;
+
+			Vec3 localFoot = XMVector3TransformCoord(footWorld, invSlope);
+			float localPenetration = 0.5f - localFoot.y;
+
+			if (localPenetration > 0.f)
+			{
+				Matrix slopeMat = _OtherCollider->GetWorldMat();
+				Vec3   pos      = GetOwner()->Transform()->GetRelativePos();
+				pos.x += localPenetration * slopeMat._21;
+				pos.y += localPenetration * slopeMat._22;
+				GetOwner()->Transform()->SetRelativePos(pos);
+			}
 		}
+		else
+		{
+			// ─── 천장 ───
+			Vec3 headWorld = centerWorld;
+			headWorld.x   += ownYAxis.x * 0.5f;
+			headWorld.y   += ownYAxis.y * 0.5f;
+			headWorld.z   += ownYAxis.z * 0.5f;
+
+			Vec3 localHead = XMVector3TransformCoord(headWorld, invSlope);
+			float localPenetration = localHead.y + 0.5f;
+
+			if (localPenetration > 0.f)
+			{
+				Matrix slopeMat = _OtherCollider->GetWorldMat();
+				Vec3   pos      = GetOwner()->Transform()->GetRelativePos();
+				pos.x -= localPenetration * slopeMat._21;
+				pos.y -= localPenetration * slopeMat._22;
+				GetOwner()->Transform()->SetRelativePos(pos);
+
+				if (m_VelocityY > 0.f)
+					m_VelocityY = 0.f;
+			}
+		}
+	}
+
+	// ─── 벽 (Layer 17, 12) ───
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::WALL_COLLIDER ||
+		_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::ENEMY_WALL_COLLIDER)
+	{
+		float ownCenterX  = _OwnCollider->GetWorldCenter().x;
+		float wallCenterX = _OtherCollider->GetWorldCenter().x;
+
+		Matrix wallMat = _OtherCollider->GetWorldMat();
+		float wallHalfW = Vec3(wallMat._11, wallMat._12, wallMat._13).Length() * 0.5f;
+
+		Matrix ownMat = _OwnCollider->GetWorldMat();
+		float ownHalfW = Vec3(ownMat._11, ownMat._12, ownMat._13).Length() * 0.5f;
+
+		Vec3 pos = GetOwner()->Transform()->GetRelativePos();
+
+		if (ownCenterX >= wallCenterX)
+		{
+			float penetration = (wallCenterX + wallHalfW) - (ownCenterX - ownHalfW);
+			if (penetration > 0.f)
+				pos.x += penetration;
+		}
+		else
+		{
+			float penetration = (ownCenterX + ownHalfW) - (wallCenterX - wallHalfW);
+			if (penetration > 0.f)
+				pos.x -= penetration;
+		}
+
+		GetOwner()->Transform()->SetRelativePos(pos);
 	}
 
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
@@ -300,15 +394,35 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 
 void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
+	// ─── 바닥 이탈 (Layer 16) ───
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
-		// 지면 이탈: 코요테 타임으로 유예
-		m_fCoyoteTimer = 0.08f;
-		m_GroundNormal = Vec3(0.f, 1.f, 0.f);
+		Matrix invSlope  = _OtherCollider->GetWorldMat().Invert();
+		Vec3 localCenter = XMVector3TransformCoord(_OwnCollider->GetWorldCenter(), invSlope);
+
+		if (localCenter.y >= 0.f)
+		{
+			--m_GroundContactCount;
+			if (m_GroundContactCount <= 0)
+			{
+				m_GroundContactCount = 0;
+				m_fCoyoteTimer = 0.08f;
+				m_GroundNormal = Vec3(0.f, 1.f, 0.f);
+			}
+		}
 	}
-	else
+
+	// ─── 벽 이탈 (Layer 17, 12) ───
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::WALL_COLLIDER ||
+		_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::ENEMY_WALL_COLLIDER)
 	{
-		m_IsFalling = true;
+		float ownX  = _OwnCollider->GetWorldCenter().x;
+		float wallX = _OtherCollider->GetWorldCenter().x;
+
+		if (ownX >= wallX)
+			m_WallContactLeft  = max(0, m_WallContactLeft - 1);
+		else
+			m_WallContactRight = max(0, m_WallContactRight - 1);
 	}
 
 	// FLOWER 타입이면 return
@@ -371,10 +485,18 @@ void CEnemyData::SaveToLevelFile(FILE* _File)
 {
 	fwrite(&m_EnemyType, sizeof(ENEMY_TYPE), 1, _File);
 	SaveAssetRef(_File, m_FlowerProjectile.Get());
+
+	fwrite(&m_InitialPos, sizeof(Vec3), 1, _File);
+	fwrite(&m_InitialRot, sizeof(Vec3), 1, _File);
+	fwrite(&m_InitialScale, sizeof(Vec3), 1, _File);
 }
 
 void CEnemyData::LoadFromLevelFile(FILE* _File)
 {
 	fread(&m_EnemyType, sizeof(ENEMY_TYPE), 1, _File);
 	m_FlowerProjectile = LoadAssetRef<APrefab>(_File);
+
+	fread(&m_InitialPos, sizeof(Vec3), 1, _File);
+	fread(&m_InitialRot, sizeof(Vec3), 1, _File);
+	fread(&m_InitialScale, sizeof(Vec3), 1, _File);
 }

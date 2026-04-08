@@ -7,6 +7,7 @@
 #include "TimeMgr.h"
 #include "RandomMgr.h"
 #include "LevelMgr.h"
+#include "ScoreMgr.h"
 
 CMainMenuController::CMainMenuController()
 	: CScript(SCRIPT_TYPE::MAINMENUCONTROLLER)
@@ -48,18 +49,20 @@ void CMainMenuController::Credit(KEY _Key)
 
 void CMainMenuController::ShuffleKey()
 {
-	KEY arryKey[3] = {};
+	RandomMgr::GetInst()->GetRandomKeyArray(m_StartKey, m_OptionKey, m_CreditKey);
 
-	RandomMgr::GetInst()->ShuffleKeyNum();
+	//KEY arryKey[3] = {};
 
-	for (UINT i = 0; i < 3; ++i)
-	{
-		arryKey[i] = RandomMgr::GetInst()->GetRandomKey(3);
-	}
+	//RandomMgr::GetInst()->ShuffleKeyNum();
 
-	m_StartKey = arryKey[0];
-	m_OptionKey = arryKey[1];	
-	m_CreditKey = arryKey[2];
+	//for (UINT i = 0; i < 3; ++i)
+	//{
+	//	arryKey[i] = RandomMgr::GetInst()->GetRandomKey(3);
+	//}
+
+	//m_StartKey = arryKey[0];
+	//m_OptionKey = arryKey[1];	
+	//m_CreditKey = arryKey[2];
 	return;
 }
 
@@ -130,7 +133,6 @@ void CMainMenuController::Tick()
 		m_Time = 0;
 		return;
 	}
-
 }
 
 void CMainMenuController::SaveToLevelFile(FILE* _File)

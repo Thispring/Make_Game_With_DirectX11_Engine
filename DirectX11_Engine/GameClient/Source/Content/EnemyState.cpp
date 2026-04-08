@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "EnemyState.h"
 
+#include "Source\Scripts\CEnemyStateManager.h"
+
 #include "LevelMgr.h"
 #include "TimeMgr.h"
 #include "KeyMgr.h"
@@ -18,8 +20,11 @@ EnemyState::~EnemyState()
 static bool isTest = false;
 void EnemyState::ApplyGravity()
 {
-	// FLYING 추락 적용 X
+	// FLYING, GHOST_SKULL 추락 적용 X
 	if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLYING)
+		return;
+
+	if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::GHOST_SKULL)
 		return;
 
 	// 임시 비활성화 Key 코드 추가하기

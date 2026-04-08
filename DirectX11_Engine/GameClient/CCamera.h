@@ -88,7 +88,7 @@ public:
     // _ScreenPos : 클라이언트(윈도우) 기준 픽셀 좌표 (왼쪽 상단-origin)
     // _ZNormalized : 0..1 범위의 깊이 값 (0 = near plane, 1 = far plane). 2D에서는 0 사용 권장.
     Vec3 ScreenToWorldPos(const Vec2& _ScreenPos, float _ZNormalized = 0.f);
-
+    Vec2 WorldToScreenPos(const Vec3& _WorldPos);  // ← 추가
 
     //============
     // 생성, 소멸자

@@ -149,7 +149,7 @@ void TimeMgr::Tick()
 void TimeMgr::Render()
 {
 	// FPS
-	FontMgr::GetInst()->DrawFont(m_strFPS.c_str(), 10, 30, 24, FONT_RGBA(200, 20, 20, 255));
+	//FontMgr::GetInst()->DrawFont(m_strFPS.c_str(), 10, 30, 24, FONT_RGBA(200, 20, 20, 255));
 
 	// 등록된 이후 호출하도록 변경
 	if (LevelMgr::GetInst()->GetCurLevel() != nullptr)
@@ -180,10 +180,10 @@ void TimeMgr::Render()
 void TimeMgr::PlayTimeRender()
 {
 	// 아웃라인 포함 — 흰 텍스트 + 검정 아웃라인, 두께 1.5px
-	FontMgr::GetInst()->DrawFontOutline(m_strPlayTime.c_str(), 10, 50, 24,
-		FONT_RGBA(255, 255, 255, 255),   // 본체: 흰색
-		FONT_RGBA(0, 0, 0, 255),   // 아웃라인: 검정
-		1.5f);
+	//FontMgr::GetInst()->DrawFontOutline(m_strPlayTime.c_str(), 10.f, 50.f, 24.f,
+	//	FONT_RGBA(255, 255, 255, 255),   // 본체: 흰색
+	//	FONT_RGBA(0, 0, 0, 255),   // 아웃라인: 검정
+	//	1.5f);
 
 	// 현재 렌더 해상도 기준 X축 중앙 정렬 (창모드·전체화면 자동 대응)
 	Vec2 vRenderResol = Device::GetInst()->GetRenderResolution();
@@ -196,7 +196,7 @@ void TimeMgr::PlayTimeRender()
 	else
 		fGoalPosX = vRenderResol.x / 2.f;
 
-	FontMgr::GetInst()->DrawFontOutline(m_strGoalTime.c_str(), fGoalPosX, 150, 96,
+	FontMgr::GetInst()->DrawFontOutline(m_strGoalTime.c_str(), fGoalPosX, 150.f, 96.f,
 		FONT_RGBA(255, 255, 255, 255),
 		FONT_RGBA(0, 0, 0, 255),
 		1.5f);
