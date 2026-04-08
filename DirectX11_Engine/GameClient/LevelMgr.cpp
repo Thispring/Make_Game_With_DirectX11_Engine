@@ -38,17 +38,10 @@ void LevelMgr::AddNewObject(Ptr<GameObject> _Object, Ptr<ALevel> _Level, int _La
 	// assert는 false로 걸릴 조건을 등록
 	assert(_Object != nullptr, _Level != nullptr, _Layer >= 0 && _Layer <= 32);
 	
-	// 입력받은 Layer에 등록
-	//_Level->AddObject(_Layer, _Object);
 
 	// TaskMgr로 CREATE_OBJECT 등록
 	// TaskMgr에서는 현재 Level에 Object를 등록
 	CreateObject(_Object.Get(), _Layer);
-
-
-	// 새로운 오브젝트 정보가 들어있는 Level 파일로 저장
-	// 파일 경로로 전달
-	//_Level->Save(CONTENT_PATH + _Level->GetKey());
 }
 
 void LevelMgr::ChangeMainMenu()
@@ -77,12 +70,23 @@ void LevelMgr::GameStart()
 void LevelMgr::ChangeEnding()
 {
 	// Main에서는 전환 X
-	if (m_CurLevel->GetKey() != L"Level\\Normal_Stage_0.lv" ||
-		m_CurLevel->GetKey() == L"Level\\MainMenu.lv" ||
-		m_CurLevel->GetKey() == L"Level\\Ending.lv")
+	if (m_CurLevel->GetKey() == L"Level\\MainMenu.lv" ||
+		m_CurLevel->GetKey() == L"Level\\Ending.lv" ||
+		m_CurLevel->GetKey() == L"Level\\GameOver.lv")
 		return;
 
 	::ChangeLevel(L"Level\\Ending.lv");
+	::ChangeLevelState(LEVEL_STATE::PLAY);
+}
+
+void LevelMgr::ChangeGameOver()
+{
+	// Main, Ending 에서 전환 X
+	if (m_CurLevel->GetKey() == L"Level\\MainMenu.lv" ||
+		m_CurLevel->GetKey() == L"Level\\Ending.lv")
+		return;
+
+	::ChangeLevel(L"Level\\GameOver.lv");
 	::ChangeLevelState(LEVEL_STATE::PLAY);
 }
 
@@ -92,13 +96,10 @@ void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 	if (m_LevelState == _NextState)
 		return;
 
-	//// 다음 시작할 Level이 Play 상태라면 GameMgr 초기화
-	//if (_NextState == LEVEL_STATE::PLAY)
-	//{
-	//	// 콘텐츠 관리 매니저 초기화
-	//	GameMgr::GetInst()->LevelPlayInit();
-	//}
-	// Clone 함수 호출전에 위 로직이 호출되면 복사 되기전 Player가 GameMgr에 등록
+	/**********************************************************************************
+	* Level 복사 후, Clone 함수 호출전에 
+	* GameMgr::GetInst()->LevelPlayInit() 이 호출되면 복사 되기전 Player가 GameMgr에 등록
+	**********************************************************************************/
 
 	// MainMenu Level이 PLAY 상태에서 전환됨
 	// PLAY -> CINEMATIC 전환
@@ -219,5 +220,11 @@ void LevelMgr::Progress()
 	if (KEY_PRESSED(KEY::HOME))
 	{
 		ChangeMainMenu();
+	}
+
+	// GameOver
+	if (KEY_PRESSED(KEY::END))
+	{
+		ChangeGameOver();
 	}
 }

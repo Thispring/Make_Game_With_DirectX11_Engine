@@ -36,11 +36,15 @@ void EnemyPatrolState::OnTick()
 	// 좌우를 바라보는 방법으로 구현
 	if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLOWER)
 	{
+		// 방향 고정이라면 return
+		if (m_EnemyData->GetIsFixedDir())
+			return;
+		
 		m_flowerPatrolTime += DT;
 
 		if (m_flowerPatrolTime >= 2.f)
 		{
-			// FLOWER 아틈라스는 기본 방향이 왼쪽이므로 scale.x 부호와 시각 방향이 다른 Enemy와 반대
+			// FLOWER 아틀라스는 기본 방향이 왼쪽이므로 scale.x 부호와 시각 방향이 다른 Enemy와 반대
 			// scale.x > 0 = 시각적 왼쪽, scale.x < 0 = 시각적 오른쪽
 			Vec3 scale = m_EnemyData->GetTargetObject()->Transform()->GetRelativeScale();
 			int  dir   = m_EnemyData->GetDirection();

@@ -31,6 +31,7 @@ public:
 	void ChangeMainMenu();
 	void GameStart();
 	void ChangeEnding();
+	void ChangeGameOver();
 
 
 	//=========

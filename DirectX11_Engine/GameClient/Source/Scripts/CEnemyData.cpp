@@ -37,6 +37,7 @@ CEnemyData::CEnemyData()
 	, m_IsDead(false)
 	, m_IsFalling(true)
 	, m_IsAttack(false)
+	, m_isFixedDir(false)
 
 	, m_InitialPos{}
 	, m_InitialRot{}
@@ -88,6 +89,7 @@ void CEnemyData::Init()
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsDead, L"IsDead", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsFalling, L"IsFalling", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::BOOL, &m_IsAttack, L"IsAttack", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::BOOL, &m_isFixedDir, L"isFixedDir", true, 0.f);
 
 	AddScriptParam(SCRIPT_PARAM::PREFAB, &m_FlowerProjectile, L"FlowerProjectile", true, 0.f);
 
@@ -125,6 +127,14 @@ void CEnemyData::Begin()
 
 	// m_InitialPos로 초기위치 정보를 설정
 	GetOwner()->Transform()->SetRelativePos(m_InitialPos);
+
+	// 회전은 도를 라디안으로 변환시켜야함
+	// x, y, z 회전각도를 사용하면 아래 조건 추가
+	if (abs(m_InitialRot.z) > FLT_EPSILON)
+		m_InitialRot.z = XMConvertToRadians(m_InitialRot.z);
+	//if (m_InitialRot.z > 0.f)
+	//	m_InitialRot.z = XMConvertToRadians(25.f);
+	
 	GetOwner()->Transform()->SetRelativeRot(m_InitialRot);
 	GetOwner()->Transform()->SetRelativeScale(m_InitialScale);
 
@@ -425,12 +435,6 @@ void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 			m_WallContactRight = max(0, m_WallContactRight - 1);
 	}
 
-	// FLOWER 타입이면 return
-	if (m_EnemyType == ENEMY_TYPE::FLOWER)
-	{
-		ChangeState(ENEMY_STATE::IDLE);
-		return;
-	}
 
 	// HIT, DEAD 상태에서는 IDLE로 강제 전환하지 않음
 	// 해당 상태들은 Flipbook 재생 완료 후 자체적으로 전이합니다.
@@ -489,6 +493,7 @@ void CEnemyData::SaveToLevelFile(FILE* _File)
 	fwrite(&m_InitialPos, sizeof(Vec3), 1, _File);
 	fwrite(&m_InitialRot, sizeof(Vec3), 1, _File);
 	fwrite(&m_InitialScale, sizeof(Vec3), 1, _File);
+	fwrite(&m_isFixedDir, sizeof(bool), 1, _File);
 }
 
 void CEnemyData::LoadFromLevelFile(FILE* _File)
@@ -499,4 +504,5 @@ void CEnemyData::LoadFromLevelFile(FILE* _File)
 	fread(&m_InitialPos, sizeof(Vec3), 1, _File);
 	fread(&m_InitialRot, sizeof(Vec3), 1, _File);
 	fread(&m_InitialScale, sizeof(Vec3), 1, _File);
+	fread(&m_isFixedDir, sizeof(bool), 1, _File);
 }

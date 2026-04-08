@@ -119,12 +119,12 @@ void TimeMgr::Tick()
 		SetWindowText(Engine::GetInst()->GetMainWndHwnd(), buff);
 		m_strFPS = buff;
 
-		// m_TotalPlayTime으로 누적 플레이 시간 표시
-		// %.nf: 소수점 아래 n자리까지 표시
-		// 반올림 문제가 있을 수 있으므로 정수로 형변환하여 출력
-		wchar_t playTimeBuff[255] = {};
-		swprintf_s(playTimeBuff, 255, L"PlayTime : %d", (int)m_TotalPlayTime);
-		m_strPlayTime = playTimeBuff;
+		//// m_TotalPlayTime으로 누적 플레이 시간 표시
+		//// %.nf: 소수점 아래 n자리까지 표시
+		//// 반올림 문제가 있을 수 있으므로 정수로 형변환하여 출력
+		//wchar_t playTimeBuff[255] = {};
+		//swprintf_s(playTimeBuff, 255, L"PlayTime : %d", (int)m_TotalPlayTime);
+		//m_strPlayTime = playTimeBuff;
 
 
 		// 전체 초를 정수로 자른 뒤 분/초로 분리

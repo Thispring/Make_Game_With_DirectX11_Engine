@@ -57,7 +57,9 @@ private:
 
     bool                m_IsDead;
     bool                m_IsFalling;        // true일 때만 Tick에서 y축으로 DT 만큼 음수 이동
-    bool                m_IsAttack; 
+    bool                m_IsAttack;
+
+    bool                m_isFixedDir;       // 방향 고정 여부
 
     EnemyDamageEvent    m_OnTakeDamageEvent;
 
@@ -110,6 +112,8 @@ public:
     GET_SET(bool, IsDead);
     GET_SET(bool, IsFalling);
     GET_SET(bool, IsAttack);
+
+    bool GetIsFixedDir() { return m_isFixedDir; }
 
     GET_SET(Vec3, InitialPos);
     GET_SET(Vec3, OriginPos);

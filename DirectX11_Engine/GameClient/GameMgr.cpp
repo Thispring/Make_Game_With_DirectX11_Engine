@@ -23,20 +23,14 @@ void GameMgr::Init()
 	// LevelPlayInit은 Level Play 때 사용
 	//====================================
 
-	// NOTE(26-04-03):
-	// GameMgr을 엔진 초기화때 같이 초기화하기 위해
-	// 현재 Level이 아닌, 등록된 에셋 중 이름을 통해 Player를 등록하게 합니다.
-	//Ptr<ALevel> pLevel = FIND(ALevel, L"Level\\Normal_Stage_0.lv");		// Texture 생성 시 설정한 이름 String을 입력합니다. 
-
-	//m_Player = pLevel->FindObjectByName(L"Player");
-	//m_PlayerData = m_Player->GetScript<CPlayerData>();
 	
-	// 현재 Level 이 두 Level 이면 불러오기 X
-	//  L"Level\\Ending.lv"
-	//  L"Level\\MainMenu.lv"
+	//====================================
+	// 현재 Level 이 아래 Level이면 바로 리턴
+	//====================================
 	if (LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\MainMenu.lv"
-		|| LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\Ending.lv")
-		return;
+		|| LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\Ending.lv"
+		|| LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\GameOver.lv")
+			return;
 
 
 	m_Player = LevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"Player");

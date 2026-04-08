@@ -113,6 +113,11 @@ KEY: HOME
 KEY_STATE: PRESSED
 Source File: LevelMgr.cpp
 
+Comment: GameOver
+KEY: END
+KEY_STATE: PRESSED
+Source File: LevelMgr.cpp
+
 Comment: No Comment
 KEY: F9
 KEY_STATE: TAP
