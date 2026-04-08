@@ -60,8 +60,9 @@ namespace FLIPBOOK
     {
         constexpr int IDLE = 0;
         constexpr int MOVE = 1;
-        constexpr int JUMP = 2;
-        constexpr int ATTACK = 3;
+        constexpr int ATTACK_TORNADO_WHIRL = 2;
+        constexpr int ATTACK_TORPEDO_WHIRL = 3;
+
         constexpr int HIT = 4;
         constexpr int DEAD = 5;
     }

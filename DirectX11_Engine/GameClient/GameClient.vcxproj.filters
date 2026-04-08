@@ -283,9 +283,6 @@
     <ClInclude Include="Source\Scripts\CEnemyAnimator.h">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\CEnemyBehavior.h">
-      <Filter>Source\ContentScript\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="SpriteMaker.h">
       <Filter>GameEngine\Editor\MakerUI\SpriteMaker</Filter>
     </ClInclude>
@@ -706,9 +703,6 @@
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\CEnemyAnimator.cpp">
-      <Filter>Source\ContentScript\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\CEnemyBehavior.cpp">
       <Filter>Source\ContentScript\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\CEnemyStateManager.cpp">

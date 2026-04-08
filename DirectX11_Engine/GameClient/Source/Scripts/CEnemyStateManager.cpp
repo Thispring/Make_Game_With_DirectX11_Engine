@@ -146,8 +146,11 @@ void CEnemyStateManager::SetUp()
         m_mapStatus[ENEMY_STATE::PATROL] = std::make_pair(make_unique<EnemyPatrolState>(m_EnemyData), FLIPBOOK::FLOWER::IDLE);
         break;
     case ENEMY_TYPE::BOSS:
-        //m_mapStatus[ENEMY_STATE::IDLE] = std::make_pair(make_unique<EnemyIdleState>(m_EnemyData), FLIPBOOK::BOSS::IDLE);
-        //m_mapStatus[ENEMY_STATE::MOVE] = std::make_pair(make_unique<EnemyMoveState>(m_EnemyData), FLIPBOOK::BOSS::MOVE);
+        m_mapStatus[ENEMY_STATE::IDLE] = std::make_pair(make_unique<EnemyIdleState>(m_EnemyData), FLIPBOOK::BOSS::IDLE);
+        m_mapStatus[ENEMY_STATE::MOVE] = std::make_pair(make_unique<EnemyMoveState>(m_EnemyData), FLIPBOOK::BOSS::MOVE);
+        m_mapStatus[ENEMY_STATE::ATTACK] = std::make_pair(make_unique<EnemyAttackState>(m_EnemyData), FLIPBOOK::BOSS::ATTACK_TORNADO_WHIRL);
+        m_mapStatus[ENEMY_STATE::PATROL] = std::make_pair(make_unique<EnemyPatrolState>(m_EnemyData), FLIPBOOK::BOSS::MOVE);
+        m_mapStatus[ENEMY_STATE::CHASE] = std::make_pair(make_unique<EnemyChaseState>(m_EnemyData), FLIPBOOK::BOSS::ATTACK_TORPEDO_WHIRL);
         break;
     }
 

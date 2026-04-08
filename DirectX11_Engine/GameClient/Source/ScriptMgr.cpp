@@ -5,7 +5,6 @@
 #include "Scripts/CCamMoveScript.h"
 #include "Scripts/CEndingLevelController.h"
 #include "Scripts/CEnemyAnimator.h"
-#include "Scripts/CEnemyBehavior.h"
 #include "Scripts/CEnemyData.h"
 #include "Scripts/CEnemyEyes.h"
 #include "Scripts/CEnemySpawner.h"
@@ -30,7 +29,6 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CCamMoveScript");
 	_vec.push_back(L"CEndingLevelController");
 	_vec.push_back(L"CEnemyAnimator");
-	_vec.push_back(L"CEnemyBehavior");
 	_vec.push_back(L"CEnemyData");
 	_vec.push_back(L"CEnemyEyes");
 	_vec.push_back(L"CEnemySpawner");
@@ -59,8 +57,6 @@ CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 		return NEW CEndingLevelController;
 	if (L"CEnemyAnimator" == _strScriptName)
 		return NEW CEnemyAnimator;
-	if (L"CEnemyBehavior" == _strScriptName)
-		return NEW CEnemyBehavior;
 	if (L"CEnemyData" == _strScriptName)
 		return NEW CEnemyData;
 	if (L"CEnemyEyes" == _strScriptName)
@@ -112,9 +108,6 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYANIMATOR:
 		return NEW CEnemyAnimator;
-		break;
-	case (UINT)SCRIPT_TYPE::ENEMYBEHAVIOR:
-		return NEW CEnemyBehavior;
 		break;
 	case (UINT)SCRIPT_TYPE::ENEMYDATA:
 		return NEW CEnemyData;
@@ -188,10 +181,6 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::ENEMYANIMATOR:
 		return L"CEnemyAnimator";
-		break;
-
-	case SCRIPT_TYPE::ENEMYBEHAVIOR:
-		return L"CEnemyBehavior";
 		break;
 
 	case SCRIPT_TYPE::ENEMYDATA:
@@ -283,9 +272,6 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	case ENEMYANIMATOR: return "CEnemyAnimator";
 		break;
 
-	case ENEMYBEHAVIOR: return "CEnemyBehavior";
-		break;
-
 	case ENEMYDATA: return "CEnemyData";
 		break;
 
@@ -359,8 +345,6 @@ CScript * ScriptMgr::GetScript(const char* _strScriptName)
 		return NEW CEndingLevelController;
 	if (0 == strcmp(_strScriptName, "CEnemyAnimator"))
 		return NEW CEnemyAnimator;
-	if (0 == strcmp(_strScriptName, "CEnemyBehavior"))
-		return NEW CEnemyBehavior;
 	if (0 == strcmp(_strScriptName, "CEnemyData"))
 		return NEW CEnemyData;
 	if (0 == strcmp(_strScriptName, "CEnemyEyes"))
@@ -409,8 +393,6 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 		return ENDINGLEVELCONTROLLER;
 	if (L"CEnemyAnimator" == _strScriptName)
 		return ENEMYANIMATOR;
-	if (L"CEnemyBehavior" == _strScriptName)
-		return ENEMYBEHAVIOR;
 	if (L"CEnemyData" == _strScriptName)
 		return ENEMYDATA;
 	if (L"CEnemyEyes" == _strScriptName)
@@ -459,8 +441,6 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 		return ENDINGLEVELCONTROLLER;
 	if (0 == strcmp(_strScriptName, "CEnemyAnimator"))
 		return ENEMYANIMATOR;
-	if (0 == strcmp(_strScriptName, "CEnemyBehavior"))
-		return ENEMYBEHAVIOR;
 	if (0 == strcmp(_strScriptName, "CEnemyData"))
 		return ENEMYDATA;
 	if (0 == strcmp(_strScriptName, "CEnemyEyes"))

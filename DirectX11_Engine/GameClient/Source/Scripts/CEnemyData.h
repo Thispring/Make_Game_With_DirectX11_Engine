@@ -27,6 +27,8 @@ private:
     // 파일로 저장하여 초기 위치를 지정하는 멤버 추가
     //==========================================
     Vec3                m_InitialPos;
+    Vec3                m_InitialRot;
+    Vec3                m_InitialScale;
 
     Vec3                m_OriginPos;
     Vec3                m_CurPos;

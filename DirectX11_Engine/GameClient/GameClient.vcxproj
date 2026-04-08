@@ -285,7 +285,6 @@ call CodeGen.exe</Command>
     <ClInclude Include="Source\Scripts\CCamMoveScript.h" />
     <ClInclude Include="Source\Scripts\CEndingLevelController.h" />
     <ClInclude Include="Source\Scripts\CEnemyAnimator.h" />
-    <ClInclude Include="Source\Scripts\CEnemyBehavior.h" />
     <ClInclude Include="Source\Scripts\CEnemyData.h" />
     <ClInclude Include="Source\Scripts\CEnemyEyes.h" />
     <ClInclude Include="Source\Scripts\CEnemySpawner.h" />
@@ -431,7 +430,6 @@ call CodeGen.exe</Command>
     <ClCompile Include="Source\Scripts\CCamMoveScript.cpp" />
     <ClCompile Include="Source\Scripts\CEndingLevelController.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyAnimator.cpp" />
-    <ClCompile Include="Source\Scripts\CEnemyBehavior.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyData.cpp" />
     <ClCompile Include="Source\Scripts\CEnemyEyes.cpp" />
     <ClCompile Include="Source\Scripts\CEnemySpawner.cpp" />

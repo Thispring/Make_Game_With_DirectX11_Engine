@@ -65,7 +65,6 @@ void EnemyChaseState::OnTick()
 		m_EnemyData->GetTargetObject()->Transform()->SetRelativePos(pos);
 		m_EnemyData->GetTargetObject()->Transform()->SetRelativeScale(scale);
 		m_EnemyData->SetDirection(dir);
-		//m_EnemyData->SetOffset(offSet);
 	}
 	else
 	{
@@ -82,6 +81,10 @@ void EnemyChaseState::OnTick()
 			scale.x *= -1.f;
 			dir = newDir;
 		}
+
+		// Boss 타입 추적 speed 증가
+		if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::BOSS)
+			speed *= 4.f;
 
 		// 3. 이동량 계산 (X축, 프레임 독립적)
 		// 추격 시 더 빠른 스피드 적용

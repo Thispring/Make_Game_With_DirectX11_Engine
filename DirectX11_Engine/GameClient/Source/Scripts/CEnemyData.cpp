@@ -36,6 +36,10 @@ CEnemyData::CEnemyData()
 	, m_IsAttack(false)
 
 	, m_InitialPos{}
+	, m_InitialRot{}
+	, m_InitialScale{}
+
+
 	, m_OriginPos{}
 	, m_CurPos{}
 	, m_OriginRot{}
@@ -73,6 +77,8 @@ void CEnemyData::Init()
 	
 	// Spawn 위치가 잘 되었는지 확인용
 	AddScriptParam(SCRIPT_PARAM::VEC3, &m_InitialPos, L"InitialPos", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::VEC3, &m_InitialRot, L"InitialRot", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::VEC3, &m_InitialScale, L"InitialScale", true, 0.f);
 
 	AddScriptParam(SCRIPT_PARAM::INT, &m_Direction, L"Direction", true, 0.f);
 
@@ -114,6 +120,13 @@ void CEnemyData::Begin()
 		GetOwner()->GetChild(ENEMY_PROJECTILE_ANCHOR)->SetLayerIdx((int)LEVEL_0_LAYER::ENEMY_PROJECT_ANCHOR);
 	}
 
+	// m_InitialPos로 초기위치 정보를 설정
+	GetOwner()->Transform()->SetRelativePos(m_InitialPos);
+	GetOwner()->Transform()->SetRelativeRot(m_InitialRot);
+	GetOwner()->Transform()->SetRelativeScale(m_InitialScale);
+
+
+
 	// 기존 위치는 Begin에서 초기화
 	m_OriginPos = GetOwner()->Transform()->GetRelativePos();
 	m_CurPos    = m_OriginPos;
@@ -147,6 +160,10 @@ void CEnemyData::TakeDamage(float _Damage, bool _hitSkull)
 	
 	// 죽은 상태에서 함수가 또 호출되면, HIT 상태로 되돌리기 X
 	if (m_IsDead)
+		return;
+
+	// BOSS 타입이면 데미지 입는 판정 X
+	if (m_EnemyType == ENEMY_TYPE::BOSS)
 		return;
 
 	// 이미 GHOST_SKULL 상태라면 전환 X
