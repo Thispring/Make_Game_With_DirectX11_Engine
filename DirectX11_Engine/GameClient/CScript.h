@@ -11,6 +11,7 @@ enum class SCRIPT_PARAM
     FLOAT,
     VEC2,
     VEC3,
+    VEC3_ROT,
     VEC4,
     MATRIX,
 

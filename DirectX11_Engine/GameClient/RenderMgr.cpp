@@ -56,7 +56,8 @@ void RenderMgr::Progress()
 		m_MainCam->Render();
 	}
 	// Level이 Play 상태라면 MainCam으로 렌더링
-	else if (LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
+	else if (LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY
+		|| LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PAUSE)
 	{
 		// UI 카메라는 없을 수도 있으므로 조건부 렌더
 		if (m_UICam != nullptr)

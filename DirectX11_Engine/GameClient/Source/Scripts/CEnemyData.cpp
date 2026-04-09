@@ -14,6 +14,8 @@
 #include "CPlayerData.h"
 #include "CPlayerMeleeTrigger.h"
 
+vector<CEnemyData*> CEnemyData::s_AllInstances;
+
 CEnemyData::CEnemyData()
 	: CScript(SCRIPT_TYPE::ENEMYDATA)
 	// 멤버들은 추후 파일로 저장하여, 불러오는 방식을 사용합니다.
@@ -61,6 +63,10 @@ CEnemyData::CEnemyData()
 
 CEnemyData::~CEnemyData()
 {
+	// static 리스트에서 자기 자신을 제거
+	auto it = std::find(s_AllInstances.begin(), s_AllInstances.end(), this);
+	if (it != s_AllInstances.end())
+		s_AllInstances.erase(it);
 }
 
 void CEnemyData::Init()
@@ -81,7 +87,7 @@ void CEnemyData::Init()
 	
 	// Spawn 위치가 잘 되었는지 확인용
 	AddScriptParam(SCRIPT_PARAM::VEC3, &m_InitialPos, L"InitialPos", true, 0.f);
-	AddScriptParam(SCRIPT_PARAM::VEC3, &m_InitialRot, L"InitialRot", true, 0.f);
+	AddScriptParam(SCRIPT_PARAM::VEC3_ROT, &m_InitialRot, L"InitialRot", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::VEC3, &m_InitialScale, L"InitialScale", true, 0.f);
 
 	AddScriptParam(SCRIPT_PARAM::INT, &m_Direction, L"Direction", true, 0.f);
@@ -130,8 +136,8 @@ void CEnemyData::Begin()
 
 	// 회전은 도를 라디안으로 변환시켜야함
 	// x, y, z 회전각도를 사용하면 아래 조건 추가
-	if (abs(m_InitialRot.z) > FLT_EPSILON)
-		m_InitialRot.z = XMConvertToRadians(m_InitialRot.z);
+	//if (abs(m_InitialRot.z) > FLT_EPSILON)
+	//	m_InitialRot.z = XMConvertToRadians(m_InitialRot.z);
 	//if (m_InitialRot.z > 0.f)
 	//	m_InitialRot.z = XMConvertToRadians(25.f);
 	
@@ -164,6 +170,19 @@ void CEnemyData::Begin()
 	// Script의 Begin을 호출한다면, 등록된 순서대로 각 콘텐츠 스크립트의 Begin이 호출되기 때문에
 	// State 생성 부분을 m_EnemyType이 결정된 이후 호출하게 합니다.
 	m_TargetObject->GetScript<CEnemyStateManager>()->SetUp();
+
+
+	//===========================================================
+	// static 리스트에 자기 자신 등록 (중복 방지)
+	// 비활성화되어도 리스트에는 남아있어, GameMgr에서 직접 접근 가능
+	// 
+	// Begin에 등록하는 이유는, Level 시작 시에 등록하면 되기 때문
+	// Init은 Level 시작 여부와 상관없이 호출
+	//===========================================================
+	auto it = find(s_AllInstances.begin(), s_AllInstances.end(), this);
+	if (it == s_AllInstances.end())
+		s_AllInstances.push_back(this);
+
 }
 
 void CEnemyData::TakeDamage(float _Damage, bool _hitSkull)
@@ -186,6 +205,7 @@ void CEnemyData::TakeDamage(float _Damage, bool _hitSkull)
 		return;
 
 	// 구독자(AttackState 등)에게 피격 사실을 즉시 알림
+	//  => 공격 중, 피격 당했다면 바로 HIT로 넘어가게 하는 기능
 	if (m_OnTakeDamageEvent)
 		m_OnTakeDamageEvent();
 
@@ -505,4 +525,92 @@ void CEnemyData::LoadFromLevelFile(FILE* _File)
 	fread(&m_InitialRot, sizeof(Vec3), 1, _File);
 	fread(&m_InitialScale, sizeof(Vec3), 1, _File);
 	fread(&m_isFixedDir, sizeof(bool), 1, _File);
+}
+
+
+//=====================
+// Enemy Reset 관련 함수
+//=====================
+void CEnemyData::ResetToInitial()
+{
+	//==========================================================
+	// 개별 Enemy의 모든 상태를 Begin 직후 상태로 복원합니다.
+	// GameObject가 비활성 상태여도 직접 호출되므로 Tick에 의존하지 않습니다.
+	//==========================================================
+
+	// 1. GameObject 본인 + 모든 자식 재활성화
+	SetActiveRecursive(GetOwner(), true);
+
+	// 2. HP 및 상태 플래그 초기화
+	m_CurHP = m_FullHP;
+	m_IsDead = false;
+	m_IsFalling = true;
+	m_IsAttack = false;
+	m_VelocityY = 0.f;
+	m_fCoyoteTimer = 0.f;
+	m_GroundContactCount = 0;
+	m_WallContactLeft = 0;
+	m_WallContactRight = 0;
+	m_GroundNormal = Vec3(0.f, 1.f, 0.f);
+	m_TimeSinceSpawn = 0.f;
+	m_TimeInState = 0.f;
+
+	// 3. 위치/회전/스케일을 초기값으로 복원
+	GetOwner()->Transform()->SetRelativePos(m_InitialPos);
+	GetOwner()->Transform()->SetRelativeRot(m_OriginRot);
+	GetOwner()->Transform()->SetRelativeScale(m_InitialScale);
+
+	m_CurPos = m_InitialPos;
+	m_CurRot = m_OriginRot;
+
+	// 4. 스케일로 방향 재결정
+	if (m_InitialScale.x > 0)
+		m_Direction = 1;
+	else
+		m_Direction = -1;
+
+	// 5. GHOST_SKULL이었던 경우 원래 타입으로 복원
+	if (m_EnemyType == ENEMY_TYPE::GHOST_SKULL)
+		m_EnemyType = ENEMY_TYPE::SKULL;
+
+	// 6. IDLE 상태로 전이
+	ChangeState(ENEMY_STATE::IDLE);
+}
+
+void CEnemyData::ResetAllEnemies()
+{
+	//==========================================================
+	// static 함수: 등록된 모든 CEnemyData 인스턴스를 순회하며 리셋
+	// GameMgr은 개별 Enemy 객체를 알 필요 없이 이 함수 하나로 트리거
+	//==========================================================
+	for (CEnemyData* pEnemy : s_AllInstances)
+	{
+		if (pEnemy != nullptr)
+			pEnemy->ResetToInitial();
+	}
+}
+
+void CEnemyData::ClearAllInstances()
+{
+	//==========================================================
+	// Level 전환 시 호출하여 static 리스트를 비웁니다.
+	// ClearLevelPlay() 등에서 사용
+	//==========================================================
+	s_AllInstances.clear();
+}
+
+void CEnemyData::SetActiveRecursive(GameObject* _Obj, bool _IsActive)
+{
+	//==========================================================
+	// 자기 자신을 활성/비활성화 한 뒤,
+	// 보유한 모든 자식 오브젝트를 재귀적으로 동일하게 설정합니다.
+	// 자식이 다른 Layer에 있어도 m_vecChild로 접근하므로 Layer 무관
+	//==========================================================
+	_Obj->SetIsActive(_IsActive);
+
+	const vector<Ptr<GameObject>>& vecChild = _Obj->GetChild();
+	for (size_t i = 0; i < vecChild.size(); ++i)
+	{
+		SetActiveRecursive(vecChild[i].Get(), _IsActive);
+	}
 }

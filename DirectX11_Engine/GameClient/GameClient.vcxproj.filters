@@ -334,9 +334,6 @@
     <ClInclude Include="Source\Scripts\CCamMoveScript.h">
       <Filter>Source\ContentScript\Etc</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\CLightObjectMove.h">
-      <Filter>Source\ContentScript\Etc</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Scripts\CParallaxLayer.h">
       <Filter>Source\ContentScript\Etc</Filter>
     </ClInclude>
@@ -450,6 +447,15 @@
     </ClInclude>
     <ClInclude Include="ScoreMgr.h">
       <Filter>Source\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ASound.h">
+      <Filter>GameEngine\Asset\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundMgr.h">
+      <Filter>Source\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\CMovingPlatform.h">
+      <Filter>Source\ContentScript\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -768,9 +774,6 @@
     <ClCompile Include="Source\Scripts\CCamMoveScript.cpp">
       <Filter>Source\ContentScript\Etc</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripts\CLightObjectMove.cpp">
-      <Filter>Source\ContentScript\Etc</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scripts\CParallaxLayer.cpp">
       <Filter>Source\ContentScript\Etc</Filter>
     </ClCompile>
@@ -878,6 +881,15 @@
     </ClCompile>
     <ClCompile Include="ScoreMgr.cpp">
       <Filter>Source\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ASound.cpp">
+      <Filter>GameEngine\Asset\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundMgr.cpp">
+      <Filter>Source\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CMovingPlatform.cpp">
+      <Filter>Source\ContentScript\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1219,6 +1231,9 @@
     </Filter>
     <Filter Include="Source\GameContent\PlayerStatus\Death">
       <UniqueIdentifier>{2274f227-30a0-4c5e-b8f6-c65bed65fc45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Asset\Sound">
+      <UniqueIdentifier>{31b243eb-ced3-4c78-b226-08d83aa01c8a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,7 @@
 #include "UIMgr.h"
 #include "CinematicMgr.h"
 #include "ScoreMgr.h"
+#include "SoundMgr.h"
 
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -136,6 +137,16 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
 
     // 키보드 동작 상태 계산
     KeyMgr::GetInst()->Init();
+
+    // FMOD 초기화	
+    // Sound 에셋을 가지고 오려면 미리 해야함
+    {
+        FMOD::System_Create(&m_FMODSystem);
+        assert(m_FMODSystem);
+
+        // 32개 채널 생성
+        FMOD_RESULT result = m_FMODSystem->init(32, FMOD_DEFAULT, nullptr);
+    }
     
     // 엔진 기본 Asset들 생성
     AssetMgr::GetInst()->Init();
@@ -148,6 +159,9 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
 
     // Render 초기화
     RenderMgr::GetInst()->Init();
+
+    // SoundMgr 초기화
+    SoundMgr::GetInst()->Init();
 
     // CinematicMgr 초기화
     CinematicMgr::GetInst()->Init();

@@ -168,6 +168,43 @@ void EScriptUI::Tick_UI()
 			AddItemHeight();
 		}
 			break;
+		case SCRIPT_PARAM::VEC3_ROT:
+		{
+			//==============================================================
+			// NOTE(26-04-09):
+			// 벡터의 회전은 도 <-> 라디안 변환이 필요합니다.
+			// 입력은 '도'를 기준으로 받고 값 적용은 라디안으로 변환하여 적용합니다.
+			//==============================================================
+			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());
+
+			string Key = "_VEC3_ROT##Vec3_Rot";
+			Key += ID;
+
+			// 실제 데이터(라디안)를 Vec3 참조로 접근
+			Vec3& vRot = *(Vec3*)vecParam[i].Data;
+
+			// 표시용 임시 변수: 라디안 → 도 변환
+			Vec3 vDegree = vRot * (180.f / XM_PI);
+
+			if (vecParam[i].IsInput)
+			{
+				if (ImGui::InputFloat3(Key.c_str(), (float*)&vDegree))
+				{
+					// 수정된 도 → 라디안으로 변환하여 원본에 반영
+					vRot = vDegree * (XM_PI / 180.f);
+				}
+			}
+			else
+			{
+				if (ImGui::DragFloat3(Key.c_str(), (float*)&vDegree))
+				{
+					vRot = vDegree * (XM_PI / 180.f);
+				}
+			}
+
+			AddItemHeight();
+		}
+			break;
 		case SCRIPT_PARAM::VEC4:
 		{
 			ImGui::Text(string(vecParam[i].Desc.begin(), vecParam[i].Desc.end()).c_str());

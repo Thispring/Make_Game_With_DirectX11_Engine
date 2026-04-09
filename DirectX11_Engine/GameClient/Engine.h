@@ -24,6 +24,12 @@ private:
 	bool		m_EditorMode;	// Engine을 Editor로 실행할지 여부
 	bool		m_FullScreen;	// 전체화면(창모드 1920x1080) 여부
 
+	//======
+	// FMOD
+	//======
+	FMOD::System*	m_FMODSystem;	// FMOD 관리자
+	//bool			m_EditorMode;
+
 public:
 	//=========
 	// 멤버 함수
@@ -31,6 +37,7 @@ public:
 	int Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode);
 	int Progress();
 	void ToggleFullScreen();
+	FMOD::System* GetFMODSystem() { return m_FMODSystem; }
 
 
 	//=========
@@ -42,3 +49,6 @@ public:
 	bool IsFullScreen() const { return m_FullScreen; }
 
 };
+
+// FMOD 관리자 매크로
+#define FMOD_SYSTEM Engine::GetInst()->GetFMODSystem()

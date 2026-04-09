@@ -63,10 +63,19 @@ private:
 
     EnemyDamageEvent    m_OnTakeDamageEvent;
 
+    //============================================================
+    // static Self-Registration 패턴
+    // Begin 시점에 자동 등록, 소멸자에서 자동 해제
+    // GameMgr는 이 리스트를 통해 비활성 객체를 포함한 모든 Enemy에 접근 가능
+    //============================================================
+    static vector<CEnemyData*>  s_AllInstances;
+
     //=================
     // private 멤버 함수
     //=================
     void ChangeState(ENEMY_STATE _State);
+    void ResetToInitial();
+    void SetActiveRecursive(GameObject* _Obj, bool _IsActive);
 
 public:
     //=========
@@ -79,6 +88,14 @@ public:
     void EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider);
 
     void CreateProjectile();
+
+    //============================================================
+    // static 함수: GameMgr에서 호출하여 모든 Enemy를 일괄 리셋
+    // 개별 객체 등록 없이, CEnemyData가 존재하는 것만으로 자동 참여
+    //============================================================
+    static void ResetAllEnemies();
+    static void ClearAllInstances();
+
 
     //=============
     // 상속 멤버 함수
@@ -125,7 +142,6 @@ public:
     GET_SET(ENEMY_TYPE, EnemyType);
     GET_SET(Ptr<APrefab>, FlowerProjectile);
 
-
     // ─── 벽 접촉 조회 ───
     bool GetIsBlockedLeft()  const { return m_WallContactLeft > 0; }
     bool GetIsBlockedRight() const { return m_WallContactRight > 0; }
@@ -133,6 +149,7 @@ public:
     // 이벤트 구독 / 해제
     void SubscribeOnTakeDamage(EnemyDamageEvent _Event) { m_OnTakeDamageEvent = _Event; }
     void UnsubscribeOnTakeDamage()                      { m_OnTakeDamageEvent = nullptr; }
+    
 
     //============
     // 생성, 소멸자

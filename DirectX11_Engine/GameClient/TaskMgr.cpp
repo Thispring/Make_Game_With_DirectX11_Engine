@@ -107,8 +107,8 @@ void TaskMgr::Progress()
 			{
 				LEVEL_STATE NextState = (LEVEL_STATE)m_vecTask[i].Param_0;
 				LevelMgr::GetInst()->ChangeLevelState(NextState);
-				TimeMgr::GetInst()->InitPlayTime();
-				TimeMgr::GetInst()->InitGoalTime();
+				//TimeMgr::GetInst()->InitPlayTime();
+				//TimeMgr::GetInst()->InitGoalTime();
 			}
 				break;
 

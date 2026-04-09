@@ -100,6 +100,21 @@ typedef SimpleMath::Matrix Matrix;
 #pragma comment(lib, "DirectxTex\\DirectXTex.lib")
 #endif
 
+
+//======
+// FMOD
+//======
+#include <FMOD/fmod.h>
+#include <FMOD/fmod.hpp>
+#include <FMOD/fmod_codec.h>
+
+#ifdef _DEBUG
+#pragma comment(lib, "FMOD/fmodL64_vc.lib")
+#else
+#pragma comment(lib, "FMOD/fmod64_vc.lib")
+#endif
+
+
 //===============
 // 사용자 정의 헤더
 //===============

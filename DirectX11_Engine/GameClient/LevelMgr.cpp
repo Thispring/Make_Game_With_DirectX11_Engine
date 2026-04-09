@@ -10,6 +10,7 @@
 #include "RandomMgr.h"
 #include "KeyMgr.h"
 #include "CinematicMgr.h"
+#include "SoundMgr.h"
 
 #include "Source/Scripts/CCamMoveScript.h"
 
@@ -116,6 +117,27 @@ void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 
 		// 레벨 오브젝트 준비 완료 후 카메라 탐색 및 원점 기록
 		CinematicMgr::GetInst()->Init();
+
+		// BGM 재생
+		SoundMgr::GetInst()->PlayBGM();
+
+		return;
+	}
+
+	//====================
+	// PLAY <-> PAUSE 전환
+	//====================
+	if (m_LevelState == LEVEL_STATE::PLAY && _NextState == LEVEL_STATE::PAUSE)
+	{
+		// 이미 Progress 에서 LevelState가 PLAY여야 Tick과 같은 로직을 수행하게 했으므로
+		// 전달받은 Level 상태만 변경합니다.
+		m_LevelState = _NextState;
+		return;
+	}
+
+	if (m_LevelState == LEVEL_STATE::PAUSE && _NextState == LEVEL_STATE::PLAY)
+	{
+		m_LevelState = _NextState;
 		return;
 	}
 
@@ -145,10 +167,18 @@ void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 	// 다음 시작할 Level이 Play 상태라면 GameMgr 초기화
 	if (_NextState == LEVEL_STATE::PLAY)
 	{
+		// NOTE(26-04-09): CINEMATIC 전환 이후, 한 번만 이곳을 호출해야 하며,
+		// PLAY <-> PAUSE 전환은 바로 return을 하기에 이곳에 들어올 수 없음
+
+
 		// 콘텐츠 관리 매니저 초기화
 		GameMgr::GetInst()->Init();
 		// 콘텐츠에 사용할 난수 초기화
 		RandomMgr::GetInst()->Init();
+
+		// 콘텐츠 관련 시간 초기화
+		TimeMgr::GetInst()->InitPlayTime();
+		TimeMgr::GetInst()->InitGoalTime();
 	}
 
 	m_LevelState = _NextState;

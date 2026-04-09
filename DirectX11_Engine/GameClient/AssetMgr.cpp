@@ -76,6 +76,8 @@ void AssetMgr::LoadContent()
 		// Texture는 AssetMgr Init에서 Load 진행
 		//case ASSET_TYPE::TEXTURE:
 		//	break;
+		// Sound는 확장자가 여러개고, 파일이 나뉘어져 있으므로
+		// 두번째 switch 문에서 Load처리를 따로 구현
 		//case ASSET_TYPE::SOUND:
 		//	break;
 		//case ASSET_TYPE::GRAPHICSHADER:
@@ -142,8 +144,40 @@ void AssetMgr::LoadContent()
 			// Texture는 AssetMgr Init에서 Load 진행
 			//case ASSET_TYPE::TEXTURE:
 			//	break;
-			//case ASSET_TYPE::SOUND:
-			//	break;
+		case ASSET_TYPE::SOUND:
+		{
+			// 검사할 하위 폴더 목록
+			const wstring soundDirs[] = { L"Sound\\BGM\\", L"Sound\\SFX\\" };
+			// 검사할 확장자 목록
+			const string  soundExts[] = { ".mp3", ".wav" };
+
+			for (const auto& dir : soundDirs)
+			{
+				wstring fullPath = (wstring)CONTENT_PATH + dir;
+
+				if (!fs::exists(fullPath) || !fs::is_directory(fullPath))
+					continue;
+
+				for (const auto& entry : fs::directory_iterator(fullPath))
+				{
+					if (!entry.is_regular_file())
+						continue;
+
+					// 확장자 배열 중 하나라도 일치하면 Load
+					string fileExt = entry.path().extension().string();
+					for (const auto& ext : soundExts)
+					{
+						if (fileExt == ext)
+						{
+							wstring fileName = entry.path().filename().wstring();
+							Load<ASound>(dir + fileName, dir + fileName);
+							break;
+						}
+					}
+				}
+			}
+			break;
+		}
 			//case ASSET_TYPE::GRAPHICSHADER:
 			//	break;
 			//case ASSET_TYPE::COMPUTESHADER:

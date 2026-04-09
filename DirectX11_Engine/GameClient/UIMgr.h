@@ -12,6 +12,8 @@ private:
 	bool		m_isFullScreen;
 	bool		m_ShowExitConfirm;  // ← 추가: Exit? 팝업 유지 플래그
 
+	UINT		m_OpenFrame;        // 팝업이 열린 ImGui 프레임 번호
+
 	float		BGMvolume;
 	float		SFXvolume;
 

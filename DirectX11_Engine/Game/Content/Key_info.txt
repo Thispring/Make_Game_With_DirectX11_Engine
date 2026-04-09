@@ -248,7 +248,7 @@ KEY: F6
 KEY_STATE: TAP
 Source File: CPlayerStateManager.cpp
 
-Comment: Exit? 확인창이 열려 있을 때는 ESC 토글 무시
+Comment: ESC: 팝업 "열기"만 담당 (닫기는 RenderOptionsWindow 내부에서 처리)
 KEY: ESC
 KEY_STATE: TAP
 Source File: UIMgr.cpp

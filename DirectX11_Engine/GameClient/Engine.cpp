@@ -12,6 +12,7 @@
 #include "CinematicMgr.h"
 #include "UIMgr.h"
 #include "ScoreMgr.h"
+#include "SoundMgr.h"
 
 Engine::Engine()
 	: // 명시되어 있지 않지만, 상속받은 부모의 생성자가 숨어있음
@@ -20,11 +21,15 @@ Engine::Engine()
 	, m_Resolution{}
 	, m_EditorMode(true)
 	, m_FullScreen(false)
+
+	, m_FMODSystem(nullptr)
 {
 }
 
 Engine::~Engine()
 {
+	if (nullptr != m_FMODSystem)
+		m_FMODSystem->release();
 }
 
 int Engine::Progress() 
@@ -55,6 +60,9 @@ int Engine::Progress()
 	{
 		ScoreMgr::GetInst()->Progress();
 	}
+
+	// Sound 매니저 업데이트
+	SoundMgr::GetInst()->Progress();
 
 	// CinematicMgr 업데이트
 	CinematicMgr::GetInst()->Progress();

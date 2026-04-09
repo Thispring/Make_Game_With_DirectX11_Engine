@@ -14,8 +14,11 @@
 
 UIMgr::UIMgr()
     : m_ShowOptions(false)
+    , m_ShowCredit(false)
     , m_isFullScreen(false)
     , m_ShowExitConfirm(false)  // ← 초기화 추가
+
+    , m_OpenFrame(0)
 
     , BGMvolume(0.f)
     , SFXvolume(0.f)
@@ -36,12 +39,15 @@ void UIMgr::Init()
 void UIMgr::Progress()
 {
     // Exit? 확인창이 열려 있을 때는 ESC 토글 무시
-    if (KEY_TAP(KEY::ESC) && !m_ShowExitConfirm)
+    // ESC: 팝업 "열기"만 담당 (닫기는 RenderOptionsWindow 내부에서 처리)
+    if (KEY_TAP(KEY::ESC) && !m_ShowExitConfirm && !m_ShowOptions)
     {
-        m_ShowOptions = !m_ShowOptions;
+        // 프레임 번호 기록
+        m_OpenFrame = ImGui::GetFrameCount();
 
-        if (m_ShowOptions)
-            ImGui::OpenPopup("OptionsWindow");
+        m_ShowOptions = true;
+        ChangeLevelState(LEVEL_STATE::PAUSE);
+        ImGui::OpenPopup("OptionsWindow");
     }
 
     // 둘다 열리지 않게 방지
@@ -74,6 +80,7 @@ void UIMgr::RenderOptionsWindow()
 
     if (ImGui::BeginPopupModal("OptionsWindow", nullptr, flags))
     {
+
         #pragma region Option Title
         Vec4 vColor = ColorConvertIntToVec4(3.f, 157.f, 252.f);
         ImGui::PushID(0);
@@ -98,6 +105,8 @@ void UIMgr::RenderOptionsWindow()
         if (ImGui::Button("Close"))
         {
             m_ShowOptions = false;
+            ChangeLevelState(LEVEL_STATE::PLAY);
+            ImGui::SetWindowFocus(NULL);  // ImGui 포커스 해제 → 엔진 윈도우로 복귀
             ImGui::CloseCurrentPopup();
         }
         #pragma endregion
@@ -109,7 +118,24 @@ void UIMgr::RenderOptionsWindow()
             m_ShowExitConfirm = true;
             ImGui::OpenPopup("Exit?");
         }
-    
+
+        //=============================================================
+        // 포커스가 이미 ImGui쪽에 가있으므로
+        // 함수 내에서 ESC 눌렀을 때 작동하도록 변경
+        //
+        // ImGui 키 감지 — Win32 포커스와 무관하게 동작
+        // 열린 직후 2프레임은 무시 (KeyMgr ↔ ImGui 입력 파이프라인 지연 보상)
+        //=============================================================
+        bool bSafeToClose = (ImGui::GetFrameCount() - m_OpenFrame) >= 2;
+        if (bSafeToClose
+            && !m_ShowExitConfirm
+            && ImGui::IsKeyPressed(ImGuiKey_Escape, false))
+        {
+            m_ShowOptions = false;
+            ChangeLevelState(LEVEL_STATE::PLAY);
+            ImGui::SetWindowFocus(NULL);
+            ImGui::CloseCurrentPopup();
+        }
 
         ImGui::EndPopup(); // ← 부모 EndPopup 나중
     }
@@ -145,6 +171,8 @@ void UIMgr::RenderOptionsWindow()
         {
             m_ShowExitConfirm = false;  // ← 플래그 해제
             m_ShowOptions = false;
+            ChangeLevelState(LEVEL_STATE::PLAY);
+            ImGui::SetWindowFocus(NULL);  // ImGui 포커스 해제 → 엔진 윈도우로 복귀
             ImGui::CloseCurrentPopup();
         }
 

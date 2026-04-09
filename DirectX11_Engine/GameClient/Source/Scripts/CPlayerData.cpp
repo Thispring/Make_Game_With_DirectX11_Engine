@@ -2,6 +2,7 @@
 #include "CPlayerData.h"
 
 #include "CPlayerStateManager.h"
+#include "CMovingPlatform.h"
 
 #include "LevelMgr.h"
 #include "AssetMgr.h"
@@ -11,7 +12,7 @@ CPlayerData::CPlayerData()
 	: CScript(SCRIPT_TYPE::PLAYERDATA)
 	, m_FullHP(10.f)
 	, m_CurHP(m_FullHP)
-	, m_Damage(2.f)
+	, m_Damage(3.5f)
 	, m_JumpVelocity(500.f)
 	, m_Speed(250.f)
 
@@ -172,19 +173,32 @@ void CPlayerData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider
 		{
 			// ─── 바닥 ───
 			Vec3 footWorld = centerWorld;
-			footWorld.x   -= ownYAxis.x * 0.5f;
-			footWorld.y   -= ownYAxis.y * 0.5f;
-			footWorld.z   -= ownYAxis.z * 0.5f;
+			footWorld.x -= ownYAxis.x * 0.5f;
+			footWorld.y -= ownYAxis.y * 0.5f;
+			footWorld.z -= ownYAxis.z * 0.5f;
 
 			Vec3 localFoot = XMVector3TransformCoord(footWorld, invSlope);
 			float localPenetration = 0.5f - localFoot.y;
-			if (localPenetration <= 0.f)
-				return;
 
 			Matrix slopeMat = _OtherCollider->GetWorldMat();
-			Vec3 pos        = GetOwner()->Transform()->GetRelativePos();
-			pos.x += localPenetration * slopeMat._21;
-			pos.y += localPenetration * slopeMat._22;
+			Vec3 pos = GetOwner()->Transform()->GetRelativePos();
+
+			// 1. penetration 보정 (양수일 때만)
+			if (localPenetration > 0.f)
+			{
+				pos.x += localPenetration * slopeMat._21;
+				pos.y += localPenetration * slopeMat._22;
+			}
+
+			// 2. Moving Platform delta (penetration과 무관하게 항상 적용)
+			Ptr<CMovingPlatform> pPlatform = _OtherCollider->GetOwner()->GetScript<CMovingPlatform>();
+			if (pPlatform != nullptr)
+			{
+				Vec3 delta = pPlatform->GetDelta();
+				pos.x += delta.x;
+			}
+
+			// 3. 한 번만 호출
 			GetOwner()->Transform()->SetRelativePos(pos);
 		}
 		else
@@ -201,7 +215,7 @@ void CPlayerData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider
 				return;
 
 			Matrix slopeMat = _OtherCollider->GetWorldMat();
-			Vec3 pos        = GetOwner()->Transform()->GetRelativePos();
+			Vec3   pos      = GetOwner()->Transform()->GetRelativePos();
 			pos.x -= localPenetration * slopeMat._21;
 			pos.y -= localPenetration * slopeMat._22;
 			GetOwner()->Transform()->SetRelativePos(pos);

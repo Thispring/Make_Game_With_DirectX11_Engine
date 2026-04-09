@@ -8,6 +8,7 @@
 #include "KeyMgr.h"
 #include "TimeMgr.h"
 #include "RandomMgr.h"
+#include "GameMgr.h"
 
 #include "Source\Content\PlayerIdleState.h"
 #include "Source\Content\PlayerMoveState.h"
@@ -147,6 +148,9 @@ void CPlayerStateManager::Respawn()
     // 초기 스탯으로 초기화 + Origin 위치로 이동
     //======================================
     
+    // Enemy 초기화
+    GameMgr::GetInst()->PlayerRespawnEvent();
+
     // 체력
     m_PlayerData->SetCurHP(m_PlayerData->GetFullHP());
 

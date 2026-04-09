@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Source\Scripts\CPlayerData.h"
+#include "Source\Scripts\CEnemyData.h"
 
 // 게임 콘텐츠 관련 데이터를 관리합니다.
 // 싱글톤으로 디자인하여 사용합니다.
@@ -11,6 +12,8 @@ class GameMgr
 private:
 	Ptr<GameObject>				m_Player;
 	Ptr<CPlayerData>			m_PlayerData;
+	Ptr<CEnemyData>				m_EnemyData;
+
 	vector<Ptr<GameObject>>		m_vecSpawnEnemy;
 	vector<Ptr<GameObject>>		m_vecSavePoint;
 
@@ -27,6 +30,7 @@ public:
 	void RegisterPlayerSave(Vec3 _SavePos);
 
 	void ClearLevelPlay();
+	void PlayerRespawnEvent();
 
 
 	//=========

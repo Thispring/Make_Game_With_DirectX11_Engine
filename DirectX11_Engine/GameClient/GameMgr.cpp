@@ -85,4 +85,22 @@ void GameMgr::ClearLevelPlay()
 		pLevel->DestroyAllObjectsInLayer((int)LEVEL_0_LAYER::ENEMY_PROJECTILE);
 	}
 
+	// Level 종료 시 static 리스트 정리
+	CEnemyData::ClearAllInstances();
+}
+
+void GameMgr::PlayerRespawnEvent()
+{
+	// Player가 건들 수 없는 Level 바깥 영역에 Dummy Enemy를 하나 생성하고
+	// 이 객체의 주소에 접근해 CEnemyData에 있는 m_isPlayerRespawn을 접근합니다.
+	//
+	// 문제점: 이미 비활성화라면 GameObject Tick에서 리턴을 시키므로, 비활성 Enemy는 Tick에서
+	// 신호를 받을 수 없음, 그렇다고 GameObject에 부활신호를 추가하면 객체 설계에 위반
+	// 
+	//==========================================================
+	// Player Respawn 시, CEnemyData의 static 리스트를 통해
+	// 현재 Level의 모든 Enemy를 일괄 리셋합니다.
+	// 비활성화된 Enemy도 static 리스트에 남아있으므로 접근 가능
+	//==========================================================
+	CEnemyData::ResetAllEnemies();
 }

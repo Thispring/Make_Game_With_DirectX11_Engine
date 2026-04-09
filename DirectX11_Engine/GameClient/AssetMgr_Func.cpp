@@ -499,6 +499,9 @@ void AssetMgr::CreateEngineTexture()
 	Load<ATexture>(L"optionBtnImg", L"Texture\\UI\\MainMenu\\optionBtn.png");
 	Load<ATexture>(L"creditBtnImg", L"Texture\\UI\\MainMenu\\creditBtn.png");
 	
+	// Ending / GameOver
+	Load<ATexture>(L"mainMenuBtnImg", L"Texture\\UI\\MainMenu\\mainMenuBtn.png");
+
 	// Portal
 	Load<ATexture>(L"portalRings2Atlas", L"Texture\\Object\\portalRings2.png");
 

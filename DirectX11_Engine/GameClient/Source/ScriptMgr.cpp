@@ -11,8 +11,8 @@
 #include "Scripts/CEnemyStateManager.h"
 #include "Scripts/CEnergyBlast.h"
 #include "Scripts/CFlowerProjectile.h"
-#include "Scripts/CLightObjectMove.h"
 #include "Scripts/CMainMenuController.h"
+#include "Scripts/CMovingPlatform.h"
 #include "Scripts/CParallaxLayer.h"
 #include "Scripts/CPlayerAnimator.h"
 #include "Scripts/CPlayerController.h"
@@ -35,8 +35,8 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CEnemyStateManager");
 	_vec.push_back(L"CEnergyBlast");
 	_vec.push_back(L"CFlowerProjectile");
-	_vec.push_back(L"CLightObjectMove");
 	_vec.push_back(L"CMainMenuController");
+	_vec.push_back(L"CMovingPlatform");
 	_vec.push_back(L"CParallaxLayer");
 	_vec.push_back(L"CPlayerAnimator");
 	_vec.push_back(L"CPlayerController");
@@ -69,10 +69,10 @@ CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 		return NEW CEnergyBlast;
 	if (L"CFlowerProjectile" == _strScriptName)
 		return NEW CFlowerProjectile;
-	if (L"CLightObjectMove" == _strScriptName)
-		return NEW CLightObjectMove;
 	if (L"CMainMenuController" == _strScriptName)
 		return NEW CMainMenuController;
+	if (L"CMovingPlatform" == _strScriptName)
+		return NEW CMovingPlatform;
 	if (L"CParallaxLayer" == _strScriptName)
 		return NEW CParallaxLayer;
 	if (L"CPlayerAnimator" == _strScriptName)
@@ -127,11 +127,11 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::FLOWERPROJECTILE:
 		return NEW CFlowerProjectile;
 		break;
-	case (UINT)SCRIPT_TYPE::LIGHTOBJECTMOVE:
-		return NEW CLightObjectMove;
-		break;
 	case (UINT)SCRIPT_TYPE::MAINMENUCONTROLLER:
 		return NEW CMainMenuController;
+		break;
+	case (UINT)SCRIPT_TYPE::MOVINGPLATFORM:
+		return NEW CMovingPlatform;
 		break;
 	case (UINT)SCRIPT_TYPE::PARALLAXLAYER:
 		return NEW CParallaxLayer;
@@ -207,12 +207,12 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CFlowerProjectile";
 		break;
 
-	case SCRIPT_TYPE::LIGHTOBJECTMOVE:
-		return L"CLightObjectMove";
-		break;
-
 	case SCRIPT_TYPE::MAINMENUCONTROLLER:
 		return L"CMainMenuController";
+		break;
+
+	case SCRIPT_TYPE::MOVINGPLATFORM:
+		return L"CMovingPlatform";
 		break;
 
 	case SCRIPT_TYPE::PARALLAXLAYER:
@@ -290,10 +290,10 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	case FLOWERPROJECTILE: return "CFlowerProjectile";
 		break;
 
-	case LIGHTOBJECTMOVE: return "CLightObjectMove";
+	case MAINMENUCONTROLLER: return "CMainMenuController";
 		break;
 
-	case MAINMENUCONTROLLER: return "CMainMenuController";
+	case MOVINGPLATFORM: return "CMovingPlatform";
 		break;
 
 	case PARALLAXLAYER: return "CParallaxLayer";
@@ -357,10 +357,10 @@ CScript * ScriptMgr::GetScript(const char* _strScriptName)
 		return NEW CEnergyBlast;
 	if (0 == strcmp(_strScriptName, "CFlowerProjectile"))
 		return NEW CFlowerProjectile;
-	if (0 == strcmp(_strScriptName, "CLightObjectMove"))
-		return NEW CLightObjectMove;
 	if (0 == strcmp(_strScriptName, "CMainMenuController"))
 		return NEW CMainMenuController;
+	if (0 == strcmp(_strScriptName, "CMovingPlatform"))
+		return NEW CMovingPlatform;
 	if (0 == strcmp(_strScriptName, "CParallaxLayer"))
 		return NEW CParallaxLayer;
 	if (0 == strcmp(_strScriptName, "CPlayerAnimator"))
@@ -405,10 +405,10 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 		return ENERGYBLAST;
 	if (L"CFlowerProjectile" == _strScriptName)
 		return FLOWERPROJECTILE;
-	if (L"CLightObjectMove" == _strScriptName)
-		return LIGHTOBJECTMOVE;
 	if (L"CMainMenuController" == _strScriptName)
 		return MAINMENUCONTROLLER;
+	if (L"CMovingPlatform" == _strScriptName)
+		return MOVINGPLATFORM;
 	if (L"CParallaxLayer" == _strScriptName)
 		return PARALLAXLAYER;
 	if (L"CPlayerAnimator" == _strScriptName)
@@ -453,10 +453,10 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 		return ENERGYBLAST;
 	if (0 == strcmp(_strScriptName, "CFlowerProjectile"))
 		return FLOWERPROJECTILE;
-	if (0 == strcmp(_strScriptName, "CLightObjectMove"))
-		return LIGHTOBJECTMOVE;
 	if (0 == strcmp(_strScriptName, "CMainMenuController"))
 		return MAINMENUCONTROLLER;
+	if (0 == strcmp(_strScriptName, "CMovingPlatform"))
+		return MOVINGPLATFORM;
 	if (0 == strcmp(_strScriptName, "CParallaxLayer"))
 		return PARALLAXLAYER;
 	if (0 == strcmp(_strScriptName, "CPlayerAnimator"))
