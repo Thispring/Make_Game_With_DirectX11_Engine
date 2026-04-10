@@ -43,6 +43,14 @@ namespace
 
 namespace ImGuiFunc
 {
+    ImGuiKey KeyToImGuiKey(KEY _key)
+    {
+        int idx = (int)_key;
+        if (idx >= (int)KEY::A && idx <= (int)KEY::Z)
+            return static_cast<ImGuiKey>(ImGuiKey_A + idx - (int)KEY::A);
+        return ImGuiKey_None;
+    }
+
     bool ColoredButton(const char* label, const ImVec4& baseColor, const ImVec2& size)
     {
         // Derive hovered/active by simple brightness multipliers

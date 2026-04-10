@@ -1,12 +1,15 @@
 #include "pch.h"
 #include "FontMgr.h"
+
 #include "Device.h"
 #include "PathMgr.h"
 #include "LevelMgr.h"
+#include "ScoreMgr.h"
 
 FontMgr::FontMgr()
 	: m_FW1Factory(nullptr)
 	, m_FontWrapper(nullptr)
+	, m_hFontResource(nullptr)
 {
 }
 
@@ -18,8 +21,13 @@ FontMgr::~FontMgr()
 	if (nullptr != m_FontWrapper)
 		m_FontWrapper->Release();
 
-	wstring path = WCONTENT_PATH + L"\\Fonts\\_bitmap_font____romulus_by_pix3m-d6aokem.ttf";
-	RemoveFontResourceEx(path.c_str(), FR_PRIVATE, 0);
+	// 메모리 폰트 해제
+	if (m_hFontResource && !m_fontBuffer.empty())
+	{
+		RemoveFontMemResourceEx(m_hFontResource);
+		m_hFontResource = nullptr;
+		m_fontBuffer.clear();
+	}
 }
 
 void FontMgr::Init()
@@ -29,8 +37,21 @@ void FontMgr::Init()
 		assert(nullptr);
 	}
 
-	wstring path = WCONTENT_PATH + L"\\Fonts\\_bitmap_font____romulus_by_pix3m-d6aokem.ttf";
-	AddFontResourceEx(path.c_str(), FR_PRIVATE, 0);
+    wstring path = WCONTENT_PATH + L"\\Fonts\\_bitmap_font____romulus_by_pix3m-d6aokem.ttf";
+
+	// TTF 파일을 메모리로 읽어서 등록
+	std::ifstream fontFile(path, std::ios::binary | std::ios::ate);
+	if (fontFile)
+	{
+		std::streamsize size = fontFile.tellg();
+		fontFile.seekg(0, std::ios::beg);
+		m_fontBuffer.resize((size_t)size);
+		if (fontFile.read(reinterpret_cast<char*>(m_fontBuffer.data()), size))
+		{
+			DWORD fonts = 0;
+			m_hFontResource = AddFontMemResourceEx(m_fontBuffer.data(), (DWORD)size, 0, &fonts);
+		}
+	}
 
 	if (FAILED(m_FW1Factory->CreateFontWrapper(DEVICE, L"Romulus", &m_FontWrapper)))
 	{
@@ -50,7 +71,7 @@ void FontMgr::PrintEnding()
 		{
 			// 현재 렌더 해상도 기준 X축 중앙 정렬 (창모드·전체화면 자동 대응)
 			Vec2 vRenderResol = Device::GetInst()->GetRenderResolution();
-			Vec2 vGoalTextSize = FontMgr::GetInst()->MeasureText(L"Ending", 96.f);
+			Vec2 vGoalTextSize = FontMgr::GetInst()->MeasureText(L"GameClear", 96.f);
 
 			// 빈 문자열이거나 MeasureText가 유효하지 않은 값을 반환한 경우 폴백
 			float fGoalPosX = 0.f;
@@ -63,6 +84,9 @@ void FontMgr::PrintEnding()
 				FONT_RGBA(255, 255, 255, 255),
 				FONT_RGBA(0, 0, 0, 255),
 				1.5f);
+
+			// 아래 최고 점수 출력
+			ScoreMgr::GetInst()->RenderScore();
 		}
 	}
 }

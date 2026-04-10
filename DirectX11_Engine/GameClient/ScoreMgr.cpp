@@ -96,22 +96,17 @@ void ScoreMgr::RenderScore()
 	if (m_HighScore <= 0)
 		return;
 
-	//// 메인 카메라를 통해 월드 좌표 → 스크린 픽셀 좌표 변환
-	//Ptr<CCamera> pCam = RenderMgr::GetInst()->GetPOVCamera();
-	//if (pCam == nullptr)
-	//	return;
-
-	//Vec2 screenPos = pCam->WorldToScreenPos(Vec3(100.f, 1000.f, 0.f));
-
-	// 해상도에 비례한 고정 UI 위치 (좌상단에서 5%, 10% 지점)
 	Vec2 res = Engine::GetInst()->GetResolution();
-	float posX = res.x * 0.05f;   // 화면 너비의 5%
-	float posY = res.y * 0.25f;   // 화면 높이의 10%
-
 	wstring score = L"HighScore:  " + to_wstring(m_HighScore);
 
+	// 텍스트 크기 측정
+	Vec2 textSize = FontMgr::GetInst()->MeasureText(score.c_str(), 48.f);
+
+	// X축 중앙 정렬
+	float posX = (res.x - textSize.x) / 2.f;
+	float posY = res.y * 0.35f;
+
 	FontMgr::GetInst()->DrawFontOutline(score.c_str(),
-		//screenPos.x, screenPos.y, 96.f,
 		posX, posY, 48.f,
 		FONT_RGBA(255, 255, 0, 255),
 		FONT_RGBA(0, 0, 0, 255),

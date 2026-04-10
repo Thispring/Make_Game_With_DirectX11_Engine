@@ -23,7 +23,6 @@ private:
 	double			m_TargetFrameTime;	// 1프레임 목표 시간 (초)
 
 	wstring			m_strFPS;
-	wstring			m_strPlayTime;
 	wstring			m_strGoalTime;
 
 public:
@@ -52,6 +51,7 @@ public:
 	float GetEngineTime() { return g_Global.EngineTime; }
 
 	float GetTotalPlayTime() { return m_TotalPlayTime; }
+	float GetGoalTime() { return m_GoalTime; }
 
 	/// @brief 목표 FPS를 설정합니다. 0을 넣으면 제한 없음.
 	void SetTargetFPS(UINT _FPS);

@@ -17,12 +17,23 @@ UIMgr::UIMgr()
     , m_ShowCredit(false)
     , m_isFullScreen(false)
     , m_ShowExitConfirm(false)  // ← 초기화 추가
+    
+    , m_eventShowOption(false)
+    , m_bCloseOptionsRequest(false)
+
+    , m_eventShowCredit(false)
+    , m_bCloseCreditRequest(false)
 
     , m_OpenFrame(0)
+    , m_CreditOpenFrame(0)
 
     , BGMvolume(0.f)
     , SFXvolume(0.f)
 
+    , m_PrevOptionKey(KEY::END)
+    , m_PrevCreditKey(KEY::END)
+    , m_PrevOptionImGuiKey(ImGuiKey_None)
+    , m_PrevCreditImGuiKey(ImGuiKey_None)
 {
 
 }
@@ -40,23 +51,24 @@ void UIMgr::Progress()
 {
     // Exit? 확인창이 열려 있을 때는 ESC 토글 무시
     // ESC: 팝업 "열기"만 담당 (닫기는 RenderOptionsWindow 내부에서 처리)
-    if (KEY_TAP(KEY::ESC) && !m_ShowExitConfirm && !m_ShowOptions)
+    if ((KEY_TAP(KEY::ESC) || m_eventShowOption) && !m_ShowExitConfirm && !m_ShowOptions)
     {
         // 프레임 번호 기록
         m_OpenFrame = ImGui::GetFrameCount();
 
         m_ShowOptions = true;
+        m_eventShowOption = false;
         ChangeLevelState(LEVEL_STATE::PAUSE);
         ImGui::OpenPopup("OptionsWindow");
     }
 
-    // 둘다 열리지 않게 방지
-    if (KEY_TAP(KEY::CTRL))
+    // Credit: IsShowCredit() 이벤트로 열기 요청
+    if (m_eventShowCredit && !m_ShowCredit)
     {
-        m_ShowCredit = !m_ShowCredit;
-
-        if (m_ShowCredit)
-            ImGui::OpenPopup("CreditWindow");
+        m_CreditOpenFrame = ImGui::GetFrameCount();
+        m_ShowCredit = true;
+        m_eventShowCredit = false;
+        ImGui::OpenPopup("CreditWindow");
     }
 
     RenderOptionsWindow();
@@ -82,27 +94,64 @@ void UIMgr::RenderOptionsWindow()
     {
 
         #pragma region Option Title
-        Vec4 vColor = ColorConvertIntToVec4(3.f, 157.f, 252.f);
+        Vec4 vColor = ColorConvertIntToVec4(82.f, 82.f, 250.f);
         ImGui::PushID(0);
         ImGui::PushStyleColor(ImGuiCol_Button, vColor);
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, vColor);
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, vColor);
-        ImGui::Button("Options", Vec2(150.f, 25.f));
+        ImGui::Button("Options", Vec2(150.f, 50.f));
         ImGui::PopStyleColor(3);
         ImGui::PopID();
         #pragma endregion
         SPACING_UI(10);
+        ImGui::Separator();
 
         #pragma region FullScreen
+        ImGui::Text("Screen Size");
+        SPACING_UI(2);
         if (ImGui::Checkbox("FullScreen", &m_isFullScreen))
         {
             Engine::GetInst()->ToggleFullScreen();
         }
         #pragma endregion
-        SPACING_UI(10);
+        SPACING_UI(5);
+        ImGui::Separator();
 
+        #pragma region Volume Slide
+        ImGui::Text("Music");
+        SPACING_UI(2);
+        
+        ImGui::Text("BGM Volume");
+        ImGui::SameLine(600.f);
+        ImGui::Text("Mute");
+        float f = 0.f;
+        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
+        ImGui::SliderFloat("##BGM", &f, 0.f, 10.f);
+
+        bool isBgm = false;
+        ImGui::SameLine(600.f);
+        ImGui::Checkbox("##BGMMute", &isBgm);
+
+        SPACING_UI(5);
+        ImGui::Text("SFX Volume");
+        ImGui::SameLine(600.f);
+        ImGui::Text("Mute");
+        float f2 = 0.f;
+        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
+        ImGui::SliderFloat("##SFX", &f2, 0.f, 10.f);
+
+        bool isSfx = false;
+        ImGui::SameLine(600.f);
+        ImGui::Checkbox("##SFXMute", &isSfx);
+        #pragma endregion
+
+        SPACING_UI(10);
+        ImGui::Separator();
+
+        SPACING_UI(10);
         #pragma region OptionCloseBtn
-        if (ImGui::Button("Close"))
+        if (ImGuiFunc::ColoredButton("Close",
+            ColorConvertIntToVec4(12.f, 129.f, 207.f), ImVec2(100.f, 25.f)))
         {
             m_ShowOptions = false;
             ChangeLevelState(LEVEL_STATE::PLAY);
@@ -110,10 +159,23 @@ void UIMgr::RenderOptionsWindow()
             ImGui::CloseCurrentPopup();
         }
         #pragma endregion
-        SPACING_UI(10);
+        ImGui::SameLine(330.f);
 
+        #pragma region MainMenuBtn
+        if (ImGuiFunc::ColoredButton("MainMenu",
+            ColorConvertIntToVec4(12.f, 129.f, 207.f), ImVec2(100.f, 25.f)))
+        {
+            m_ShowOptions = false;
+            LevelMgr::GetInst()->ChangeMainMenu();
+            ImGui::SetWindowFocus(NULL);  // ImGui 포커스 해제 → 엔진 윈도우로 복귀
+            ImGui::CloseCurrentPopup();
+        }
+        #pragma endregion
+        ImGui::SameLine(690.f);
+
+        #pragma region ExitBtn
         if (ImGuiFunc::ColoredButton("Exit",
-            ColorConvertIntToVec4(38, 74, 27), ImVec2(120.f, 50.f)))
+            ColorConvertIntToVec4(12.f, 129.f, 207.f), ImVec2(100.f, 25.f)))
         {
             m_ShowExitConfirm = true;
             ImGui::OpenPopup("Exit?");
@@ -127,10 +189,13 @@ void UIMgr::RenderOptionsWindow()
         // 열린 직후 2프레임은 무시 (KeyMgr ↔ ImGui 입력 파이프라인 지연 보상)
         //=============================================================
         bool bSafeToClose = (ImGui::GetFrameCount() - m_OpenFrame) >= 2;
+        bool bPrevKeyPressed = (m_PrevOptionImGuiKey != ImGuiKey_None)
+                            && ImGui::IsKeyPressed(m_PrevOptionImGuiKey, false);
         if (bSafeToClose
             && !m_ShowExitConfirm
-            && ImGui::IsKeyPressed(ImGuiKey_Escape, false))
+            && (ImGui::IsKeyPressed(ImGuiKey_Escape, false) || bPrevKeyPressed))
         {
+            m_bCloseOptionsRequest = false;  // ← 요청 플래그 초기화
             m_ShowOptions = false;
             ChangeLevelState(LEVEL_STATE::PLAY);
             ImGui::SetWindowFocus(NULL);
@@ -138,6 +203,7 @@ void UIMgr::RenderOptionsWindow()
         }
 
         ImGui::EndPopup(); // ← 부모 EndPopup 나중
+        #pragma endregion
     }
 
 
@@ -238,6 +304,52 @@ void UIMgr::RenderCreditWindow()
         }
         SPACING_UI(10);
 
+        bool bSafeToClose = (ImGui::GetFrameCount() - m_CreditOpenFrame) >= 2;
+        bool bPrevKeyPressed = (m_PrevCreditImGuiKey != ImGuiKey_None)
+                            && ImGui::IsKeyPressed(m_PrevCreditImGuiKey, false);
+        if (bSafeToClose
+            && (ImGui::IsKeyPressed(ImGuiKey_Escape, false) || bPrevKeyPressed))
+        {
+            m_bCloseCreditRequest = false;
+            m_ShowCredit = false;
+            ImGui::SetWindowFocus(NULL);
+            ImGui::CloseCurrentPopup();
+        }
+
         ImGui::EndPopup();
     }
+}
+
+void UIMgr::IsShowOptions(KEY _key)
+{
+    m_PrevOptionKey = _key;
+    m_PrevOptionImGuiKey = ImGuiFunc::KeyToImGuiKey(_key);
+
+    if (m_ShowOptions)
+        m_bCloseOptionsRequest = true;
+    else
+        m_eventShowOption = true;
+}
+
+void UIMgr::ResetOptionKey()
+{
+    m_PrevOptionKey = KEY::END;
+    m_PrevOptionImGuiKey = ImGuiKey_None;
+}
+
+void UIMgr::IsShowCredit(KEY _key)
+{
+    m_PrevCreditKey = _key;
+    m_PrevCreditImGuiKey = ImGuiFunc::KeyToImGuiKey(_key);
+
+    if (m_ShowCredit)
+        m_bCloseCreditRequest = true;
+    else
+        m_eventShowCredit = true;
+}
+
+void UIMgr::ResetCreditKey()
+{
+    m_PrevCreditKey = KEY::END;
+    m_PrevCreditImGuiKey = ImGuiKey_None;
 }

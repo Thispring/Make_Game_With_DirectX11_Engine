@@ -37,13 +37,12 @@ void TimeMgr::Init()
 	QueryPerformanceCounter(&m_Current);
 	QueryPerformanceCounter(&m_Prev);
 
-	// 목표 시간 초기화 (5분)
-	m_GoalTime = 300.f;
+	// 목표 시간 초기화 
+	m_GoalTime = 600.f;
 	m_TotalPlayTime = 0.f;
 
 	// 1초 주기 갱신 전에도 Render에서 MeasureText가 유효한 문자열을 받도록 초기화
-	m_strGoalTime  = L"5:00";
-	m_strPlayTime  = L"PlayTime : 0";
+	m_strGoalTime  = L"10:00";
 	m_strFPS       = L"";
 }
 
@@ -119,14 +118,9 @@ void TimeMgr::Tick()
 		SetWindowText(Engine::GetInst()->GetMainWndHwnd(), buff);
 		m_strFPS = buff;
 
-		//// m_TotalPlayTime으로 누적 플레이 시간 표시
-		//// %.nf: 소수점 아래 n자리까지 표시
-		//// 반올림 문제가 있을 수 있으므로 정수로 형변환하여 출력
-		//wchar_t playTimeBuff[255] = {};
-		//swprintf_s(playTimeBuff, 255, L"PlayTime : %d", (int)m_TotalPlayTime);
-		//m_strPlayTime = playTimeBuff;
 
-
+		// %.nf: 소수점 아래 n자리까지 표시
+		// 반올림 문제가 있을 수 있으므로 정수로 형변환하여 출력
 		// 전체 초를 정수로 자른 뒤 분/초로 분리
 		int totalSecs = (int)m_GoalTime;
 		int minutes = totalSecs / 60;
@@ -136,10 +130,6 @@ void TimeMgr::Tick()
 		// %02d: 한 자리 수일 때 앞에 0 패딩 (예: 9 → "09")
 		swprintf_s(goalTimeBuff, 255, L"%d:%02d", minutes, seconds);
 		m_strGoalTime = goalTimeBuff;
-
-		//wchar_t goalTimeBuff[255] = {};
-		//swprintf_s(goalTimeBuff, 255, L"GoalTime : %d", (int)m_GoalTime);
-		//m_strGoalTime = goalTimeBuff;
 
 		m_FPS = 0;
 		m_Time -= 1.f;
@@ -162,28 +152,17 @@ void TimeMgr::Render()
 		}
 	}
 	
-	//// Level이 아직 등록되지 않은 초기 상태라면 이하 렌더 스킵
-	//Ptr<ALevel> pCurLevel = LevelMgr::GetInst()->GetCurLevel();
-	//if (pCurLevel == nullptr)
-	//	return;
-
-	//// Normal_Stage 키를 포함하는 레벨이 PLAY 상태일 때만 실행
-	//// find 사용 → Normal_Stage_0, Normal_Stage_1 등 복수 스테이지에도 대응
-	//const wstring& key = pCurLevel->GetKey();
-	//if (key.find(L"Normal_Stage") != wstring::npos
-	//	&& LevelMgr::GetInst()->GetLevelState() == LEVEL_STATE::PLAY)
-	//{
-	//	PlayTimeRender();
-	//}
 }
 
 void TimeMgr::PlayTimeRender()
 {
+	//================================================================================
 	// 아웃라인 포함 — 흰 텍스트 + 검정 아웃라인, 두께 1.5px
-	//FontMgr::GetInst()->DrawFontOutline(m_strPlayTime.c_str(), 10.f, 50.f, 24.f,
+	//	FontMgr::GetInst()->DrawFontOutline(m_strPlayTime.c_str(), 10.f, 50.f, 24.f,
 	//	FONT_RGBA(255, 255, 255, 255),   // 본체: 흰색
 	//	FONT_RGBA(0, 0, 0, 255),   // 아웃라인: 검정
 	//	1.5f);
+	//================================================================================
 
 	// 현재 렌더 해상도 기준 X축 중앙 정렬 (창모드·전체화면 자동 대응)
 	Vec2 vRenderResol = Device::GetInst()->GetRenderResolution();
@@ -209,5 +188,5 @@ void TimeMgr::InitPlayTime()
 
 void TimeMgr::InitGoalTime()
 {
-	m_GoalTime = 300.f;
+	m_GoalTime = 600.f;
 }

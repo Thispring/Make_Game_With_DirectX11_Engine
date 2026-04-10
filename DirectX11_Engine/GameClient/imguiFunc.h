@@ -7,11 +7,15 @@
 
 #pragma once
 #include "imgui\imgui.h"
+#include "KeyMgr.h"
 
 namespace ImGuiFunc
 {
     // Primary API (declared, implemented in imguiFunc.cpp)
     bool ColoredButton(const char* label, const ImVec4& baseColor, const ImVec2& size = ImVec2(0, 0));
+
+    // KEY::A~Z 를 대응하는 ImGuiKey 로 변환 (범위 밖이면 ImGuiKey_None 반환)
+    ImGuiKey KeyToImGuiKey(KEY _key);
 
     // Convenience overload (implemented inline to forward to primary API)
     inline bool ColoredButton(const char* label, const ImVec4& baseColor, float w, float h)

@@ -14,14 +14,17 @@ private:
 	// SoundMgr에서 ASound를 묶어서 관리하고, 원하는 동작을 구현합니다.
 	// ex) 전체 BGM mute, 전체 SFX mute
 	//============================================================
-	map<SOUND_TYPE, Ptr<ASound>>		m_SoundMap;
+	map<SOUND_TYPE, map<wstring, Ptr<ASound>>>			m_SoundGroups;
 
-	bool								m_isBGMMute;
-	bool								m_isSFXMute;
+	bool												m_isBGMMute;
+	bool												m_isSFXMute;
 
 public:
 	void Init();
 	void Progress();
 
-	void PlayBGM();
+	void PlayBGM(wstring _LevelName);
+	void StopPrevBGM();
+
+	void PlaySFX(wstring _SFXName);
 };

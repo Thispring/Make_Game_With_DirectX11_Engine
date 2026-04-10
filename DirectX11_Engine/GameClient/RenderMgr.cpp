@@ -34,9 +34,18 @@ void RenderMgr::Init()
 
 void RenderMgr::Progress()
 {
-	if (KEY_TAP(KEY::F9))
-		m_IsDebugRender ? m_IsDebugRender = false : m_IsDebugRender = true;
+	//if (KEY_TAP(KEY::F9))
+	//	m_IsDebugRender ? m_IsDebugRender = false : m_IsDebugRender = true;
 
+#ifdef _DEBUG
+	// 디버그 빌드에서만 실행되는 코드
+	m_IsDebugRender = true;
+#endif
+
+#ifndef _DEBUG
+	// 릴리즈 빌드에서만 실행되는 코드
+	m_IsDebugRender = false;
+#endif
 
 	// 렌더링 시작 전에 할 일
 	Render_Start();

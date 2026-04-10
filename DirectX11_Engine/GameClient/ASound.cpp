@@ -115,6 +115,12 @@ int ASound::Load(const wstring& _FilePath)
 	return S_OK;
 }
 
+// 현재 사운드가 재생 중인지 반환
+bool ASound::IsPlaying() const
+{
+    return !m_listChannel.empty();
+}
+
 // =========
 // Call Back
 // =========

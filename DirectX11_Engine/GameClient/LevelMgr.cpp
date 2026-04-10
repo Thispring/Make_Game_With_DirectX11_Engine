@@ -9,6 +9,7 @@
 #include "GameMgr.h"
 #include "RandomMgr.h"
 #include "KeyMgr.h"
+#include "UIMgr.h"
 #include "CinematicMgr.h"
 #include "SoundMgr.h"
 
@@ -64,6 +65,10 @@ void LevelMgr::GameStart()
 		return;
 
 	// func.cpp의 ChangeLevel 함수를 호출하려면 스코프연산자::를 앞에 붙입니다.
+	// Level_0으로 전환 전, MainMenu에서 등록된 Option/Credit Key 초기화
+	UIMgr::GetInst()->ResetOptionKey();
+	UIMgr::GetInst()->ResetCreditKey();
+
 	::ChangeLevel(L"Level\\Normal_Stage_0.lv");
 	::ChangeLevelState(LEVEL_STATE::CINEMATIC);
 }
@@ -118,9 +123,6 @@ void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 		// 레벨 오브젝트 준비 완료 후 카메라 탐색 및 원점 기록
 		CinematicMgr::GetInst()->Init();
 
-		// BGM 재생
-		SoundMgr::GetInst()->PlayBGM();
-
 		return;
 	}
 
@@ -170,7 +172,11 @@ void LevelMgr::ChangeLevelState(LEVEL_STATE _NextState)
 		// NOTE(26-04-09): CINEMATIC 전환 이후, 한 번만 이곳을 호출해야 하며,
 		// PLAY <-> PAUSE 전환은 바로 return을 하기에 이곳에 들어올 수 없음
 
-
+		// 이전에 재생하던 BGM이 있다면 정지하고
+		SoundMgr::GetInst()->StopPrevBGM();
+		// BGM 재생
+		SoundMgr::GetInst()->PlayBGM(m_CurLevel->GetKey());
+		
 		// 콘텐츠 관리 매니저 초기화
 		GameMgr::GetInst()->Init();
 		// 콘텐츠에 사용할 난수 초기화
@@ -197,6 +203,13 @@ void LevelMgr::ChangeLevel(Ptr<ALevel> _NextLevel)
 
 void LevelMgr::Init()
 {
+	// NOTE(26-04-10): 릴리즈 빌드에서
+	// 해당 주석 해제
+#ifndef _DEBUG
+	// 릴리즈 빌드에서만 실행되는 코드
+	::ChangeLevel(L"Level\\MainMenu.lv");
+	::ChangeLevelState(LEVEL_STATE::PLAY);
+#endif
 
 }
 

@@ -223,6 +223,16 @@ KEY: LBTN
 KEY_STATE: PRESSED
 Source File: CCamMoveScript.cpp
 
+Comment: MainMenu로 돌아가기
+KEY: H
+KEY_STATE: PRESSED
+Source File: CEndingLevelController.cpp
+
+Comment: MainMenu로 돌아가기
+KEY: H
+KEY_STATE: PRESSED
+Source File: CGameOverController.cpp
+
 Comment: No Comment
 KEY: RIGHT
 KEY_STATE: PRESSED
@@ -247,14 +257,4 @@ Comment: F9는 디버그 렌더 On/Off
 KEY: F6
 KEY_STATE: TAP
 Source File: CPlayerStateManager.cpp
-
-Comment: ESC: 팝업 "열기"만 담당 (닫기는 RenderOptionsWindow 내부에서 처리)
-KEY: ESC
-KEY_STATE: TAP
-Source File: UIMgr.cpp
-
-Comment: 둘다 열리지 않게 방지
-KEY: CTRL
-KEY_STATE: TAP
-Source File: UIMgr.cpp
 

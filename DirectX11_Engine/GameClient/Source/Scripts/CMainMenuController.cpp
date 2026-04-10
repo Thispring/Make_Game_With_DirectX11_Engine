@@ -8,6 +8,7 @@
 #include "RandomMgr.h"
 #include "LevelMgr.h"
 #include "ScoreMgr.h"
+#include "UIMgr.h"
 
 CMainMenuController::CMainMenuController()
 	: CScript(SCRIPT_TYPE::MAINMENUCONTROLLER)
@@ -24,7 +25,7 @@ CMainMenuController::~CMainMenuController()
 
 void CMainMenuController::Start(KEY _Key)
 {
-	if (KEY_PRESSED(_Key))
+	if (KEY_TAP(_Key))
 	{
 		// Level 변경 및 시작
 		LevelMgr::GetInst()->GameStart();
@@ -33,36 +34,25 @@ void CMainMenuController::Start(KEY _Key)
 
 void CMainMenuController::Option(KEY _Key)
 {
-	if (KEY_PRESSED(_Key))
+	if (KEY_TAP(_Key))
 	{
 		// Option 창 활성화
+		UIMgr::GetInst()->IsShowOptions(_Key);
 	}
 }
 
 void CMainMenuController::Credit(KEY _Key)
 {
-	if (KEY_PRESSED(_Key))
+	if (KEY_TAP(_Key))
 	{
 		// Credit 창 활성화
+		UIMgr::GetInst()->IsShowCredit(_Key);
 	}
 }
 
 void CMainMenuController::ShuffleKey()
 {
 	RandomMgr::GetInst()->GetRandomKeyArray(m_StartKey, m_OptionKey, m_CreditKey);
-
-	//KEY arryKey[3] = {};
-
-	//RandomMgr::GetInst()->ShuffleKeyNum();
-
-	//for (UINT i = 0; i < 3; ++i)
-	//{
-	//	arryKey[i] = RandomMgr::GetInst()->GetRandomKey(3);
-	//}
-
-	//m_StartKey = arryKey[0];
-	//m_OptionKey = arryKey[1];	
-	//m_CreditKey = arryKey[2];
 	return;
 }
 

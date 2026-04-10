@@ -15,6 +15,7 @@ private:
 
 	vector<Ptr<GameObject>>		m_vecEditorObj; // Editor 모드에서 사용할 오브젝트 모음 (Editor 카메라)
 	
+	bool						m_isRelease;
 
 	//=================
 	// private 멤버 함수

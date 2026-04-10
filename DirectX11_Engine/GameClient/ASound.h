@@ -26,6 +26,9 @@ public:
     void RemoveChannel(FMOD::Channel* _pTargetChannel);
     void Stop();
 
+    // 현재 사운드가 재생 중인지 반환
+    bool IsPlaying() const;
+
     // 0 ~ 1
     void SetVolume(float _f, int _iChannelIdx);
 

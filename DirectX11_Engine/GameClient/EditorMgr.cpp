@@ -36,6 +36,7 @@
 EditorMgr::EditorMgr()
     : m_ShowDemo(false)     // ImGui Demo UI 활성/비활성
     , m_UIVisible(true)     // 기본값: UI 표시
+    , m_isRelease(false)
 {
 }
 
@@ -84,6 +85,11 @@ void EditorMgr::Tick()
 
     m_FocusedUI = nullptr;
     
+    if (nullptr != m_FocusedUI)
+        KeyMgr::GetInst()->SetActive(false);
+    else
+        KeyMgr::GetInst()->SetActive(true);
+
     // DemoUI 활성/비활성화
     // Enable/Disable DemoUI
     if (KEY_TAP(KEY::F8))
@@ -106,10 +112,10 @@ void EditorMgr::Tick()
             pair.second->Tick();
     }
 
-    if (nullptr != m_FocusedUI)
-        KeyMgr::GetInst()->SetActive(false);
-    else
-        KeyMgr::GetInst()->SetActive(true);
+    //if (nullptr != m_FocusedUI)
+    //    KeyMgr::GetInst()->SetActive(false);
+    //else
+    //    KeyMgr::GetInst()->SetActive(true);
 
     
     /*******************************************************
@@ -226,6 +232,16 @@ void EditorMgr::CreateEditorObject()
 
 void EditorMgr::Init()
 {
+#ifdef _DEBUG
+    // 디버그 빌드에서만 실행되는 코드
+    m_isRelease = false;
+#endif
+
+#ifndef _DEBUG
+    // 릴리즈 빌드에서만 실행되는 코드
+    m_isRelease = true;
+#endif
+
     // Make process DPI aware and obtain main monitor scale
     ImGui_ImplWin32_EnableDpiAwareness();
     float main_scale = ImGui_ImplWin32_GetDpiScaleForMonitor(::MonitorFromPoint(POINT{ 0, 0 }, MONITOR_DEFAULTTOPRIMARY));

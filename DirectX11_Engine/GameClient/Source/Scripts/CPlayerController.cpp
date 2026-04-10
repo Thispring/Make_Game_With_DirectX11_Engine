@@ -84,9 +84,11 @@ void CPlayerController::Punch(KEY _key)
 
 void CPlayerController::Kick(KEY _key)
 {
+	// Kick의 경우 발견이벤트 바로 적용
+	m_bKeyRevealed[KICK_KEY] = true;
+	
 	if (KEY_TAP(_key))
 	{
-		m_bKeyRevealed[KICK_KEY] = true;
 
 		// 콜라이더 활성화 및 IsAttack 설정은 PlayerMiddleKickState::Begin()에서 처리
 		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::MIDDLE_KICK));

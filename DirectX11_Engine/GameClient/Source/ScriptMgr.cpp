@@ -11,6 +11,7 @@
 #include "Scripts/CEnemyStateManager.h"
 #include "Scripts/CEnergyBlast.h"
 #include "Scripts/CFlowerProjectile.h"
+#include "Scripts/CGameOverController.h"
 #include "Scripts/CMainMenuController.h"
 #include "Scripts/CMovingPlatform.h"
 #include "Scripts/CParallaxLayer.h"
@@ -35,6 +36,7 @@ void ScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CEnemyStateManager");
 	_vec.push_back(L"CEnergyBlast");
 	_vec.push_back(L"CFlowerProjectile");
+	_vec.push_back(L"CGameOverController");
 	_vec.push_back(L"CMainMenuController");
 	_vec.push_back(L"CMovingPlatform");
 	_vec.push_back(L"CParallaxLayer");
@@ -69,6 +71,8 @@ CScript * ScriptMgr::GetScript(const wstring& _strScriptName)
 		return NEW CEnergyBlast;
 	if (L"CFlowerProjectile" == _strScriptName)
 		return NEW CFlowerProjectile;
+	if (L"CGameOverController" == _strScriptName)
+		return NEW CGameOverController;
 	if (L"CMainMenuController" == _strScriptName)
 		return NEW CMainMenuController;
 	if (L"CMovingPlatform" == _strScriptName)
@@ -126,6 +130,9 @@ CScript * ScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::FLOWERPROJECTILE:
 		return NEW CFlowerProjectile;
+		break;
+	case (UINT)SCRIPT_TYPE::GAMEOVERCONTROLLER:
+		return NEW CGameOverController;
 		break;
 	case (UINT)SCRIPT_TYPE::MAINMENUCONTROLLER:
 		return NEW CMainMenuController;
@@ -205,6 +212,10 @@ const wchar_t * ScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::FLOWERPROJECTILE:
 		return L"CFlowerProjectile";
+		break;
+
+	case SCRIPT_TYPE::GAMEOVERCONTROLLER:
+		return L"CGameOverController";
 		break;
 
 	case SCRIPT_TYPE::MAINMENUCONTROLLER:
@@ -290,6 +301,9 @@ const char* ScriptMgr::GetScriptName(SCRIPT_TYPE _Type)
 	case FLOWERPROJECTILE: return "CFlowerProjectile";
 		break;
 
+	case GAMEOVERCONTROLLER: return "CGameOverController";
+		break;
+
 	case MAINMENUCONTROLLER: return "CMainMenuController";
 		break;
 
@@ -357,6 +371,8 @@ CScript * ScriptMgr::GetScript(const char* _strScriptName)
 		return NEW CEnergyBlast;
 	if (0 == strcmp(_strScriptName, "CFlowerProjectile"))
 		return NEW CFlowerProjectile;
+	if (0 == strcmp(_strScriptName, "CGameOverController"))
+		return NEW CGameOverController;
 	if (0 == strcmp(_strScriptName, "CMainMenuController"))
 		return NEW CMainMenuController;
 	if (0 == strcmp(_strScriptName, "CMovingPlatform"))
@@ -405,6 +421,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const std::wstring& _strScriptName)
 		return ENERGYBLAST;
 	if (L"CFlowerProjectile" == _strScriptName)
 		return FLOWERPROJECTILE;
+	if (L"CGameOverController" == _strScriptName)
+		return GAMEOVERCONTROLLER;
 	if (L"CMainMenuController" == _strScriptName)
 		return MAINMENUCONTROLLER;
 	if (L"CMovingPlatform" == _strScriptName)
@@ -453,6 +471,8 @@ SCRIPT_TYPE ScriptMgr::GetScriptType(const char* _strScriptName)
 		return ENERGYBLAST;
 	if (0 == strcmp(_strScriptName, "CFlowerProjectile"))
 		return FLOWERPROJECTILE;
+	if (0 == strcmp(_strScriptName, "CGameOverController"))
+		return GAMEOVERCONTROLLER;
 	if (0 == strcmp(_strScriptName, "CMainMenuController"))
 		return MAINMENUCONTROLLER;
 	if (0 == strcmp(_strScriptName, "CMovingPlatform"))

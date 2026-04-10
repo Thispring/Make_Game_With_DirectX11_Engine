@@ -21,10 +21,13 @@ int Device::Init(HWND _hwnd, Vec2 _Resolution)
 	m_RenderResol = _Resolution;
 	g_Global.Resolution = m_RenderResol;
 
+	UINT iFlag = 0;
+
 #ifdef _DEBUG
-	UINT iFlag = D3D11_CREATE_DEVICE_DEBUG;
+	iFlag = D3D11_CREATE_DEVICE_DEBUG;
 #endif
 	D3D_FEATURE_LEVEL* pLevel = nullptr;
+
 
 	/******************************************************************************************************
 	* 이중 포인터

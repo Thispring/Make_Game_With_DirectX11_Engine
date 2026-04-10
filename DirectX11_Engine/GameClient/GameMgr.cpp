@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "GameMgr.h"
+
 #include "LevelMgr.h"
 #include "AssetMgr.h"
-
+#include "TimeMgr.h"
 
 GameMgr::GameMgr()
 	: m_Player(nullptr)
@@ -38,6 +39,19 @@ void GameMgr::Init()
 
 	assert(m_Player != nullptr && "Not find Player Object");
 	assert(m_PlayerData != nullptr && "Not find PlayerData");
+}
+
+void GameMgr::Progress()
+{
+	// 게임 시작 후, GoalTime이 0이된다면 GameOver Level로 변경
+	float time = TimeMgr::GetInst()->GetGoalTime();
+
+	if (time <= 0.f)
+	{
+		// GameOver Level 변경
+		LevelMgr::GetInst()->ChangeGameOver();
+		return;
+	}
 }
 
 void GameMgr::LevelPlayInit()

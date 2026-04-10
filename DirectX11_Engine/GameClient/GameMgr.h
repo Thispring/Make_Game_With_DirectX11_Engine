@@ -26,6 +26,8 @@ public:
 	//=========
 	// Level 시작 시, 필요한 멤버 데이터를 초기화
 	void Init();
+	void Progress();
+
 	void LevelPlayInit();
 	void RegisterPlayerSave(Vec3 _SavePos);
 

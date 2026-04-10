@@ -457,6 +457,9 @@
     <ClInclude Include="Source\Scripts\CMovingPlatform.h">
       <Filter>Source\ContentScript\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Scripts\CGameOverController.h">
+      <Filter>Source\ContentScript\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -890,6 +893,9 @@
     </ClCompile>
     <ClCompile Include="Source\Scripts\CMovingPlatform.cpp">
       <Filter>Source\ContentScript\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CGameOverController.cpp">
+      <Filter>Source\ContentScript\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

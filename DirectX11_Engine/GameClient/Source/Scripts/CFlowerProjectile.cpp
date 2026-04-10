@@ -112,8 +112,8 @@ void CFlowerProjectile::Tick()
 
 	m_TravelTime += DT;
 
-	// 2초이상 지났다면 삭제요청
-	if (m_TravelTime >= 2.f)
+	// 시간에 따른 삭제요청
+	if (m_TravelTime >= 3.f)
 	{
 		DestroyProjectile();
 		return;

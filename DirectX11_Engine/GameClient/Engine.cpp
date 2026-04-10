@@ -13,6 +13,7 @@
 #include "UIMgr.h"
 #include "ScoreMgr.h"
 #include "SoundMgr.h"
+#include "GameMgr.h"
 
 Engine::Engine()
 	: // 명시되어 있지 않지만, 상속받은 부모의 생성자가 숨어있음
@@ -67,8 +68,12 @@ int Engine::Progress()
 	// CinematicMgr 업데이트
 	CinematicMgr::GetInst()->Progress();
 
+	// GameMgr 업데이트
+	GameMgr::GetInst()->Progress();
+
 	// Ending Level 용 Render
 	FontMgr::GetInst()->PrintEnding();
+
 	// GameOver
 	FontMgr::GetInst()->PrintGameOver();
 

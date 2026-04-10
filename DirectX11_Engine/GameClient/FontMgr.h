@@ -16,6 +16,8 @@ class FontMgr :
 private:
     IFW1Factory*        m_FW1Factory;
     IFW1FontWrapper*    m_FontWrapper;
+    HANDLE              m_hFontResource = nullptr;
+    std::vector<BYTE>   m_fontBuffer;
 
 public:
     void Init();
