@@ -39,6 +39,11 @@ private:
     int     m_OverlapCount; // 충돌에 대한 카운트
     bool    m_Enabled;      // 콜라이더 활성화 여부 (충돌 검사에 사용)
 
+    // 경사면(플랫폼) 충돌 최적화를 위한 캐싱 멤버
+    Matrix  m_CachedInvWorldMat;
+    Vec3    m_CachedNormal;
+    bool    m_CacheDirty = true;
+
     vector<COLLISION_DELEGATE>  m_vecBeginDel;
     vector<COLLISION_DELEGATE>  m_vecOverDel;
     vector<COLLISION_DELEGATE>  m_vecEndDel;
@@ -107,4 +112,17 @@ public:
     // friend class
     //=============
     friend class CollisionMgr;
+
+    // 캐시 갱신 (월드 행렬 변경 시 호출)
+    void UpdateSlopeCache()
+    {
+        m_CachedInvWorldMat = m_matWorld.Invert();
+        m_CachedNormal = Vec3(m_matWorld._21, m_matWorld._22, m_matWorld._23);
+        m_CachedNormal.Normalize();
+        m_CacheDirty = false;
+    }
+    const Matrix& GetCachedInvWorldMat() const { return m_CachedInvWorldMat; }
+    const Vec3& GetCachedNormal() const { return m_CachedNormal; }
+    bool IsCacheDirty() const { return m_CacheDirty; }
+    void SetCacheDirty(bool dirty) { m_CacheDirty = dirty; }
 };

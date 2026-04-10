@@ -12,92 +12,45 @@ CollisionMgr::~CollisionMgr()
 
 void CollisionMgr::CollisionBtwLayer(Layer* _Left, Layer* _Right)
 {
-	const vector<Ptr<GameObject>>& vecLeft = _Left->GetAllObjects();
-	const vector<Ptr<GameObject>>& vecRight = _Right->GetAllObjects();
+	// Dead/Collider 없는 오브젝트 미리 필터링
+	std::vector<Ptr<GameObject>> filteredLeft, filteredRight;
+	for (auto& obj : _Left->GetAllObjects()) {
+		if (obj.Get() && obj->Collider2D().Get() && !obj->IsDead())
+			filteredLeft.push_back(obj);
+	}
+	for (auto& obj : _Right->GetAllObjects()) {
+		if (obj.Get() && obj->Collider2D().Get() && !obj->IsDead())
+			filteredRight.push_back(obj);
+	}
 
-	for (size_t i = 0; i < vecLeft.size(); i++)
-	{
-		// 충돌하는 모든 오브젝트에 Collider가 있을 때만 검사
-		if (vecLeft[i]->Collider2D() == nullptr)
-			continue;
-
-		for (size_t j = 0; j < vecRight.size(); j++)
-		{
-			// 충돌하는 모든 오브젝트에 Collider가 있을 때만 검사
-			if (vecRight[j]->Collider2D() == nullptr)
-				continue;
-
-			// 두 충돌체의 고유 ID 로 조합을한 키값 생성
+	for (size_t i = 0; i < filteredLeft.size(); i++) {
+		for (size_t j = 0; j < filteredRight.size(); j++) {
 			COL_ID colid;
-			colid.LeftID = vecLeft[i]->Collider2D()->GetID();
-			colid.RightID = vecRight[j]->Collider2D()->GetID();
+			colid.LeftID = filteredLeft[i]->Collider2D()->GetID();
+			colid.RightID = filteredRight[j]->Collider2D()->GetID();
 
-			map<ULONGLONG, bool>::iterator iter = m_mapColID.find(colid.ID);
-	
-			if (iter == m_mapColID.end())
-			{
-				m_mapColID.insert(make_pair(colid.ID, false));
+			auto iter = m_mapColID.find(colid.ID);
+			if (iter == m_mapColID.end()) {
+				m_mapColID.insert(std::make_pair(colid.ID, false));
 				iter = m_mapColID.find(colid.ID);
 			}
 
-			// 충돌 검사를 진행하는 두 오브젝트 중에서 하나라도 Dead 상태인지를 체크
-			bool IsDead = vecLeft[i]->IsDead() || vecRight[j]->IsDead();
-
-			// 현재 충돌 중임
-			if (IsCollision(vecLeft[i]->Collider2D(), vecRight[j]->Collider2D()))
-			{
-				// 둘 중 하나가 곧 삭제라면
-				// 양쪽 충돌체의 EndOverlap 호출
-				if (IsDead)
-				{
-					vecLeft[i]->Collider2D()->EndOverlap(vecRight[j]->Collider2D());
-					vecRight[j]->Collider2D()->EndOverlap(vecLeft[i]->Collider2D());
+			if (IsCollision(filteredLeft[i]->Collider2D(), filteredRight[j]->Collider2D())) {
+				if (iter->second) {
+					filteredLeft[i]->Collider2D()->Overlap(filteredRight[j]->Collider2D());
+					filteredRight[j]->Collider2D()->Overlap(filteredLeft[i]->Collider2D());
+				} else {
+					filteredLeft[i]->Collider2D()->BeginOverlap(filteredRight[j]->Collider2D());
+					filteredRight[j]->Collider2D()->BeginOverlap(filteredLeft[i]->Collider2D());
 				}
-				// 이전에도 충돌했었는지 검사
-				else if (iter->second)
-				{
-					vecLeft[i]->Collider2D()->Overlap(vecRight[j]->Collider2D());
-					vecRight[j]->Collider2D()->Overlap(vecLeft[i]->Collider2D());
-				}
-				// 이전에는 충돌하지 않았음
-				else
-				{
-					vecLeft[i]->Collider2D()->BeginOverlap(vecRight[j]->Collider2D());
-					vecRight[j]->Collider2D()->BeginOverlap(vecLeft[i]->Collider2D());
-				}
-
 				iter->second = true;
-			}
-			// 현재 충돌 중이 아님
-			else
-			{
-				// 이전 프레임에는 충돌 중이었다.
-				if (iter->second)
-				{
-					vecLeft[i]->Collider2D()->EndOverlap(vecRight[j]->Collider2D());
-					vecRight[j]->Collider2D()->EndOverlap(vecLeft[i]->Collider2D());
+			} else {
+				if (iter->second) {
+					filteredLeft[i]->Collider2D()->EndOverlap(filteredRight[j]->Collider2D());
+					filteredRight[j]->Collider2D()->EndOverlap(filteredLeft[i]->Collider2D());
 				}
-
 				iter->second = false;
 			}
-
-			//// 검사하려면 모든 오브젝트에 Collider가 있는지 검사
-			//if (IsCollision(vecLeft[i]->Collider2D(), vecRight[j]->Collider2D()))
-			//{
-			//	vecLeft[i]->Collider2D()->Overlap(vecRight[j]->Collider2D());
-			//	vecRight[j]->Collider2D()->Overlap(vecLeft[i]->Collider2D());
-			//	
-			//	// 만약 Left 충돌체의 GameObject Layer번호가 8번이라면, 다른 오버랩 호출?
-			//	// Layer 번호 4(무기), 8(플레이어의 자식 오브젝트) 끼리 충돌했다면
-			//	// EndOverlap을 호출
-			//	if (vecLeft[i]->GetLayerIdx() == 4 && vecRight[j]->GetLayerIdx() == 8)
-			//	{
-			//		// 특정 Layer끼리의 충돌일 시 
-			//		// EndOverlap을 호출 시키고, 로직작성
-			//		vecLeft[i]->Collider2D()->EndOverlap(vecRight[j]->Collider2D());
-			//	}
-			//}
-
 		}
 	}
 }
@@ -231,20 +184,26 @@ bool CollisionMgr::IsCollisionSectorVsAny(Ptr<CCollider2D> _Sector, Ptr<CCollide
 		if (_Target->GetShape() == COLLIDER2D_SHAPE::RECT)
 		{
 			Matrix mat = _Target->GetWorldMat();
-			Vec3 corners[4];
-			corners[0] = XMVector3TransformCoord(Vec3(-0.5f, -0.5f, 0.f), mat);
-			corners[1] = XMVector3TransformCoord(Vec3(-0.5f,  0.5f, 0.f), mat);
-			corners[2] = XMVector3TransformCoord(Vec3( 0.5f, -0.5f, 0.f), mat);
-			corners[3] = XMVector3TransformCoord(Vec3( 0.5f,  0.5f, 0.f), mat);
-			for (int i = 0; i < 4; ++i)
+			// 9개 샘플링 포인트 정의
+			Vec3 testPoints[9] = {
+				Vec3(-0.5f, -0.5f, 0.f), Vec3(-0.5f,  0.5f, 0.f),
+				Vec3(0.5f, -0.5f, 0.f), Vec3(0.5f,  0.5f, 0.f),
+				Vec3(0.f,   0.f,  0.f), Vec3(-0.5f,  0.f,  0.f),
+				Vec3(0.5f,  0.f,  0.f), Vec3(0.f,  -0.5f, 0.f),
+				Vec3(0.f,   0.5f, 0.f)
+			};
+
+			for (int i = 0; i < 9; ++i)
 			{
-				if (IsPointInSector(corners[i], vTip, vDir, fRadius, fHalfAngle))
+				Vec3 worldPt = XMVector3TransformCoord(testPoints[i], mat);
+				if (IsPointInSector(worldPt, vTip, vDir, fRadius, fHalfAngle))
 					return true;
 			}
 
+			// 역방향 검사: 섹터의 팁이 사각형 안에 있는지 확인
 			Matrix matInverse = mat.Invert();
 			Vec3 vLocalTip = XMVector3TransformCoord(vTip, matInverse);
-			if (vLocalTip.x >= -0.5f && vLocalTip.x <= 0.5f && vLocalTip.y >= -0.5f && vLocalTip.y <= 0.5f) return true;
+			if (fabs(vLocalTip.x) <= 0.5f && fabs(vLocalTip.y) <= 0.5f) return true;
 		}
 	}
 
@@ -272,44 +231,50 @@ bool CollisionMgr::IsCollisionLargeBaseConeVsAny(Ptr<CCollider2D> _LBC, Ptr<CCol
 
 	if (_Target->GetShape() == COLLIDER2D_SHAPE::CIRCLE)
 	{
-		float angle = atan2f(fabs(x), y); 
+		float angle = atan2f(fabs(x), y);
 		if (angle > fLbcHalfAngle && y < 0.f)
 			return false;
 
 		float distSq = (x * x) / (fLbcRadiusX * fLbcRadiusX) + (y * y) / (fLbcRadiusY * fLbcRadiusY);
-		float ext = 1.f + (fTargetRadius / fLbcRadiusY); 
+		float ext = 1.f + (fTargetRadius / fLbcRadiusY);
 
 		if (distSq <= ext * ext && y >= -fTargetRadius)
 			return true;
 	}
 	else if (_Target->GetShape() == COLLIDER2D_SHAPE::RECT || _Target->GetShape() == COLLIDER2D_SHAPE::SECTOR || _Target->GetShape() == COLLIDER2D_SHAPE::LARGE_BASE_CONE)
 	{
-		float angle = atan2f(fabs(x), y); 
-		if (angle <= fLbcHalfAngle && ((x*x)/(fLbcRadiusX*fLbcRadiusX) + (y*y)/(fLbcRadiusY*fLbcRadiusY)) <= 1.f)
+		// 1. 타겟의 중심점이 원뿔 안에 있는지 기본 검사
+		float angle = atan2f(fabs(x), y);
+		if (angle <= fLbcHalfAngle && ((x * x) / (fLbcRadiusX * fLbcRadiusX) + (y * y) / (fLbcRadiusY * fLbcRadiusY)) <= 1.f)
 			return true;
 
 		if (_Target->GetShape() == COLLIDER2D_SHAPE::RECT)
 		{
+			// 2. RECT일 경우 9개 점 샘플링 검사 (꼭짓점 4 + 변 중앙 4 + 중심 1)
 			Matrix matTargetLocal = _Target->GetWorldMat() * matInverse;
-			Vec3 corners[4];
-			corners[0] = XMVector3TransformCoord(Vec3(-0.5f, -0.5f, 0.f), matTargetLocal);
-			corners[1] = XMVector3TransformCoord(Vec3(-0.5f,  0.5f, 0.f), matTargetLocal);
-			corners[2] = XMVector3TransformCoord(Vec3( 0.5f, -0.5f, 0.f), matTargetLocal);
-			corners[3] = XMVector3TransformCoord(Vec3( 0.5f,  0.5f, 0.f), matTargetLocal);
+			Vec3 testPoints[9] = {
+				Vec3(-0.5f, -0.5f, 0.f), Vec3(-0.5f,  0.5f, 0.f),
+				Vec3(0.5f, -0.5f, 0.f), Vec3(0.5f,  0.5f, 0.f),
+				Vec3(0.f,   0.f,  0.f), Vec3(-0.5f,  0.f,  0.f),
+				Vec3(0.5f,  0.f,  0.f), Vec3(0.f,  -0.5f, 0.f),
+				Vec3(0.f,   0.5f, 0.f)
+			};
 
-			for(int i=0; i<4; ++i)
+			for (int i = 0; i < 9; ++i)
 			{
-				float cx = corners[i].x;
-				float cy = corners[i].y;
+				Vec3 pt = XMVector3TransformCoord(testPoints[i], matTargetLocal);
+				float cx = pt.x;
+				float cy = pt.y;
 				float a = atan2f(fabs(cx), cy);
-				if (a <= fLbcHalfAngle && ((cx*cx)/(fLbcRadiusX*fLbcRadiusX) + (cy*cy)/(fLbcRadiusY*fLbcRadiusY)) <= 1.f)
+				if (a <= fLbcHalfAngle && ((cx * cx) / (fLbcRadiusX * fLbcRadiusX) + (cy * cy) / (fLbcRadiusY * fLbcRadiusY)) <= 1.f)
 					return true;
 			}
 
-			// 중심 처리도 RECT의 경우
-			Vec3 lc = XMVector3TransformCoord(Vec3(0,0,0), matTargetLocal);
-			float lc_a = atan2f(fabs(lc.x), lc.y);
-			if (lc_a <= fLbcHalfAngle && ((lc.x*lc.x)/(fLbcRadiusX*fLbcRadiusX) + (lc.y*lc.y)/(fLbcRadiusY*fLbcRadiusY)) <= 1.f)
+			// 3. 역방향 검사: 원뿔의 원점(Tip)이 RECT 내부에 있는지 확인
+			Matrix matConeInTarget = _LBC->GetWorldMat() * _Target->GetWorldMat().Invert();
+			Vec3 vConeTipInTarget = XMVector3TransformCoord(Vec3(0.f, 0.f, 0.f), matConeInTarget);
+
+			if (fabs(vConeTipInTarget.x) <= 0.5f && fabs(vConeTipInTarget.y) <= 0.5f)
 				return true;
 		}
 	}

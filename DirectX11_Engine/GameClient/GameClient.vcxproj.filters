@@ -460,6 +460,7 @@
     <ClInclude Include="Source\Scripts\CGameOverController.h">
       <Filter>Source\ContentScript\UI</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -1246,6 +1247,7 @@
     <ResourceCompile Include="GameClient.rc">
       <Filter>Default</Filter>
     </ResourceCompile>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="std2d.fx">

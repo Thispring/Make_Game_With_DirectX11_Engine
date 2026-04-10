@@ -2,6 +2,7 @@
 #include "ALevel.h"
 #include "Layer.h"
 #include "CCollider2D.h"
+#include <unordered_map>
 
 union COL_ID
 {

@@ -90,6 +90,9 @@ void EditorMgr::Tick()
     else
         KeyMgr::GetInst()->SetActive(true);
 
+    if (m_isRelease)
+        return;
+
     // DemoUI 활성/비활성화
     // Enable/Disable DemoUI
     if (KEY_TAP(KEY::F8))

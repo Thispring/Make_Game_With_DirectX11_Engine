@@ -110,6 +110,7 @@ void CCollider2D::FinalTick()
 	// 최종적으로 m_matWorld의 크기 변화가 이루어 집니다.
 	m_matWorld = matScale * matTran;
 	m_matWorld *= Transform()->GetWorldMat();
+	m_CacheDirty = true; // Transform 변경 시 캐시 invalidate
 
 	Vec4 vDbgColor = (0 < m_OverlapCount) ? Vec4(1.f, 0.f, 0.f, 1.f) : ((m_OverlapCount == 0) ? Vec4(0.f, 1.f, 0.f, 1.f) : Vec4(0,0,0,0));
 

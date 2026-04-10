@@ -264,6 +264,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="RandomMgr.h" />
     <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="ScoreMgr.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Singleton.h" />
@@ -466,6 +467,7 @@ call CodeGen.exe</Command>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameClient.rc" />
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico" />
