@@ -4,10 +4,15 @@
 #include "GameObject.h"
 
 #include "CEnemyStateManager.h"
+#include "TimeMgr.h"
+
 
 CEnemyEyes::CEnemyEyes()
 	: CScript(SCRIPT_TYPE::ENEMYEYES)
 {
+	m_fTimeSinceLastDetect = 1000.f;
+	m_fDetectGraceTime = 0.18f; // 허용 시간
+	m_bPlayerRecentlyDetected = false;
 }
 
 CEnemyEyes::~CEnemyEyes()
@@ -19,8 +24,12 @@ void CEnemyEyes::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherColl
 	if (m_EnemyData->GetIsDead() == true)
 		return;
 
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == 3)
+    if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
 	{
+        // 감지: 타이머 리셋
+		m_bPlayerRecentlyDetected = true;
+		m_fTimeSinceLastDetect = 0.f;
+
 		// 만약 GHOST_SKULL 이거나 GHOST_SKULL_MOVE 이라면 추적 X
 		Ptr<CEnemyStateManager> pMgr = GetOwner()->GetParent()->GetScript<CEnemyStateManager>();
 		ENEMY_STATE curState = pMgr->GetCurCommonState();
@@ -47,6 +56,17 @@ void CEnemyEyes::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
 	// MovementBoundary와 충돌했거나, 가까운 상태에서 Chase 상태라면 Idle로 변경 or 
 	// 일정 시간 반대방향으로 Chase
+    // 플레이어와 지속적으로 겹칠 경우 타이머 리셋
+	if (_OtherCollider && _OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
+	{
+		m_bPlayerRecentlyDetected = true;
+		m_fTimeSinceLastDetect = 0.f;
+	}
+
+	if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLYING)
+	{
+		int a = 0;
+	}
 
 	if (m_EnemyData->GetIsDead() == true)
 	{
@@ -56,11 +76,22 @@ void CEnemyEyes::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 
 void CEnemyEyes::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
+	// 디버그 출력: 누가 EndOverlap 호출했는지 확인
+	std::ostringstream oss;
+	oss << "CEnemyEyes::EndOverlap called. EnemyType=" << (int)m_EnemyData->GetEnemyType()
+		<< " CurState=" << (int)GetOwner()->GetParent()->GetScript<CEnemyStateManager>()->GetCurCommonState()
+		<< " OtherLayer=" << _OtherCollider->GetOwner()->GetLayerIdx() << "\n";
+	OutputDebugStringA(oss.str().c_str());
+
 	if (m_EnemyData->GetIsDead() == true)
 		return;
 
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
+    if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
 	{
+        // EndOverlap도 호출되면 감지 플래그 해제 및 타이머 시작
+		m_bPlayerRecentlyDetected = false;
+		m_fTimeSinceLastDetect = 0.f;
+
 		Ptr<CEnemyStateManager> pMgr = GetOwner()->GetParent()->GetScript<CEnemyStateManager>();
 
 		if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLOWER)
@@ -77,6 +108,15 @@ void CEnemyEyes::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 		// 현재 CHASE 중일 때만 IDLE로 전환 (다른 상태에서 호출 방지)
 		if (pMgr->GetCurStatus() == pMgr->GetStatusByIndex((int)ENEMY_STATE::CHASE))
 		{
+			if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::DEMON)
+			{
+				int a = 0;
+			}
+			if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLYING)
+			{
+				int a = 0;
+			}
+
 			pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::IDLE));
 			pMgr->ChangeState();
 		}
@@ -89,6 +129,11 @@ void CEnemyEyes::Begin()
 	// 함수 호출자가 부모인지 자식인지 꼭 확인
 	m_EnemyData = GetOwner()->GetParent()->GetScript<CEnemyData>();
 
+	// 초기값
+	m_fTimeSinceLastDetect = 1000.f;
+	m_fDetectGraceTime = 0.18f;
+	m_bPlayerRecentlyDetected = false;
+
 	ADD_DYNAMIC_BEGIN_OVERLAP(CEnemyEyes::BeginOverlap);
 	ADD_DYNAMIC_OVERLAP(CEnemyEyes::Overlap);
 	ADD_DYNAMIC_END_OVERLAP(CEnemyEyes::EndOverlap);
@@ -96,9 +141,44 @@ void CEnemyEyes::Begin()
 
 void CEnemyEyes::Tick()
 {
-	if (m_EnemyData->GetIsDead() == true)
+    if (m_EnemyData->GetIsDead() == true)
 	{
 		GetOwner()->SetIsActive(false);
+		return;
+	}
+
+	// 타이머 업데이트
+	if (!m_bPlayerRecentlyDetected)
+	{
+		m_fTimeSinceLastDetect += DT;
+	}
+
+	// 일정 시간 동안 플레이어 감지가 없으면 EndOverlap과 동일하게 상태 전환 수행
+	if (m_fTimeSinceLastDetect > m_fDetectGraceTime)
+	{
+		Ptr<CEnemyStateManager> pMgr = GetOwner()->GetParent()->GetScript<CEnemyStateManager>();
+		ENEMY_STATE curState = pMgr->GetCurCommonState();
+
+		if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLOWER)
+		{
+			if (curState == ENEMY_STATE::RANGED_ATTACK)
+			{
+				pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::IDLE));
+				pMgr->ChangeState();
+			}
+		}
+		else
+		{
+			if (curState == ENEMY_STATE::CHASE)
+			{
+				pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::IDLE));
+				pMgr->ChangeState();
+				// 중복 전환 방지
+				m_fTimeSinceLastDetect = 1000.f;
+			}
+		}
+
+		m_bPlayerRecentlyDetected = false;
 	}
 }
 

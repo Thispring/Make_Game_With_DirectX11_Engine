@@ -8,6 +8,12 @@ class CEnemyEyes :
 
 private:
     Ptr<CEnemyData>         m_EnemyData;
+    // 마지막으로 플레이어를 감지한 이후 경과 시간 (초)
+    float                   m_fTimeSinceLastDetect;
+    // 플레이어 미감지 시 IDLE로 전환하기 위한 그레이스 타임(초)
+    float                   m_fDetectGraceTime;
+    // 플레이어가 최근에 감지되었는지 플래그
+    bool                    m_bPlayerRecentlyDetected;
 
 public:
     //=========
