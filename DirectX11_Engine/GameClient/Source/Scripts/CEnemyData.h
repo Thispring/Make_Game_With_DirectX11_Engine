@@ -52,6 +52,9 @@ private:
     
     float               m_TimeSinceSpawn;
     float               m_TimeInState;
+    // 플레이어 이탈 시 공격 상태에서 즉시 Idle로 전환되는 것을 방지하기 위한 그레이스 타임
+    float               m_fPlayerLostTimer;
+    bool                m_bPlayerLostPending;
 
     int                 m_Direction;        // 이동방향
 

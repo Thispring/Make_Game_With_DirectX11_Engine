@@ -33,6 +33,8 @@ CEnemyData::CEnemyData()
 	, m_Offset(0.f)
 	, m_TimeSinceSpawn(0.f)
 	, m_TimeInState(0.f)
+	, m_fPlayerLostTimer(0.f)
+	, m_bPlayerLostPending(false)
 
 	, m_Direction(1)		// 이동방향 1로 초기화
 
@@ -84,7 +86,7 @@ void CEnemyData::Init()
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_Offset, L"Offset", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_TimeSinceSpawn, L"TimeSinceSpawn", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_TimeInState, L"TimeInState", true, 0.f);
-	
+
 	// Spawn 위치가 잘 되었는지 확인용
 	AddScriptParam(SCRIPT_PARAM::VEC3, &m_InitialPos, L"InitialPos", true, 0.f);
 	AddScriptParam(SCRIPT_PARAM::VEC3_ROT, &m_InitialRot, L"InitialRot", true, 0.f);
@@ -139,10 +141,10 @@ void CEnemyData::Begin()
 
 	// 기존 위치는 Begin에서 초기화
 	m_OriginPos = GetOwner()->Transform()->GetRelativePos();
-	m_CurPos    = m_OriginPos;
+	m_CurPos = m_OriginPos;
 
 	m_OriginRot = GetOwner()->Transform()->GetRelativeRot();
-	m_CurRot    = m_OriginRot;
+	m_CurRot = m_OriginRot;
 
 
 	// 스케일 x축값을 읽어와 음수인지 양수인지 판단하여 이동방향을 미리 결정합니다.
@@ -180,7 +182,7 @@ void CEnemyData::TakeDamage(float _Damage, bool _hitSkull)
 {
 	// 해당 함수를 Player쪽 공격 스크립트에서 호출하고 있기 때문에
 	// HIT 상태 변경을 이쪽에서 처리합니다.
-	
+
 	// 죽은 상태에서 함수가 또 호출되면, HIT 상태로 되돌리기 X
 	if (m_IsDead)
 		return;
@@ -245,12 +247,12 @@ void CEnemyData::ChangeState(ENEMY_STATE _State)
 
 void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	// FLYING, FLOWER 타입은 추락 로직 적용 X
-	if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
-		return;
+	// 수정: FLYING/FLOWER 타입인 경우 'BACK_GROUND_COLLIDER' 에 대해서만
+	// 바닥/천장 관련 로직을 무시하도록 변경했습니다.
+	int otherLayer = _OtherCollider->GetOwner()->GetLayerIdx();
 
-	// 추락 시, 사망 처리
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::OUT_OF_BOUNDS)
+	// 추락 시, 사망 처리 (OutOfBounds은 항상 처리)
+	if (otherLayer == (int)LEVEL_0_LAYER::OUT_OF_BOUNDS)
 	{
 		// Dead 상태 호출
 		m_IsDead = true;
@@ -259,9 +261,13 @@ void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherColl
 	}
 
 	// ─── 바닥 / 천장 (Layer 16) ───
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
+	if (otherLayer == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
-		Matrix invSlope  = _OtherCollider->GetWorldMat().Invert();
+		// FLYING, FLOWER 타입은 바닥 충돌로 인한 복원 로직 적용 X
+		if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
+			return;
+
+		Matrix invSlope = _OtherCollider->GetWorldMat().Invert();
 		Vec3 localCenter = XMVector3TransformCoord(_OwnCollider->GetWorldCenter(), invSlope);
 
 		++m_GroundContactCount;
@@ -272,29 +278,13 @@ void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherColl
 		Vec3 normal = Vec3(slopeMat._21, slopeMat._22, slopeMat._23);
 		normal.Normalize();
 		m_GroundNormal = (fabsf(normal.y) > 0.99f) ? Vec3(0.f, 1.f, 0.f) : normal;
-		//if (localCenter.y >= 0.f)
-		//{
-		//	++m_GroundContactCount;
-		//	m_IsFalling = false;
-		//	m_fCoyoteTimer = 0.f;
-
-		//	Matrix slopeMat = _OtherCollider->GetWorldMat();
-		//	Vec3 normal = Vec3(slopeMat._21, slopeMat._22, slopeMat._23);
-		//	normal.Normalize();
-		//	m_GroundNormal = (fabsf(normal.y) > 0.99f) ? Vec3(0.f, 1.f, 0.f) : normal;
-		//}
-		//else
-		//{
-		//	if (m_VelocityY > 0.f)
-		//		m_VelocityY = 0.f;
-		//}
 	}
 
 	// ─── 벽 (Layer 17, 12) ───
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::WALL_COLLIDER ||
-		_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::ENEMY_WALL_COLLIDER)
+	if (otherLayer == (int)LEVEL_0_LAYER::WALL_COLLIDER ||
+		otherLayer == (int)LEVEL_0_LAYER::ENEMY_WALL_COLLIDER)
 	{
-		float ownX  = _OwnCollider->GetWorldCenter().x;
+		float ownX = _OwnCollider->GetWorldCenter().x;
 		float wallX = _OtherCollider->GetWorldCenter().x;
 
 		if (ownX >= wallX)
@@ -316,11 +306,11 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 			return;
 
 		// 자신 콜라이더의 월드 Y축 (스케일 포함)
-		Matrix ownMat  = _OwnCollider->GetWorldMat();
-		Vec3 ownYAxis  = Vec3(ownMat._21, ownMat._22, ownMat._23);
+		Matrix ownMat = _OwnCollider->GetWorldMat();
+		Vec3 ownYAxis = Vec3(ownMat._21, ownMat._22, ownMat._23);
 
 		Vec3 centerWorld = _OwnCollider->GetWorldCenter();
-		Matrix invSlope  = _OtherCollider->GetWorldMat().Invert();
+		Matrix invSlope = _OtherCollider->GetWorldMat().Invert();
 		Vec3 localCenter = XMVector3TransformCoord(centerWorld, invSlope);
 
 		// ─── 바닥 ───
@@ -340,50 +330,6 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 			pos.y += localPenetration * slopeMat._22;
 			GetOwner()->Transform()->SetRelativePos(pos);
 		}
-
-		//if (localCenter.y >= 0.f)
-		//{
-		//	// ─── 바닥 ───
-		//	Vec3 footWorld = centerWorld;
-		//	footWorld.x   -= ownYAxis.x * 0.5f;
-		//	footWorld.y   -= ownYAxis.y * 0.5f;
-		//	footWorld.z   -= ownYAxis.z * 0.5f;
-
-		//	Vec3 localFoot = XMVector3TransformCoord(footWorld, invSlope);
-		//	float localPenetration = 0.5f - localFoot.y;
-
-		//	if (localPenetration > 0.f)
-		//	{
-		//		Matrix slopeMat = _OtherCollider->GetWorldMat();
-		//		Vec3   pos      = GetOwner()->Transform()->GetRelativePos();
-		//		pos.x += localPenetration * slopeMat._21;
-		//		pos.y += localPenetration * slopeMat._22;
-		//		GetOwner()->Transform()->SetRelativePos(pos);
-		//	}
-		//}
-		//else
-		//{
-		//	// ─── 천장 ───
-		//	Vec3 headWorld = centerWorld;
-		//	headWorld.x   += ownYAxis.x * 0.5f;
-		//	headWorld.y   += ownYAxis.y * 0.5f;
-		//	headWorld.z   += ownYAxis.z * 0.5f;
-
-		//	Vec3 localHead = XMVector3TransformCoord(headWorld, invSlope);
-		//	float localPenetration = localHead.y + 0.5f;
-
-		//	if (localPenetration > 0.f)
-		//	{
-		//		Matrix slopeMat = _OtherCollider->GetWorldMat();
-		//		Vec3   pos      = GetOwner()->Transform()->GetRelativePos();
-		//		pos.x -= localPenetration * slopeMat._21;
-		//		pos.y -= localPenetration * slopeMat._22;
-		//		GetOwner()->Transform()->SetRelativePos(pos);
-
-		//		if (m_VelocityY > 0.f)
-		//			m_VelocityY = 0.f;
-		//	}
-		//}
 	}
 
 	// ─── 벽 (Layer 17, 12) ───
@@ -394,7 +340,7 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 		if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
 			return;
 
-		float ownCenterX  = _OwnCollider->GetWorldCenter().x;
+		float ownCenterX = _OwnCollider->GetWorldCenter().x;
 		float wallCenterX = _OtherCollider->GetWorldCenter().x;
 
 		Matrix wallMat = _OtherCollider->GetWorldMat();
@@ -430,6 +376,10 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 			return;
 		}
 
+		// 플레이어가 다시 들어오면 그레이스 타임 취소
+		m_bPlayerLostPending = false;
+		m_fPlayerLostTimer = 0.f;
+
 		Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
 		ENEMY_STATE curState = pMgr->GetCurCommonState();
 
@@ -454,20 +404,58 @@ void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 	if (curState == ENEMY_STATE::HIT || curState == ENEMY_STATE::DEAD)
 		return;
 
-	// GHOST_SKULL이면 IDLE 전환 X
-	if (curState != ENEMY_STATE::GHOST_SKULL && curState != ENEMY_STATE::GHOST_SKULL_MOVE)
-		ChangeState(ENEMY_STATE::IDLE);
-
-
-	// FLYING, FLOWER 타입은 로직 적용 X
-	if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
+	// 수정: SKULL + GHOST_SKULL 계열이면 이탈 로직 적용 X (OR로 검사)
+	if (m_EnemyType == ENEMY_TYPE::SKULL &&
+		(curState == ENEMY_STATE::GHOST_SKULL || curState == ENEMY_STATE::GHOST_SKULL_MOVE))
+	{
 		return;
+	}
 
+	int otherLayer = _OtherCollider->GetOwner()->GetLayerIdx();
+
+	// 플레이어 이탈 처리: Eyes와 동일한 범위로 처리 (Eyes 쪽과 시그널 충돌이 발생하지 않도록)
+	if (otherLayer == (int)LEVEL_0_LAYER::PLAYER)
+	{
+		// FLOWER 타입 예외: RANGED_ATTACK -> IDLE 전환 처리
+		if (m_EnemyType == ENEMY_TYPE::FLOWER)
+		{
+			if (pMgr->GetCurStatus() == pMgr->GetStatusByIndex((int)ENEMY_STATE::RANGED_ATTACK))
+			{
+				pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::IDLE));
+				pMgr->ChangeState();
+			}
+			return;
+		}
+
+     // 일반 엔진은 CHASE 상태일 때만 IDLE로 전환
+		if (pMgr->GetCurStatus() == pMgr->GetStatusByIndex((int)ENEMY_STATE::CHASE))
+		{
+			pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::IDLE));
+			pMgr->ChangeState();
+		}
+		else
+		{
+			// 플레이어가 ATTACK/RANGED_ATTACK 상태에서 이탈했을 경우 즉시 Idle로 가지 않도록
+			// 짧은 그레이스 타임을 적용: 일정 시간 대기 후 IDLE로 전환
+			if (pMgr->GetCurStatus() == pMgr->GetStatusByIndex((int)ENEMY_STATE::ATTACK) ||
+				pMgr->GetCurStatus() == pMgr->GetStatusByIndex((int)ENEMY_STATE::RANGED_ATTACK))
+			{
+				m_bPlayerLostPending = true;
+				m_fPlayerLostTimer = 0.15f; // 그레이스 타임 (초)
+			}
+		}
+
+		return;
+	}
 
 	// ─── 바닥 이탈 (Layer 16) ───
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
+	if (otherLayer == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
-		Matrix invSlope  = _OtherCollider->GetWorldMat().Invert();
+		// FLYING, FLOWER 타입은 로직 적용 X
+		if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
+			return;
+
+		Matrix invSlope = _OtherCollider->GetWorldMat().Invert();
 		Vec3 localCenter = XMVector3TransformCoord(_OwnCollider->GetWorldCenter(), invSlope);
 
 		--m_GroundContactCount;
@@ -477,34 +465,26 @@ void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 			m_fCoyoteTimer = 0.08f;
 			m_GroundNormal = Vec3(0.f, 1.f, 0.f);
 		}
-
-		//if (localCenter.y >= 0.f)
-		//{
-		//	--m_GroundContactCount;
-		//	if (m_GroundContactCount <= 0)
-		//	{
-		//		m_GroundContactCount = 0;
-		//		m_fCoyoteTimer = 0.08f;
-		//		m_GroundNormal = Vec3(0.f, 1.f, 0.f);
-		//	}
-		//}
 	}
 
 	// ─── 벽 이탈 (Layer 17, 12) ───
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::WALL_COLLIDER ||
-		_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::ENEMY_WALL_COLLIDER)
+	if (otherLayer == (int)LEVEL_0_LAYER::WALL_COLLIDER ||
+		otherLayer == (int)LEVEL_0_LAYER::ENEMY_WALL_COLLIDER)
 	{
-		float ownX  = _OwnCollider->GetWorldCenter().x;
+		// FLYING, FLOWER 타입은 로직 적용 X
+		if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
+			return;
+
+		float ownX = _OwnCollider->GetWorldCenter().x;
 		float wallX = _OtherCollider->GetWorldCenter().x;
 
 		if (ownX >= wallX)
-			m_WallContactLeft  = max(0, m_WallContactLeft - 1);
+			m_WallContactLeft = max(0, m_WallContactLeft - 1);
 		else
 			m_WallContactRight = max(0, m_WallContactRight - 1);
 	}
-
-
 }
+
 
 void CEnemyData::CreateProjectile()
 {
@@ -540,6 +520,25 @@ void CEnemyData::Tick()
 
 	// 소환 후 흐른 시간 계산
 	m_TimeSinceSpawn += DT;
+
+	// 플레이어 이탈 그레이스 타임 처리
+	if (m_bPlayerLostPending)
+	{
+		m_fPlayerLostTimer -= DT;
+		if (m_fPlayerLostTimer <= 0.f)
+		{
+			m_bPlayerLostPending = false;
+			m_fPlayerLostTimer = 0.f;
+			// 상태 확인 후 IDLE로 전환
+			Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+			if (pMgr->GetCurStatus() == pMgr->GetStatusByIndex((int)ENEMY_STATE::ATTACK) ||
+				pMgr->GetCurStatus() == pMgr->GetStatusByIndex((int)ENEMY_STATE::RANGED_ATTACK))
+			{
+				pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)ENEMY_STATE::IDLE));
+				pMgr->ChangeState();
+			}
+		}
+	}
 }
 
 void CEnemyData::SaveToLevelFile(FILE* _File)
@@ -591,6 +590,10 @@ void CEnemyData::ResetToInitial()
 	m_GroundNormal = Vec3(0.f, 1.f, 0.f);
 	m_TimeSinceSpawn = 0.f;
 	m_TimeInState = 0.f;
+
+	// 플레이어 이탈 그레이스 초기화
+	m_fPlayerLostTimer = 0.f;
+	m_bPlayerLostPending = false;
 
 	// 3. 위치/회전/스케일을 초기값으로 복원
 	GetOwner()->Transform()->SetRelativePos(m_InitialPos);

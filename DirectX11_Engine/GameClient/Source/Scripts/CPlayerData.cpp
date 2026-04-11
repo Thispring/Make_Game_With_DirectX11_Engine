@@ -72,19 +72,12 @@ void CPlayerData::Init()
 
 void CPlayerData::Begin()
 {
-	// 문자열 방식으로 찾는 방법은 최대한 줄이기
+	// GameObject 멤버, 자식 세팅
 	m_TargetObject = GetOwner();
 	m_AnchorObject = GetOwner()->GetChild(PLAYER_PROJECTILE_ANCHOR);
-	// NOTE(26-04-02):
-	// PLAYER_PROJECTILE_ANCHOR도 3번 Layer여서 Enemy 충돌판정에 사용
-	// 중복을 막기 위해 인덱스번호 5번으로 고정
-	m_AnchorObject->SetLayerIdx(5);
-
-	// NOTE(26-03-32):
-	// 자식 오브젝트 1, 2는 근거리 용, Collider를 가지고 있는 자식 오브젝트입니다.
-	// 항상 Layer 4번을 보장받을 수 있도록 Begin에서 4번으로 최종 세팅
-	GetOwner()->GetChild(PLAYER_KICK_ANCHOR)->SetLayerIdx(4);
-	GetOwner()->GetChild(PLAYER_PUNCH_ANCHOR)->SetLayerIdx(4);
+	m_AnchorObject->SetLayerIdx((int)LEVEL_0_LAYER::PLAYER_PROJECTILE);
+	GetOwner()->GetChild(PLAYER_KICK_ANCHOR)->SetLayerIdx((int)LEVEL_0_LAYER::PLAYER_MELEE_TRIGGER);
+	GetOwner()->GetChild(PLAYER_PUNCH_ANCHOR)->SetLayerIdx((int)LEVEL_0_LAYER::PLAYER_MELEE_TRIGGER);
 	
 	// 기존 위치는 Begin에서 초기화
 	m_OriginPos = Vec3(-4600.f, 250.f, 100.f);	// NOTE(26-04-03): 고정 위치 등록
@@ -266,6 +259,8 @@ void CPlayerData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherColli
 	// ─── 바닥 이탈 (Layer 16) ───
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
+		//m_IsFalling = true;
+
 		Matrix invSlope  = _OtherCollider->GetWorldMat().Invert();
 		Vec3 localCenter = XMVector3TransformCoord(_OwnCollider->GetWorldCenter(), invSlope);
 
@@ -316,24 +311,20 @@ void CPlayerData::Tick()
 
 void CPlayerData::SaveToLevelFile(FILE* _File)
 {
-	// 파일로 저장해야할 멤버 정리
-	// m_TargetObject, m_AnchorObject는 Begin에서 초기화 하므로 파일 저장 X
-
-	// 파일 저장 조건을
-	// 프로그램을 재실행하는가? 라는 조건을 두고
-	// 먼저 재실행한다 하더라도, 저장 및 불러오기가 필요한 멤버 먼저 저장
-
-	// m_OriginPos, m_CurPos
-	// m_FullHP, m_CurHP, m_Damage, m_Speed, m_JumpVelocity
-	// m_DeathCount
-	//
-	// 위 멤버는 재실행할때, 해당 정보를 불러와서 이어하길 원한다면 파일에 저장합니다.
-	// 
-	//fwrite(&m_FullHP, sizeof(float), 1, _File);
-	//fwrite(&m_Damage, sizeof(float), 1, _File);
-	//fwrite(&m_Speed, sizeof(float), 1, _File);
-	//fwrite(&m_JumpVelocity, sizeof(float), 1, _File);
-
+	/**************************************************************************
+	* 파일로 저장해야할 멤버 정리
+	* m_TargetObject, m_AnchorObject는 Begin에서 초기화 하므로 파일 저장 X
+	*
+	* 파일 저장 조건을
+	* 프로그램을 재실행하는가? 라는 조건을 두고
+	* 먼저 재실행한다 하더라도, 저장 및 불러오기가 필요한 멤버 먼저 저장
+	*
+	* m_OriginPos, m_CurPos
+	* m_FullHP, m_CurHP, m_Damage, m_Speed, m_JumpVelocity
+	* m_DeathCount
+	*
+	* 위 멤버는 재실행할때, 해당 정보를 불러와서 이어하길 원한다면 파일에 저장합니다.
+	**************************************************************************/
 	SaveAssetRef(_File, m_EnergyBlast.Get());
 }
 

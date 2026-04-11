@@ -127,7 +127,10 @@ void EnemyChaseState::OnTick()
 
 void EnemyChaseState::OnFinalTick()
 {
-
+	if (m_EnemyData->GetTargetObject()->GetName() == L"mon3_1")
+	{
+		int a = 0;
+	}
 }
 
 

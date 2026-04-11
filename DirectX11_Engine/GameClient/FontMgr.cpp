@@ -32,30 +32,46 @@ FontMgr::~FontMgr()
 
 void FontMgr::Init()
 {
+	// 1. 팩토리 생성 확인
 	if (FAILED(FW1CreateFactory(FW1_VERSION, &m_FW1Factory)))
 	{
-		assert(nullptr);
+		MessageBox(nullptr, L"FW1 Font Factory 생성 실패!", L"Font Error", MB_OK | MB_ICONERROR);
+		return;
 	}
 
-    wstring path = WCONTENT_PATH + L"\\Fonts\\_bitmap_font____romulus_by_pix3m-d6aokem.ttf";
+	// 경로 설정 (상대 경로 확인 필수)
+	wstring path = WCONTENT_PATH + L"Font\\_bitmap_font____romulus_by_pix3m-d6aokem.ttf";
 
-	// TTF 파일을 메모리로 읽어서 등록
+	// 2. 파일 존재 여부 확인
 	std::ifstream fontFile(path, std::ios::binary | std::ios::ate);
-	if (fontFile)
+	if (!fontFile)
 	{
-		std::streamsize size = fontFile.tellg();
-		fontFile.seekg(0, std::ios::beg);
-		m_fontBuffer.resize((size_t)size);
-		if (fontFile.read(reinterpret_cast<char*>(m_fontBuffer.data()), size))
+		// Release 모드에서 경로 문제를 찾기 위해 시도한 전체 경로를 메시지에 담습니다.
+		wstring errMsg = L"폰트 파일을 찾을 수 없습니다.\n경로: " + path;
+		MessageBox(nullptr, errMsg.c_str(), L"File Not Found", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	// 파일 읽기 및 메모리 등록
+	std::streamsize size = fontFile.tellg();
+	fontFile.seekg(0, std::ios::beg);
+	m_fontBuffer.resize((size_t)size);
+	if (fontFile.read(reinterpret_cast<char*>(m_fontBuffer.data()), size))
+	{
+		DWORD fonts = 0;
+		m_hFontResource = AddFontMemResourceEx(m_fontBuffer.data(), (DWORD)size, 0, &fonts);
+
+		if (nullptr == m_hFontResource)
 		{
-			DWORD fonts = 0;
-			m_hFontResource = AddFontMemResourceEx(m_fontBuffer.data(), (DWORD)size, 0, &fonts);
+			MessageBox(nullptr, L"AddFontMemResourceEx 실패!", L"Memory Font Error", MB_OK);
 		}
 	}
 
+	// 3. 최종 폰트 래퍼 생성 확인
+	// 폰트 메타데이터 분석 결과 "Romulus"가 맞으므로 이 이름은 그대로 사용합니다.
 	if (FAILED(m_FW1Factory->CreateFontWrapper(DEVICE, L"Romulus", &m_FontWrapper)))
 	{
-		assert(nullptr);
+		MessageBox(nullptr, L"Font Wrapper 생성 실패! (Romulus 글꼴 인식 불가)", L"Font Error", MB_OK | MB_ICONERROR);
 	}
 }
 
