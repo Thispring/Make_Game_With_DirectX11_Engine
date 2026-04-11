@@ -18,13 +18,13 @@ EnemyChaseState::~EnemyChaseState()
 void EnemyChaseState::OnBegin()
 {
 	// FLYING 타입은 추격 시작 시 현재 위치와 회전값을 원점으로 저장
-	if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLYING)
-	{
-		Vec3 pos = m_EnemyData->GetTargetObject()->Transform()->GetRelativePos();
-		Vec3 rot = m_EnemyData->GetTargetObject()->Transform()->GetRelativeRot();
-		m_EnemyData->SetOriginPos(pos);
-		m_EnemyData->SetOriginRot(rot);
-	}
+	//if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLYING)
+	//{
+	//	Vec3 pos = m_EnemyData->GetTargetObject()->Transform()->GetRelativePos();
+	//	Vec3 rot = m_EnemyData->GetTargetObject()->Transform()->GetRelativeRot();
+	//	m_EnemyData->SetOriginPos(pos);
+	//	m_EnemyData->SetOriginRot(rot);
+	//}
 }
 
 void EnemyChaseState::OnTick()

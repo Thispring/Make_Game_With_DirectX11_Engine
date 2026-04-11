@@ -2,6 +2,7 @@
 #include "EnemyPatrolState.h"
 
 #include "TimeMgr.h"
+#include "Source\Scripts\CEnemyStateManager.h"
 
 EnemyPatrolState::EnemyPatrolState(Ptr<CEnemyData> _Data)
 	: EnemyState(_Data)
@@ -84,9 +85,16 @@ void EnemyPatrolState::OnTick()
 	// 이동량 계산
 	float delta = dir * speed * DT;
 
-	// 벽 차단: 이동 방향에 벽이 있으면 이동하지 않음
-	if ((dir > 0 && m_EnemyData->GetIsBlockedRight())
-		|| (dir < 0 && m_EnemyData->GetIsBlockedLeft()))
+	// 상태 검사: GHOST_SKULL / GHOST_SKULL_MOVE 상태일 때도 벽 차단 로직을 적용하지 않음
+	Ptr<CEnemyStateManager> pMgr = m_EnemyData->GetTargetObject()->GetScript<CEnemyStateManager>();
+	ENEMY_STATE curState = pMgr.Get() ? pMgr->GetCurCommonState() : ENEMY_STATE::IDLE;
+
+	// 벽 차단: FLYING 타입 및 GHOST_SKULL 상태 계열은 벽 차단 로직을 적용하지 않음
+	if (m_EnemyData->GetEnemyType() != ENEMY_TYPE::FLYING &&
+		curState != ENEMY_STATE::GHOST_SKULL &&
+		curState != ENEMY_STATE::GHOST_SKULL_MOVE &&
+		((dir > 0 && m_EnemyData->GetIsBlockedRight())
+		 || (dir < 0 && m_EnemyData->GetIsBlockedLeft())))
 	{
 		// 벽에 닿으면 방향 반전
 		dir *= -1;

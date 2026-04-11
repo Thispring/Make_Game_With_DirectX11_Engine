@@ -95,6 +95,8 @@ public:
 
     GET_SET(float, VelocityY);
     GET_SET(Vec3, GroundNormal);
+    GET_SET(float, fCoyoteTimer);
+    GET_SET(int, GroundContactCount);
 
     // ─── 벽 접촉 조회 ───
     bool GetIsBlockedLeft()  const { return m_WallContactLeft > 0; }

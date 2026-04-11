@@ -33,7 +33,7 @@ CPlayerData::CPlayerData()
 
 	, m_VelocityY(0.f)
 	, m_GroundNormal(0.f, 1.f, 0.f)
-	, m_fCoyoteTimer(0.f)
+    , m_fCoyoteTimer(0.f)
 	, m_GroundContactCount(0)
 
 	, m_WallContactLeft(0)
@@ -103,41 +103,83 @@ void CPlayerData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCol
 	// 추락 시, 사망 처리
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::OUT_OF_BOUNDS)
 	{
-		Ptr<CPlayerStateManager> pMgr = GetOwner()->GetScript<CPlayerStateManager>();
-
 		SetIsDead(true);
+		Ptr<CPlayerStateManager> pMgr = GetOwner()->GetScript<CPlayerStateManager>();
 		pMgr->SetCurStatus(pMgr->GetStatusByIndex((int)PLAYER_STATE::DEATH));
 		pMgr->ChangeState();
 	}
 
-	// ─── 바닥 / 천장 (Layer 16) ───
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
+	int otherLayer = _OtherCollider->GetOwner()->GetLayerIdx();
+
+    // ─── 바닥 / 천장 (Layer 16) ───
+	if (otherLayer == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
-		Matrix invSlope  = _OtherCollider->GetWorldMat().Invert();
-		Vec3 localCenter = XMVector3TransformCoord(_OwnCollider->GetWorldCenter(), invSlope);
+		// 보다 견고한 위/아래 판별: 다른 콜라이더의 노멀을 사용하여 접촉 방향을 판단합니다.
+		// 또한, 깊게 침투한 경우에는 침투량만큼 위치 보정하여 "끼임" 현상을 방지합니다.
+		if (_OtherCollider->IsCacheDirty())
+			_OtherCollider->UpdateSlopeCache();
 
-		if (localCenter.y >= 0.f)
+		Matrix otherMat = _OtherCollider->GetWorldMat();
+		Matrix ownMat = _OwnCollider->GetWorldMat();
+
+		Vec3 otherNormal = _OtherCollider->GetCachedNormal();
+
+		Vec3 vecCenter = _OwnCollider->GetWorldCenter() - _OtherCollider->GetWorldCenter();
+		float distAlongNormal = XMVectorGetX(XMVector3Dot(vecCenter, otherNormal));
+
+		// 반높이(대략) 계산: 월드 매트릭스의 Y 축 벡터 길이 기준
+		float otherHalfH = Vec3(otherMat._21, otherMat._22, otherMat._23).Length() * 0.5f;
+		float ownHalfH   = Vec3(ownMat._21, ownMat._22, ownMat._23).Length() * 0.5f;
+
+		// 정상적으로 바닥 쪽에 위치해 있다면 distAlongNormal이 양수(노멀 방향)임
+		if (distAlongNormal >= 0.f)
 		{
-			++m_GroundContactCount;
-			m_IsFalling = false;
-			m_fCoyoteTimer = 0.f;
+          // 바닥 접촉: 점프 중일 때는 하강 중일 경우에만 착지로 처리
+			if (!m_IsJumping || m_VelocityY <= 0.f)
+			{
+				++m_GroundContactCount;
+				m_IsFalling = false;
+				m_VelocityY = 0.f;
+				m_GroundNormal = otherNormal;
+				// 착지로 판정되면 점프 플래그를 해제
+				m_IsJumping = false;
 
-			Matrix slopeMat = _OtherCollider->GetWorldMat();
-			Vec3 normal = Vec3(slopeMat._21, slopeMat._22, slopeMat._23);
-			normal.Normalize();
-			m_GroundNormal = (fabsf(normal.y) > 0.99f) ? Vec3(0.f, 1.f, 0.f) : normal;
+				// 침투 보정: 중심 축 거리(distAlongNormal)가 두 반높이 합보다 작으면 겹침
+				float requiredCenterDist = otherHalfH + ownHalfH;
+				float penetration = requiredCenterDist - distAlongNormal;
+				if (penetration > 0.f)
+				{
+					Vec3 pos = GetOwner()->Transform()->GetRelativePos();
+					pos += otherNormal * penetration;
+					GetOwner()->Transform()->SetRelativePos(pos);
+				}
+			}
 		}
 		else
 		{
+			// 천장에 닿아서 들어온 경우: 위로 향하는 속도 차단
 			if (m_VelocityY > 0.f)
 				m_VelocityY = 0.f;
+
+			// 침투 보정: 천장에 깊게 들어간 경우 약간 위치를 밀어내어 끼임/반복 충돌로
+			// 인해 즉시 낙하로 전환되는 현상을 완화합니다.
+			{
+				float penetration = (otherHalfH + ownHalfH) - fabsf(distAlongNormal);
+				if (penetration > 0.f)
+				{
+					// otherNormal은 표면의 바깥쪽을 향하는 법선입니다. 천장 쪽 침투는
+					// distAlongNormal < 0 이므로 법선의 반대 방향으로 보정합니다.
+					Vec3 pos = GetOwner()->Transform()->GetRelativePos();
+					pos -= otherNormal * penetration;
+					GetOwner()->Transform()->SetRelativePos(pos);
+				}
+			}
 		}
 	}
 
 	// ─── 벽 (Layer 17) ───
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::WALL_COLLIDER)
+	if (otherLayer == (int)LEVEL_0_LAYER::WALL_COLLIDER)
 	{
-		// 월드 X 좌표로 좌/우 판별 — localCenter 부호 반전 문제 회피
 		float ownX  = _OwnCollider->GetWorldCenter().x;
 		float wallX = _OtherCollider->GetWorldCenter().x;
 
@@ -152,84 +194,57 @@ void CPlayerData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider
 {
 	int otherLayer = _OtherCollider->GetOwner()->GetLayerIdx();
 
-	// ─── 바닥 / 천장 (Layer 16) ───
+	// ─── BACK_GROUND_COLLIDER: 천장 충돌 처리 + 접지 유지 ───
 	if (otherLayer == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
-		Matrix ownMat  = _OwnCollider->GetWorldMat();
-		Vec3 ownYAxis  = Vec3(ownMat._21, ownMat._22, ownMat._23);
-
 		Matrix invSlope  = _OtherCollider->GetWorldMat().Invert();
 		Vec3 centerWorld = _OwnCollider->GetWorldCenter();
 		Vec3 localCenter = XMVector3TransformCoord(centerWorld, invSlope);
 
-		if (localCenter.y >= 0.f)
+        if (localCenter.y >= 0.f)
 		{
-			// ─── 바닥 ───
-			Vec3 footWorld = centerWorld;
-			footWorld.x -= ownYAxis.x * 0.5f;
-			footWorld.y -= ownYAxis.y * 0.5f;
-			footWorld.z -= ownYAxis.z * 0.5f;
-
-			Vec3 localFoot = XMVector3TransformCoord(footWorld, invSlope);
-			float localPenetration = 0.5f - localFoot.y;
-
-			Matrix slopeMat = _OtherCollider->GetWorldMat();
-			Vec3 pos = GetOwner()->Transform()->GetRelativePos();
-
-			// 1. penetration 보정 (양수일 때만)
-			if (localPenetration > 0.f)
+			// 바닥 위에 있는 동안: 낙하 중지, 수직속도 보정(착지)
+			// 단, 점프 상태에서는 착지로 처리하지 않음
+			if (!m_IsJumping)
 			{
-				pos.x += localPenetration * slopeMat._21;
-				pos.y += localPenetration * slopeMat._22;
+				m_IsFalling = false;
+				// 착지 시 아래로 향하는 속도는 0으로 (안정화)
+				if (m_VelocityY < 0.f)
+					m_VelocityY = 0.f;
 			}
 
-			// 2. Moving Platform delta (penetration과 무관하게 항상 적용)
-			Ptr<CMovingPlatform> pPlatform = _OtherCollider->GetOwner()->GetScript<CMovingPlatform>();
-			if (pPlatform != nullptr)
-			{
-				Vec3 delta = pPlatform->GetDelta();
-				pos.x += delta.x;
-			}
 
-			// 3. 한 번만 호출
-			GetOwner()->Transform()->SetRelativePos(pos);
 		}
 		else
 		{
-			// ─── 천장 ───
+			// 천장 처리: 머리 위치로 침투 확인하여 위로 향하는 속도 차단
+			Matrix ownMat  = _OwnCollider->GetWorldMat();
+			Vec3 ownYAxis  = Vec3(ownMat._21, ownMat._22, ownMat._23);
+
 			Vec3 headWorld = centerWorld;
-			headWorld.x   += ownYAxis.x * 0.5f;
-			headWorld.y   += ownYAxis.y * 0.5f;
-			headWorld.z   += ownYAxis.z * 0.5f;
+			headWorld.x += ownYAxis.x * 0.5f;
+			headWorld.y += ownYAxis.y * 0.5f;
+			headWorld.z += ownYAxis.z * 0.5f;
 
 			Vec3 localHead = XMVector3TransformCoord(headWorld, invSlope);
 			float localPenetration = localHead.y + 0.5f;
-			if (localPenetration <= 0.f)
-				return;
-
-			Matrix slopeMat = _OtherCollider->GetWorldMat();
-			Vec3   pos      = GetOwner()->Transform()->GetRelativePos();
-			pos.x -= localPenetration * slopeMat._21;
-			pos.y -= localPenetration * slopeMat._22;
-			GetOwner()->Transform()->SetRelativePos(pos);
-
-			if (m_VelocityY > 0.f)
-				m_VelocityY = 0.f;
+			if (localPenetration > 0.f)
+			{
+				if (m_VelocityY > 0.f)
+					m_VelocityY = 0.f;
+			}
 		}
 	}
 
-	// ─── 벽 (Layer 17) ───
+	// ─── 벽 (Layer 17) ─── (unchanged)
 	if (otherLayer == (int)LEVEL_0_LAYER::WALL_COLLIDER)
 	{
-		// 월드 좌표 기반 보정 — localCenter 부호 반전으로 인한 관통 방지
 		float ownCenterX  = _OwnCollider->GetWorldCenter().x;
 		float wallCenterX = _OtherCollider->GetWorldCenter().x;
 
-		// 벽 반폭 (월드 X축 스케일)
 		Matrix wallMat = _OtherCollider->GetWorldMat();
 		float wallHalfW = Vec3(wallMat._11, wallMat._12, wallMat._13).Length() * 0.5f;
 
-		// 자신 반폭 (월드 X축 스케일)
 		Matrix ownMat = _OwnCollider->GetWorldMat();
 		float ownHalfW = Vec3(ownMat._11, ownMat._12, ownMat._13).Length() * 0.5f;
 
@@ -237,14 +252,12 @@ void CPlayerData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider
 
 		if (ownCenterX >= wallCenterX)
 		{
-			// 플레이어가 벽 오른쪽: 왼쪽 모서리가 벽 오른쪽 면을 넘지 않도록
 			float penetration = (wallCenterX + wallHalfW) - (ownCenterX - ownHalfW);
 			if (penetration > 0.f)
 				pos.x += penetration;
 		}
 		else
 		{
-			// 플레이어가 벽 왼쪽: 오른쪽 모서리가 벽 왼쪽 면을 넘지 않도록
 			float penetration = (ownCenterX + ownHalfW) - (wallCenterX - wallHalfW);
 			if (penetration > 0.f)
 				pos.x -= penetration;
@@ -256,21 +269,29 @@ void CPlayerData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider
 
 void CPlayerData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	// ─── 바닥 이탈 (Layer 16) ───
+    // ─── 바닥 이탈 (Layer 16) ───
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
-		//m_IsFalling = true;
+		// 보다 정확한 위/아래 판별을 위해, BeginOverlap과 동일한 방식으로
+		// 다른 콜라이더의 노멀을 사용하여 접촉 방향을 판단합니다.
+		// 이렇게 하면 같은 레이어가 천장과 바닥을 겸할 때 천장과의 충돌
+		// 이탈이 바닥 이탈로 잘못 처리되는 것을 방지합니다.
+		if (_OtherCollider->IsCacheDirty())
+			_OtherCollider->UpdateSlopeCache();
 
-		Matrix invSlope  = _OtherCollider->GetWorldMat().Invert();
-		Vec3 localCenter = XMVector3TransformCoord(_OwnCollider->GetWorldCenter(), invSlope);
+		Vec3 otherNormal = _OtherCollider->GetCachedNormal();
+		Vec3 vecCenter = _OwnCollider->GetWorldCenter() - _OtherCollider->GetWorldCenter();
+		float distAlongNormal = XMVectorGetX(XMVector3Dot(vecCenter, otherNormal));
 
-		if (localCenter.y >= 0.f)
+		// distAlongNormal이 양수면 콜라이더 기준에서 플레이어가 노멀(바닥) 쪽에
+		// 있었던 것이므로 바닥 이탈로 처리합니다. (천장 쪽이면 감소하지 않음)
+		if (distAlongNormal >= 0.f)
 		{
 			--m_GroundContactCount;
 			if (m_GroundContactCount <= 0)
 			{
 				m_GroundContactCount = 0;
-				m_fCoyoteTimer = 0.08f;
+				m_IsFalling = true;
 				m_GroundNormal = Vec3(0.f, 1.f, 0.f);
 			}
 		}
@@ -293,17 +314,6 @@ void CPlayerData::Tick()
 {
 	if (m_IsDead)
 		return;
-
-	// 코요테 타임 처리: 타이머 만료 시 낙하 시작
-	if (m_fCoyoteTimer > 0.f)
-	{
-		m_fCoyoteTimer -= DT;
-		if (m_fCoyoteTimer <= 0.f)
-		{
-			m_fCoyoteTimer = 0.f;
-			m_IsFalling = true;
-		}
-	}
 
 	// Player 위치 갱신
 	m_CurPos = GetOwner()->Transform()->GetRelativePos();

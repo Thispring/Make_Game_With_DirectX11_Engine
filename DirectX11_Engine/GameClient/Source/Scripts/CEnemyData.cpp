@@ -299,37 +299,15 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 	if (m_IsDead == true)
 		return;
 
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
+    if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
 		// FLYING, FLOWER 타입은 로직 적용 X
 		if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
 			return;
 
-		// 자신 콜라이더의 월드 Y축 (스케일 포함)
-		Matrix ownMat = _OwnCollider->GetWorldMat();
-		Vec3 ownYAxis = Vec3(ownMat._21, ownMat._22, ownMat._23);
-
-		Vec3 centerWorld = _OwnCollider->GetWorldCenter();
-		Matrix invSlope = _OtherCollider->GetWorldMat().Invert();
-		Vec3 localCenter = XMVector3TransformCoord(centerWorld, invSlope);
-
-		// ─── 바닥 ───
-		Vec3 footWorld = centerWorld;
-		footWorld.x -= ownYAxis.x * 0.5f;
-		footWorld.y -= ownYAxis.y * 0.5f;
-		footWorld.z -= ownYAxis.z * 0.5f;
-
-		Vec3 localFoot = XMVector3TransformCoord(footWorld, invSlope);
-		float localPenetration = 0.5f - localFoot.y;
-
-		if (localPenetration > 0.f)
-		{
-			Matrix slopeMat = _OtherCollider->GetWorldMat();
-			Vec3   pos = GetOwner()->Transform()->GetRelativePos();
-			pos.x += localPenetration * slopeMat._21;
-			pos.y += localPenetration * slopeMat._22;
-			GetOwner()->Transform()->SetRelativePos(pos);
-		}
+		// 간단한 천장/바닥 충돌 처리: 접지 상태 유지 및 낙하 플래그 제거
+		m_IsFalling = false;
+		m_GroundNormal = Vec3(0.f, 1.f, 0.f);
 	}
 
 	// ─── 벽 (Layer 17, 12) ───
@@ -339,6 +317,18 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 		// FLYING, FLOWER 타입은 벽에 막히는 로직 적용 X
 		if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
 			return;
+
+		// ENEMY_WALL_COLLIDER의 경우, 현재 상태가 GHOST_SKULL 계열이면 충돌 처리하지 않음
+		if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::ENEMY_WALL_COLLIDER)
+		{
+			Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+			if (pMgr.Get())
+			{
+				ENEMY_STATE curState = pMgr->GetCurCommonState();
+				if (curState == ENEMY_STATE::GHOST_SKULL || curState == ENEMY_STATE::GHOST_SKULL_MOVE)
+					return;
+			}
+		}
 
 		float ownCenterX = _OwnCollider->GetWorldCenter().x;
 		float wallCenterX = _OtherCollider->GetWorldCenter().x;
@@ -449,20 +439,17 @@ void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 	}
 
 	// ─── 바닥 이탈 (Layer 16) ───
-	if (otherLayer == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
+    if (otherLayer == (int)LEVEL_0_LAYER::BACK_GROUND_COLLIDER)
 	{
 		// FLYING, FLOWER 타입은 로직 적용 X
 		if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
 			return;
 
-		Matrix invSlope = _OtherCollider->GetWorldMat().Invert();
-		Vec3 localCenter = XMVector3TransformCoord(_OwnCollider->GetWorldCenter(), invSlope);
-
 		--m_GroundContactCount;
 		if (m_GroundContactCount <= 0)
 		{
 			m_GroundContactCount = 0;
-			m_fCoyoteTimer = 0.08f;
+			m_IsFalling = true;
 			m_GroundNormal = Vec3(0.f, 1.f, 0.f);
 		}
 	}
@@ -474,6 +461,18 @@ void CEnemyData::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 		// FLYING, FLOWER 타입은 로직 적용 X
 		if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
 			return;
+
+		// ENEMY_WALL_COLLIDER의 경우, 현재 상태가 GHOST_SKULL 계열이면 충돌 이탈 처리하지 않음
+		if (otherLayer == (int)LEVEL_0_LAYER::ENEMY_WALL_COLLIDER)
+		{
+			Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();
+			if (pMgr.Get())
+			{
+				ENEMY_STATE curState = pMgr->GetCurCommonState();
+				if (curState == ENEMY_STATE::GHOST_SKULL || curState == ENEMY_STATE::GHOST_SKULL_MOVE)
+					return;
+			}
+		}
 
 		float ownX = _OwnCollider->GetWorldCenter().x;
 		float wallX = _OtherCollider->GetWorldCenter().x;
@@ -507,16 +506,7 @@ void CEnemyData::Tick()
 	if (m_IsDead == true)
 		return;
 
-	// 코요테 타임 처리: 타이머 만료 시 낙하 시작
-	if (m_fCoyoteTimer > 0.f)
-	{
-		m_fCoyoteTimer -= DT;
-		if (m_fCoyoteTimer <= 0.f)
-		{
-			m_fCoyoteTimer = 0.f;
-			m_IsFalling = true;
-		}
-	}
+	// 코요테 타임 로직 제거: 단순 낙하 플래그 기반 처리 사용
 
 	// 소환 후 흐른 시간 계산
 	m_TimeSinceSpawn += DT;

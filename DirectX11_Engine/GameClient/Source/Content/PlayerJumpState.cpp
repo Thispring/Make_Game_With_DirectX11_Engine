@@ -25,11 +25,21 @@ void PlayerJumpState::LoadFromLevelFile(FILE* _File)
 void PlayerJumpState::Begin()
 {
     // 점프 시작 시 한 번만 초기 속도 부여
-    // ApplyGravity()의 부호 규약에 맞추어 음수(상승 방향)로 설정합니다.
-    // m_JumpVelocity는 '절대값'으로 보관되는 설계라면 여기에서 부호를 반전.
+    // ApplyGravity()에서는 양수 속도를 위쪽(상승)으로 처리하므로 양수로 설정합니다.
     m_PlayerData->SetVelocityY(fabsf(m_PlayerData->GetJumpVelocity()));
+    // 점프 시작 시 공중 상태로 만들되, 물리 업데이트와 점프-착지 판정이
+    // 일관되게 동작하도록 ground contact를 초기화하고 약간 위로 밀어줍니다.
     m_PlayerData->SetIsFalling(true);
     m_PlayerData->SetIsJumping(true);
+
+    // ground contact 카운트 초기화: BeginOverlap/EndOverlap에서 바닥 판정에
+    // 의해 감소/증가 되므로 여기서는 0으로 초기화하여 공중 상태를 보장
+    m_PlayerData->SetGroundContactCount(0);
+
+    // 콜라이더가 아직 바닥과 겹쳐있을 수 있으므로 작은 너징으로 충돌 해제
+    Vec3 pos = m_PlayerData->GetTargetObject()->Transform()->GetRelativePos();
+    pos.y += 1.0f; // small nudge to escape ground overlap
+    m_PlayerData->GetTargetObject()->Transform()->SetRelativePos(pos);
 }
 
 void PlayerJumpState::Tick()
