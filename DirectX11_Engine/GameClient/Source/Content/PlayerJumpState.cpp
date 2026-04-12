@@ -1,7 +1,10 @@
 #include "pch.h"
 #include "PlayerJumpState.h"
+
 #include "KeyMgr.h"
 #include "TimeMgr.h"
+#include "SoundMgr.h"
+
 #include "Source\Scripts\CPlayerStateManager.h"
 
 PlayerJumpState::PlayerJumpState(Ptr<CPlayerData> _Data)
@@ -24,6 +27,8 @@ void PlayerJumpState::LoadFromLevelFile(FILE* _File)
 
 void PlayerJumpState::Begin()
 {
+    SoundMgr::GetInst()->PlaySFX(L"PlayerJump");
+
     // 점프 시작 시 한 번만 초기 속도 부여
     // ApplyGravity()에서는 양수 속도를 위쪽(상승)으로 처리하므로 양수로 설정합니다.
     m_PlayerData->SetVelocityY(fabsf(m_PlayerData->GetJumpVelocity()));

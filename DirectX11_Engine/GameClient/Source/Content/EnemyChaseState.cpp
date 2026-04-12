@@ -6,6 +6,8 @@
 
 #include "Source\Scripts\CPlayerData.h"
 
+#include "SoundMgr.h"
+
 EnemyChaseState::EnemyChaseState(Ptr<CEnemyData> _Data)
 	: EnemyState(_Data)
 {
@@ -17,6 +19,23 @@ EnemyChaseState::~EnemyChaseState()
 
 void EnemyChaseState::OnBegin()
 {
+	// Stop chase SFX when leaving chase state
+	ENEMY_TYPE type = m_EnemyData->GetEnemyType();
+	switch (type)
+	{
+	case ENEMY_TYPE::DEMON:
+		SoundMgr::GetInst()->PlaySFX(L"DEMON_Chase");
+		break;
+	case ENEMY_TYPE::SKULL:
+		SoundMgr::GetInst()->PlaySFX(L"SKULL_Chase");
+		break;
+	case ENEMY_TYPE::FLYING:
+		SoundMgr::GetInst()->PlaySFX(L"FLYING_Chase");
+		break;
+	default:
+		break;
+	}
+
 	// FLYING 타입은 추격 시작 시 현재 위치와 회전값을 원점으로 저장
 	//if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLYING)
 	//{
@@ -127,9 +146,21 @@ void EnemyChaseState::OnTick()
 
 void EnemyChaseState::OnFinalTick()
 {
-	if (m_EnemyData->GetTargetObject()->GetName() == L"mon3_1")
+    // Stop chase SFX when leaving chase state
+	ENEMY_TYPE type = m_EnemyData->GetEnemyType();
+	switch (type)
 	{
-		int a = 0;
+	case ENEMY_TYPE::DEMON:
+		SoundMgr::GetInst()->StopSFX(L"DEMON_Chase");
+		break;
+	case ENEMY_TYPE::SKULL:
+		SoundMgr::GetInst()->StopSFX(L"SKULL_Chase");
+		break;
+	case ENEMY_TYPE::FLYING:
+		SoundMgr::GetInst()->StopSFX(L"FLYING_Chase");
+		break;
+	default:
+		break;
 	}
 }
 

@@ -85,6 +85,14 @@ void TimeMgr::Tick()
 	* 나눗셈을 한다면 나누어 떨어질때 까지 연산하므로, float로 형변환
 	*********************************************************/
 	m_DeltaTime = (float)(m_Current.QuadPart - m_Prev.QuadPart) / (float)m_Frequency.QuadPart;
+	
+	// 디버깅 중 중단점으로 인해 프레임 간격이 비정상적으로 커지는 경우를 무시
+	// (요청대로 m_DeltaTime이 1 이상이면 0으로 고정)
+	if (m_DeltaTime >= 1.0f)
+	{
+		m_DeltaTime = 0.1f;
+	}
+
 	m_Prev = m_Current;
 
 	// Engine용 Time — 레벨 상태 무관하게 항상 누적

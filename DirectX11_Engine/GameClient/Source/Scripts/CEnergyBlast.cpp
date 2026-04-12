@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CEnergyBlast.h"
+
 #include "LevelMgr.h"
 #include "TimeMgr.h"
 

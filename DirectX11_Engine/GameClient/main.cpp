@@ -257,6 +257,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+    //case WM_CLOSE:
+    //    // 아무것도 하지 않거나, 확인 창을 띄움
+    //    // return 0; 을 하면 프로그램이 종료되지 않습니다.
+    //    return 0;
+    //    break;
+    //case WM_SYSCOMMAND:
+    //    // wParam의 하위 4비트는 OS 내부용이므로 0xFFF0과 AND 연산을 해야 합니다.
+    //    switch (wParam & 0xFFF0)
+    //    {
+    //    case SC_KEYMENU:  // Alt 키를 눌러 메뉴로 가는 것 차단
+    //    case SC_MOUSEMENU: // 마우스 클릭으로 메뉴 가는 것 차단
+    //        return 0;
+    //    }
+    //    break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }

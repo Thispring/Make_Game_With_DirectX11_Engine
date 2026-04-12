@@ -69,6 +69,9 @@ void LevelMgr::GameStart()
 	UIMgr::GetInst()->ResetOptionKey();
 	UIMgr::GetInst()->ResetCreditKey();
 
+	// Play transition SFX when moving from MainMenu to Level 0
+	SoundMgr::GetInst()->PlaySFX(L"Level_Move");
+
 	::ChangeLevel(L"Level\\Normal_Stage_0.lv");
 	::ChangeLevelState(LEVEL_STATE::CINEMATIC);
 }

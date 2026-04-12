@@ -28,47 +28,66 @@ FontMgr::~FontMgr()
 		m_hFontResource = nullptr;
 		m_fontBuffer.clear();
 	}
+
+	// [추가] 임시 등록했던 시스템 폰트 리소스 해제
+	wstring path = WCONTENT_PATH + L"Font\\_bitmap_font____romulus_by_pix3m-d6aokem.ttf";
+	RemoveFontResourceEx(path.c_str(), FR_PRIVATE, 0);
+	SendMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
 }
 
 void FontMgr::Init()
 {
-	// 1. 팩토리 생성 확인
+	// 1. FW1 팩토리 생성
 	if (FAILED(FW1CreateFactory(FW1_VERSION, &m_FW1Factory)))
 	{
 		MessageBox(nullptr, L"FW1 Font Factory 생성 실패!", L"Font Error", MB_OK | MB_ICONERROR);
 		return;
 	}
 
-	// 경로 설정 (상대 경로 확인 필수)
+	// 경로 설정
 	wstring path = WCONTENT_PATH + L"Font\\_bitmap_font____romulus_by_pix3m-d6aokem.ttf";
 
-	// 2. 파일 존재 여부 확인
+	// [패치 1] 시스템 임시 리소스로 직접 등록 (AddFontResourceEx)
+	// FR_PRIVATE를 사용하면 현재 프로세스가 실행 중일 때만 유효하며, 설치 없이도 시스템 폰트처럼 인식률이 높아집니다.
+	int resCount = AddFontResourceEx(path.c_str(), FR_PRIVATE, 0);
+
+	if (resCount > 0)
+	{
+		// [패치 2] OS에 폰트 테이블이 변경되었음을 알림 (브로드캐스트)
+		// 이 과정을 통해 FW1Wrapper가 폰트를 찾을 확률이 비약적으로 상승합니다.
+		SendMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
+	}
+	else
+	{
+		// 파일은 있지만 등록에 실패한 경우 (권한 문제 등)를 위한 백업 메시지
+#ifndef _DEBUG
+// 릴리즈 빌드에서만 상세 경로 노출
+		wstring errMsg = L"폰트 리소스 등록 실패(시스템 예약 오류).\n경로: " + path;
+		MessageBox(nullptr, errMsg.c_str(), L"Font Registration Fail", MB_OK | MB_ICONWARNING);
+#endif
+	}
+
+	// [패치 3] 메모리 로드 로직 (기존 유지하되 안전장치 추가)
 	std::ifstream fontFile(path, std::ios::binary | std::ios::ate);
-	if (!fontFile)
+	if (fontFile)
 	{
-		// Release 모드에서 경로 문제를 찾기 위해 시도한 전체 경로를 메시지에 담습니다.
-		wstring errMsg = L"폰트 파일을 찾을 수 없습니다.\n경로: " + path;
-		MessageBox(nullptr, errMsg.c_str(), L"File Not Found", MB_OK | MB_ICONWARNING);
-		return;
-	}
+		std::streamsize size = fontFile.tellg();
+		fontFile.seekg(0, std::ios::beg);
+		m_fontBuffer.resize((size_t)size);
 
-	// 파일 읽기 및 메모리 등록
-	std::streamsize size = fontFile.tellg();
-	fontFile.seekg(0, std::ios::beg);
-	m_fontBuffer.resize((size_t)size);
-	if (fontFile.read(reinterpret_cast<char*>(m_fontBuffer.data()), size))
-	{
-		DWORD fonts = 0;
-		m_hFontResource = AddFontMemResourceEx(m_fontBuffer.data(), (DWORD)size, 0, &fonts);
-
-		if (nullptr == m_hFontResource)
+		if (fontFile.read(reinterpret_cast<char*>(m_fontBuffer.data()), size))
 		{
-			MessageBox(nullptr, L"AddFontMemResourceEx 실패!", L"Memory Font Error", MB_OK);
+			DWORD fonts = 0;
+			m_hFontResource = AddFontMemResourceEx(m_fontBuffer.data(), (DWORD)size, 0, &fonts);
 		}
+		fontFile.close();
 	}
 
-	// 3. 최종 폰트 래퍼 생성 확인
-	// 폰트 메타데이터 분석 결과 "Romulus"가 맞으므로 이 이름은 그대로 사용합니다.
+	// 2. 폰트 래퍼 생성
+	// 폰트 등록 후 OS가 인덱싱할 시간을 아주 잠깐 벌어주는 것이 안전합니다.
+	Sleep(10);
+
+	// L"Romulus" 이름이 정확한지 다시 한번 확인 필수
 	if (FAILED(m_FW1Factory->CreateFontWrapper(DEVICE, L"Romulus", &m_FontWrapper)))
 	{
 		MessageBox(nullptr, L"Font Wrapper 생성 실패! (Romulus 글꼴 인식 불가)", L"Font Error", MB_OK | MB_ICONERROR);

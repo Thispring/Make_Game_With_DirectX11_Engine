@@ -5,6 +5,7 @@
 
 #include "GameMgr.h"
 #include "TimeMgr.h"
+#include "SoundMgr.h"
 
 CSavePoint::CSavePoint()
 	: CScript(SCRIPT_TYPE::SAVEPOINT)
@@ -25,6 +26,8 @@ void CSavePoint::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherColl
 		// Player의 세이브 위치 정보를 갱신합니다.
 		GameMgr::GetInst()->RegisterPlayerSave(GetOwner()->Transform()->GetRelativePos());
 
+		// 사운드 재생
+		SoundMgr::GetInst()->PlaySFX(L"SavePoint");
 
 		// 사라지는 Flipbook 재생
 		// 재생이 끝나면 기능이 다했으므로 비활성화 or 삭제 요청을 합니다.

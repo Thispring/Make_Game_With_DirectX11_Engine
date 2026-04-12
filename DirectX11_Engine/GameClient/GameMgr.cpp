@@ -103,6 +103,17 @@ void GameMgr::ClearLevelPlay()
 	CEnemyData::ClearAllInstances();
 }
 
+void GameMgr::ClearProjectile()
+{
+	Ptr<ALevel> pLevel = LevelMgr::GetInst()->GetCurLevel();
+
+	if (pLevel->GetKey() == L"Level\\Normal_Stage_0.lv")
+	{
+		pLevel->DestroyAllObjectsInLayer((int)LEVEL_0_LAYER::PLAYER_PROJECTILE);
+		pLevel->DestroyAllObjectsInLayer((int)LEVEL_0_LAYER::ENEMY_PROJECTILE);
+	}
+}
+
 void GameMgr::PlayerRespawnEvent()
 {
 	// Player가 건들 수 없는 Level 바깥 영역에 Dummy Enemy를 하나 생성하고

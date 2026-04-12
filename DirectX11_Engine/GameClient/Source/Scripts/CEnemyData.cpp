@@ -247,14 +247,11 @@ void CEnemyData::ChangeState(ENEMY_STATE _State)
 
 void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	// 수정: FLYING/FLOWER 타입인 경우 'BACK_GROUND_COLLIDER' 에 대해서만
-	// 바닥/천장 관련 로직을 무시하도록 변경했습니다.
 	int otherLayer = _OtherCollider->GetOwner()->GetLayerIdx();
 
 	// 추락 시, 사망 처리 (OutOfBounds은 항상 처리)
 	if (otherLayer == (int)LEVEL_0_LAYER::OUT_OF_BOUNDS)
 	{
-		// Dead 상태 호출
 		m_IsDead = true;
 		ChangeState(ENEMY_STATE::DEAD);
 		return;
@@ -267,17 +264,57 @@ void CEnemyData::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherColl
 		if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
 			return;
 
-		Matrix invSlope = _OtherCollider->GetWorldMat().Invert();
-		Vec3 localCenter = XMVector3TransformCoord(_OwnCollider->GetWorldCenter(), invSlope);
+		// 보다 견고한 위/아래 판별 및 침투 보정: 플레이어 쪽 구현과 유사하게 처리
+		if (_OtherCollider->IsCacheDirty())
+			_OtherCollider->UpdateSlopeCache();
 
-		++m_GroundContactCount;
-		m_IsFalling = false;
-		m_fCoyoteTimer = 0.f;
+		Matrix otherMat = _OtherCollider->GetWorldMat();
+		Matrix ownMat = _OwnCollider->GetWorldMat();
 
-		Matrix slopeMat = _OtherCollider->GetWorldMat();
-		Vec3 normal = Vec3(slopeMat._21, slopeMat._22, slopeMat._23);
-		normal.Normalize();
-		m_GroundNormal = (fabsf(normal.y) > 0.99f) ? Vec3(0.f, 1.f, 0.f) : normal;
+		Vec3 otherNormal = _OtherCollider->GetCachedNormal();
+
+		Vec3 vecCenter = _OwnCollider->GetWorldCenter() - _OtherCollider->GetWorldCenter();
+		float distAlongNormal = XMVectorGetX(XMVector3Dot(vecCenter, otherNormal));
+
+		float otherHalfH = Vec3(otherMat._21, otherMat._22, otherMat._23).Length() * 0.5f;
+		float ownHalfH   = Vec3(ownMat._21, ownMat._22, ownMat._23).Length() * 0.5f;
+
+		// 바닥 측에 있으면 착지 처리 및 침투 보정
+		if (distAlongNormal >= 0.f)
+		{
+			++m_GroundContactCount;
+			m_IsFalling = false;
+			m_fCoyoteTimer = 0.f;
+			m_VelocityY = 0.f;
+
+			Matrix slopeMat = _OtherCollider->GetWorldMat();
+			Vec3 normal = Vec3(slopeMat._21, slopeMat._22, slopeMat._23);
+			normal.Normalize();
+			m_GroundNormal = (fabsf(normal.y) > 0.99f) ? Vec3(0.f, 1.f, 0.f) : normal;
+
+			float requiredCenterDist = otherHalfH + ownHalfH;
+			float penetration = requiredCenterDist - distAlongNormal;
+			if (penetration > 0.f)
+			{
+				Vec3 pos = GetOwner()->Transform()->GetRelativePos();
+				pos += otherNormal * penetration;
+				GetOwner()->Transform()->SetRelativePos(pos);
+			}
+		}
+		else
+		{
+			// 천장에서 들어온 경우: 위로 향하는 속도 차단 및 약간 밀어냄
+			if (m_VelocityY > 0.f)
+				m_VelocityY = 0.f;
+
+			float penetration = (otherHalfH + ownHalfH) - fabsf(distAlongNormal);
+			if (penetration > 0.f)
+			{
+				Vec3 pos = GetOwner()->Transform()->GetRelativePos();
+				pos -= otherNormal * penetration;
+				GetOwner()->Transform()->SetRelativePos(pos);
+			}
+		}
 	}
 
 	// ─── 벽 (Layer 17, 12) ───
@@ -306,8 +343,37 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 			return;
 
 		// 간단한 천장/바닥 충돌 처리: 접지 상태 유지 및 낙하 플래그 제거
-		m_IsFalling = false;
-		m_GroundNormal = Vec3(0.f, 1.f, 0.f);
+		// + 천장 침투(머리) 검사로 위 향하는 속도 차단
+		Matrix invSlope  = _OtherCollider->GetWorldMat().Invert();
+		Vec3 centerWorld = _OwnCollider->GetWorldCenter();
+		Vec3 localCenter = XMVector3TransformCoord(centerWorld, invSlope);
+
+		if (localCenter.y >= 0.f)
+		{
+			m_IsFalling = false;
+			m_GroundNormal = Vec3(0.f, 1.f, 0.f);
+			if (m_VelocityY < 0.f)
+				m_VelocityY = 0.f;
+		}
+		else
+		{
+			// 머리 위치로 침투 확인 (player 쪽과 동일한 방식)
+			Matrix ownMat  = _OwnCollider->GetWorldMat();
+			Vec3 ownYAxis  = Vec3(ownMat._21, ownMat._22, ownMat._23);
+
+			Vec3 headWorld = centerWorld;
+			headWorld.x += ownYAxis.x * 0.5f;
+			headWorld.y += ownYAxis.y * 0.5f;
+			headWorld.z += ownYAxis.z * 0.5f;
+
+			Vec3 localHead = XMVector3TransformCoord(headWorld, invSlope);
+			float localPenetration = localHead.y + 0.5f;
+			if (localPenetration > 0.f)
+			{
+				if (m_VelocityY > 0.f)
+					m_VelocityY = 0.f;
+			}
+		}
 	}
 
 	// ─── 벽 (Layer 17, 12) ───
@@ -318,7 +384,6 @@ void CEnemyData::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 		if (m_EnemyType == ENEMY_TYPE::FLYING || m_EnemyType == ENEMY_TYPE::FLOWER)
 			return;
 
-		// ENEMY_WALL_COLLIDER의 경우, 현재 상태가 GHOST_SKULL 계열이면 충돌 처리하지 않음
 		if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::ENEMY_WALL_COLLIDER)
 		{
 			Ptr<CEnemyStateManager> pMgr = m_TargetObject->GetScript<CEnemyStateManager>();

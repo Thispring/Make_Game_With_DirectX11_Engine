@@ -6,6 +6,8 @@
 #include "GameMgr.h"
 #include "TimeMgr.h"
 
+#include "SoundMgr.h"
+
 #pragma region EnemyDamageState
 EnemyDamageState::EnemyDamageState(Ptr<CEnemyData> _Data)
     : EnemyState(_Data)
@@ -32,7 +34,24 @@ EnemyHitState::~EnemyHitState()
 
 void EnemyHitState::OnBegin()
 {
-
+    // Play hit sound according to enemy type
+    ENEMY_TYPE type = m_EnemyData->GetEnemyType();
+    if (type == ENEMY_TYPE::DEMON)
+    {
+        SoundMgr::GetInst()->PlaySFX(L"DEMON_Hit");
+    }
+    else if (type == ENEMY_TYPE::SKULL)
+    {
+        SoundMgr::GetInst()->PlaySFX(L"SKULL_Hit");
+    }
+    else if (type == ENEMY_TYPE::FLYING)
+    {
+        SoundMgr::GetInst()->PlaySFX(L"FLYING_Hit");
+    }
+    else if (type == ENEMY_TYPE::FLOWER)
+    {
+        SoundMgr::GetInst()->PlaySFX(L"FLOWER_Hit");
+    }
 }
 
 void EnemyHitState::OnTick()
@@ -86,6 +105,7 @@ EnemyDeadState::~EnemyDeadState()
 
 void EnemyDeadState::OnBegin()
 {
+
 }
 
 void EnemyDeadState::OnTick()
@@ -134,6 +154,9 @@ void EnemyGhostSkullState::OnBegin()
 {
     // 타입을 GHOST_SKULL로 변경 -> 부모 클래스 중력 적용 제외하기 위함
     m_EnemyData->SetEnemyType(ENEMY_TYPE::GHOST_SKULL);
+
+    // Start skull ghost SFX looping without overlap
+    SoundMgr::GetInst()->PlaySFX(L"SKULL_Ghost", 0, false);
 }
 
 void EnemyGhostSkullState::OnTick()
@@ -149,6 +172,7 @@ void EnemyGhostSkullState::OnTick()
 
 void EnemyGhostSkullState::OnFinalTick()
 {
+
 }
 
 
@@ -235,6 +259,8 @@ void EnemyGhostSkullMoveState::OnTick()
 void EnemyGhostSkullMoveState::OnFinalTick()
 {
     m_EnemyData->SetEnemyType(ENEMY_TYPE::SKULL);
+    // Ensure ghost SFX stopped when this state ends
+    SoundMgr::GetInst()->StopSFX(L"SKULL_Ghost");
 }
 
 

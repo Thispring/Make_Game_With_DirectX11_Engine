@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "PlayerRangedAttackState.h"
+
 #include "Source\Scripts\CPlayerStateManager.h"
+
+#include "SoundMgr.h"
 
 #pragma region PlayerRangedAttackState
 PlayerRangedAttackState::PlayerRangedAttackState(Ptr<CPlayerData> _Data)
@@ -104,6 +107,8 @@ PlayerEnergyBlastShotState::~PlayerEnergyBlastShotState()
 
 void PlayerEnergyBlastShotState::Begin()
 {
+	// Sound 재생
+	SoundMgr::GetInst()->PlaySFX(L"EnergyBlast");
 	m_PlayerData->SetIsAttack();
 }
 

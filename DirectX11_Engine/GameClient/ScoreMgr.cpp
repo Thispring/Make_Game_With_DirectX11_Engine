@@ -68,18 +68,32 @@ void ScoreMgr::SaveScore(float _RemainingTime, int _DeathCount)
 	// 점수 계산 공식:
 	// GoalTime이 많이 남아 있을 수록 빨리 클리어 했다는 것이므로 높은 점수
 	// DeathCount가 적을 수록, 적게 죽은 것이므로 높은 점수
-	// 1. 시간 점수 계산 (50% 비중)
-	float timeRatio = _RemainingTime;
-	int timeScore = static_cast<int>(timeRatio * 5000);
+    // 1. 시간 점수 계산
+	// _RemainingTime을 분과 초(정수)로 변환하여 MMSS 형태로 점수화 (예: 5분43초 -> 543)
+	// 최대값은 10분(1000)
+	int totalSeconds = static_cast<int>(_RemainingTime);
+	if (totalSeconds < 0) totalSeconds = 0;
+	int minutes = totalSeconds / 60;
+	int seconds = totalSeconds % 60;
 
-	// 2. 생존 점수 계산 (50% 비중) - 고정 차감 방식 예시
-	int deathPenalty = 1000;
-	int survivalScore = 4999 - (_DeathCount * deathPenalty);
-	// 10번 이상 죽었을 시, 생존 보너스 X
-	if (survivalScore < 10) survivalScore = 0;
+	int timeScore = minutes * 100 + seconds;
+	if (timeScore > 1000) timeScore = 1000;
 
-	// 3. 최종 합산 및 클램핑
+	// 2. 생존 점수 계산 - 최대 1000점에서 고정 차감
+	const int maxSurvival = 1000;
+	const int deathPenalty = 100; // 한 번 죽을 때마다 100점 차감
+	int survivalScore = maxSurvival - (_DeathCount * deathPenalty);
+	if (survivalScore < 0) survivalScore = 0;
+
+	// 3. 최종 합산 및 검증 (최대 2000점)
 	int finalScore = timeScore + survivalScore;
+	if (finalScore > 2000)
+	{
+		// 2000을 초과하면 오류가 있으므로 경고
+		wchar_t buf[256];
+		swprintf_s(buf, L"ScoreMgr Warning: final score %d exceeds maximum 2000\n", finalScore);
+		OutputDebugStringW(buf);
+	}
 	m_Score = finalScore;
 
 	if (m_Score > m_HighScore)

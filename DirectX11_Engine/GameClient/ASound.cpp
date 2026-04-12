@@ -11,6 +11,7 @@ FMOD_RESULT CHANNEL_CALLBACK(FMOD_CHANNELCONTROL* channelcontrol, FMOD_CHANNELCO
 ASound::ASound(bool _EngineRes)
 	: Asset(ASSET_TYPE::SOUND)
 	, m_Sound(nullptr)
+	, m_iMaxOverlap(4) // 기본값: 4중첩 허용
 {
 }
 
@@ -30,10 +31,23 @@ int ASound::Play(int _iRoopCount, float _fVolume, bool _bOverlap)
 		assert(nullptr);
 	}
 
-	// 중첩재생 X + 이미 다른채널에서 재생중 ==> 재생 불가
+	// 중첩재생 금지 + 이미 재생중이면 실패
 	if (!_bOverlap && !m_listChannel.empty())
 	{
 		return E_FAIL;
+	}
+
+	// 중첩 허용이지만 현재 채널이 최대값을 넘는다면
+	// 간단한 전략: 가장 오래된(앞에 있는) 채널을 중지(voice-steal)
+	if (_bOverlap && (int)m_listChannel.size() >= m_iMaxOverlap)
+	{
+		// 가장 오래된 채널을 중지하고 리스트에서 제거
+		FMOD::Channel* pOld = m_listChannel.front();
+		if (pOld)
+		{
+			pOld->stop();
+		}
+		m_listChannel.pop_front();
 	}
 
 	_iRoopCount -= 1;
@@ -85,6 +99,28 @@ void ASound::SetVolume(float _f, int _iChannelIdx)
 		{
 			(*iter)->setVolume(_f);
 			return;
+		}
+	}
+}
+
+void ASound::SetVolumeAll(float _f)
+{
+	for (FMOD::Channel* pChannel : m_listChannel)
+	{
+		if (pChannel)
+		{
+			pChannel->setVolume(_f);
+		}
+	}
+}
+
+void ASound::SetMute(bool _bMute)
+{
+	for (FMOD::Channel* pChannel : m_listChannel)
+	{
+		if (pChannel)
+		{
+			pChannel->setMute(_bMute);
 		}
 	}
 }

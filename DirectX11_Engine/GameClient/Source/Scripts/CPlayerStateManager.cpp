@@ -9,6 +9,7 @@
 #include "TimeMgr.h"
 #include "RandomMgr.h"
 #include "GameMgr.h"
+#include "SoundMgr.h"
 
 #include "Source\Content\PlayerIdleState.h"
 #include "Source\Content\PlayerMoveState.h"
@@ -148,6 +149,12 @@ void CPlayerStateManager::Respawn()
     // 초기 스탯으로 초기화 + Origin 위치로 이동
     //======================================
     
+    // Sound
+    SoundMgr::GetInst()->PlaySFX(L"PlayerRespawn", 1, true);
+
+    // Projectile 제거
+    GameMgr::GetInst()->ClearProjectile();
+
     // Enemy 초기화
     GameMgr::GetInst()->PlayerRespawnEvent();
 
@@ -162,23 +169,6 @@ void CPlayerStateManager::Respawn()
     // 공격 키 난수 로직
     //================
     Ptr<CPlayerController> pController = m_PlayerData->GetTargetObject()->GetScript<CPlayerController>();
-    //KEY arryKey[3] = {};
-
-    //RandomMgr::GetInst()->ShuffleKeyNum();
-
-    //for (UINT i = 0; i < 3; ++i)
-    //{
-    //    arryKey[i] = RandomMgr::GetInst()->GetRandomKey(3);
-    //}
-
-    //pController->SetPunchKey(arryKey[PUNCH_KEY]);
-    //pController->SetKickKey(arryKey[KICK_KEY]);
-    //pController->SetBlastShotKey(arryKey[BLAST_SHOT_KEY]);
-
-    //assert(arryKey[0] != arryKey[1] && "Respawn: PunchKey == KickKey");
-    //assert(arryKey[1] != arryKey[2] && "Respawn: KickKey == BlastShotKey");
-    //assert(arryKey[0] != arryKey[2] && "Respawn: PunchKey == BlastShotKey");
-
     RandomMgr::GetInst()->GetRandomKeyArray(pController->GetPunchKey(), pController->GetKickKey(), pController->GetBlastShotKey());
 
     // 키 발견 초기화

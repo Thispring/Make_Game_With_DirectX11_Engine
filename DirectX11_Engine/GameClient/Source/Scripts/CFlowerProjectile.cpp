@@ -59,16 +59,31 @@ bool CFlowerProjectile::DestroyProjectile()
 
 void CFlowerProjectile::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
+	// 만약 근접공격 트리거와 충돌했다면
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER_MELEE_TRIGGER)
+	{
+		DestroyProjectile();
+		return;
+	}
+
 	// void CPlayerStateManager::TakeDamage(float _Damage) 호출
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
 	{
 		// 여기에서 _OtherCollider한테 데미지값을 전달해야함
 		_OtherCollider->GetOwner()->GetScript<CPlayerStateManager>()->TakeDamage(GetDamage());
 	}
+
 }
 
 void CFlowerProjectile::Overlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
+	// 만약 근접공격 트리거와 충돌했다면
+	//if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER_MELEE_TRIGGER)
+	//{
+	//	DestroyProjectile();
+	//	return;
+	//}
+
 	// Player Layer에서만 작동하게 조건문 실행
 	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::PLAYER)
 	{

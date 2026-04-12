@@ -17,10 +17,15 @@ CPlayerMeleeTrigger::~CPlayerMeleeTrigger()
 
 void CPlayerMeleeTrigger::BeginOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollider)
 {
-	if (_OtherCollider->GetOwner()->GetLayerIdx() == 6)
+	if (_OtherCollider->GetOwner()->GetLayerIdx() == (int)LEVEL_0_LAYER::ENEMY)
 	{
 		// 여기에서 _OtherCollider한테 데미지값을 전달해야함
 		float dmg = m_PlayerData->GetDamage();
+
+		// Kick 공격일 때 데미지 증가
+		if (_OwnCollider->GetOwner()->GetName() == L"Kick_Anchor")
+			dmg += 2.f;
+
 		_OtherCollider->GetOwner()->GetScript<CEnemyData>()->TakeDamage(dmg);
 	}
 }
@@ -45,7 +50,6 @@ void CPlayerMeleeTrigger::Begin()
 	ADD_DYNAMIC_END_OVERLAP(CPlayerMeleeTrigger::EndOverlap);
 
 	// Begin 초기화가 끝나고 스스로 비활성화 하게 변경
-	//GetOwner()->SetIsActive(false);
 	GetOwner()->Collider2D()->SetEnabled(false);
 }
 

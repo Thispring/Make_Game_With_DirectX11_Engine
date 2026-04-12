@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "PlayerMeleeAttackState.h"
+
 #include "KeyMgr.h"
+#include "SoundMgr.h"
+
 #include "Source\Scripts\CPlayerStateManager.h"
 
 #pragma region PlayerMeleeAttackState
@@ -28,6 +31,8 @@ PlayerPunchState::~PlayerPunchState()
 
 void PlayerPunchState::Begin()
 {
+	SoundMgr::GetInst()->PlaySFX(L"PlayerPunch1");
+	SoundMgr::GetInst()->PlaySFX(L"PlayerPunch2");
 	m_PlayerData->SetIsAttack();
 	// 콜라이더 활성화 — CPlayerController 대신 Begin에서 처리하여 재시작 시에도 동작
 	m_PlayerData->GetTargetObject()->GetChild(PLAYER_PUNCH_ANCHOR)->Collider2D()->SetEnabled(true);
@@ -128,17 +133,22 @@ PlayerHighKickState::~PlayerHighKickState()
 
 void PlayerHighKickState::Begin()
 {
+	SoundMgr::GetInst()->PlaySFX(L"PlayerKick");
 	m_PlayerData->SetIsAttack();
+	// 콜라이더 활성화 — 재시작 시에도 동작하도록 Begin에서 처리
+	m_PlayerData->GetTargetObject()->GetChild(PLAYER_KICK_ANCHOR)->Collider2D()->SetEnabled(true);
 }
 
 void PlayerHighKickState::Tick()
 {
+	PlayerState::ApplyGravity();
 }
 
 void PlayerHighKickState::FinalTick()
 {
 	// 정리(cleanup)만 담당 — Idle 전환은 CPlayerAnimator::Tick()에서 처리
 	m_PlayerData->OffIsAttack();
+	m_PlayerData->GetTargetObject()->GetChild(PLAYER_KICK_ANCHOR)->Collider2D()->SetEnabled(false);
 }
 
 PLAYER_STATE PlayerHighKickState::GetFlipbookIndex()

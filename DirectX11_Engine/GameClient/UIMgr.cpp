@@ -12,6 +12,8 @@
 #include "Engine.h"
 #include "Device.h"
 
+#include "SoundMgr.h" // 추가: UI에서 사운드 제어 호출
+
 UIMgr::UIMgr()
     : m_ShowOptions(false)
     , m_ShowCredit(false)
@@ -30,10 +32,15 @@ UIMgr::UIMgr()
     , BGMvolume(0.f)
     , SFXvolume(0.f)
 
+    , m_bBGMMute(false)
+    , m_bSFXMute(false)
+
     , m_PrevOptionKey(KEY::END)
     , m_PrevCreditKey(KEY::END)
     , m_PrevOptionImGuiKey(ImGuiKey_None)
     , m_PrevCreditImGuiKey(ImGuiKey_None)
+
+    , m_isRelease(false)
 {
 
 }
@@ -44,7 +51,10 @@ UIMgr::~UIMgr()
 
 void UIMgr::Init()
 {
-
+#ifndef Debug
+    m_isRelease = true;
+#endif // !Debug
+    m_isRelease = false;
 }
 
 void UIMgr::Progress()
@@ -57,6 +67,11 @@ void UIMgr::Progress()
         m_OpenFrame = ImGui::GetFrameCount();
 
         m_ShowOptions = true;
+        // Options 창 오픈 시 UI 값을 현재 SoundMgr 상태로 동기화 (0..100 정수)
+        BGMvolume = SoundMgr::GetInst()->GetBGMVolume_UI();
+        SFXvolume = SoundMgr::GetInst()->GetSFXVolume_UI();
+        m_bBGMMute = SoundMgr::GetInst()->IsBGMMute();
+        m_bSFXMute = SoundMgr::GetInst()->IsSFXMute();
         m_eventShowOption = false;
         ChangeLevelState(LEVEL_STATE::PAUSE);
         ImGui::OpenPopup("OptionsWindow");
@@ -106,16 +121,19 @@ void UIMgr::RenderOptionsWindow()
         SPACING_UI(10);
         ImGui::Separator();
 
-        #pragma region FullScreen
-        ImGui::Text("Screen Size");
-        SPACING_UI(2);
-        if (ImGui::Checkbox("FullScreen", &m_isFullScreen))
+        if (!m_isRelease)
         {
-            Engine::GetInst()->ToggleFullScreen();
+            #pragma region FullScreen
+            ImGui::Text("Screen Size");
+            SPACING_UI(2);
+            if (ImGui::Checkbox("FullScreen", &m_isFullScreen))
+            {
+                Engine::GetInst()->ToggleFullScreen();
+            }
+            #pragma endregion
+            SPACING_UI(5);
+            ImGui::Separator();
         }
-        #pragma endregion
-        SPACING_UI(5);
-        ImGui::Separator();
 
         #pragma region Volume Slide
         ImGui::Text("Music");
@@ -124,25 +142,39 @@ void UIMgr::RenderOptionsWindow()
         ImGui::Text("BGM Volume");
         ImGui::SameLine(600.f);
         ImGui::Text("Mute");
-        float f = 0.f;
         ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
-        ImGui::SliderFloat("##BGM", &f, 0.f, 10.f);
+        // BGMvolume은 0..100 정수로 표현
+        float fBgm = (float)BGMvolume;
+        if (ImGui::SliderFloat("##BGM", &fBgm, 0.f, 100.f))
+        {
+            BGMvolume = (int)fBgm;
+            SoundMgr::GetInst()->SetBGMVolume_UI(BGMvolume);
+        }
 
-        bool isBgm = false;
         ImGui::SameLine(600.f);
-        ImGui::Checkbox("##BGMMute", &isBgm);
+        if (ImGui::Checkbox("##BGMMute", &m_bBGMMute))
+        {
+            SoundMgr::GetInst()->SetBGMMute(m_bBGMMute);
+        }
 
         SPACING_UI(5);
         ImGui::Text("SFX Volume");
         ImGui::SameLine(600.f);
         ImGui::Text("Mute");
-        float f2 = 0.f;
         ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
-        ImGui::SliderFloat("##SFX", &f2, 0.f, 10.f);
+        // SFXvolume은 0..100 정수로 표현
+        float fSfx = (float)SFXvolume;
+        if (ImGui::SliderFloat("##SFX", &fSfx, 0.f, 100.f))
+        {
+            SFXvolume = (int)fSfx;
+            SoundMgr::GetInst()->SetSFXVolume_UI(SFXvolume);
+        }
 
-        bool isSfx = false;
         ImGui::SameLine(600.f);
-        ImGui::Checkbox("##SFXMute", &isSfx);
+        if (ImGui::Checkbox("##SFXMute", &m_bSFXMute))
+        {
+            SoundMgr::GetInst()->SetSFXMute(m_bSFXMute);
+        }
         #pragma endregion
 
         SPACING_UI(10);

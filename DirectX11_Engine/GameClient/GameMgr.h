@@ -32,6 +32,7 @@ public:
 	void RegisterPlayerSave(Vec3 _SavePos);
 
 	void ClearLevelPlay();
+	void ClearProjectile();
 	void PlayerRespawnEvent();
 
 

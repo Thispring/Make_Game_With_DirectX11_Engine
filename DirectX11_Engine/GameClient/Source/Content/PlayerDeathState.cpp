@@ -2,6 +2,8 @@
 #include "PlayerDeathState.h"
 #include "Source\Scripts\CPlayerStateManager.h"
 
+#include "SoundMgr.h"
+
 PlayerDeathState::PlayerDeathState(Ptr<CPlayerData> _Data)
 	: PlayerState(_Data)
 {
@@ -15,6 +17,7 @@ PlayerDeathState::~PlayerDeathState()
 
 void PlayerDeathState::Begin()
 {
+	SoundMgr::GetInst()->PlaySFX(L"PlayerDeath", 1, false);
 	// GET_SET 매크로에서 Set함수에 +1 매개변수를 전달하는 것은 단순히 정수 1을 의미, 아래와 같이 작성해야함
 	m_PlayerData->SetDeathCount(m_PlayerData->GetDeathCount() + 1);
 }

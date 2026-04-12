@@ -9,11 +9,37 @@
 
 #include "APrefab.h"
 
+#include "SoundMgr.h"
+
 #pragma region EnemyAttackState(근접)
 EnemyAttackState::EnemyAttackState(Ptr<CEnemyData> _Data)
 	: EnemyState(_Data)
 {
 
+}
+
+// Play attack SFX for different enemy types when attack begins
+// Called from OnBegin of EnemyAttackState and EnemyRangedAttackState if needed
+void PlayEnemyAttackSFX(Ptr<CEnemyData> enemy)
+{
+	if (enemy == nullptr)
+		return;
+
+	ENEMY_TYPE type = enemy->GetEnemyType();
+	switch (type)
+	{
+    case ENEMY_TYPE::DEMON:
+		SoundMgr::GetInst()->PlaySFX(L"DEMON_Attack", 1, false);
+		break;
+	case ENEMY_TYPE::SKULL:
+		SoundMgr::GetInst()->PlaySFX(L"SKULL_Attack", 1, false);
+		break;
+	case ENEMY_TYPE::FLYING:
+		SoundMgr::GetInst()->PlaySFX(L"FLYING_Attack", 1, false);
+		break;
+	default:
+		break;
+	}
 }
 
 EnemyAttackState::~EnemyAttackState()
@@ -29,6 +55,9 @@ void EnemyAttackState::OnBegin()
 	{
 		m_bInterrupted = true;
 	});
+
+	// Play SFX for attack start
+	PlayEnemyAttackSFX(m_EnemyData);
 }
 
 void EnemyAttackState::OnTick()
@@ -83,6 +112,7 @@ void EnemyRangedAttackState::OnBegin()
 {
 	// 첫 공격 보장
 	m_fireTime += 1.f;
+
 }
 
 void EnemyRangedAttackState::OnTick()
@@ -93,6 +123,12 @@ void EnemyRangedAttackState::OnTick()
 
 	if (m_fireTime >= 1.f)
 	{
+        // Flower only: play ranged attack SFX and create projectile
+		if (m_EnemyData != nullptr && m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLOWER)
+		{
+			SoundMgr::GetInst()->PlaySFX(L"FLOWER_RangedAttack");
+		}
+
 		m_EnemyData->CreateProjectile();
 		m_fireTime = 0;
 		return;

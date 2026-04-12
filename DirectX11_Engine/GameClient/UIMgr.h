@@ -29,8 +29,14 @@ private:
 	UINT		m_OpenFrame;        // Options 팝업이 열린 ImGui 프레임 번호
 	UINT		m_CreditOpenFrame;  // Credit 팝업이 열린 ImGui 프레임 번호
 
-	float		BGMvolume;
-	float		SFXvolume;
+	int		BGMvolume;          // UI에서 보여줄 정수(0..100)
+	int		SFXvolume;          // UI에서 보여줄 정수(0..100)
+
+	// UI 쪽에서 유지할 음소거 상태(체크박스와 바인딩)
+	bool		m_bBGMMute;
+	bool		m_bSFXMute;
+
+	bool		m_isRelease;
 
 	
 public:

@@ -149,7 +149,7 @@ void AssetMgr::LoadContent()
 			// 검사할 하위 폴더 목록
 			const wstring soundDirs[] = { L"Sound\\BGM\\", L"Sound\\SFX\\" };
 			// 검사할 확장자 목록
-			const string  soundExts[] = { ".mp3", ".wav" };
+			const string  soundExts[] = { ".mp3", ".wav", ".ogg" };
 
 			for (const auto& dir : soundDirs)
 			{

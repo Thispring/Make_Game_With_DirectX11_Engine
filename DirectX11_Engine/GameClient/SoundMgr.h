@@ -18,6 +18,16 @@ private:
 
 	bool												m_isBGMMute;
 	bool												m_isSFXMute;
+	float												m_BGMVolume;
+	float												m_SFXVolume;
+
+	// 이전 볼륨을 저장하여 뮤트 해제 시 복원하기 위한 변수
+	float											m_prevBGMVolume;
+	float											m_prevSFXVolume;
+
+	// 뮤트 상태에서 슬라이더로 볼륨을 변경했는지 추적
+	bool											m_bBGMChangedWhileMuted;
+	bool											m_bSFXChangedWhileMuted;
 
 public:
 	void Init();
@@ -27,4 +37,32 @@ public:
 	void StopPrevBGM();
 
 	void PlaySFX(wstring _SFXName);
+
+	// Overload: play with loop count and overlap control (_iRoopCount: 0 -> loop indefinitely)
+	void PlaySFX(wstring _SFXName, int _iRoopCount, bool _bOverlap);
+
+	// Stop all channels for a named SFX
+	void StopSFX(wstring _SFXName);
+
+	// BGM 일괄 제어
+	void SetBGMVolume(float _f);
+	void SetBGMMute(bool _bMute);
+	bool IsBGMMute() const;
+
+	// Set using 0..100 integer UI value
+	void SetBGMVolume_UI(int _iPercent) { SetBGMVolume(_iPercent / 100.f); }
+	int GetBGMVolume_UI() const { return (int)(m_BGMVolume * 100.f); }
+
+	// SFX 일괄 제어 (옵션 창에서 사용 가능하도록 추가)
+	void SetSFXVolume(float _f);
+	void SetSFXMute(bool _bMute);
+	bool IsSFXMute() const;
+
+	// Get current global volumes
+	float GetBGMVolume() const { return m_BGMVolume; }
+	float GetSFXVolume() const { return m_SFXVolume; }
+
+	// UI friendly access (0..100 integer)
+	void SetSFXVolume_UI(int _iPercent) { SetSFXVolume(_iPercent / 100.f); }
+	int GetSFXVolume_UI() const { return (int)(m_SFXVolume * 100.f); }
 };

@@ -1,8 +1,11 @@
 #include "pch.h"
 #include "PlayerMoveState.h"
+
 #include "PlayerState.h"
+
 #include "TimeMgr.h"
 #include "KeyMgr.h"
+#include "SoundMgr.h"
 
 PlayerMoveState::PlayerMoveState(Ptr<CPlayerData> _Data)
 	: PlayerState(_Data)

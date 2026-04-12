@@ -91,7 +91,7 @@ void CPlayerController::Kick(KEY _key)
 	{
 
 		// 콜라이더 활성화 및 IsAttack 설정은 PlayerMiddleKickState::Begin()에서 처리
-		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::MIDDLE_KICK));
+		m_StatusMgr->SetCurStatus(m_StatusMgr->GetStatusByIndex((int)PLAYER_STATE::HIGH_KICK));
 		m_StatusMgr->ChangeState();
 	}
 }
