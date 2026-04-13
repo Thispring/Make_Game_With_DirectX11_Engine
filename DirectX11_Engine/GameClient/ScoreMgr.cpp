@@ -125,5 +125,8 @@ void ScoreMgr::RenderScore()
 		FONT_RGBA(255, 255, 0, 255),
 		FONT_RGBA(0, 0, 0, 255),
 		1.5f);
+
+	// 아래 함수 호출하면 동작 OK
+	//FontMgr::GetInst()->DrawFont(score.c_str(), 10, 30, 24, FONT_RGBA(200, 20, 20, 255));
 }
 

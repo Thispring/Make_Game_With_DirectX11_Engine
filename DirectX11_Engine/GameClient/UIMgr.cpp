@@ -197,10 +197,22 @@ void UIMgr::RenderOptionsWindow()
         if (ImGuiFunc::ColoredButton("MainMenu",
             ColorConvertIntToVec4(12.f, 129.f, 207.f), ImVec2(100.f, 25.f)))
         {
+            // MainMenu에서 호출했다면 ChangeMainMenu 호출하지 않고
+            // Popup Close만 진행하기
+            if (LevelMgr::GetInst()->GetCurLevel()->GetKey() != L"Level\\MainMenu.lv")
+            {
+                LevelMgr::GetInst()->ChangeMainMenu();
+            }
+            else
+            {
+                m_bCloseOptionsRequest = false;  // ← 요청 플래그 초기화
+                ChangeLevelState(LEVEL_STATE::PLAY);
+            }
             m_ShowOptions = false;
-            LevelMgr::GetInst()->ChangeMainMenu();
             ImGui::SetWindowFocus(NULL);  // ImGui 포커스 해제 → 엔진 윈도우로 복귀
             ImGui::CloseCurrentPopup();
+
+
         }
         #pragma endregion
         ImGui::SameLine(690.f);
