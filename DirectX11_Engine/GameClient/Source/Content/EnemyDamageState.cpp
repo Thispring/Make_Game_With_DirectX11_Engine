@@ -156,7 +156,7 @@ void EnemyGhostSkullState::OnBegin()
     m_EnemyData->SetEnemyType(ENEMY_TYPE::GHOST_SKULL);
 
     // Start skull ghost SFX looping without overlap
-    SoundMgr::GetInst()->PlaySFX(L"SKULL_Ghost", 0, false);
+    SoundMgr::GetInst()->PlaySFX(L"SKULL_Ghost_In", 1, true);
 }
 
 void EnemyGhostSkullState::OnTick()
@@ -205,7 +205,8 @@ EnemyGhostSkullMoveState::~EnemyGhostSkullMoveState()
 
 void EnemyGhostSkullMoveState::OnBegin()
 {
-
+    // Start skull ghost SFX looping without overlap
+    SoundMgr::GetInst()->PlaySFX(L"SKULL_Ghost_Idle", 0, true);
 }
 
 void EnemyGhostSkullMoveState::OnTick()
@@ -260,7 +261,8 @@ void EnemyGhostSkullMoveState::OnFinalTick()
 {
     m_EnemyData->SetEnemyType(ENEMY_TYPE::SKULL);
     // Ensure ghost SFX stopped when this state ends
-    SoundMgr::GetInst()->StopSFX(L"SKULL_Ghost");
+    SoundMgr::GetInst()->StopSFX(L"SKULL_Ghost_In");
+    SoundMgr::GetInst()->StopSFX(L"SKULL_Ghost_Idle");
 }
 
 

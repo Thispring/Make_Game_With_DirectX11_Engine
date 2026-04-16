@@ -96,16 +96,6 @@ void CCamMoveScript::Tick()
 		GetOwner()->Transform()->SetRelativePos(playerPos);
 	}
 
-
-	// I KEY를 누르면 위치, 회전 상태 초기화
-	// Resets the position and rotation when the I KEY is pressed.
-	if (KEY_PRESSED(KEY::NUMPAD0))
-		MoveOrigin();
-
-	// F4 KEY를 누르면 카메라의 투영방식 스위칭
-	// Switches the camera's projection method when the F4 KEY is pressed.
-	if (KEY_TAP(KEY::NUMPAD_SUB))
-		SwitchingType(Camera()->GetTypeRef());
 }
 
 void CCamMoveScript::SaveToLevelFile(FILE* _File)

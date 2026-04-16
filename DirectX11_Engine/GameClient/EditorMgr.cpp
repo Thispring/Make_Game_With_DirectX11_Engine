@@ -4,8 +4,6 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx11.h"
-// imgui에서 문자열 길이에 따라 버퍼가 자동조절하게 해주는 해더
-//#include "imgui/imgui_stdlib.h"
 
 #include "Engine.h"
 #include "Device.h"
@@ -95,13 +93,13 @@ void EditorMgr::Tick()
 
     // DemoUI 활성/비활성화
     // Enable/Disable DemoUI
-    if (KEY_TAP(KEY::F8))
-        m_ShowDemo ? m_ShowDemo = false : m_ShowDemo = true;
+    //if (KEY_TAP(KEY::F8))
+    //    m_ShowDemo ? m_ShowDemo = false : m_ShowDemo = true;
 
     // Enter를 누르면 현재 선택된 ImGui의 포커스를 해제시킴
     // Clears the focus of the currently selected ImGui item when Enter is pressed.
-    if (KEY_TAP(KEY::ENTER))
-        ImGui::SetWindowFocus(nullptr);
+    //if (KEY_TAP(KEY::ENTER))
+    //    ImGui::SetWindowFocus(nullptr);
 
     // DemoUI, ImGui의 기능을 살펴보기 위해 사용
     // Used to explore the features of DemoUI and ImGui.
@@ -114,11 +112,6 @@ void EditorMgr::Tick()
         if (pair.second->IsActive())
             pair.second->Tick();
     }
-
-    //if (nullptr != m_FocusedUI)
-    //    KeyMgr::GetInst()->SetActive(false);
-    //else
-    //    KeyMgr::GetInst()->SetActive(true);
 
     
     /*******************************************************

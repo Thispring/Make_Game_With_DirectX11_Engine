@@ -117,12 +117,13 @@ void TimeMgr::Tick()
 		g_Global.Time += m_DeltaTime;
 	}
 
+
 	// 1초 주기 FPS 카운터 (Engine 실시간 기준으로 항상 동작)
 	m_Time += g_Global.EngineDT;
 	if (1.f < m_Time)
 	{
 		wchar_t buff[255] = {};
-		swprintf_s(buff, 255, L"DeltaTime : %f, FPS : %d", m_DeltaTime, m_FPS);
+		swprintf_s(buff, 255, L"Fresh Man	FPS : %d", m_FPS);
 		SetWindowText(Engine::GetInst()->GetMainWndHwnd(), buff);
 		m_strFPS = buff;
 

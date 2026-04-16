@@ -14,15 +14,11 @@ private:
 
     bool    m_isMoving;         // 이동중인지 여부
 
-    Ptr<GameObject> m_pPlayer;  // 추적 대상 플레이어
-    bool    m_bFollowPlayer;    // F6 플레이어 추적 토글
-
 public:
     //=========
     // 멤버 함수
     //=========
     void MoveOrigin();
-    void MovingOrigin();
     void OrthoCamMove();
     void PrespecCamMove();
     void MouseCamMove();

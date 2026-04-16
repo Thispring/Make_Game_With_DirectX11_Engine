@@ -1,0 +1,360 @@
+The following work was used in the creation of this game.  Modifications were made.
+
+//==============================================================================
+Title: Cat Fighter Sprite Sheet
+
+Author: dogchicken
+
+URL: https://opengameart.org/content/cat-fighter-sprite-sheet
+
+License(s): * CC-BY 3.0 ( https://creativecommons.org/licenses/by/3.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Cat Fighter Addon1 [ Energy Force Master Kit ]
+
+Author: dogchicken
+
+URL: https://opengameart.org/content/cat-fighter-addon1-energy-force-master-kit
+
+License(s): * CC-BY 3.0 ( https://creativecommons.org/licenses/by/3.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Cat Fighter Addon2[ Assault Rifle Kit ]
+
+Author: dogchicken
+
+URL: https://opengameart.org/content/cat-fighter-addon2-assault-rifle-kit
+
+License(s): * CC-BY 3.0 ( https://creativecommons.org/licenses/by/3.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Cute Monster Sprite Sheet
+
+Author: dogchicken
+
+URL: https://opengameart.org/content/cute-monster-sprite-sheet
+
+License(s): * CC-BY 3.0 ( https://creativecommons.org/licenses/by/3.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Skull Monster Sprite Sheet
+
+Author: dogchicken
+
+URL: https://opengameart.org/content/skull-monster-sprite-sheet
+
+License(s): * CC-BY 3.0 ( https://creativecommons.org/licenses/by/3.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Flying Tongue Monster Sprite Sheet
+
+Author: dogchicken
+
+URL: https://opengameart.org/content/flying-tongue-monster-sprite-sheet
+
+License(s): * CC-BY 3.0 ( https://creativecommons.org/licenses/by/3.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Demon Flower Monster Sprite Sheet
+
+Author: Rosswet Mobile (Submitted by dogchicken)
+
+URL: https://opengameart.org/content/demon-flower-monster-sprite-sheet
+
+License(s): * CC-BY 3.0 ( https://creativecommons.org/licenses/by/3.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Magic Cliffs Environment
+
+Author: ansimuz
+
+URL: https://opengameart.org/content/magic-cliffs-environment
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Input Prompts Pixel 16×
+
+Author: Kenney
+
+URL: https://opengameart.org/content/input-prompts-pixel-16%C3%97
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: 1-Bit Input Prompts Pixel 16×
+
+Author: Kenney
+
+URL: https://opengameart.org/content/1-bit-input-prompts-pixel-16%C3%97
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Animated bomb explosion
+
+Author: Bobjt
+
+URL: https://opengameart.org/content/animated-bomb-explosion
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Mechaneko!
+
+Author: Emcee Flesher
+
+URL: https://opengameart.org/content/mechaneko
+
+License(s): * CC-BY 4.0 ( https://creativecommons.org/licenses/by/4.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Approaching Meteor (Animated)
+
+Author: ARoachIFoundOnMyPillow
+
+URL: https://opengameart.org/content/approaching-meteor-animated
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Pixel Hearts
+
+Author: TokyoGeisha
+
+URL: https://opengameart.org/content/pixel-hearts
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Pixel fonts by Pix3M
+
+Author: Pix3M
+
+URL: https://opengameart.org/content/pixel-fonts-by-pix3m
+
+License(s): * CC-BY 3.0 ( https://creativecommons.org/licenses/by/3.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Portals
+
+Author: LetargicDev
+
+URL: https://opengameart.org/content/portals
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Level 1 (8-Bit)
+
+Author: Umplix
+
+URL: https://opengameart.org/content/level-1-8-bit
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Interstellar Fleet 1
+
+Author: Zane Little Music
+
+URL: https://opengameart.org/content/interstellar-fleet-1
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: It Takes A Hero
+
+Author: Zane Little Music
+
+URL: https://opengameart.org/content/it-takes-a-hero
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Harán
+
+Author: megupets
+
+URL: https://opengameart.org/content/har%C3%A1n
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Korg Minilogue Sounds
+
+Author: Spring Spring
+
+URL: https://opengameart.org/content/korg-minilogue-sounds
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Retro Monster Roar
+
+Author: greg300
+
+URL: https://opengameart.org/content/retro-monster-roar
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Kelvin Shadewing's Sound Pack - 3
+
+Author: Kelvin Shadewing
+
+URL: https://opengameart.org/content/kelvin-shadewings-sound-pack-3
+
+License(s): * CC-BY-SA 4.0 ( https://creativecommons.org/licenses/by-sa/4.0/ )
+GPL 3.0 ( https://www.gnu.org/licenses/gpl-3.0.html )
+//==============================================================================
+
+
+//==============================================================================
+Title: Kelvin Shadewing's Sound Pack - 2
+
+Author: Kelvin Shadewing
+
+URL: https://opengameart.org/content/kelvin-shadewings-sound-pack-2
+
+License(s): * CC-BY-SA 4.0 ( https://creativecommons.org/licenses/by-sa/4.0/ )
+GPL 3.0 ( https://www.gnu.org/licenses/gpl-3.0.html )
+//==============================================================================
+
+
+//==============================================================================
+Title: bomb_explosion_8bit
+
+Author: Luke.RUSTLTD
+
+URL: https://opengameart.org/content/bombexplosion8bit
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: Monster 1
+
+Author: Bart Kelsey (Submitted by bart)
+
+URL: https://opengameart.org/content/monster-1
+
+License(s): * CC-BY-SA 3.0 ( https://creativecommons.org/licenses/by-sa/3.0/ )
+GPL 3.0 ( https://www.gnu.org/licenses/gpl-3.0.html )
+GPL 2.0 ( https://www.gnu.org/licenses/old-licenses/gpl-2.0.html )
+//==============================================================================
+
+
+//==============================================================================
+Title: 50 CC0 retro / synth SFX
+
+Author: rubberduck
+
+URL: https://opengameart.org/content/50-cc0-retro-synth-sfx
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: 8-bit platformer SFX
+
+Author: bart
+
+URL: https://opengameart.org/content/8-bit-platformer-sfx
+
+License(s): * CC-BY 3.0 ( https://creativecommons.org/licenses/by/3.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: 512 Sound Effects (8-bit style)
+
+Author: SubspaceAudio
+
+URL: https://opengameart.org/content/512-sound-effects-8-bit-style
+
+License(s): * CC0 ( https://creativecommons.org/publicdomain/zero/1.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Title: 100 plus game sound effects WAV,OGG,M4A
+
+Author: Damaged Panda
+
+URL: https://opengameart.org/content/100-plus-game-sound-effects-wavoggm4a
+
+License(s): * CC-BY 3.0 ( https://creativecommons.org/licenses/by/3.0/ )
+//==============================================================================
+
+
+//==============================================================================
+Made using FMOD Studio by Firelight Technologies Pty Ltd.
+Audio Engine: FMOD Studio by Firelight Technologies Pty Ltd.
+//==============================================================================
+
+
+//==============================================================================
+Jersey 10
+https://fonts.google.com/specimen/Jersey+10?preview.script=Latn
+Copyright 2023 The Soft Type Project Authors 
+(https://github.com/scfried/soft-type-jersey)
+
+Jersey 20
+https://fonts.google.com/specimen/Jersey+20?preview.script=Latn&query=Sarah+Cadigan-Fried
+Copyright 2023 The Soft Type Project Authors 
+(https://github.com/scfried/soft-type-jersey)
+//==============================================================================
+
+
+//==============================================================================
+x12y12pxMaruMinyaHangul
+© 2026 Lee Minseo (quiple​@​quiple​.​dev)
+© 2026 The x12​y12​px​Maru​Minya Project Authors (https://​github​.​com​/​hicc​hicc​/​x12​y12​px​Maru​Minya)
+//==============================================================================

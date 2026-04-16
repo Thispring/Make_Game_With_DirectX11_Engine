@@ -34,6 +34,7 @@ void PlayerDeathState::Tick()
 
 void PlayerDeathState::FinalTick()
 {
+	SoundMgr::GetInst()->StopSFX(L"PlayerDeath");
 }
 
 PLAYER_STATE PlayerDeathState::GetFlipbookIndex()

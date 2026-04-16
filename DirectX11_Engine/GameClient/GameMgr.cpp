@@ -28,7 +28,8 @@ void GameMgr::Init()
 	//====================================
 	// 현재 Level 이 아래 Level이면 바로 리턴
 	//====================================
-	if (LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\MainMenu.lv"
+	if (LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\Intro.lv"
+		|| LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\MainMenu.lv"
 		|| LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\Ending.lv"
 		|| LevelMgr::GetInst()->GetCurLevel()->GetKey() == L"Level\\GameOver.lv")
 			return;

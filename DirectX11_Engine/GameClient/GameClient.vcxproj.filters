@@ -461,6 +461,9 @@
       <Filter>Source\ContentScript\UI</Filter>
     </ClInclude>
     <ClInclude Include="resource1.h" />
+    <ClInclude Include="Source\Scripts\CIntroLevelController.h">
+      <Filter>Source\ContentScript\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="GameClient.ico">
@@ -896,6 +899,9 @@
       <Filter>Source\ContentScript\Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\CGameOverController.cpp">
+      <Filter>Source\ContentScript\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\CIntroLevelController.cpp">
       <Filter>Source\ContentScript\UI</Filter>
     </ClCompile>
   </ItemGroup>

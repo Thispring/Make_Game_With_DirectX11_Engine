@@ -9,6 +9,8 @@
 
 CSavePoint::CSavePoint()
 	: CScript(SCRIPT_TYPE::SAVEPOINT)
+	, m_InitialPos{}
+	, m_OriginPos{}
 	, m_BobTime(0.f)
 	, m_bTriggered(false)
 {
@@ -44,6 +46,11 @@ void CSavePoint::EndOverlap(CCollider2D* _OwnCollider, CCollider2D* _OtherCollid
 {
 }
 
+void CSavePoint::Init()
+{
+	AddScriptParam(SCRIPT_PARAM::VEC3, &m_InitialPos, L"InitialPos", true, 0.f);
+}
+
 void CSavePoint::Begin()
 {
 	ADD_DYNAMIC_BEGIN_OVERLAP(CSavePoint::BeginOverlap);
@@ -59,6 +66,9 @@ void CSavePoint::Begin()
 
 	// Idle Flipbook 재생
 	GetOwner()->FlipbookRender()->Play(0, 5, -1);
+
+	// 위치 초기화
+	GetOwner()->Transform()->SetRelativePos(m_InitialPos);
 
 	// 위아래 반복 움직임의 기준 위치 저장
 	m_OriginPos = GetOwner()->Transform()->GetRelativePos();
@@ -89,8 +99,10 @@ void CSavePoint::Tick()
 
 void CSavePoint::SaveToLevelFile(FILE* _File)
 {
+	fwrite(&m_InitialPos, sizeof(Vec3), 1, _File);
 }
 
 void CSavePoint::LoadFromLevelFile(FILE* _File)
 {
+	fread(&m_InitialPos, sizeof(Vec3), 1, _File);
 }

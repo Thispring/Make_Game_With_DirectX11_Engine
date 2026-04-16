@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "PlayerState.h"
+
 #include "LevelMgr.h"
 #include "TimeMgr.h"
-#include "KeyMgr.h"
 
 PlayerState::PlayerState(Ptr<CPlayerData> _Data)
 {
@@ -20,21 +20,8 @@ void PlayerState::Init()
 {
 }
 
-// Test 용 코드
-static bool isTest = false;
 void PlayerState::ApplyGravity()
 {
-	// 임시 비활성화 Key 코드 추가하기
-	if (KEY_TAP(KEY::ALPHA9))
-	{
-		// bool Test 변수 토글
-		isTest = !isTest;
-		return;
-	}
-
-	if (isTest)
-		return;
-
 	if (m_PlayerData->GetIsFalling() == true)
 	{
 		// 1. 중력 가속도를 현재 속도에 누적 (v = v + a * dt)

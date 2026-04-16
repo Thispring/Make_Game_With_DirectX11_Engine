@@ -16,6 +16,7 @@ CFlipbookRender::CFlipbookRender()
 	, m_IsStop(false)
 	, m_CurFlipbook(0)
 	, m_PrevFlipbook(0)
+	, m_UseAlphaBlending(false)
 {
 }
 
@@ -134,6 +135,16 @@ void CFlipbookRender::Render()
 
 	Ptr<AFlipbook> pCurFlipbook = m_vecFlipbook[m_CurFlipbook];
 	Ptr<ASprite> pCurSprite = pCurFlipbook->GetSprite(m_CurSprite);
+
+	//=========================================================================
+	// NOTE(26-04-16):
+	// BS_TYPE이 DEFAULT로 설정되있어서 투명도 옵션이 적용이 안되었음
+	// Flipbook을 사용하려면 아래 조건문 처럼 따로 BS_TYPE을 ALPHABLEND로 설정해야함
+	//=========================================================================
+	if (m_UseAlphaBlending)
+		GetMaterial()->GetShader()->SetBSType(BS_TYPE::ALPHABLEND);
+	else
+		GetMaterial()->GetShader()->SetBSType(BS_TYPE::DEFAULT);
 
 	GetMaterial()->SetTexture(TEX_0, pCurSprite->GetAtlas());
 	GetMaterial()->SetScalar(VEC2_0, pCurSprite->GetLeftTopUV());

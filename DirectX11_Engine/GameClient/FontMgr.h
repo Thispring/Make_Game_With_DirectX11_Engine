@@ -15,7 +15,10 @@
 #include <dwrite_3.h>
 #include <filesystem>
 #include <algorithm>
+#include <wrl.h>            // ComPtr
 #pragma comment(lib, "Dwrite.lib")
+
+using Microsoft::WRL::ComPtr;
 
 class FontMgr :
     public Singleton<FontMgr>
@@ -30,6 +33,15 @@ private:
     wstring                     m_FontPath;
     wstring                     m_FontFamily;
 
+    // 단일 TextLayout 캐시 (프로젝트에서 폰트 하나만 쓸 경우)
+    ComPtr<IDWriteTextLayout>   m_CachedTextLayout;
+    std::wstring                m_CachedFontPath;
+    std::wstring                m_CachedFamilyName;
+    std::wstring                m_CachedText;
+    float                       m_CachedFontSize = 0.f;
+    float                       m_CachedMaxWidth = 0.f;
+    float                       m_CachedMaxHeight = 0.f;
+
     //=================
     // private 멤버 함수
     //=================
@@ -37,7 +49,6 @@ private:
     int FontCheck();
 
 public:
-    void OldInit();
     void Init(const wstring& _FontPath = L"", const wstring& _FontFamily = L"");
 
     void PrintEnding();
@@ -57,8 +68,17 @@ public:
     // 텍스트 크기 측정 — 반환값: { 너비, 높이 } (픽셀 단위)
     Vec2 MeasureText(const wchar_t* _pStr, float _fFontSize);
 
-    // FontLayout 생성
+    // FontLayout 생성 (기존)
     HRESULT CreateTextLayoutFromFontFile(const std::wstring& InFontFilePath,
+        const std::wstring& InFamilyName,
+        const std::wstring& InText,
+        float InFontSize,
+        float InMaxWidth,
+        float InMaxHeight,
+        IDWriteTextLayout** OutTextLayout);
+
+    // 단일 캐시를 가져오거나 생성해서 반환
+    HRESULT GetOrCreateCachedTextLayout(const std::wstring& InFontFilePath,
         const std::wstring& InFamilyName,
         const std::wstring& InText,
         float InFontSize,

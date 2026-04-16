@@ -29,8 +29,8 @@ private:
 	UINT		m_OpenFrame;        // Options 팝업이 열린 ImGui 프레임 번호
 	UINT		m_CreditOpenFrame;  // Credit 팝업이 열린 ImGui 프레임 번호
 
-	int		BGMvolume;          // UI에서 보여줄 정수(0..100)
-	int		SFXvolume;          // UI에서 보여줄 정수(0..100)
+	int			BGMvolume;          // UI에서 보여줄 정수(0..100)
+	int			SFXvolume;          // UI에서 보여줄 정수(0..100)
 
 	// UI 쪽에서 유지할 음소거 상태(체크박스와 바인딩)
 	bool		m_bBGMMute;
@@ -38,7 +38,14 @@ private:
 
 	bool		m_isRelease;
 
+	ifstream        m_fopen;			// 파일 읽기 
+	vector<string>  m_creditList;		// 파일에서 읽어온 문자를 저장하는 멤버
 	
+	//=================
+	// private 멤버 함수
+	//=================
+	void GetStringFromFile();
+
 public:
 	void Init();
 	void Progress();    // EditorMgr::Tick() 안 ImGui 프레임에서 호출

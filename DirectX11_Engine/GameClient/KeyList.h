@@ -9,15 +9,15 @@ class KeyList :
 {
 
 private:
-    ifstream    m_fopen;        // 파일 읽기 
-    vector<string> m_keyList;   // 파일에서 읽어온 문자를 저장하는 멤버
+    ifstream        m_fopen;        // 파일 읽기 
+    vector<string>  m_keyList;      // 파일에서 읽어온 문자를 저장하는 멤버
 
-public:
-    //=========
-    // 멤버 함수
-    //=========
+    //=================
+    // private 멤버 함수
+    //=================
     void GetStringFromFile();
 
+public:
 
     //=============
     // 상속 멤버 함수

@@ -113,10 +113,39 @@ void Engine::ToggleFullScreen()
 
 	if (m_FullScreen)
 	{
-		// 타이틀 창 제거(WS_POPUP), 1920x1080 창모드 전체화면
+		// 현재 창이 위치한 모니터 정보를 얻음 (가장 가까운 모니터)
+		HMONITOR hMon = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST);
+		MONITORINFO mi = {};
+		mi.cbSize = sizeof(mi);
+		GetMonitorInfo(hMon, &mi);
+
+		// 전체 모니터 영역 사용 (작업 표시줄 제외를 원하면 mi.rcWork 사용)
+		int monitorLeft = mi.rcMonitor.left;
+		int monitorTop = mi.rcMonitor.top;
+		int monitorW = mi.rcMonitor.right - mi.rcMonitor.left;
+		int monitorH = mi.rcMonitor.bottom - mi.rcMonitor.top;
+
+		// 모니터 크기에 맞춰 16:9 비율로 최대 크기 계산
+		int targetW = monitorW;
+		int targetH = (targetW * 9) / 16;
+
+		if (targetH > monitorH)
+		{
+			// 높이가 넘치면 높이에 맞추고 너비 조정
+			targetH = monitorH;
+			targetW = (targetH * 16) / 9;
+		}
+
+		// 중앙 배치 오프셋 계산
+		int offsetX = monitorLeft + (monitorW - targetW) / 2;
+		int offsetY = monitorTop + (monitorH - targetH) / 2;
+
+		// 윈도우 스타일을 무테(WS_POPUP)로 변경하고 위치/크기 적용
 		SetWindowLongPtr(m_hWnd, GWL_STYLE, WS_POPUP);
-		SetWindowPos(m_hWnd, HWND_TOP, 0, 0, 1920, 1080, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
-		Device::GetInst()->ResizeSwapChain(Vec2(1920.f, 1080.f));
+		SetWindowPos(m_hWnd, HWND_TOP, offsetX, offsetY, targetW, targetH, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+
+		// 스왑체인도 동일한 픽셀 크기로 리사이즈
+		Device::GetInst()->ResizeSwapChain(Vec2(static_cast<float>(targetW), static_cast<float>(targetH)));
 
 		if (m_EditorMode)
 			EditorMgr::GetInst()->SetUIVisible(false);

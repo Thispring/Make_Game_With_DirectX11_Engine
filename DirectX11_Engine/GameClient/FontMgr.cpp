@@ -16,11 +16,29 @@ FontMgr::FontMgr()
 
 FontMgr::~FontMgr()
 {
-	if (nullptr != m_FW1Factory)
-		m_FW1Factory->Release();
+	// 캐시된 TextLayout을 먼저 해제 (명시적 순서 보장)
+	if (m_CachedTextLayout)
+	{
+		m_CachedTextLayout.Reset();
+		m_CachedFontPath.clear();
+		m_CachedFamilyName.clear();
+		m_CachedText.clear();
+		m_CachedFontSize = 0.f;
+		m_CachedMaxWidth = 0.f;
+		m_CachedMaxHeight = 0.f;
+	}
 
 	if (nullptr != m_FontWrapper)
+	{
 		m_FontWrapper->Release();
+		m_FontWrapper = nullptr;
+	}
+
+	if (nullptr != m_FW1Factory)
+	{
+		m_FW1Factory->Release();
+		m_FW1Factory = nullptr;
+	}
 
 	// 메모리 폰트 해제
 	if (m_hFontResource && !m_fontBuffer.empty())
@@ -29,11 +47,6 @@ FontMgr::~FontMgr()
 		m_hFontResource = nullptr;
 		m_fontBuffer.clear();
 	}
-
-	// [추가] 임시 등록했던 시스템 폰트 리소스 해제
-	wstring path = WCONTENT_PATH + L"Font\\_bitmap_font____romulus_by_pix3m-d6aokem.ttf";
-	RemoveFontResourceEx(path.c_str(), FR_PRIVATE, 0);
-	SendMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
 }
 
 void FontMgr::CreateFontWrapper()
@@ -84,65 +97,6 @@ int FontMgr::FontCheck()
 	FontCollection->Release();
 
 	return bExists;
-}
-
-void FontMgr::OldInit()
-{
-	// 1. FW1 팩토리 생성
-	if (FAILED(FW1CreateFactory(FW1_VERSION, &m_FW1Factory)))
-	{
-		MessageBox(nullptr, L"FW1 Font Factory 생성 실패!", L"Font Error", MB_OK | MB_ICONERROR);
-		return;
-	}
-
-	// 경로 설정
-	wstring path = WCONTENT_PATH + L"Font\\_bitmap_font____romulus_by_pix3m-d6aokem.ttf";
-
-	// [패치 1] 시스템 임시 리소스로 직접 등록 (AddFontResourceEx)
-	// FR_PRIVATE를 사용하면 현재 프로세스가 실행 중일 때만 유효하며, 설치 없이도 시스템 폰트처럼 인식률이 높아집니다.
-	int resCount = AddFontResourceEx(path.c_str(), FR_PRIVATE, 0);
-
-	if (resCount > 0)
-	{
-		// [패치 2] OS에 폰트 테이블이 변경되었음을 알림 (브로드캐스트)
-		// 이 과정을 통해 FW1Wrapper가 폰트를 찾을 확률이 비약적으로 상승합니다.
-		SendMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
-	}
-	else
-	{
-		// 파일은 있지만 등록에 실패한 경우 (권한 문제 등)를 위한 백업 메시지
-#ifndef _DEBUG
-// 릴리즈 빌드에서만 상세 경로 노출
-		wstring errMsg = L"폰트 리소스 등록 실패(시스템 예약 오류).\n경로: " + path;
-		MessageBox(nullptr, errMsg.c_str(), L"Font Registration Fail", MB_OK | MB_ICONWARNING);
-#endif
-	}
-
-	// [패치 3] 메모리 로드 로직 (기존 유지하되 안전장치 추가)
-	std::ifstream fontFile(path, std::ios::binary | std::ios::ate);
-	if (fontFile)
-	{
-		std::streamsize size = fontFile.tellg();
-		fontFile.seekg(0, std::ios::beg);
-		m_fontBuffer.resize((size_t)size);
-
-		if (fontFile.read(reinterpret_cast<char*>(m_fontBuffer.data()), size))
-		{
-			DWORD fonts = 0;
-			m_hFontResource = AddFontMemResourceEx(m_fontBuffer.data(), (DWORD)size, 0, &fonts);
-		}
-		fontFile.close();
-	}
-
-	// 2. 폰트 래퍼 생성
-	// 폰트 등록 후 OS가 인덱싱할 시간을 아주 잠깐 벌어주는 것이 안전합니다.
-	Sleep(10);
-
-	// L"Romulus" 이름이 정확한지 다시 한번 확인 필수
-	if (FAILED(m_FW1Factory->CreateFontWrapper(DEVICE, L"Romulus", &m_FontWrapper)))
-	{
-		MessageBox(nullptr, L"Font Wrapper 생성 실패! (Romulus 글꼴 인식 불가)", L"Font Error", MB_OK | MB_ICONERROR);
-	}
 }
 
 void FontMgr::Init(const wstring& _FontPath, const wstring& _FontFamily)
@@ -232,9 +186,9 @@ void FontMgr::DrawFont(const wchar_t* _pStr, float _fPosX, float _fPosY, float _
 	}
 	else
 	{
-		// Font 정보를 이용해서 IDWriteTextLayout 객체 생성
+		// 단일 캐시된 TextLayout을 가져오거나 생성
 		ComPtr<IDWriteTextLayout> pTextLayout = {};
-		if (FAILED(CreateTextLayoutFromFontFile(
+		if (FAILED(GetOrCreateCachedTextLayout(
 			m_FontPath
 			, m_FontFamily
 			, _pStr
@@ -275,7 +229,7 @@ Vec2 FontMgr::MeasureText(const wchar_t* _pStr, float _fFontSize)
 }
 
 // ===============
-// TestLayout 생성
+// TextLayout 생성
 // ===============
 HRESULT FontMgr::CreateTextLayoutFromFontFile(
 	const std::wstring& InFontFilePath,
@@ -417,6 +371,52 @@ HRESULT FontMgr::CreateTextLayoutFromFontFile(
 	return S_OK;
 }
 
+// 단일 캐시를 가져오거나 새로 생성해 캐시에 저장하는 헬퍼
+HRESULT FontMgr::GetOrCreateCachedTextLayout(const std::wstring& InFontFilePath,
+	const std::wstring& InFamilyName,
+	const std::wstring& InText,
+	float InFontSize,
+	float InMaxWidth,
+	float InMaxHeight,
+	IDWriteTextLayout** OutTextLayout)
+{
+	if (!OutTextLayout)
+		return E_INVALIDARG;
+
+	*OutTextLayout = nullptr;
+
+	// 캐시가 있고 파라미터가 동일하면 재사용
+	if (m_CachedTextLayout &&
+		m_CachedFontPath == InFontFilePath &&
+		m_CachedFamilyName == InFamilyName &&
+		m_CachedText == InText &&
+		m_CachedFontSize == InFontSize &&
+		m_CachedMaxWidth == InMaxWidth &&
+		m_CachedMaxHeight == InMaxHeight)
+	{
+		return m_CachedTextLayout.CopyTo(OutTextLayout);
+	}
+
+	// 없으면 생성 후 캐시에 저장 (기존 것은 ComPtr가 자동으로 Release 처리)
+	ComPtr<IDWriteTextLayout> newLayout;
+	HRESULT hr = CreateTextLayoutFromFontFile(InFontFilePath, InFamilyName, InText, InFontSize, InMaxWidth, InMaxHeight, newLayout.GetAddressOf());
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	// 캐시에 저장할 파라미터 복사
+	m_CachedTextLayout = newLayout;
+	m_CachedFontPath = InFontFilePath;
+	m_CachedFamilyName = InFamilyName;
+	m_CachedText = InText;
+	m_CachedFontSize = InFontSize;
+	m_CachedMaxWidth = InMaxWidth;
+	m_CachedMaxHeight = InMaxHeight;
+
+	return m_CachedTextLayout.CopyTo(OutTextLayout);
+}
+
 // ===============================================================================================
 
 
@@ -424,8 +424,45 @@ void FontMgr::DrawFontOutline(const wchar_t* _pStr, float _fPosX, float _fPosY,
                                float _fFontSize, UINT _FillColor, UINT _OutlineColor,
                                float _fThickness)
 {
-	// 8방향 오프셋으로 아웃라인 먼저 렌더
-	// → 나중에 덮어쓸 본체보다 먼저 그려야 아웃라인이 뒤에 깔림
+	// 캐시된(또는 새로 생성된) TextLayout 획득
+	ComPtr<IDWriteTextLayout> pTextLayout;
+	if (FAILED(GetOrCreateCachedTextLayout(
+		m_FontPath,
+		m_FontFamily,
+		_pStr,
+		_fFontSize,
+		1000.f,    // 필요에 맞게 조정 가능
+		200.f,     // 필요에 맞게 조정 가능
+		pTextLayout.GetAddressOf())))
+	{
+		// 레이아웃 생성 실패 시 폴백: 기존 DrawString 방식으로 처리
+		const float offsets_fb[8][2] =
+		{
+			{-1.f, -1.f}, { 0.f, -1.f}, { 1.f, -1.f},
+			{-1.f,  0.f},               { 1.f,  0.f},
+			{-1.f,  1.f}, { 0.f,  1.f}, { 1.f,  1.f}
+		};
+
+		for (int i = 0; i < 8; ++i)
+		{
+			m_FontWrapper->DrawString(
+				CONTEXT, _pStr, _fFontSize,
+				_fPosX + offsets_fb[i][0] * _fThickness,
+				_fPosY + offsets_fb[i][1] * _fThickness,
+				_OutlineColor,
+				FW1_RESTORESTATE);
+		}
+
+		m_FontWrapper->DrawString(
+			CONTEXT, _pStr, _fFontSize,
+			_fPosX, _fPosY,
+			_FillColor,
+			FW1_RESTORESTATE);
+
+		return;
+	}
+
+	// 오프셋 배열 (기존과 동일)
 	const float offsets[8][2] =
 	{
 		{-1.f, -1.f}, { 0.f, -1.f}, { 1.f, -1.f},
@@ -433,10 +470,12 @@ void FontMgr::DrawFontOutline(const wchar_t* _pStr, float _fPosX, float _fPosY,
 		{-1.f,  1.f}, { 0.f,  1.f}, { 1.f,  1.f}
 	};
 
+	// 아웃라인 먼저 렌더 (TextLayout 기준 위치에 오프셋 적용)
 	for (int i = 0; i < 8; ++i)
 	{
-		m_FontWrapper->DrawString(
-			CONTEXT, _pStr, _fFontSize,
+		m_FontWrapper->DrawTextLayout(
+			CONTEXT,
+			pTextLayout.Get(),
 			_fPosX + offsets[i][0] * _fThickness,
 			_fPosY + offsets[i][1] * _fThickness,
 			_OutlineColor,
@@ -444,9 +483,11 @@ void FontMgr::DrawFontOutline(const wchar_t* _pStr, float _fPosX, float _fPosY,
 	}
 
 	// 본체 렌더 — 아웃라인 위에 덮어 씀
-	m_FontWrapper->DrawString(
-		CONTEXT, _pStr, _fFontSize,
-		_fPosX, _fPosY,
+	m_FontWrapper->DrawTextLayout(
+		CONTEXT,
+		pTextLayout.Get(),
+		_fPosX,
+		_fPosY,
 		_FillColor,
 		FW1_RESTORESTATE);
 }

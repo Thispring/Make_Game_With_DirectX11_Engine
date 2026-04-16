@@ -20,6 +20,7 @@ private:
     // ImGui에서 재생 컨트롤용으로 사용 중인 bool 변수
     // EFlipbookRenderUI 클래스에 의존하고 있어서 사용 주의 필요
     bool                    m_IsStop;
+    bool                    m_UseAlphaBlending;
 
     //=================
     // private 멤버 함수

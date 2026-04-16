@@ -161,7 +161,7 @@ void SoundMgr::Init()
 	m_SoundGroups[SOUND_TYPE::BGM][L"Normal_Stage_0"] = FIND(ASound, L"Sound\\BGM\\level_1_8-bit_.wav").Get();
 	m_SoundGroups[SOUND_TYPE::BGM][L"MainMenu"] = FIND(ASound, L"Sound\\BGM\\Interstellar Fleet 1 [LOOP].wav").Get();
 	m_SoundGroups[SOUND_TYPE::BGM][L"Ending"] = FIND(ASound, L"Sound\\BGM\\it_takes_a_hero.wav").Get();
-	m_SoundGroups[SOUND_TYPE::BGM][L"GameOver"] = FIND(ASound, L"Sound\\BGM\\Haran.mp3").Get();
+	m_SoundGroups[SOUND_TYPE::BGM][L"GameOver"] = FIND(ASound, L"Sound\\BGM\\Haran.wav").Get();
 
 	// Player
 	m_SoundGroups[SOUND_TYPE::SFX][L"PlayerJump"] = FIND(ASound, L"Sound\\SFX\\PlayerJump.wav").Get();
@@ -169,8 +169,8 @@ void SoundMgr::Init()
 	m_SoundGroups[SOUND_TYPE::SFX][L"PlayerPunch1"] = FIND(ASound, L"Sound\\SFX\\PlayerPunch1.wav").Get();
 	m_SoundGroups[SOUND_TYPE::SFX][L"PlayerPunch2"] = FIND(ASound, L"Sound\\SFX\\PlayerPunch2.wav").Get();
 	m_SoundGroups[SOUND_TYPE::SFX][L"PlayerKick"] = FIND(ASound, L"Sound\\SFX\\PlayerKick.wav").Get();
-	m_SoundGroups[SOUND_TYPE::SFX][L"PlayerDeath"] = FIND(ASound, L"Sound\\SFX\\PlayerDeath.ogg").Get();
-	m_SoundGroups[SOUND_TYPE::SFX][L"PlayerRespawn"] = FIND(ASound, L"Sound\\SFX\\PlayerRespawn.mp3").Get();
+	m_SoundGroups[SOUND_TYPE::SFX][L"PlayerDeath"] = FIND(ASound, L"Sound\\SFX\\PlayerDeath.wav").Get();
+	m_SoundGroups[SOUND_TYPE::SFX][L"PlayerRespawn"] = FIND(ASound, L"Sound\\SFX\\PlayerRespawn.wav").Get();
 	m_SoundGroups[SOUND_TYPE::SFX][L"EnergyBlast"] = FIND(ASound, L"Sound\\SFX\\EnergyBlast.wav").Get();
 
 	m_SoundGroups[SOUND_TYPE::SFX][L"Level_Move"] = FIND(ASound, L"Sound\\SFX\\Level_Move.wav").Get();
@@ -186,8 +186,9 @@ void SoundMgr::Init()
 	// SKULL
 	m_SoundGroups[SOUND_TYPE::SFX][L"SKULL_Hit"] = FIND(ASound, L"Sound\\SFX\\SKULL_Hit.wav").Get();
 	m_SoundGroups[SOUND_TYPE::SFX][L"SKULL_Chase"] = FIND(ASound, L"Sound\\SFX\\SKULL_Chase.wav").Get();
-	m_SoundGroups[SOUND_TYPE::SFX][L"SKULL_Attack"] = FIND(ASound, L"Sound\\SFX\\SKULL_Attack.mp3").Get();
-	m_SoundGroups[SOUND_TYPE::SFX][L"SKULL_Ghost"] = FIND(ASound, L"Sound\\SFX\\SKULL_Ghost.wav").Get();
+	m_SoundGroups[SOUND_TYPE::SFX][L"SKULL_Attack"] = FIND(ASound, L"Sound\\SFX\\SKULL_Attack.wav").Get();
+	m_SoundGroups[SOUND_TYPE::SFX][L"SKULL_Ghost_In"] = FIND(ASound, L"Sound\\SFX\\SKULL_Ghost_In.wav").Get();
+	m_SoundGroups[SOUND_TYPE::SFX][L"SKULL_Ghost_Idle"] = FIND(ASound, L"Sound\\SFX\\SKULL_Ghost_Idle.wav").Get();
 	
 	// FLYING
 	m_SoundGroups[SOUND_TYPE::SFX][L"FLYING_Hit"] = FIND(ASound, L"Sound\\SFX\\FLYING_Hit.wav").Get();

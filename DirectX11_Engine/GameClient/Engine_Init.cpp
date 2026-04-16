@@ -177,7 +177,6 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
 
     // Font 매니저 초기화
     FontMgr::GetInst()->Init(L"Font\\_bitmap_font____romulus_by_pix3m-d6aokem.ttf", L"Romulus");
-    //FontMgr::GetInst()->OldInit();
 
     // 콘텐츠 점수 매니저 초기화
     ScoreMgr::GetInst()->Init();

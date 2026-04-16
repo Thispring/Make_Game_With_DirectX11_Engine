@@ -505,6 +505,11 @@ void AssetMgr::CreateEngineTexture()
 	// Portal
 	Load<ATexture>(L"portalRings2Atlas", L"Texture\\Object\\portalRings2.png");
 
+	// Logo
+	Load<ATexture>(L"LogoAtlas", L"Texture\\Logo\\Logo_Flipbook.png");
+	Load<ATexture>(L"FMODLogoAtlas", L"Texture\\Logo\\FMOD_Flipbook.png");
+	Load<ATexture>(L"LogoImg", L"Texture\\Logo\\Logo.png");
+	Load<ATexture>(L"FMODLogoImg", L"Texture\\Logo\\FMOD Logo White - Transparent Background.png");
 
 
 }

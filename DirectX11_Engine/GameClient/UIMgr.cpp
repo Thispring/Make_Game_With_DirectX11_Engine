@@ -11,6 +11,7 @@
 
 #include "Engine.h"
 #include "Device.h"
+#include "PathMgr.h"
 
 #include "SoundMgr.h" // 추가: UI에서 사운드 제어 호출
 
@@ -42,7 +43,7 @@ UIMgr::UIMgr()
 
     , m_isRelease(false)
 {
-
+    GetStringFromFile();
 }
 
 UIMgr::~UIMgr()
@@ -325,7 +326,8 @@ void UIMgr::RenderCreditWindow()
     if (ImGui::BeginPopupModal("CreditWindow", nullptr, flags))
     {
         // 크기 조절을 위해 OutputTitle 함수 사용 X
-        Vec4 vColor = Vec4(0.5f, 0.5f, 0.5f, 1.f);
+        #pragma region Credit Title
+        Vec4 vColor = ColorConvertIntToVec4(82.f, 82.f, 250.f);
         ImGui::PushID(0);
         ImGui::PushStyleColor(ImGuiCol_Button, vColor);
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, vColor);
@@ -333,20 +335,38 @@ void UIMgr::RenderCreditWindow()
         ImGui::Button("Credit", Vec2(150.f, 50.f));
         ImGui::PopStyleColor(3);
         ImGui::PopID();
+        #pragma endregion
 
         SPACING_UI(10);
-
+        ImGui::Separator();
         // NOTE(26-04-07):
         // Credit창에는 사용했던 Asset 목록을 .txt 파일로 저장하여
         // ImGui에서 이를 읽어와 .txt 문자열을 출력합니다.
 
+        ImGui::Text("License");
+        vector<string>::iterator iter(m_creditList.begin());
 
-        if (ImGui::Button("Close"))
+        for (; iter < m_creditList.end(); ++iter)
+        {
+            ImGui::Text((*iter).c_str());
+        }
+        ImGui::Separator();
+
+        #pragma region OptionCloseBtn
+        if (ImGuiFunc::ColoredButton("Close",
+            ColorConvertIntToVec4(12.f, 129.f, 207.f), ImVec2(100.f, 25.f)))
         {
             m_ShowCredit = false;
-            ImGui::CloseCurrentPopup(); // 모달 닫기
+            ImGui::CloseCurrentPopup();
         }
-        SPACING_UI(10);
+        #pragma endregion
+
+        //if (ImGui::Button("Close"))
+        //{
+        //    m_ShowCredit = false;
+        //    ImGui::CloseCurrentPopup(); // 모달 닫기
+        //}
+        //SPACING_UI(10);
 
         bool bSafeToClose = (ImGui::GetFrameCount() - m_CreditOpenFrame) >= 2;
         bool bPrevKeyPressed = (m_PrevCreditImGuiKey != ImGuiKey_None)
@@ -362,6 +382,39 @@ void UIMgr::RenderCreditWindow()
 
         ImGui::EndPopup();
     }
+    else
+    {
+        // 팝업이 닫혀 있음(ESC로 닫혔다든지 등).
+        // 상태 플래그를 실제 ImGui 상태에 맞춰 동기화.
+        m_ShowCredit = false;
+        m_bCloseCreditRequest = false;
+        m_eventShowCredit = false;
+        // 필요하면 m_CreditOpenFrame 초기화도 수행
+        m_CreditOpenFrame = 0;
+    }
+}
+
+void UIMgr::GetStringFromFile()
+{
+    wstring txtPath = CONTENT_PATH;
+    txtPath += L"CREDIT.txt";
+
+    m_fopen.open(txtPath);
+
+    // 파일이 열리지 않았다면
+    if (!m_fopen.is_open())
+        return;
+
+    while (!m_fopen.eof())	// 파일의 끝을 만날 때 까지
+    {
+        // 계산을 위한 임시 string
+        string tmp;
+        getline(m_fopen, tmp);
+        m_creditList.push_back(tmp);
+    }
+
+    // 읽기가 끝났다면 파일 닫기
+    m_fopen.close();
 }
 
 void UIMgr::IsShowOptions(KEY _key)

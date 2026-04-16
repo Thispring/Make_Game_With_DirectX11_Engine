@@ -5,7 +5,6 @@
 
 #include "LevelMgr.h"
 #include "TimeMgr.h"
-#include "KeyMgr.h"
 
 EnemyState::EnemyState(Ptr<CEnemyData> _Data)
 {
@@ -16,26 +15,12 @@ EnemyState::~EnemyState()
 {
 }
 
-// Test 용 코드
-static bool isTest = false;
 void EnemyState::ApplyGravity()
 {
 	// FLYING, GHOST_SKULL, FLOWER 중력 적용 X
 	if (m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLYING || 
 		m_EnemyData->GetEnemyType() == ENEMY_TYPE::GHOST_SKULL ||
 		m_EnemyData->GetEnemyType() == ENEMY_TYPE::FLOWER)
-		return;
-
-
-	// 임시 비활성화 Key 코드 추가하기
-	if (KEY_TAP(KEY::ALPHA8))
-	{
-		// bool Test 변수 토글
-		isTest = !isTest;
-		return;
-	}
-
-	if (isTest)
 		return;
 
 	if (m_EnemyData->GetIsFalling() == true)
