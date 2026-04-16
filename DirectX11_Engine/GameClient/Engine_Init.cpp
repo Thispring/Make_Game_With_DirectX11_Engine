@@ -126,15 +126,6 @@ int Engine::Init(HINSTANCE _hInst, UINT _Width, UINT _Height, bool _EditorMode)
         return E_FAIL;
     }
 
-    // 창 생성후 기본 전체화면으로 전환
-    // Debug builds should start in windowed mode. Release builds default to fullscreen.
-#ifdef _DEBUG
-    // Start in windowed mode for debugging.
-#else
-    // In release build, switch to fullscreen by default.
-    ToggleFullScreen();
-#endif
-
     // 실행파일과 같이 있는 Content 폴더의 경로를 계산
     PathMgr::GetInst()->Init();
 
