@@ -228,15 +228,15 @@ void EditorMgr::CreateEditorObject()
 
 void EditorMgr::Init()
 {
-#ifdef _DEBUG
-    // 디버그 빌드에서만 실행되는 코드
-    m_isRelease = false;
-#endif
-
-#ifndef _DEBUG
-    // 릴리즈 빌드에서만 실행되는 코드
-    m_isRelease = true;
-#endif
+//#ifdef _DEBUG
+//    // 디버그 빌드에서만 실행되는 코드
+//    m_isRelease = false;
+//#endif
+//
+//#ifndef _DEBUG
+//    // 릴리즈 빌드에서만 실행되는 코드
+//    m_isRelease = true;
+//#endif
 
     // Make process DPI aware and obtain main monitor scale
     ImGui_ImplWin32_EnableDpiAwareness();

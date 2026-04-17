@@ -164,4 +164,8 @@ void Engine::ToggleFullScreen()
 		if (m_EditorMode)
 			EditorMgr::GetInst()->SetUIVisible(true);
 	}
+
+	// 릴리즈 빌드에서 아래 주석 해제
+	// Ensure our KeyMgr processes keys while editor UI is hidden
+	//KeyMgr::GetInst()->SetActive(true);
 }
