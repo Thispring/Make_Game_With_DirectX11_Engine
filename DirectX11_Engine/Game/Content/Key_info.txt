@@ -78,26 +78,6 @@ KEY: F5
 KEY_STATE: TAP
 Source File: Engine.cpp
 
-Comment: 다음 Level을 불러옴
-KEY: INS
-KEY_STATE: PRESSED
-Source File: LevelMgr.cpp
-
-Comment: Ending Level
-KEY: DEL
-KEY_STATE: PRESSED
-Source File: LevelMgr.cpp
-
-Comment: Main Level
-KEY: HOME
-KEY_STATE: PRESSED
-Source File: LevelMgr.cpp
-
-Comment: GameOver
-KEY: END
-KEY_STATE: PRESSED
-Source File: LevelMgr.cpp
-
 Comment: No Comment
 KEY: F9
 KEY_STATE: TAP
@@ -207,14 +187,4 @@ Comment: No Comment
 KEY: SPACE
 KEY_STATE: TAP
 Source File: CPlayerController.cpp
-
-Comment: Player Respawn Test
-KEY: ALPHA1
-KEY_STATE: PRESSED
-Source File: CPlayerStateManager.cpp
-
-Comment: No Comment
-KEY: F6
-KEY_STATE: TAP
-Source File: CPlayerStateManager.cpp
 

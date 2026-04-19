@@ -18,7 +18,8 @@ public:
 	void Progress();
 
 	void SaveScore(float _RemainingTime, int _DeathCount);
-	void RenderScore();
+	void RenderHighScore();
+	void RenderCurScore();
 
 
 };

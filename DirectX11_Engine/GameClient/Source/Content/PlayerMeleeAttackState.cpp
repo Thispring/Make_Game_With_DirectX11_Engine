@@ -31,8 +31,10 @@ PlayerPunchState::~PlayerPunchState()
 
 void PlayerPunchState::Begin()
 {
-	SoundMgr::GetInst()->PlaySFX(L"PlayerPunch1");
-	SoundMgr::GetInst()->PlaySFX(L"PlayerPunch2");
+    // Prevent excessive SFX spam when Begin() is repeatedly called (e.g., key held down)
+	const float kSfxMinInterval = 0.08f; // seconds
+	SoundMgr::GetInst()->PlaySFX(L"PlayerPunch1", kSfxMinInterval);
+	SoundMgr::GetInst()->PlaySFX(L"PlayerPunch2", kSfxMinInterval);
 	m_PlayerData->SetIsAttack();
 	// 콜라이더 활성화 — CPlayerController 대신 Begin에서 처리하여 재시작 시에도 동작
 	m_PlayerData->GetTargetObject()->GetChild(PLAYER_PUNCH_ANCHOR)->Collider2D()->SetEnabled(true);
@@ -133,7 +135,8 @@ PlayerHighKickState::~PlayerHighKickState()
 
 void PlayerHighKickState::Begin()
 {
-	SoundMgr::GetInst()->PlaySFX(L"PlayerKick");
+    const float kSfxMinInterval = 0.08f; // seconds
+	SoundMgr::GetInst()->PlaySFX(L"PlayerKick", kSfxMinInterval);
 	m_PlayerData->SetIsAttack();
 	// 콜라이더 활성화 — 재시작 시에도 동작하도록 Begin에서 처리
 	m_PlayerData->GetTargetObject()->GetChild(PLAYER_KICK_ANCHOR)->Collider2D()->SetEnabled(true);

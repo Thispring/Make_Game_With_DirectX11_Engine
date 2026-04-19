@@ -388,6 +388,7 @@ void GameObjectMaker::SetTargetObject(Ptr<GameObject> _Object)
 
 				m_vecScriptUI.push_back(pScriptUI);
 			}
+			
 		}
 
 		// 오브젝트에서 가져온 Script를 각각의 ScriptUI에 세팅

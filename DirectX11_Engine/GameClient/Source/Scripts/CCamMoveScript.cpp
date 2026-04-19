@@ -48,34 +48,34 @@ void CCamMoveScript::Begin()
 void CCamMoveScript::Tick()
 {
 	// Change Cam Move Mode
-	if (KEY_PRESSED(KEY::NUMPAD_DIV))
-	{
-		// F1 키로 카메라 모드 스위칭
-		if (m_MoveMode == CAM_MOVE_MODE::DEBUG)
-		{
-			m_MoveMode = CAM_MOVE_MODE::INGAME;
-			return;
-		}
+	//if (KEY_PRESSED(KEY::NUMPAD_DIV))
+	//{
+	//	// F1 키로 카메라 모드 스위칭
+	//	if (m_MoveMode == CAM_MOVE_MODE::DEBUG)
+	//	{
+	//		m_MoveMode = CAM_MOVE_MODE::INGAME;
+	//		return;
+	//	}
 
-		if (m_MoveMode == CAM_MOVE_MODE::INGAME)
-		{
-			m_MoveMode = CAM_MOVE_MODE::DEBUG;
-			return;
-		}
-	}
+	//	if (m_MoveMode == CAM_MOVE_MODE::INGAME)
+	//	{
+	//		m_MoveMode = CAM_MOVE_MODE::DEBUG;
+	//		return;
+	//	}
+	//}
 
 	// Debug 모드일 때만 아래 이동 함수를 실행
 	if (m_MoveMode == CAM_MOVE_MODE::DEBUG)
 	{
-		// 원경 투영
-		if (Camera()->GetProjType() == PROJ_TYPE::PERSPECTIVE)
-		{
-			PrespecCamMove();
-			MouseCamMove();
-		}
-		// 직교 투영
-		else if (Camera()->GetProjType() == PROJ_TYPE::ORTHOGRAPHIC)
-			OrthoCamMove();
+		//// 원경 투영
+		//if (Camera()->GetProjType() == PROJ_TYPE::PERSPECTIVE)
+		//{
+		//	PrespecCamMove();
+		//	MouseCamMove();
+		//}
+		//// 직교 투영
+		//else if (Camera()->GetProjType() == PROJ_TYPE::ORTHOGRAPHIC)
+		//	OrthoCamMove();
 	}
 	// InGame에서는 Player의 방향키 이동과 같은 속도와 방향으로 이동
 	else if (m_MoveMode == CAM_MOVE_MODE::INGAME)

@@ -3,13 +3,14 @@
 
 #include "AssetMgr.h"
 #include "LevelMgr.h"
+#include "TimeMgr.h"
 
 SoundMgr::SoundMgr()
 	: m_isBGMMute(false)
 	, m_isSFXMute(false)
 	, m_BGMVolume(1.f)
 	, m_SFXVolume(1.f)
-   , m_prevBGMVolume(1.f)
+	, m_prevBGMVolume(1.f)
 	, m_prevSFXVolume(1.f)
 	, m_bBGMChangedWhileMuted(false)
 	, m_bSFXChangedWhileMuted(false)
@@ -280,6 +281,39 @@ void SoundMgr::PlaySFX(wstring _SFXName, int _iRoopCount, bool _bOverlap)
 {
 	if (m_isSFXMute)
 		return;
+
+	auto& sfxGroup = m_SoundGroups[SOUND_TYPE::SFX];
+	auto iter = sfxGroup.find(_SFXName);
+	if (iter == sfxGroup.end())
+		return;
+
+	Ptr<ASound> pSound = iter->second;
+	if (pSound == nullptr)
+		return;
+
+	float fPlayVolume = m_isSFXMute ? 0.f : m_SFXVolume;
+	pSound->Play(_iRoopCount, fPlayVolume, _bOverlap);
+	if (m_isSFXMute)
+		pSound->SetMute(true);
+}
+
+void SoundMgr::PlaySFX(wstring _SFXName, float _minIntervalSeconds, int _iRoopCount, bool _bOverlap)
+{
+	if (m_isSFXMute)
+		return;
+
+	// If a minimum interval is specified, enforce cooldown per SFX name
+	if (_minIntervalSeconds > 0.f)
+	{
+		float now = TimeMgr::GetInst()->GetTime();
+		auto it = m_SFXLastPlayTime.find(_SFXName);
+		if (it != m_SFXLastPlayTime.end())
+		{
+			if (now - it->second < _minIntervalSeconds)
+				return; // too soon, drop request
+		}
+		m_SFXLastPlayTime[_SFXName] = now;
+	}
 
 	auto& sfxGroup = m_SoundGroups[SOUND_TYPE::SFX];
 	auto iter = sfxGroup.find(_SFXName);

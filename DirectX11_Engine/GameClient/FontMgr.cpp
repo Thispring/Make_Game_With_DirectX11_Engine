@@ -137,7 +137,9 @@ void FontMgr::PrintEnding()
 				1.5f);
 
 			// 아래 최고 점수 출력
-			ScoreMgr::GetInst()->RenderScore();
+			ScoreMgr::GetInst()->RenderHighScore();
+			// 현재 점수 출력
+			ScoreMgr::GetInst()->RenderCurScore();
 		}
 	}
 }

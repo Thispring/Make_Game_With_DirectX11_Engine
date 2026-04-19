@@ -21,13 +21,16 @@ private:
 	float												m_BGMVolume;
 	float												m_SFXVolume;
 
+	// SFX별 마지막 재생 시간 추적용 (초)
+	map<wstring, float>						m_SFXLastPlayTime;
+
 	// 이전 볼륨을 저장하여 뮤트 해제 시 복원하기 위한 변수
-	float											m_prevBGMVolume;
-	float											m_prevSFXVolume;
+	float										m_prevBGMVolume;
+	float										m_prevSFXVolume;
 
 	// 뮤트 상태에서 슬라이더로 볼륨을 변경했는지 추적
-	bool											m_bBGMChangedWhileMuted;
-	bool											m_bSFXChangedWhileMuted;
+	bool									m_bBGMChangedWhileMuted;
+	bool									m_bSFXChangedWhileMuted;
 
 public:
 	void Init();
@@ -40,6 +43,10 @@ public:
 
 	// Overload: play with loop count and overlap control (_iRoopCount: 0 -> loop indefinitely)
 	void PlaySFX(wstring _SFXName, int _iRoopCount, bool _bOverlap);
+
+	// Overload: allow specifying a minimum interval (seconds) between plays for the named SFX.
+	// If _minIntervalSeconds <= 0, no interval check is performed.
+	void PlaySFX(wstring _SFXName, float _minIntervalSeconds, int _iRoopCount = 1, bool _bOverlap = true);
 
 	// Stop all channels for a named SFX
 	void StopSFX(wstring _SFXName);

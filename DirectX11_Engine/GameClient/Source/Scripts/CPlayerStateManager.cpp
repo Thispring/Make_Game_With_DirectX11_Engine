@@ -194,8 +194,8 @@ void CPlayerStateManager::ChangeDebugMode()
 {
     m_isDebugMode = !m_isDebugMode;
     // 이속 빠르게
-    //m_PlayerData->SetSpeed(500.f);
-    //m_PlayerData->SetJumpVelocity(700.f);
+    m_PlayerData->SetSpeed(500.f);
+    m_PlayerData->SetJumpVelocity(700.f);
 }
 
 void CPlayerStateManager::Init()
@@ -248,18 +248,6 @@ void CPlayerStateManager::Tick()
             m_fReviveDelay   = -1.f;
             m_PlayerData->SetIsDead(false);
         }
-    }
-
-    // Player Respawn Test
-    if (KEY_PRESSED(KEY::ALPHA1))
-    {
-        m_PlayerData->SetIsDead(true);
-        Respawn();
-    }
-
-    if (KEY_TAP(KEY::F6))
-    {
-        ChangeDebugMode();
     }
 
 	// 필요에 따라 Tick에서 m_Status의 함수를 실행합니다.

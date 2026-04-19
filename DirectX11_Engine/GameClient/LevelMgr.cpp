@@ -247,30 +247,4 @@ void LevelMgr::Progress()
 
 	// 호출 순서상 맨 아래에 배치해야
 	// 검은색으로 렌더가 되는 현상 방지할 수 있음
-
-	// Level 전환 테스트 KEY
-	// 조건문 안으로 들어오면 TaskMgr을 통해
-	// 다음 Level을 불러옴
-	if (KEY_PRESSED(KEY::INS))	// KET -> Ins
-	{
-		GameStart();
-	}
-
-	// Ending Level
-	if (KEY_PRESSED(KEY::DEL))
-	{
-		ChangeEnding();
-	}
-
-	// Main Level
-	if (KEY_PRESSED(KEY::HOME))
-	{
-		ChangeMainMenu();
-	}
-
-	// GameOver
-	if (KEY_PRESSED(KEY::END))
-	{
-		ChangeGameOver();
-	}
 }
