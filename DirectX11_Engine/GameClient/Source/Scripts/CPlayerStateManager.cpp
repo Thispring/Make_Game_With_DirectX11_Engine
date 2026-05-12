@@ -164,6 +164,12 @@ void CPlayerStateManager::Respawn()
     // 위치
     GetOwner()->Transform()->SetRelativePos(m_PlayerData->GetOriginPos());
 
+    // 물리 상태 초기화
+    m_PlayerData->SetIsFalling(true);                   // 중력 적용 활성화
+    m_PlayerData->SetVelocityY(0.f);                    // 수직 속도 초기화
+    m_PlayerData->SetGroundContactCount(0);             // 접지 카운터 초기화
+    m_PlayerData->SetGroundNormal(Vec3(0.f, 1.f, 0.f)); // 법선 평지로 초기화
+    m_PlayerData->SetfCoyoteTimer(0.f);
 
     //================
     // 공격 키 난수 로직
@@ -234,6 +240,9 @@ void CPlayerStateManager::Begin()
 
 void CPlayerStateManager::Tick()
 {
+    if (KEY_PRESSED(KEY::ALPHA1))
+        Respawn();
+
     //================================================
     // 지연 부활 처리 — Tick 최상단에서 수행
     // Respawn()이 같은 프레임에서 호출되더라도

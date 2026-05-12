@@ -188,3 +188,8 @@ KEY: SPACE
 KEY_STATE: TAP
 Source File: CPlayerController.cpp
 
+Comment: No Comment
+KEY: ALPHA1
+KEY_STATE: PRESSED
+Source File: CPlayerStateManager.cpp
+
