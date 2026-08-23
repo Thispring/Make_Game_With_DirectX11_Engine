@@ -1,4 +1,8 @@
-# Make Game With DirectX11 Engine
+# Fresh Man
+
+<p align="center">
+  <img src="ScreenShot/s1.jpg" width="85%" alt="메인 화면">
+</p>
 
 DirectX 11과 C++를 기반으로 자체 게임 엔진과 에디터를 구현하고, 이를 활용해 2D 게임 콘텐츠를 제작한 개인 프로젝트입니다.
 
@@ -8,7 +12,7 @@ DirectX 11과 C++를 기반으로 자체 게임 엔진과 에디터를 구현하
 
 ---
 
-## 📖 프로젝트 소개
+## 프로젝트 소개
 
 본 프로젝트는 DirectX 11 기반의 게임 엔진을 직접 구현하며 게임 엔진의 기본 구조와 게임 실행 흐름을 학습하기 위해 진행한 개인 프로젝트입니다.
 
@@ -20,16 +24,37 @@ DirectX 11과 C++를 기반으로 자체 게임 엔진과 에디터를 구현하
 
 | 항목 | 내용 |
 | --- | --- |
-| 개발 인원 | 1명 |
 | 플랫폼 | Windows |
-| 그래픽 API | DirectX 11 |
 | 개발 언어 | C++ |
+| 그래픽 API | DirectX 11 |
 | UI 라이브러리 | Dear ImGui |
+| 개발 인원 | 1명 |
 | 담당 역할 | 엔진 및 게임 클라이언트 프로그래밍 전반 |
 
 ---
 
-## 👨‍💻 My Role
+## Gameplay
+
+| :---: | :---: |
+| <img src="ScreenShot/s2.jpg" width="100%" alt="스크린샷2"> | <img src="ScreenShot/s3.jpg" width="100%" alt="스크린샷3"> |
+
+게임 플레이 영상은 아래 링크에서 확인할 수 있습니다.
+
+[Fresh Man Gameplay Video](https://youtu.be/giiFv2sXMus?si=xqEO6lNW48JX_c4-)
+
+---
+
+## Download
+
+게임 실행파일은 아래 링크에서 다운로드 할 수 있습니다.
+
+**Windows**
+
+[Download for Windows](https://thispring.itch.io/fresh-man)
+
+---
+
+## My Role
 
 ### Engine Programming
 
@@ -53,9 +78,9 @@ DirectX 11과 C++를 기반으로 자체 게임 엔진과 에디터를 구현하
 
 ---
 
-# 🎯 주요 구현 기능
+# 주요 구현 기능
 
-## 🧩 GameObject 및 Component 기반 객체 구조
+## GameObject 및 Component 기반 객체 구조
 
 게임 내 모든 객체를 `GameObject`를 중심으로 관리하고, 기능을 Component와 Script 단위로 분리하는 구조를 구현했습니다.
 
@@ -67,16 +92,16 @@ DirectX 11과 C++를 기반으로 자체 게임 엔진과 에디터를 구현하
 
 **관련 코드**
 
-- [GameObject.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/GameObject.cpp)
-- [GameObject.h](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/GameObject.h)
-- [Component.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Component.cpp)
-- [Component.h](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Component.h)
-- [CScript.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/CScript.cpp)
-- [CScript.h](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/CScript.h)
+- [GameObject.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/GameObject.cpp)
+- [GameObject.h](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/GameObject.h)
+- [Component.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Component.cpp)
+- [Component.h](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Component.h)
+- [CScript.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/CScript.cpp)
+- [CScript.h](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/CScript.h)
 
 ---
 
-## 🎨 DirectX 11 기반 렌더링 및 카메라 시스템
+## DirectX 11 기반 렌더링 및 카메라 시스템
 
 게임의 메인 루프에서 Level 업데이트 이후 `RenderMgr`를 통해 렌더링을 수행하도록 구성했습니다.
 
@@ -88,16 +113,16 @@ DirectX 11과 C++를 기반으로 자체 게임 엔진과 에디터를 구현하
 
 **관련 코드**
 
-- [Engine.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Engine.cpp)
-- [RenderMgr.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/RenderMgr.cpp)
-- [RenderMgr.h](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/RenderMgr.h)
-- [CCamera.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/CCamera.cpp)
-- [CCamera.h](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/CCamera.h)
-- [Device.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Device.cpp)
+- [Engine.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Engine.cpp)
+- [RenderMgr.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/RenderMgr.cpp)
+- [RenderMgr.h](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/RenderMgr.h)
+- [CCamera.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/CCamera.cpp)
+- [CCamera.h](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/CCamera.h)
+- [Device.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Device.cpp)
 
 ---
 
-## 💥 레이어 기반 충돌 처리 시스템
+## 레이어 기반 충돌 처리 시스템
 
 게임 오브젝트가 속한 Layer를 기준으로 충돌 대상을 관리하고, 각 객체에 연결된 `Collider2D`를 통해 충돌을 판정하도록 구현했습니다.
 
@@ -109,15 +134,15 @@ DirectX 11과 C++를 기반으로 자체 게임 엔진과 에디터를 구현하
 
 **관련 코드**
 
-- [CollisionMgr.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/CollisionMgr.cpp)
-- [CollisionMgr.h](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/CollisionMgr.h)
-- [CCollider2D.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/CCollider2D.cpp)
-- [CCollider2D.h](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/CCollider2D.h)
-- [Layer.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Layer.cpp)
+- [CollisionMgr.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/CollisionMgr.cpp)
+- [CollisionMgr.h](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/CollisionMgr.h)
+- [CCollider2D.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/CCollider2D.cpp)
+- [CCollider2D.h](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/CCollider2D.h)
+- [Layer.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Layer.cpp)
 
 ---
 
-## 🛠️ Asset, Prefab, Level 관리 및 자체 에디터
+## Asset, Prefab, Level 관리 및 자체 에디터
 
 Dear ImGui를 기반으로 게임 오브젝트와 컴포넌트를 확인하고 수정할 수 있는 자체 에디터를 구현했습니다.
 
@@ -131,16 +156,16 @@ Dear ImGui를 기반으로 게임 오브젝트와 컴포넌트를 확인하고 �
 
 **관련 코드**
 
-- [EditorMgr.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/EditorMgr.cpp)
-- [EditorMgr.h](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/EditorMgr.h)
-- [AssetMgr.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/AssetMgr.cpp)
-- [AssetMgr.h](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/AssetMgr.h)
-- [PrefabMaker.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/PrefabMaker.cpp)
-- [LevelMaker.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/LevelMaker.cpp)
+- [EditorMgr.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/EditorMgr.cpp)
+- [EditorMgr.h](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/EditorMgr.h)
+- [AssetMgr.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/AssetMgr.cpp)
+- [AssetMgr.h](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/AssetMgr.h)
+- [PrefabMaker.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/PrefabMaker.cpp)
+- [LevelMaker.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/LevelMaker.cpp)
 
 ---
 
-## 🎮 상태 기반 플레이어 및 적 행동 시스템
+## 상태 기반 플레이어 및 적 행동 시스템
 
 엔진 위에서 제작한 게임 콘텐츠에서는 플레이어와 적의 행동을 State 클래스로 분리하여 관리했습니다.
 
@@ -152,18 +177,18 @@ Dear ImGui를 기반으로 게임 오브젝트와 컴포넌트를 확인하고 �
 
 **관련 코드**
 
-- [PlayerState.h](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Source/Content/PlayerState.h)
-- [PlayerIdleState.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Source/Content/PlayerIdleState.cpp)
-- [PlayerMoveState.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Source/Content/PlayerMoveState.cpp)
-- [PlayerMeleeAttackState.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Source/Content/PlayerMeleeAttackState.cpp)
-- [EnemyState.h](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Source/Content/EnemyState.h)
-- [EnemyIdleState.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Source/Content/EnemyIdleState.cpp)
-- [EnemyChaseState.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Source/Content/EnemyChaseState.cpp)
-- [EnemyAttackState.cpp](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/blob/feature/non-docking-window/DirectX11_Engine/GameClient/Source/Content/EnemyAttackState.cpp)
+- [PlayerState.h](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Source/Content/PlayerState.h)
+- [PlayerIdleState.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Source/Content/PlayerIdleState.cpp)
+- [PlayerMoveState.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Source/Content/PlayerMoveState.cpp)
+- [PlayerMeleeAttackState.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Source/Content/PlayerMeleeAttackState.cpp)
+- [EnemyState.h](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Source/Content/EnemyState.h)
+- [EnemyIdleState.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Source/Content/EnemyIdleState.cpp)
+- [EnemyChaseState.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Source/Content/EnemyChaseState.cpp)
+- [EnemyAttackState.cpp](https://github.com/Thispring/Fresh_Man/blob/main/DirectX11_Engine/GameClient/Source/Content/EnemyAttackState.cpp)
 
 ---
 
-# 🛠 사용 기술
+# 사용 기술
 
 | 기술 | 활용 |
 | --- | --- |
@@ -175,12 +200,6 @@ Dear ImGui를 기반으로 게임 오브젝트와 컴포넌트를 확인하고 �
 
 ---
 
-# 🔗 Repository
-
-[GitHub - Make Game With DirectX11 Engine](https://github.com/Thispring/Make_Game_With_DirectX11_Engine/tree/feature/non-docking-window)
-
----
-
 > 본 프로젝트는 DirectX 11과 C++를 기반으로 게임 엔진의 구조와 동작 방식을 학습하고 구현한 개인 프로젝트입니다.
 >
-> 현재 공개된 코드는 `feature/non-docking-window` 브랜치 기준입니다.
+> 현재 공개된 코드는 `main` 브랜치 기준입니다.
