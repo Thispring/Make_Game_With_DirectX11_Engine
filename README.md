@@ -35,6 +35,7 @@ DirectX 11과 C++를 기반으로 자체 게임 엔진과 에디터를 구현하
 
 ## Gameplay
 
+| 스크린샷 |
 | :---: |
 | <img src="ScreenShot/s2.jpg" width="49%" alt="스크린샷2"> <img src="ScreenShot/s3.jpg" width="49%" alt="스크린샷3"> |
 
